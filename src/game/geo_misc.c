@@ -16,6 +16,7 @@
 #include "rendering_graph_node.h"
 #include "save_file.h"
 #include "segment2.h"
+#include "randomizer.h"
 
 /**
  * @file geo_misc.c
@@ -73,7 +74,7 @@ Gfx *geo_exec_inside_castle_light(s32 callContext, struct GraphNode *node, UNUSE
 
     if (callContext == GEO_CONTEXT_RENDER) {
         s32 flags = save_file_get_flags();
-        if (gHudDisplay.stars >= NUM_STARS_REQUIRED_FOR_WING_CAP_LIGHT && !(flags & SAVE_FLAG_HAVE_WING_CAP)) {
+        if (gHudDisplay.stars >= gRequiredStars[STAR_REQ_TOTWC] && !(flags & SAVE_FLAG_HAVE_WING_CAP)) {
             displayList = alloc_display_list(2 * sizeof(*displayList));
 
             if (displayList == NULL) {

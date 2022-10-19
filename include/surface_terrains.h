@@ -6,136 +6,74 @@
 // Surface Types
 enum SurfaceTypes {
     SURFACE_NULL = -1,
-    SURFACE_DEFAULT,                    // 0x0000 // Environment default
-    SURFACE_BURNING,                    // 0x0001 // Lava / Frostbite (in SL), but is used mostly for Lava
-    SURFACE_NEW_WATER,                  // 0x0002 // Custom water surface
-    SURFACE_NEW_WATER_BOTTOM,           // 0x0003 // Custom water surface bottom marker
-    SURFACE_0004,                       // 0x0004 // Unused, has no function and has parameters
-    SURFACE_HANGABLE,                   // 0x0005 // Ceiling that Mario can climb on
-    SURFACE_0006,                       // 0x0006 // Unused
-    SURFACE_0007,                       // 0x0007 // Unused
-    SURFACE_0008,                       // 0x0008 // Unused
-    SURFACE_SLOW,                       // 0x0009 // Slow down Mario, unused
-    SURFACE_DEATH_PLANE,                // 0x000A // Death floor
-    SURFACE_CLOSE_CAMERA,               // 0x000B // Close camera
-    SURFACE_000C,                       // 0x000C // unused
-    SURFACE_WATER,                      // 0x000D // Water, has no action, used on some waterboxes below
-    SURFACE_FLOWING_WATER,              // 0x000E // Water (flowing), has parameters
-    SURFACE_000F,                       // 0x000F // Unused
-    SURFACE_0010,                       // 0x0010 // Unused
-    SURFACE_0011,                       // 0x0011 // Unused
-    SURFACE_INTANGIBLE,                 // 0x0012 // Intangible (Separates BBH mansion from merry-go-round, for room usage)
-    SURFACE_VERY_SLIPPERY,              // 0x0013 // Very slippery, mostly used for slides
-    SURFACE_SLIPPERY,                   // 0x0014 // Slippery
-    SURFACE_NOT_SLIPPERY,               // 0x0015 // Non-slippery, climbable
-    SURFACE_TTM_VINES,                  // 0x0016 // TTM vines, has no action defined
-    SURFACE_0017,                       // 0x0017 // Unused
-    SURFACE_0018,                       // 0x0018 // Unused
-    SURFACE_0019,                       // 0x0019 // Unused
-    SURFACE_MGR_MUSIC,                  // 0x001A // Plays the Merry go round music, see handle_merry_go_round_music in bbh_merry_go_round.inc.c for more details
-    SURFACE_INSTANT_WARP_1B,            // 0x001B // Instant warp to another area, used to warp between areas in WDW and the endless stairs to warp back
-    SURFACE_INSTANT_WARP_1C,            // 0x001C // Instant warp to another area, used to warp between areas in WDW
-    SURFACE_INSTANT_WARP_1D,            // 0x001D // Instant warp to another area, used to warp between areas in DDD, SSL and TTM
-    SURFACE_INSTANT_WARP_1E,            // 0x001E // Instant warp to another area, used to warp between areas in DDD, SSL and TTM
-    SURFACE_001F,                       // 0x001F // Unused
-    SURFACE_0020,                       // 0x0020 // Unused
-    SURFACE_SHALLOW_QUICKSAND,          // 0x0021 // Shallow Quicksand (depth of 10 units)
-    SURFACE_DEEP_QUICKSAND,             // 0x0022 // Quicksand (lethal, slow, depth of 160 units)
-    SURFACE_INSTANT_QUICKSAND,          // 0x0023 // Quicksand (lethal, instant)
-    SURFACE_DEEP_MOVING_QUICKSAND,      // 0x0024 // Moving quicksand (flowing, depth of 160 units)
-    SURFACE_SHALLOW_MOVING_QUICKSAND,   // 0x0025 // Moving quicksand (flowing, depth of 25 units)
-    SURFACE_QUICKSAND,                  // 0x0026 // Moving quicksand (60 units)
-    SURFACE_MOVING_QUICKSAND,           // 0x0027 // Moving quicksand (flowing, depth of 60 units)
-    SURFACE_WALL_MISC,                  // 0x0028 // Used for some walls, Cannon to adjust the camera, and some objects like Warp Pipe
-    SURFACE_NOISE_DEFAULT,              // 0x0029 // Default floor with noise
-    SURFACE_NOISE_SLIPPERY,             // 0x002A // Slippery floor with noise
-    SURFACE_002B,                       // 0x002B // Unused
-    SURFACE_HORIZONTAL_WIND,            // 0x002C // Horizontal wind, has parameters
-    SURFACE_INSTANT_MOVING_QUICKSAND,   // 0x002D // Quicksand (lethal, flowing)
-    SURFACE_ICE,                        // 0x002E // Slippery Ice, in snow levels and THI's water floor
-    SURFACE_LOOK_UP_WARP,               // 0x002F // Look up and warp (Wing cap entrance)
-    SURFACE_HARD,                       // 0x0030 // Hard floor (Always has fall damage)
-    SURFACE_0031,                       // 0x0031 // Unused
-    SURFACE_WARP,                       // 0x0032 // Surface warp
-    SURFACE_TIMER_START,                // 0x0033 // Timer start (Peach's secret slide)
-    SURFACE_TIMER_END,                  // 0x0034 // Timer stop (Peach's secret slide)
-    SURFACE_HARD_SLIPPERY,              // 0x0035 // Hard and slippery (Always has fall damage)
-    SURFACE_HARD_VERY_SLIPPERY,         // 0x0036 // Hard and very slippery (Always has fall damage)
-    SURFACE_HARD_NOT_SLIPPERY,          // 0x0037 // Hard and Non-slippery (Always has fall damage)
-    SURFACE_VERTICAL_WIND,              // 0x0038 // Death at bottom with vertical wind
-    SURFACE_0039,                       // 0x0039 // Unused
-    SURFACE_003A,                       // 0x003A // Unused
-    SURFACE_003B,                       // 0x003B // Unused
-    SURFACE_003C,                       // 0x003C // Unused
-    SURFACE_003D,                       // 0x003D // Unused
-    SURFACE_003E,                       // 0x003E // Unused
-    SURFACE_003F,                       // 0x003F // Unused
-    SURFACE_BOSS_FIGHT_CAMERA = 0x65,   // 0x0065 // Wide camera for BoB and WF bosses
-    SURFACE_CAMERA_FREE_ROAM,           // 0x0066 // Free roam camera for THI and TTC
-    SURFACE_0067,                       // 0x0067 // Unused
-    SURFACE_THI3_WALLKICK,              // 0x0068 // Surface where there's a wall kick section in THI 3rd area, has no action defined
-    SURFACE_CAMERA_8_DIR,               // 0x0069 // Surface that enables far camera for platforms, used in THI
-    SURFACE_006A,                       // 0x006A // Unused
-    SURFACE_006B,                       // 0x006B // Unused
-    SURFACE_006C,                       // 0x006C // Unused
-    SURFACE_006D,                       // 0x006D // Unused
-    SURFACE_CAMERA_MIDDLE,              // 0x006E // Surface camera that returns to the middle, used on the 4 pillars of SSL
-    SURFACE_CAMERA_ROTATE_RIGHT,        // 0x006F // Surface camera that rotates to the right (Bowser 1 & THI)
-    SURFACE_CAMERA_ROTATE_LEFT,         // 0x0070 // Surface camera that rotates to the left (BoB & TTM)
-    SURFACE_0071,                       // 0x0071 // Unused
-    SURFACE_CAMERA_BOUNDARY,            // 0x0072 // Intangible Area, only used to restrict camera movement
-    SURFACE_NOISE_VERY_SLIPPERY_73,     // 0x0073 // Very slippery floor with noise, unused
-    SURFACE_NOISE_VERY_SLIPPERY_74,     // 0x0074 // Very slippery floor with noise, unused
-    SURFACE_NOISE_VERY_SLIPPERY,        // 0x0075 // Very slippery floor with noise, used in CCM
-    SURFACE_NO_CAM_COLLISION,           // 0x0076 // Surface with no cam collision flag
-    SURFACE_NO_CAM_COLLISION_77,        // 0x0077 // Surface with no cam collision flag, unused
-    SURFACE_NO_CAM_COL_VERY_SLIPPERY,   // 0x0078 // Surface with no cam collision flag, very slippery with noise (THI)
-    SURFACE_NO_CAM_COL_SLIPPERY,        // 0x0079 // Surface with no cam collision flag, slippery with noise (CCM, PSS and TTM slides)
-    SURFACE_SWITCH,                     // 0x007A // Surface with no cam collision flag, non-slippery with noise, used by switches and Dorrie
-    SURFACE_VANISH_CAP_WALLS,           // 0x007B // Vanish cap walls, pass through them with Vanish Cap
-    SURFACE_007C,                       // 0x007C // Unused
-    SURFACE_007D,                       // 0x007D // Unused
-    SURFACE_007E,                       // 0x007E // Unused
-    SURFACE_007F,                       // 0x007F // Unused
-    SURFACE_0080,                       // 0x0080 // Unused
-    SURFACE_0081,                       // 0x0081 // Unused
-    SURFACE_0082,                       // 0x0082 // Unused
-    SURFACE_0083,                       // 0x0083 // Unused
-    SURFACE_0084,                       // 0x0084 // Unused
-    SURFACE_0085,                       // 0x0085 // Unused
-    SURFACE_0086,                       // 0x0086 // Unused
-    SURFACE_0087,                       // 0x0087 // Unused
-    SURFACE_0088,                       // 0x0088 // Unused
-    SURFACE_0089,                       // 0x0089 // Unused
-    SURFACE_008A,                       // 0x008A // Unused
-    SURFACE_008B,                       // 0x008B // Unused
-    SURFACE_008C,                       // 0x008C // Unused
-    SURFACE_008D,                       // 0x008D // Unused
-    SURFACE_008E,                       // 0x008E // Unused
-    SURFACE_008F,                       // 0x008F // Unused
-    SURFACE_0090,                       // 0x0090 // Unused
-    SURFACE_0091,                       // 0x0091 // Unused
-    SURFACE_0092,                       // 0x0092 // Unused
-    SURFACE_0093,                       // 0x0093 // Unused
-    SURFACE_0094,                       // 0x0094 // Unused
-    SURFACE_0095,                       // 0x0095 // Unused
-    SURFACE_0096,                       // 0x0096 // Unused
-    SURFACE_0097,                       // 0x0097 // Unused
-    SURFACE_0098,                       // 0x0098 // Unused
-    SURFACE_0099,                       // 0x0099 // Unused
-    SURFACE_009A,                       // 0x009A // Unused
-    SURFACE_009B,                       // 0x009B // Unused
-    SURFACE_009C,                       // 0x009C // Unused
-    SURFACE_009D,                       // 0x009D // Unused
-    SURFACE_009E,                       // 0x009E // Unused
-    SURFACE_009F,                       // 0x009F // Unused
-    SURFACE_00A0,                       // 0x00A0 // Unused
-    SURFACE_00A1,                       // 0x00A1 // Unused
-    SURFACE_00A2,                       // 0x00A2 // Unused
-    SURFACE_00A3,                       // 0x00A3 // Unused
-    SURFACE_00A4,                       // 0x00A4 // Unused
-    SURFACE_00A5,                       // 0x00A5 // Unused
-    SURFACE_PAINTING_WOBBLE_A6,         // 0x00A6 // Painting wobble (BoB Left)
+    SURFACE_DEFAULT,                  // Environment default
+    SURFACE_0004,                     // Unused, has no function and has parameters
+    SURFACE_VERY_SLIPPERY,            // Very slippery, mostly used for slides
+    SURFACE_SLIPPERY,                 // Slippery
+    SURFACE_NOT_SLIPPERY,             // Non-slippery, climbable
+    SURFACE_HARD,                     // Hard floor (Always has fall damage)
+    SURFACE_HARD_SLIPPERY,            // Hard and slippery (Always has fall damage)
+    SURFACE_HARD_VERY_SLIPPERY,       // Hard and very slippery (Always has fall damage)
+    SURFACE_HARD_NOT_SLIPPERY,        // Hard and Non-slippery (Always has fall damage)
+    SURFACE_ICE,                      // Slippery Ice, in snow levels and THI's water floor
+    SURFACE_HORIZONTAL_WIND,          // Horizontal wind, has parameters
+    SURFACE_FLOWING_WATER,            // Water (flowing), has parameters
+    SURFACE_MGR_MUSIC,                // Plays the Merry go round music, see handle_merry_go_round_music in bbh_merry_go_round.inc.c for more details
+    SURFACE_NOISE_DEFAULT,            // Default floor with noise
+    SURFACE_NOISE_SLIPPERY,           // Slippery floor with noise
+    SURFACE_NOISE_VERY_SLIPPERY,      // Very slippery floor with noise, used in CCM
+    SURFACE_NOISE_VERY_SLIPPERY_73,   // Very slippery floor with noise, unused
+    SURFACE_NOISE_VERY_SLIPPERY_74,   // Very slippery floor with noise, unused
+    SURFACE_CLOSE_CAMERA,             // Close camera
+    SURFACE_WATER,                    // Water, has no action, used on some waterboxes below
+    SURFACE_SHALLOW_QUICKSAND,        // Shallow Quicksand (depth of 10 units)
+    SURFACE_LOOK_UP_WARP,             // Look up and warp (Wing cap entrance)
+    SURFACE_TIMER_START,              // Timer start (Peach's secret slide)
+    SURFACE_TIMER_END,                // Timer stop (Peach's secret slide)
+    SURFACE_BOSS_FIGHT_CAMERA,        // Wide camera for BOB and WF bosses
+    SURFACE_CAMERA_FREE_ROAM,         // Free roam camera for THI and TTC
+    SURFACE_THI3_WALLKICK,            // Surface where there's a wall kick section in THI 3rd area, has no action defined
+    SURFACE_CAMERA_8_DIR,             // Surface that enables far camera for platforms, used in THI
+    SURFACE_CAMERA_MIDDLE,            // Surface camera that returns to the middle, used on the 4 pillars of SSL
+    SURFACE_CAMERA_ROTATE_RIGHT,      // Surface camera that rotates to the right (Bowser 1 & THI)
+    SURFACE_CAMERA_ROTATE_LEFT,       // Surface camera that rotates to the left (BOB & TTM)
+    SURFACE_NO_CAM_COLLISION,         // Surface with no cam collision flag
+    SURFACE_NO_CAM_COLLISION_77,      // Surface with no cam collision flag, unused
+    SURFACE_NO_CAM_COL_VERY_SLIPPERY, // Surface with no cam collision flag, very slippery with noise (THI)
+    SURFACE_NO_CAM_COL_SLIPPERY,      // Surface with no cam collision flag, slippery with noise (CCM, PSS and TTM slides)
+    SURFACE_TTM_VINES,                // TTM vines, has no action defined
+    SURFACE_SWITCH,                   // Surface with no cam collision flag, non-slippery with noise, used by switches and Dorrie
+    SURFACE_VANISH_CAP_WALLS,         // Vanish cap walls, pass through them with Vanish Cap
+    SURFACE_WALL_MISC,                // Used for some walls, Cannon to adjust the camera, and some objects like Warp Pipe
+    SURFACE_HANGABLE,                 // Ceiling that Mario can climb on
+    SURFACE_SLOW,                     // Slow down Mario, unused
+
+    SURFACE_SAFE_FLOORS_GENERAL,
+
+    SURFACE_BURNING,                  // Lava / Frostbite (in SL), but is used mostly for Lava
+    SURFACE_DEEP_QUICKSAND,           // Quicksand (lethal, slow, depth of 160 units)
+    SURFACE_INSTANT_QUICKSAND,        // Quicksand (lethal, instant)
+    SURFACE_DEEP_MOVING_QUICKSAND,    // Moving quicksand (flowing, depth of 160 units)
+    SURFACE_SHALLOW_MOVING_QUICKSAND, // Moving quicksand (flowing, depth of 25 units)
+    SURFACE_QUICKSAND,                // Moving quicksand (60 units)
+    SURFACE_MOVING_QUICKSAND,         // Moving quicksand (flowing, depth of 60 units)
+    SURFACE_INSTANT_MOVING_QUICKSAND, // Quicksand (lethal, flowing)
+
+    SURFACE_SAFE_FLOORS_HARD,
+
+    SURFACE_DEATH_PLANE,              // Death floor
+    SURFACE_INTANGIBLE,               // Intangible (Separates BBH mansion from merry-go-round, for room usage)
+    SURFACE_INSTANT_WARP_1B,          // Instant warp to another area, used to warp between areas in WDW and the endless stairs to warp back
+    SURFACE_INSTANT_WARP_1C,          // Instant warp to another area, used to warp between areas in WDW
+    SURFACE_INSTANT_WARP_1D,          // Instant warp to another area, used to warp between areas in DDD, SSL and TTM
+    SURFACE_INSTANT_WARP_1E,          // Instant warp to another area, used to warp between areas in DDD, SSL and TTM
+    SURFACE_WARP,                     // Surface warp
+    SURFACE_VERTICAL_WIND,            // Death at bottom with vertical wind
+    SURFACE_CAMERA_BOUNDARY,          // Intangible Area, only used to restrict camera movement
+    SURFACE_NEW_WATER,
+    SURFACE_NEW_WATER_BOTTOM,
+
+    SURFACE_PAINTING_WOBBLE_A6 = 0xA6,         // 0x00A6 // Painting wobble (BoB Left)
     SURFACE_PAINTING_WOBBLE_A7,         // 0x00A7 // Painting wobble (BoB Middle)
     SURFACE_PAINTING_WOBBLE_A8,         // 0x00A8 // Painting wobble (BoB Right)
     SURFACE_PAINTING_WOBBLE_A9,         // 0x00A9 // Painting wobble (CCM Left)
@@ -228,8 +166,20 @@ enum SurfaceTypes {
 };
 
 #define SURFACE_IS_NEW_WATER(cmd)               (((cmd) == SURFACE_NEW_WATER) || ((cmd) == SURFACE_NEW_WATER_BOTTOM))
-#define SURFACE_IS_QUICKSAND(cmd)               ((((cmd) >= SURFACE_SHALLOW_QUICKSAND) && ((cmd) <= SURFACE_MOVING_QUICKSAND)) || ((cmd) == SURFACE_INSTANT_MOVING_QUICKSAND))
-#define SURFACE_IS_NOT_HARD(cmd)                (((cmd) != SURFACE_HARD) && !((cmd) >= SURFACE_HARD_SLIPPERY && ((cmd) <= SURFACE_HARD_NOT_SLIPPERY)))
+
+#define SURFACE_IS_QUICKSAND(cmd)  ((cmd) == SURFACE_SHALLOW_QUICKSAND || \
+                                    (cmd) == SURFACE_INSTANT_QUICKSAND || \
+                                    (cmd) == SURFACE_DEEP_MOVING_QUICKSAND || \
+                                    (cmd) == SURFACE_SHALLOW_MOVING_QUICKSAND || \
+                                    (cmd) == SURFACE_QUICKSAND || \
+                                    (cmd) == SURFACE_MOVING_QUICKSAND || \
+                                    (cmd) == SURFACE_INSTANT_MOVING_QUICKSAND)
+
+#define SURFACE_IS_NOT_HARD(cmd)   ((cmd) != SURFACE_HARD && \
+                                    (cmd) != SURFACE_HARD_VERY_SLIPPERY && \
+                                    (cmd) != SURFACE_HARD_SLIPPERY && \
+                                    (cmd) != SURFACE_HARD_NOT_SLIPPERY)
+
 #define SURFACE_IS_PAINTING_WOBBLE(cmd)         (((cmd) >= SURFACE_PAINTING_WOBBLE_A6) && ((cmd) <= SURFACE_PAINTING_WOBBLE_D2))
 #define SURFACE_IS_PAINTING_WOBBLE_LEFT(cmd)    ((((cmd) - SURFACE_PAINTING_WOBBLE_A6) % 3) == 0)
 #define SURFACE_IS_PAINTING_WOBBLE_MIDDLE(cmd)  ((((cmd) - SURFACE_PAINTING_WOBBLE_A7) % 3) == 0)
@@ -244,7 +194,7 @@ enum SurfaceTypes {
 
 enum SurfaceClass {
     SURFACE_CLASS_DEFAULT,
-    SURFACE_CLASS_VERY_SLIPPERY = 0x0013,
+    SURFACE_CLASS_VERY_SLIPPERY,
     SURFACE_CLASS_SLIPPERY,
     SURFACE_CLASS_NOT_SLIPPERY
 };
@@ -253,6 +203,7 @@ enum SurfaceFlags {
     SURFACE_FLAGS_NONE            = (0 << 0), // 0x0000
     SURFACE_FLAG_DYNAMIC          = (1 << 0), // 0x0001
     SURFACE_FLAG_NO_CAM_COLLISION = (1 << 1), // 0x0002
+    SURFACE_FLAG_X_PROJECTION     = (1 << 2), // 0x0004
 };
 
 // These are effectively unique "surface" types like those defined higher

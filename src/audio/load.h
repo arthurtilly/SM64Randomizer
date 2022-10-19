@@ -13,7 +13,7 @@ enum Preloads {
     PRELOAD_BANKS,
 };
 
-#define IS_SEQUENCE_CHANNEL_VALID(ptr) ((uintptr_t)(ptr) != (uintptr_t)&gSequenceChannelNone)
+#define IS_SEQUENCE_CHANNEL_VALID(ptr) (((uintptr_t)(ptr) != (uintptr_t)&gSequenceChannelNone) && (ptr != NULL))
 
 extern struct Note *gNotes;
 extern u8 sAudioFirstBoot;

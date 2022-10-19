@@ -8,6 +8,7 @@
 #include "surface_load.h"
 #include "game/puppyprint.h"
 #include "game/rendering_graph_node.h"
+#include "game/randomizer.h"
 
 #include "config.h"
 #include "config/config_world.h"
@@ -25,31 +26,34 @@ Vec3s gVec3sZero = {     0,     0,     0 };
 Vec3i gVec3iZero = {     0,     0,     0 };
 Vec3s gVec3sOne  = {     1,     1,     1 };
 
-static u16 gRandomSeed16;
-
 // Generate a pseudorandom integer from 0 to 65535 from the random seed, and update the seed.
-u32 random_u16(void) {
-    if (gRandomSeed16 == 22026) {
-        gRandomSeed16 = 0;
+u32 random_u16_seeded(u16 seed) {
+    if (seed == 22026) {
+        seed = 0;
     }
 
-    u16 temp1 = (((gRandomSeed16 & 0x00FF) << 8) ^ gRandomSeed16);
+    u16 temp1 = (((seed & 0x00FF) << 8) ^ seed);
 
-    gRandomSeed16 = ((temp1 & 0x00FF) << 8) + ((temp1 & 0xFF00) >> 8);
+    seed = ((temp1 & 0x00FF) << 8) + ((temp1 & 0xFF00) >> 8);
 
-    temp1 = (((temp1 & 0x00FF) << 1) ^ gRandomSeed16);
+    temp1 = (((temp1 & 0x00FF) << 1) ^ seed);
     u16 temp2 = ((temp1 >> 1) ^ 0xFF80);
 
     if ((temp1 & 0x1) == 0) {
         if (temp2 == 43605) {
-            gRandomSeed16 = 0;
+            seed = 0;
         } else {
-            gRandomSeed16 = (temp2 ^ 0x1FF4);
+            seed = (temp2 ^ 0x1FF4);
         }
     } else {
-        gRandomSeed16 = (temp2 ^ 0x8180);
+        seed = (temp2 ^ 0x8180);
     }
 
+    return seed;
+}
+
+u32 random_u16(void) {
+    gRandomSeed16 = random_u16_seeded(gRandomSeed16);
     return gRandomSeed16;
 }
 

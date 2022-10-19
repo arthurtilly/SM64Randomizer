@@ -1052,7 +1052,7 @@ void visualise_object_hitbox(struct Object *node) {
  * Process an object node.
  */
 void geo_process_object(struct Object *node) {
-    if (node->header.gfx.areaIndex == gCurGraphNodeRoot->areaIndex) {
+    if ((node->header.gfx.areaIndex == gCurGraphNodeRoot->areaIndex) || (node->header.gfx.activeAreaIndex == -1)) {
         if (node->header.gfx.throwMatrix != NULL) {
             mtxf_mul(gMatStack[gMatStackIndex + 1], *node->header.gfx.throwMatrix,
                      gMatStack[gMatStackIndex]);

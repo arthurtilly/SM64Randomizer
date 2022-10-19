@@ -225,7 +225,7 @@ ALIGNED8 static const Texture texture_hud_char_double_quote[] = {
 #include "textures/segment2/segment2.04A00.rgba16.inc.c"
 };
 
-#if defined(VERSION_EU) || defined(COMPLETE_EN_US_SEGMENT2)
+#if defined(VERSION_EU) //|| defined(COMPLETE_EN_US_SEGMENT2)
 ALIGNED8 static const Texture texture_hud_char_umlaut[] = {
 #include "textures/segment2/segment2.umlaut.rgba16.inc.c"// EU ¨
 };

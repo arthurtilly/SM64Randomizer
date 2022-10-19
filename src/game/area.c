@@ -26,6 +26,8 @@
 #include "debug_box.h"
 #include "engine/colors.h"
 #include "profiling.h"
+#include "randomizer.h"
+#include "raycaster.h"
 
 struct SpawnInfo gPlayerSpawnInfos[1];
 struct GraphNode *gGraphNodePointers[MODEL_ID_COUNT];
@@ -56,6 +58,7 @@ Color gWarpTransGreen = 0;
 Color gWarpTransBlue = 0;
 s16 gCurrSaveFileNum = 1;
 s16 gCurrLevelNum = LEVEL_MIN;
+u32 gTimeStartedLoadingArea = 0;
 
 /*
  * The following two tables are used in get_mario_spawn_type() to determine spawn type
@@ -179,10 +182,16 @@ void load_obj_warp_nodes(void) {
 void clear_areas(void) {
     s32 i;
 
+    for (i = 0; i < gSpawnCounter; i++) {
+        gUsedSeeds[i] = 0;
+    }
+    gSpawnCounter = 0;
+
     gCurrentArea = NULL;
     gWarpTransition.isActive = FALSE;
     gWarpTransition.pauseRendering = FALSE;
     gMarioSpawnInfo->areaIndex = -1;
+    gJrbShipRaised = FALSE;
 
     for (i = 0; i < AREA_COUNT; i++) {
         gAreaData[i].index = i;
@@ -229,9 +238,15 @@ void clear_area_graph_nodes(void) {
 }
 
 void load_area(s32 index) {
+    gTimeStartedLoadingArea = gGlobalTimer;
+
+    gIgnoreCollisionDistance = TRUE;
+
     if (gCurrentArea == NULL && gAreaData[index].graphNode != NULL) {
         gCurrentArea = &gAreaData[index];
         gCurrAreaIndex = gCurrentArea->index;
+
+        update_raycaster_params();
 
         if (gCurrentArea->terrainData != NULL) {
             load_area_terrain(index, gCurrentArea->terrainData, gCurrentArea->surfaceRooms,
@@ -250,6 +265,13 @@ void load_area(s32 index) {
 }
 
 void unload_area(void) {
+    s32 i;
+
+    for (i = 0; i < gSpawnCounter; i++) {
+        gUsedSeeds[i] = 0;
+    }
+    gSpawnCounter = 0;
+
     if (gCurrentArea != NULL) {
         unload_objects_from_area(0, gCurrentArea->index);
 #ifndef DISABLE_GRAPH_NODE_TYPE_FUNCTIONAL

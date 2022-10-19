@@ -22,6 +22,10 @@
 #include "puppyprint.h"
 #include "puppylights.h"
 #include "profiling.h"
+#include "engine/math_util.h"
+#include "randomizer.h"
+#include "main.h"
+#include "course_table.h"
 
 
 /**
@@ -150,7 +154,7 @@ s32 gEnvironmentLevels[20];
 RoomData gDoorAdjacentRooms[60][2];
 s16 gMarioCurrentRoom;
 s16 gTHIWaterDrained;
-s16 gTTCSpeedSetting;
+s16 gTTCSpeedSetting = TTC_SPEED_STOPPED;
 s16 gMarioShotFromCannon;
 s16 gCCMEnteredSlide;
 s16 gNumRoomedObjectsInMarioRoom;
@@ -327,8 +331,12 @@ s32 update_objects_during_time_stop(struct ObjectNode *objList, struct ObjectNod
                 unfrozen = TRUE;
             }
 
-            if ((gCurrentObject->oInteractType & (INTERACT_DOOR | INTERACT_WARP_DOOR))
-                && !(gTimeStopState & TIME_STOP_MARIO_AND_DOORS)) {
+            if (gCurrentObject->behavior == segmented_to_virtual(bhvOrangeNumber)) {
+                unfrozen = TRUE;
+            }
+
+            if ((gCurrentObject->oInteractType & (INTERACT_DOOR | INTERACT_WARP_DOOR)) &&
+                !(gTimeStopState & TIME_STOP_MARIO_AND_DOORS)) {
                 unfrozen = TRUE;
             }
 
@@ -483,7 +491,13 @@ void spawn_objects_from_info(UNUSED s32 unused, struct SpawnInfo *spawnInfo) {
             object->oBehParams2ndByte = GET_BPARAM2(spawnInfo->behaviorArg);
 
             object->behavior = script;
-            object->unused1 = 0;
+            object->pointerSeed = spawnInfo->pointerSeed;
+
+            if ((script == segmented_to_virtual(bhvSpinAirborneWarp)) && (gCurrCourseNum != COURSE_NONE) && (gOptionsSettings.gameplay.s.randomLevelSpawn)) {
+                Vec3s pos;
+                get_safe_position(object, pos, 100.f, 500.f, &gRandomSeed16, FLOOR_SAFE_GROUNDED, RAND_POSITION_FLAG_CAN_BE_UNDERWATER | RAND_POSITION_FLAG_SPAWN_TOP_OF_SLIDE | RAND_POSITION_FLAG_BBH_HMC_LIMITED_ROOMS | RAND_POSITION_FLAG_SAFE);
+                vec3s_copy(spawnInfo->startPos, pos);
+            }
 
             // Record death/collection in the SpawnInfo
             object->respawnInfoType = RESPAWN_INFO_TYPE_NORMAL;

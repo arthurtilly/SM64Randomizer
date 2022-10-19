@@ -137,7 +137,7 @@ void bhv_scuttlebug_spawn_loop(void) {
         if (o->oTimer > 30 && 500.0f < o->oDistanceToMario && o->oDistanceToMario < 1500.0f) {
             struct Object *scuttlebug;
             cur_obj_play_sound_2(SOUND_OBJ2_SCUTTLEBUG_ALERT);
-            scuttlebug = spawn_object(o, MODEL_SCUTTLEBUG, bhvScuttlebug);
+            scuttlebug = spawn_object(o, MODEL_SCUTTLEBUG, bhvScuttlebugNoRando);
             scuttlebug->oScuttlebugHasNoLootCoins = o->oScuttlebugSpawnerSpawnWithNoLootCoins;
             scuttlebug->oForwardVel = 30.0f;
             scuttlebug->oVelY = 80.0f;

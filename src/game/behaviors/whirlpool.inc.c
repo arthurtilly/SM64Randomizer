@@ -63,6 +63,12 @@ void bhv_whirlpool_loop(void) {
 }
 
 void bhv_jet_stream_loop(void) {
+    // This code change makes this not spawn if- the stage is JRB, it is on the first act,
+    // the boat isn't raised, and nonstop is active.
+    if((gCurrLevelNum == LEVEL_JRB) && (gCurrActNum == 1) && (!gJrbShipRaised) && (gOptionsSettings.gameplay.s.nonstopMode)) {
+        return;
+    }
+
     if (o->oDistanceToMario < 5000.0f) {
         gEnvFxBubbleConfig[ENVFX_STATE_PARTICLECOUNT] = 60;
         gEnvFxBubbleConfig[ENVFX_STATE_SRC_X] = o->oPosX;

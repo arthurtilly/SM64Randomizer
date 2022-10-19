@@ -801,6 +801,10 @@
 #define /*0x088*/ oOpenableGrillIsOpen         OBJECT_FIELD_S32(0x00)
 #define /*0x0F4*/ oOpenableGrillFloorSwitchObj OBJECT_FIELD_OBJ(0x1B)
 
+/* Orange number */
+#define /*0x0F4*/ oOrangeNumType    OBJECT_FIELD_S32(0x1B)
+#define /*0x0F8*/ oOrangeNumPointer OBJECT_FIELD_VPTR(0x1C)
+
 /* Intro Cutscene Peach */
 #define /*0x108*/ oIntroPeachYawFromFocus OBJECT_FIELD_F32(0x20)
 #define /*0x10C*/ oIntroPeachPitchFromFocus OBJECT_FIELD_F32(0x21)
@@ -1012,6 +1016,9 @@
 #define /*0x0F4*/ oStarSelectorType  OBJECT_FIELD_S32(0x1B)
 #define /*0x0F8*/ oStarSelectorTimer OBJECT_FIELD_S32(0x1C)
 #define /*0x108*/ oStarSelectorSize  OBJECT_FIELD_F32(0x20)
+
+/* General Stars */
+#define /*0x100*/ oStarOrangeNumPointer OBJECT_FIELD_VPTR(0x1E)
 
 /* Sushi Shark */
 #define /*0x0F4*/ oSushiSharkAngleFromHome OBJECT_FIELD_S32(0x1B)

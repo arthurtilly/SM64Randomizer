@@ -43,7 +43,7 @@ enum LevelCommands {
     /*0x20*/ LEVEL_CMD_END_AREA,
     /*0x21*/ LEVEL_CMD_LOAD_MODEL_FROM_DL,
     /*0x22*/ LEVEL_CMD_LOAD_MODEL_FROM_GEO,
-    /*0x23*/ LEVEL_CMD_23,
+    /*0x23*/ LEVEL_CMD_OBJ_WITH_ACTS_NS,
     /*0x24*/ LEVEL_CMD_PLACE_OBJECT,
     /*0x25*/ LEVEL_CMD_INIT_MARIO,
     /*0x26*/ LEVEL_CMD_CREATE_WARP_NODE,
@@ -66,7 +66,7 @@ enum LevelCommands {
     /*0x37*/ LEVEL_CMD_SET_MENU_MUSIC,
     /*0x38*/ LEVEL_CMD_FADEOUT_MUSIC,
     /*0x39*/ LEVEL_CMD_SET_MACRO_OBJECTS,
-    /*0x3A*/ LEVEL_CMD_3A,
+    /*0x3A*/ LEVEL_CMD_OBJ_WITH_ACTS_NOT_NS,
     /*0x3B*/ LEVEL_CMD_CREATE_WHIRLPOOL,
     /*0x3C*/ LEVEL_CMD_GET_OR_SET_VAR,
     /*0x3D*/ LEVEL_CMD_PUPPYVOLUME,
@@ -347,11 +347,19 @@ enum GoddardScene {
     CMD_BBH(LEVEL_CMD_LOAD_MODEL_FROM_GEO, 0x08, model), \
     CMD_PTR(geo)
 
-// unk8 is float, but doesn't really matter since CMD23 is unused
-#define CMD23(model, unk4, unk8) \
-    CMD_BBH(LEVEL_CMD_23, 0x08, 0), \
-    CMD_PTR(unk4), \
-    CMD_W(unk8)
+// Previously 0x23 CMD
+// Version of below but will always spawn for NS
+#define OBJ_WITH_ACTS_NS(model, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh, acts) \
+    CMD_BBBB(LEVEL_CMD_OBJ_WITH_ACTS_NS, 0x18, acts, model), \
+    CMD_HHHHHH(posX, posY, posZ, angleX, angleY, angleZ), \
+    CMD_W(behParam), \
+    CMD_PTR(beh)
+
+#define OBJ_WITH_ACTS_NOT_NS(model, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh, acts) \
+    CMD_BBBB(LEVEL_CMD_OBJ_WITH_ACTS_NOT_NS, 0x18, acts, model), \
+    CMD_HHHHHH(posX, posY, posZ, angleX, angleY, angleZ), \
+    CMD_W(behParam), \
+    CMD_PTR(beh)
 
 #define OBJECT_WITH_ACTS(model, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh, acts) \
     CMD_BBBB(LEVEL_CMD_PLACE_OBJECT, 0x1C, acts, 0x00), \
@@ -362,6 +370,9 @@ enum GoddardScene {
 
 #define OBJECT(model, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh) \
     OBJECT_WITH_ACTS(model, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh, 0x1F)
+
+#define OBJECT_EXTRA(model, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh) \
+    OBJECT_WITH_ACTS(model, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh, 0x7F)
 
 #define MARIO(model, behArg, beh) \
     CMD_BBH(LEVEL_CMD_INIT_MARIO, 0x0C, model), \
@@ -439,12 +450,6 @@ enum GoddardScene {
 #define MACRO_OBJECTS(objList) \
     CMD_BBH(LEVEL_CMD_SET_MACRO_OBJECTS, 0x08, 0x0000), \
     CMD_PTR(objList)
-
-// unused
-#define CMD3A(unk2, unk4, unk6, unk8, unk10) \
-    CMD_BBH(LEVEL_CMD_3A, 0x0C, unk2), \
-    CMD_HH(unk6, unk8), \
-    CMD_HH(unk10, 0x0000)
 
 #define WHIRLPOOL(index, condition, posX, posY, posZ, strength) \
     CMD_BBBB(LEVEL_CMD_CREATE_WHIRLPOOL, 0x0C, index, condition), \

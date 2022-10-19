@@ -55,8 +55,6 @@ void bhv_yellow_coin_init(void) {
             cur_obj_set_model(MODEL_YELLOW_COIN_NO_SHADOW);
         } else if (cur_obj_has_model(MODEL_BLUE_COIN)) {
             cur_obj_set_model(MODEL_BLUE_COIN_NO_SHADOW);
-        } else if (cur_obj_has_model(MODEL_RED_COIN)) {
-            cur_obj_set_model(MODEL_RED_COIN_NO_SHADOW);
 #ifdef IA8_30FPS_COINS
         } else if (cur_obj_has_model(MODEL_SILVER_COIN)) {
             cur_obj_set_model(MODEL_SILVER_COIN_NO_SHADOW);
@@ -155,9 +153,9 @@ void bhv_coin_formation_spawned_coin_loop(void) {
         obj_set_hitbox(o, &sYellowCoinHitbox);
         if (o->oCoinSnapToGround) {
             o->oPosY += 300.0f;
-            cur_obj_update_floor_height();
+            struct Surface *floor = cur_obj_update_floor_height_and_get_floor();
 
-            if (o->oPosY + FIND_FLOOR_BUFFER < o->oFloorHeight || o->oFloorHeight < FLOOR_LOWER_LIMIT_MISC) {
+            if (o->oPosY + FIND_FLOOR_BUFFER < o->oFloorHeight || o->oFloorHeight < FLOOR_LOWER_LIMIT_MISC || floor->type == SURFACE_DEATH_PLANE) {
                 obj_mark_for_deletion(o);
             } else {
                 o->oPosY = o->oFloorHeight;

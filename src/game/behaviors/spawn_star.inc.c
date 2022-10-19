@@ -14,6 +14,14 @@ static struct ObjectHitbox sCollectStarHitbox = {
 
 void bhv_collect_star_init(void) {
     s8 starId = GET_BPARAM1(o->oBehParams);
+
+    if ((gCurrCourseNum <= COURSE_RR) && (gCurrCourseNum >= COURSE_BOB)) {
+        struct Object *num = spawn_orange_number(starId + 1, 0, 0, 0);
+        num->oOrangeNumType = 1;
+        num->oOrangeNumPointer = o;
+        o->oStarOrangeNumPointer = num;
+    }
+
 #ifdef GLOBAL_STAR_IDS
     u8 currentLevelStarFlags = save_file_get_star_flags((gCurrSaveFileNum - 1), COURSE_NUM_TO_INDEX(starId / 7));
     if (currentLevelStarFlags & (1 << (starId % 7))) {
@@ -46,11 +54,7 @@ void bhv_star_spawn_init(void) {
     o->oForwardVel = o->oStarSpawnDisFromHome / 30.0f;
     o->oStarSpawnVelY = o->oPosY;
 
-#ifdef ENABLE_VANILLA_LEVEL_SPECIFIC_CHECKS
-    if (o->oBehParams2ndByte == SPAWN_STAR_ARC_CUTSCENE_BP_DEFAULT_STAR || gCurrCourseNum == COURSE_BBH) {
-#else
     if (o->oBehParams2ndByte == SPAWN_STAR_ARC_CUTSCENE_BP_DEFAULT_STAR) {
-#endif
         cutscene_object(CUTSCENE_STAR_SPAWN, o);
     } else {
         cutscene_object(CUTSCENE_RED_COIN_STAR_SPAWN, o);
@@ -134,7 +138,15 @@ struct Object *spawn_star(struct Object *starObj, f32 x, f32 y, f32 z) {
 void spawn_default_star(f32 x, f32 y, f32 z) {
     struct Object *starObj = NULL;
     starObj = spawn_star(starObj, x, y, z);
-    starObj->oBehParams2ndByte = SPAWN_STAR_ARC_CUTSCENE_BP_DEFAULT_STAR;
+    if (gOptionsSettings.gameplay.s.randomizeStarSpawns) {
+        Vec3s pos;
+        get_safe_position(gCurrentObject, pos, 400.f, 700.f, &gRandomSeed16, FLOOR_SAFE_HOVERING, (RAND_POSITION_FLAG_CAN_BE_UNDERWATER | RAND_POSITION_FLAG_THI_A3_ABOVE_MESH | RAND_POSITION_FLAG_SPAWN_BOTTOM_OF_SLIDE | RAND_POSITION_FLAG_BBH_HMC_LIMITED_ROOMS));
+        starObj->oHomeX = pos[0];
+        starObj->oHomeY = pos[1];
+        starObj->oHomeZ = pos[2];
+    }
+
+    starObj->oBehParams2ndByte = SPAWN_STAR_ARC_CUTSCENE_BP_HIDDEN_STAR;
 }
 
 void spawn_red_coin_cutscene_star(f32 x, f32 y, f32 z) {
@@ -153,13 +165,11 @@ void spawn_no_exit_star(f32 x, f32 y, f32 z) {
 void bhv_hidden_red_coin_star_init(void) {
     struct Object *starObj = NULL;
 
-    if (gCurrCourseNum != COURSE_JRB) {
-        spawn_object(o, MODEL_TRANSPARENT_STAR, bhvRedCoinStarMarker);
-    }
+    spawn_object(o, MODEL_TRANSPARENT_STAR, bhvRedCoinStarMarker);
 
     s16 numRedCoinsRemaining = count_objects_with_behavior(bhvRedCoin);
     if (numRedCoinsRemaining == 0) {
-        starObj = spawn_object_abs_with_rot(o, 0, MODEL_STAR, bhvStar, o->oPosX, o->oPosY, o->oPosZ, 0, 0, 0);
+        starObj = spawn_object_abs_with_rot(o, 0, MODEL_STAR, bhvStarNoRandom, o->oPosX, o->oPosY, o->oPosZ, 0, 0, 0);
         starObj->oBehParams = o->oBehParams;
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }

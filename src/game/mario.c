@@ -536,10 +536,10 @@ u32 mario_floor_is_slippery(struct MarioState *m) {
     }
 
     switch (mario_get_floor_class(m)) {
-        case SURFACE_VERY_SLIPPERY: normY = COS10; break;
-        case SURFACE_SLIPPERY:      normY = COS20; break;
-        default:                    normY = COS38; break;
-        case SURFACE_NOT_SLIPPERY:  normY = 0.0f;  break;
+        case SURFACE_CLASS_VERY_SLIPPERY: normY = COS10; break;
+        case SURFACE_CLASS_SLIPPERY:      normY = COS20; break;
+        default:                          normY = COS38; break;
+        case SURFACE_CLASS_NOT_SLIPPERY:  normY = 0.0f;  break;
     }
 
     return m->floor->normal.y <= normY;
@@ -557,10 +557,10 @@ s32 mario_floor_is_slope(struct MarioState *m) {
     }
 
     switch (mario_get_floor_class(m)) {
-        case SURFACE_VERY_SLIPPERY: normY = COS5;  break;
-        case SURFACE_SLIPPERY:      normY = COS10; break;
-        default:                    normY = COS15; break;
-        case SURFACE_NOT_SLIPPERY:  normY = COS20; break;
+        case SURFACE_CLASS_VERY_SLIPPERY: normY = COS5;  break;
+        case SURFACE_CLASS_SLIPPERY:      normY = COS10; break;
+        default:                          normY = COS15; break;
+        case SURFACE_CLASS_NOT_SLIPPERY:  normY = COS20; break;
     }
 
     return m->floor->normal.y <= normY;
@@ -584,10 +584,10 @@ s32 mario_floor_is_steep(struct MarioState *m) {
     // This does not matter in vanilla game practice.
     if (!mario_facing_downhill(m, FALSE)) {
         switch (mario_get_floor_class(m)) {
-            case SURFACE_VERY_SLIPPERY: normY = COS15; break;
-            case SURFACE_SLIPPERY:      normY = COS20; break;
-            default:                    normY = COS30; break;
-            case SURFACE_NOT_SLIPPERY:  normY = COS30; break;
+            case SURFACE_CLASS_VERY_SLIPPERY: normY = COS15; break;
+            case SURFACE_CLASS_SLIPPERY:      normY = COS20; break;
+            default:                          normY = COS30; break;
+            case SURFACE_CLASS_NOT_SLIPPERY:  normY = COS30; break;
         }
 
         return m->floor->normal.y <= normY;
@@ -1691,6 +1691,9 @@ void queue_rumble_particles(struct MarioState *m) {
 }
 #endif
 
+u8 sDemonStart = 0;
+u8 sDemonTimer = 0;
+
 /**
  * Main function for executing Mario's behavior. Returns particleFlags.
  */
@@ -1733,6 +1736,22 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
         // If Mario is OOB, stop executing actions.
         if (gMarioState->floor == NULL) {
             return ACTIVE_PARTICLE_NONE;
+        }
+
+        if (sDemonStart) {
+            if ((gMarioState->action & ACT_GROUP_MOVING) || (gMarioState->action & ACT_GROUP_AIRBORNE) || (gMarioState->action & ACT_GROUP_SUBMERGED)) {
+                        sDemonTimer = 100;
+                        sDemonStart = 0;
+            }
+        } else if (sDemonTimer > 1) {
+            sDemonTimer--;
+        } else if (sDemonTimer == 1) {
+            if ((gCurrLevelNum != LEVEL_CASTLE) && (gCurrLevelNum != LEVEL_CASTLE_COURTYARD) && (gCurrLevelNum != LEVEL_CASTLE_GROUNDS)) {
+                if ((gCurrLevelNum != LEVEL_BOWSER_1) && (gCurrLevelNum != LEVEL_BOWSER_2) && (gCurrLevelNum != LEVEL_BOWSER_3)) {
+                    spawn_object(gMarioState->marioObj, MODEL_1UP, bhvGreenDemon);
+                }
+            }
+            sDemonTimer = 0;
         }
 
         // The function can loop through many action shifts in one frame,
@@ -1850,11 +1869,25 @@ void init_mario(void) {
 
     Vec3s capPos;
     if (save_file_get_cap_pos(capPos)) {
-        struct Object *capObject = spawn_object(gMarioState->marioObj, MODEL_MARIOS_CAP, bhvNormalCap);
-        vec3s_to_vec3f(&capObject->oPosVec, capPos);
-
-        capObject->oForwardVel = 0;
-        capObject->oMoveAngleYaw = 0;
+        save_file_clear_flags(SAVE_FLAG_CAP_ON_GROUND);
+        switch (gCurrCourseNum) {
+            case COURSE_SSL:
+                save_file_set_flags(SAVE_FLAG_CAP_ON_KLEPTO);
+                break;
+            case COURSE_SL:
+                save_file_set_flags(SAVE_FLAG_CAP_ON_MR_BLIZZARD);
+                break;
+            case COURSE_TTM:
+                save_file_set_flags(SAVE_FLAG_CAP_ON_UKIKI);
+                break;
+            default:
+                save_file_set_flags(SAVE_FLAG_CAP_ON_KLEPTO);
+                break;
+        }
+    }
+    set_mario_rando_colors();
+    if (gOptionsSettings.gameplay.s.demonOn && (cur_obj_nearest_object_with_behavior(bhvGreenDemon) == NULL)) {
+        sDemonStart = 1;
     }
 }
 

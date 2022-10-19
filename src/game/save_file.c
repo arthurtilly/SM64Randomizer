@@ -17,6 +17,7 @@
 #include "sram.h"
 #endif
 #include "puppycam2.h"
+#include "randomizer.h"
 
 #define ALIGN4(val) (((val) + 0x3) & ~0x3)
 
@@ -205,7 +206,10 @@ static void add_save_block_signature(void *buffer, s32 size, u16 magic) {
     sig->chksum = calc_checksum(buffer, size);
 }
 
-static void save_main_menu_data(void) {
+void save_main_menu_data(void) {
+    gSaveBuffer.menuData.randomNum = gRandomSeed16;
+    gMainMenuDataModified = TRUE;
+
     if (gMainMenuDataModified) {
         // Compute checksum
         add_save_block_signature(&gSaveBuffer.menuData, sizeof(gSaveBuffer.menuData), MENU_DATA_MAGIC);
@@ -358,6 +362,8 @@ void save_file_load_all(void) {
                 break;
         }
     }
+
+    gRandomSeed16 = gSaveBuffer.menuData.randomNum;
 }
 
 #ifdef PUPPYCAM
@@ -422,6 +428,10 @@ void save_file_collect_star_or_key(s16 coinScore, s16 starIndex) {
 #else
     s32 starFlag = 1 << starIndex;
 #endif
+
+    if (gCurrDemoInput != NULL) {
+        return;
+    }
 
     gLastCompletedCourseNum = courseIndex + 1;
     gLastCompletedStarNum = starIndex + 1;
@@ -646,16 +656,49 @@ void save_file_set_cannon_unlocked(void) {
     gSaveFileModified = TRUE;
 }
 
+extern u8 gOverwriteFileOptions;
+extern u8 gOverwriteFileSeed;
+
+void save_file_set_seed_and_options(s32 fileNum) {
+    struct SaveFile *saveFile = &gSaveBuffer.files[fileNum - 1][0];
+    u8 overwriteOptions = gOverwriteFileOptions;
+    u8 overwriteSeed = gOverwriteFileSeed;
+
+    // New file, set the file's seed to the one picked.
+    if (!(saveFile->flags & SAVE_FLAG_FILE_EXISTS)){
+        overwriteOptions = TRUE;
+        overwriteSeed = TRUE;
+    }
+    // If the options have been modified or if the file is new
+    if (overwriteOptions) {
+        saveFile->options = gOptionsSettings;
+    // Existing file
+    } else {
+        gOptionsSettings = saveFile->options;
+    }
+
+    // If the seed has been modified or if the file is new
+    if (overwriteSeed) {
+        saveFile->seed = gRandomizerGameSeed;
+        // If the file is old and was originally set seed, keep it set
+        if (saveFile->flags & SAVE_FLAG_IS_SET_SEED) {
+            gIsSetSeed = TRUE;
+        } else if (gIsSetSeed) {
+            saveFile->flags |= SAVE_FLAG_IS_SET_SEED;
+        }
+    // Existing file
+    } else {
+        gRandomizerGameSeed = saveFile->seed;
+        gIsSetSeed = (saveFile->flags & SAVE_FLAG_IS_SET_SEED) != 0;
+    }
+}
+
 void save_file_set_cap_pos(s16 x, s16 y, s16 z) {
     struct SaveFile *saveFile = &gSaveBuffer.files[gCurrSaveFileNum - 1][0];
 
     saveFile->capLevel = gCurrLevelNum;
     saveFile->capArea = gCurrAreaIndex;
-#ifndef SAVE_NUM_LIVES
-    vec3s_set(saveFile->capPos, x, y, z);
-#else
     (void) x; (void) y; (void) z; // Address compiler warnings for unused variables
-#endif
     save_file_set_flags(SAVE_FLAG_CAP_ON_GROUND);
 }
 
@@ -665,11 +708,7 @@ s32 save_file_get_cap_pos(Vec3s capPos) {
 
     if (saveFile->capLevel == gCurrLevelNum && saveFile->capArea == gCurrAreaIndex
         && (flags & SAVE_FLAG_CAP_ON_GROUND)) {
-#ifdef SAVE_NUM_LIVES
         vec3_zero(capPos);
-#else
-        vec3s_copy(capPos, saveFile->capPos);
-#endif
         return TRUE;
     }
     return FALSE;

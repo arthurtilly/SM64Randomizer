@@ -219,7 +219,7 @@
 #define TEXT_HEADSET _("HEADSET")
 
 // Misc Menu Text
-#define TEXT_SAVED_DATA_EXISTS _("SAVED DATA EXITS") // Misspell
+#define TEXT_SAVED_DATA_EXISTS _("SAVED DATA EXISTS")
 #define TEXT_NO_SAVED_DATA_EXISTS _("NO SAVED DATA EXISTS")
 
 // Inside a Menu
@@ -227,6 +227,54 @@
 #define TEXT_CHECK_SCORE _("CHECK SCORE")
 #define TEXT_COPY_FILE_BUTTON _("COPY FILE")
 #define TEXT_ERASE_FILE_BUTTON _("ERASE FILE")
+
+// Seed Menu
+#define TEXT_ENTER_SEED _("ENTER SEED")
+#define TEXT_ENTER_OPTIONS _("SELECT OPTIONS")
+#define TEXT_SEED_SHOULD_BE _("SEED SHOULD BE BETWEEN 0 AND 65535")
+#define TEXT_RANDOM _("RANDOM")
+
+#define TEXT_RANDOM_OPTIONS _("RANDOMIZE")
+
+#define TEXT_SEED _("SEED")
+#define TEXT_RESET _("RESET")
+#define TEXT_OPTIONS _("OPTIONS")
+
+#define TEXT_NEXT _("< L - PREV")
+#define TEXT_PREV _("NEXT - R >")
+
+#define TEXT_OBJECT_OPTIONS _("OBJECT OPTIONS")
+#define TEXT_WARP_OPTIONS _("WARP OPTIONS")
+#define TEXT_AESTHETIC_OPTIONS _("AESTHETIC OPTIONS")
+#define TEXT_PRESETS _("PRESETS")
+#define TEXT_GMP_OPTIONS _("GAMEPLAY MODE OPTIONS")
+
+// Option Menu
+#define TEXT_PLUS _("<")
+#define TEXT_MINUS _(">")
+
+#define TEXT_BITS_119 _("119")
+#define TEXT_SEED_SHOULD_BE _("SEED SHOULD BE BETWEEN 0 AND 65535")
+#define TEXT_RANDOM _("RANDOM")
+
+
+#define TEXT_PRESET_TEXT _("USE PRESET")
+#define TEXT_PRESET_CUSTOM _("CUSTOM")
+
+#define TEXT_PRESET1 _("DEFAULT")
+#define TEXT_PRESET2 _("DEFAULT PLUS")
+#define TEXT_PRESET3 _("EXTREME")
+#define TEXT_PRESET4 _("EASY")
+#define TEXT_PRESET5 _("NEW GAME")
+#define TEXT_PRESET6 _("CALM")
+
+#define TEXT_PRESET1DESC _("The classic randomizer experience you know\nand love from earlier versions.")
+#define TEXT_PRESET2DESC _("The same settings as Default, but with\nwacky colors and aesthetics!")
+#define TEXT_PRESET3DESC _("A super challenging experience for the\nskilled players out there.")
+#define TEXT_PRESET4DESC _("A more peaceful and beginner-friendly\nmode for those new to the game.")
+#define TEXT_PRESET5DESC _("A mode designed to simulate playing a\nnew, shaken-up legit version of SM64!")
+#define TEXT_PRESET6DESC _("Much less randomization and vanilla warps\nfor those who don't want to be\noverwhelmed.")
+// Seed Menu
 
 // Score Menu
 #define TEXT_HI_SCORE _("HI SCORE")
@@ -256,6 +304,7 @@
 #define TEXT_MYSCORE _("MYSCORE")
 #define TEXT_CONTINUE _("CONTINUE")
 #define TEXT_EXIT_COURSE _("EXIT COURSE")
+#define TEXT_EXIT_LOBBY _("EXIT TO LOBBY")
 #ifndef VERSION_EU // "R" text is different in EU
 #define TEXT_CAMERA_ANGLE_R _("SET CAMERA ANGLE WITH R")
 #endif
@@ -288,6 +337,28 @@
 #define TEXT_LETS_HAVE_CAKE _("let's bake a delicious cake...")
 #define TEXT_FOR_MARIO _("...for Mario...")
 #define TEXT_FILE_MARIO_QUESTION _("Mario!")
+
+#define TEXT_BY_ARTHUR _("Creators: Arthurtilly, JoshDuMan, nim, Kaze Emanuar")
+#define TEXT_CURR_VERSION _("Version: v1.0")
+#define TEXT_SM64_RANDO _("SM64 RANDOMIZER")
+
+#define TEXT_00012 _("1 2 OATMEAL") // heroic
+#define TEXT_00112 _("THIS IS THE 1 12") // josh
+#define TEXT_00320 _("GIVE RANDO SOURCE") // alo
+#define TEXT_00360 _("CHRISGRIN") // josh
+#define TEXT_00404 _("404 NOT FOUND") // baggage
+#define TEXT_00650 _("YA MUDDAS") // chrism
+#define TEXT_02401 _("L IS REAL")
+#define TEXT_02639 _("YOUR STUPID")
+#define TEXT_11037 _("NO THATS WRONG")
+#define TEXT_12345 _("NOT VERY CREATIVE")
+#define TEXT_42069 _("NICE MEME")
+#define TEXT_58008 _("HOW INAPPROPRIATE") // baggage
+#define TEXT_62396 _("HAPPY BIRTHDAY") // zimbo
+#define TEXT_65222 _("TRANS RIGHTS")
+
+// course complete menu
+#define TEXT_CONGRATULATIONS _("CONGRATULATIONS")
 
 #endif
 

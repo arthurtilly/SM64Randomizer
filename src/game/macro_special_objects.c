@@ -142,6 +142,7 @@ void spawn_macro_objects(s32 areaIndex, MacroObject *macroObjList) {
             newObj->respawnInfoType = RESPAWN_INFO_TYPE_MACRO_OBJECT;
             newObj->respawnInfo = macroObjList - 1;
             newObj->parentObj = newObj;
+            newObj->pointerSeed = (uintptr_t)macroObjList;
         }
     }
 }

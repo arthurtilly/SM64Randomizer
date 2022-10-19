@@ -26,6 +26,8 @@
 #include "config.h"
 #include "puppycam2.h"
 #include "main.h"
+#include "randomizer.h"
+#include "print.h"
 
 #ifdef VERSION_EU
 #undef LANGUAGE_FUNCTION
@@ -826,26 +828,28 @@ void handle_dialog_scroll_page_state(s8 lineNum, s8 totalLines, s8 *pageState, s
 }
 
 void render_star_count_dialog_text(s8 *xMatrix, s16 *linePos) {
-    s8 tensDigit = gDialogVariable / 10;
-    s8 onesDigit = gDialogVariable - (tensDigit * 10); // remainder
-
-    if (tensDigit != 0) {
-        if (*xMatrix != 1) {
-            create_dl_translation_matrix(MENU_MTX_NOPUSH, (f32)(gDialogCharWidths[DIALOG_CHAR_SPACE] * *xMatrix), 0, 0);
-        }
-
-        render_generic_char(tensDigit);
-        create_dl_translation_matrix(MENU_MTX_NOPUSH, (f32) gDialogCharWidths[tensDigit], 0, 0);
-        *xMatrix = 1;
-        (*linePos)++;
-    }
+    s8 hundredsDigit = gDialogVariable / 100;
+    s8 tensDigit = (gDialogVariable / 10) - (hundredsDigit * 10);
+    s8 onesDigit = gDialogVariable - (tensDigit * 10 + hundredsDigit * 100);
 
     if (*xMatrix != 1) {
         create_dl_translation_matrix(MENU_MTX_NOPUSH, (f32)(gDialogCharWidths[DIALOG_CHAR_SPACE] * (*xMatrix - 1)), 0, 0);
     }
 
+    if (hundredsDigit != 0) {
+        render_generic_char(hundredsDigit);
+        create_dl_translation_matrix(MENU_MTX_NOPUSH, (f32) gDialogCharWidths[hundredsDigit], 0, 0);
+        (*linePos)++;
+    }
+    if (tensDigit != 0 || hundredsDigit != 0) {
+        render_generic_char(tensDigit);
+        create_dl_translation_matrix(MENU_MTX_NOPUSH, (f32) gDialogCharWidths[tensDigit], 0, 0);
+        (*linePos)++;
+    }
+
     render_generic_char(onesDigit);
     create_dl_translation_matrix(MENU_MTX_NOPUSH, (f32) gDialogCharWidths[onesDigit], 0, 0);
+
     (*linePos)++;
     *xMatrix = 1;
 }
@@ -1068,7 +1072,7 @@ void handle_special_dialog_text(s16 dialogID) { // dialog ID tables, in order
     for (i = 0; i < (s16) ARRAY_COUNT(dialogBossStart); i++) {
         if (dialogBossStart[i] == dialogID) {
             seq_player_unlower_volume(SEQ_PLAYER_LEVEL, 60);
-            play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_EVENT_BOSS), 0);
+            play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS_R(4, SEQ_EVENT_BOSS), 0);
             return;
         }
     }
@@ -1666,18 +1670,23 @@ void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
 void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
     u8 textContinue[] = { TEXT_CONTINUE };
     u8 textExitCourse[] = { TEXT_EXIT_COURSE };
+    u8 textExitLobby[] = { TEXT_EXIT_LOBBY };
     u8 textCameraAngleR[] = { TEXT_CAMERA_ANGLE_R };
 
-    handle_menu_scrolling(MENU_SCROLL_VERTICAL, index, 1, 3);
+    handle_menu_scrolling(MENU_SCROLL_VERTICAL, index, 1, (gOptionsSettings.gameplay.s.nonstopMode ? 4 : 3));
+
+    gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
 
     print_generic_string(x + 10, y - 2, LANGUAGE_ARRAY(textContinue));
-    print_generic_string(x + 10, y - 17, LANGUAGE_ARRAY(textExitCourse));
+    print_generic_string(x + 10, y - 17, textExitLobby);
 
-    if (*index != MENU_OPT_CAMERA_ANGLE_R) {
-        print_generic_string(x + 10, y - 33, LANGUAGE_ARRAY(textCameraAngleR));
+    if (gOptionsSettings.gameplay.s.nonstopMode) print_generic_string(x + 10, y - 32, textExitCourse);
+
+    if (*index != (gOptionsSettings.gameplay.s.nonstopMode ? 4 : 3)) {
+        print_generic_string(x + 10, y - (gOptionsSettings.gameplay.s.nonstopMode ? 47 : 32), textCameraAngleR);
         gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
 
         create_dl_translation_matrix(MENU_MTX_PUSH, x - X_VAL8, (y - ((*index - 1) * yIndex)) - Y_VAL8, 0);
@@ -1687,7 +1696,7 @@ void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
         gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
     }
 
-    if (*index == MENU_OPT_CAMERA_ANGLE_R) {
+    if (*index == (gOptionsSettings.gameplay.s.nonstopMode ? 4 : 3)){
         render_pause_camera_options(x - 42, y - 42, &gDialogCameraAngleIndex, 110);
     }
 }
@@ -1895,6 +1904,8 @@ s32 render_pause_courses_and_castle(void) {
 
                 if (gDialogLineNum == MENU_OPT_EXIT_COURSE) {
                     index = gDialogLineNum;
+                } else if (gOptionsSettings.gameplay.s.nonstopMode && gDialogLineNum == 3) {
+                    index = gDialogLineNum;
                 } else { // MENU_OPT_CONTINUE or MENU_OPT_CAMERA_ANGLE_R
                     index = MENU_OPT_DEFAULT;
                 }
@@ -1922,6 +1933,9 @@ s32 render_pause_courses_and_castle(void) {
 #if defined(WIDE) && !defined(PUPPYCAM)
         render_widescreen_setting();
 #endif
+
+    print_seed_and_options_data();
+
     if (gDialogTextAlpha < 250) {
         gDialogTextAlpha += 25;
     }
@@ -2148,6 +2162,7 @@ s32 render_course_complete_screen(void) {
 
         case DIALOG_STATE_VERTICAL:
             shade_screen();
+            print_seed_and_options_data();
             render_course_complete_lvl_info_and_hud_str();
             render_save_confirmation(100, 86, &gDialogLineNum, 20);
 
@@ -2180,7 +2195,10 @@ s32 render_menus_and_dialogs(void) {
 
     create_dl_ortho_matrix();
 
-    if (gMenuMode != MENU_MODE_NONE) {
+    if (gMarioState->action == ACT_JUMBO_STAR_CUTSCENE) {
+        gDialogTextAlpha = 255;
+        print_seed_and_options_data();
+    } else if (gMenuMode != MENU_MODE_NONE) {
         switch (gMenuMode) {
             case MENU_MODE_UNUSED_0:
                 mode = render_pause_courses_and_castle();

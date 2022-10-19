@@ -114,6 +114,20 @@ void bhv_door_init(void) {
         gDoorAdjacentRooms[o->oDoorSelfRoom][0] = o->oDoorForwardRoom;
         gDoorAdjacentRooms[o->oDoorSelfRoom][1] = o->oDoorBackwardRoom;
     }
+
+    if ((((o->oBehParams >> 24) & 0xFF) != 0) && (((o->oBehParams >> 24) & 0xFF) < 0xFE)) {
+        o->oBehParams = (gRequiredStars[((o->oBehParams >> 24) & 0xFF) - 1] << 24) + (o->oBehParams & 0x00FFFFFF);
+    }
+
+    // Check model id
+    if ((!gOptionsSettings.gameplay.s.keepStructure) && (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_CASTLE_KEY_DOOR])) {
+        o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_CASTLE_CASTLE_DOOR];
+    }
+
+    if ((gOptionsSettings.gameplay.s.randomStarDoorCounts != 0) &&
+        ((o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_CASTLE_DOOR_1_STAR]) || (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_CASTLE_DOOR_3_STARS]))) {
+        o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_CASTLE_DOOR_0_STARS];
+    }
 }
 
 void bhv_door_rendering_loop(void) {

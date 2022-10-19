@@ -179,6 +179,8 @@ static void add_shadow_to_display_list(Gfx *displayListHead, s8 shadowType) {
     gSPEndDisplayList(displayListHead);
 }
 
+extern u32 gGlobalTimer;
+
 //! TODO:
 //      - Breakout create_shadow_below_xyz into multiple functions
 /**
@@ -189,6 +191,10 @@ Gfx *create_shadow_below_xyz(Vec3f pos, s16 shadowScale, u8 shadowSolidity, s8 s
     struct Object *obj = gCurGraphNodeObjectNode;
     // Check if the object exists.
     if (obj == NULL) {
+        return NULL;
+    }
+
+    if (gGlobalTimer == gTimeStartedLoadingArea) {
         return NULL;
     }
 

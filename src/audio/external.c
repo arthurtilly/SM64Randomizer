@@ -2186,7 +2186,7 @@ void play_music(u8 player, u16 seqArgs, u16 fadeTimer) {
     // If already in the queue, abort, after first restarting the sequence if
     // it is first, and handling disabled music somehow.
     // (That handling probably ought to occur even when the queue is full...)
-    for (i = 0; i < sBackgroundMusicQueueSize; i++) {
+    /** for (i = 0; i < sBackgroundMusicQueueSize; i++) {
         if (sBackgroundMusicQueue[i].seqId == seqId) {
             if (i == 0) {
                 seq_player_play_sequence(SEQ_PLAYER_LEVEL, seqId, fadeTimer);
@@ -2195,7 +2195,7 @@ void play_music(u8 player, u16 seqArgs, u16 fadeTimer) {
             }
             return;
         }
-    }
+    } **/
 
     // Find the next sequence slot by priority.
     for (i = 0; i < sBackgroundMusicQueueSize; i++) {

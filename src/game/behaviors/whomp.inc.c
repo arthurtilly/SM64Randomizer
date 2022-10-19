@@ -110,7 +110,7 @@ void king_whomp_chase(void) {
 
     if (mario_is_far_below_object(1000.0f)) {
         o->oAction = 0;
-        stop_background_music(SEQUENCE_ARGS(4, SEQ_EVENT_BOSS));
+        stop_background_music(SEQUENCE_ARGS_R(4, SEQ_EVENT_BOSS));
     }
 }
 
@@ -139,7 +139,7 @@ void whomp_jump(void) {
 }
 
 void whomp_land(void) {
-    if (o->oSubAction == 0 && o->oMoveFlags & OBJ_MOVE_LANDED) {
+    if (o->oSubAction == 0 && (o->oMoveFlags & OBJ_MOVE_LANDED || (o->oMoveFlags & OBJ_MOVE_AT_WATER_SURFACE && o->oTimer == 0))) {
         cur_obj_play_sound_2(SOUND_OBJ_WHOMP);
         cur_obj_shake_screen(SHAKE_POS_SMALL);
         o->oVelY = 0.0f;
@@ -242,7 +242,8 @@ void whomp_die(void) {
             spawn_triangle_break_particles(20, MODEL_DIRT_ANIMATION, 3.0f, 4);
             cur_obj_shake_screen(SHAKE_POS_SMALL);
             o->oPosY += 100.0f;
-            spawn_default_star(180.0f, 3880.0f, 340.0f);
+            // spawn_default_star(180.0f, 3880.0f, 340.0f);
+            spawn_default_star(o->oPosX, o->oPosY + 200.0f, o->oPosZ);
             cur_obj_play_sound_2(SOUND_OBJ_KING_WHOMP_DEATH);
             o->oAction = 9;
         }
@@ -257,7 +258,7 @@ void whomp_die(void) {
 
 void king_whomp_stop_music(void) {
     if (o->oTimer == 60) {
-        stop_background_music(SEQUENCE_ARGS(4, SEQ_EVENT_BOSS));
+        stop_background_music(SEQUENCE_ARGS_R(4, SEQ_EVENT_BOSS));
     }
 }
 

@@ -5,16 +5,16 @@
  *********************/
 
 // The size of the master display list (gDisplayListHead). 6400 is vanilla.
-#define GFX_POOL_SIZE 10000
+#define GFX_POOL_SIZE 7000
 
 // Show a watermark on the title screen that reads "Made with HackerSM64", instead of the copyright message.
-#define INTRO_CREDIT
+// #define INTRO_CREDIT
 
 // Spawns floombas on the title screen.
-#define INTRO_FLOOMBAS
+// #define INTRO_FLOOMBAS
 
 // Enables widescreen (16:9) support.
-#define WIDE
+// #define WIDE
 
 // Skybox size modifier, changing this will add support for larger skybox images. NOTE: Vanilla skyboxes may break if you change this option. Be sure to rescale them accordingly.
 // Whenever you change this, make sure to run "make -C tools clean" to rebuild the skybox tool (alternatively go into skyconv.c and change the file in any way (like adding/deleting a space) to specifically rebuild that tool).
@@ -34,10 +34,10 @@
 // #define DISABLE_AA
 
 // Makes the coins ia8 64x64 instead of ia16 32x32. Uses new ia8 textures so that vanilla coins look better.
-#define IA8_COINS
+// #define IA8_COINS
 
 // Similar to the above, but 30 FPS (Textures by InTheBeef, cleaned up by Arceveti).
-#define IA8_30FPS_COINS
+// #define IA8_30FPS_COINS
 
 // Use .rej microcode for certain objects (experimental - only should be used when F3DEX_GBI_2 is defined).
 // For advanced users only. Does not work perfectly out the box, best used when exported actor models are
@@ -61,7 +61,7 @@
 // #define OBJ_OPACITY_BY_CAM_DIST
 
 // Fixes the game reading the ia8 burn smoke texture as an rgba16.
-#define BURN_SMOKE_FIX
+// #define BURN_SMOKE_FIX
 
 // Disables the fix to Koopa's unshelled model.
 #define KOOPA_KEEP_PINK_SHORTS
