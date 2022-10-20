@@ -350,16 +350,18 @@ enum GoddardScene {
 // Previously 0x23 CMD
 // Version of below but will always spawn for NS
 #define OBJ_WITH_ACTS_NS(model, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh, acts) \
-    CMD_BBBB(LEVEL_CMD_OBJ_WITH_ACTS_NS, 0x18, acts, model), \
+    CMD_BBBB(LEVEL_CMD_OBJ_WITH_ACTS_NS, 0x1C, acts, 0x00), \
     CMD_HHHHHH(posX, posY, posZ, angleX, angleY, angleZ), \
     CMD_W(behParam), \
-    CMD_PTR(beh)
+    CMD_PTR(beh), \
+    CMD_W(model)
 
 #define OBJ_WITH_ACTS_NOT_NS(model, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh, acts) \
-    CMD_BBBB(LEVEL_CMD_OBJ_WITH_ACTS_NOT_NS, 0x18, acts, model), \
+    CMD_BBBB(LEVEL_CMD_OBJ_WITH_ACTS_NOT_NS, 0x1C, acts, 0x00), \
     CMD_HHHHHH(posX, posY, posZ, angleX, angleY, angleZ), \
     CMD_W(behParam), \
-    CMD_PTR(beh)
+    CMD_PTR(beh), \
+    CMD_W(model)
 
 #define OBJECT_WITH_ACTS(model, posX, posY, posZ, angleX, angleY, angleZ, behParam, beh, acts) \
     CMD_BBBB(LEVEL_CMD_PLACE_OBJECT, 0x1C, acts, 0x00), \

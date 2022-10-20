@@ -144,24 +144,24 @@ void print_seed_and_options_data(void) {
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
     
     sprintf(buf, "%s Seed", (gIsSetSeed ? "Set" : "Random"));
-    print_generic_text_ascii_buf(8,36,buf);
+    print_generic_text_ascii_buf(8,32,buf);
     sprintf(buf, "Seed\xE6 %05d", gRandomizerGameSeed);
-    print_generic_text_ascii_buf(8,22,buf);
+    print_generic_text_ascii_buf(8,18,buf);
     
     for (i = 0; i < ARRAY_COUNT(gPresets); i++) {
         if (gOptionsSettings.gameplay.w == gPresets[i].gameplay.w) {
             sprintf(buf, "Preset\xE6 %s", presetStrings[i]);
-            print_generic_text_ascii_buf(8,8,buf);
+            print_generic_text_ascii_buf(8,4,buf);
             goto presetFound; // don't kill me please
         }
     }
     
     sprintf(buf, "Settings ID\xE6 %d", gOptionsSettings.gameplay.w);
-    print_generic_text_ascii_buf(8,8,buf);
+    print_generic_text_ascii_buf(8,4,buf);
 
 presetFound:
     verXPos = 310 - 2*(310 - get_str_x_pos_from_center(310,textVersion2,0));
-    print_generic_string(verXPos, 8, textVersion2);
+    print_generic_string(verXPos, 4, textVersion2);
 
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
 }
@@ -216,10 +216,7 @@ static u8 is_floor_safe(struct Surface *floor, u8 floorSafeLevel,
             norm = 0.4f;
     }
 
-    if (floorSafeLevel != FLOOR_SAFE_HOVERING) {
-        norm = 0.9f;
-    }
-    if (randPosFlags & RAND_POSITION_FLAG_SAFE) {
+    if ((floorSafeLevel == FLOOR_SAFE_GROUNDED) || (randPosFlags & RAND_POSITION_FLAG_SAFE)) {
         norm = 0.9f;
     }
 
@@ -348,7 +345,6 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
 
     while (TRUE) {
         *seed = random_u16_seeded(tempSeed);
-        tempSeed = *seed;
         // Prevent objects from using the same seed to spawn.
         for (i = 0; i < gSpawnCounter; i++){
             if (gUsedSeeds[i] == *seed) {
@@ -356,6 +352,7 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
                 i = 0; // Technically, first array value is missed on subsequent run-throughs. -1 causes crashes however.
             }
         }
+        tempSeed = *seed;
 
         // Generate random position
         pos[0] = get_val_in_range_uniform(minX, maxX, seed);
@@ -390,9 +387,6 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
             continue;
 
         if (!is_floor_safe(lowFloor, floorSafeLevel, randPosFlags))
-            continue;
-
-        if ((randPosFlags & RAND_POSITION_FLAG_SAFE) && (lowFloor->normal.y < 0.9))
             continue;
 
         // Snap to ground and check if safe
@@ -433,7 +427,6 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
 
         if ((gOptionsSettings.gameplay.s.safeSpawns == SPAWN_SAFETY_HARD) &&
             (floorSafeLevel != FLOOR_SAFE_GROUNDED) && !(randPosFlags & RAND_POSITION_FLAG_SAFE) &&
-            (obj->behavior != segmented_to_virtual(bhvSpinAirborneWarp)) &&
             (obj->behavior != segmented_to_virtual(bhvStar)) &&
             (obj->behavior != segmented_to_virtual(bhvStarSpawnCoordinates)) &&
             (obj->behavior != segmented_to_virtual(bhvExclamationBox))) {

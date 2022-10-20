@@ -352,8 +352,7 @@ static s32 bhv_cmd_set_int(void) {
     return BHV_PROC_CONTINUE;
 }
 
-static s32 bhv_cmd_randomize_object(void)
-{
+static s32 bhv_cmd_randomize_object(void) {
     u32 randType = BHV_CMD_GET_U32(1);
     u32 randPosFlags = 0;
     u8 randomize = FALSE;
@@ -437,8 +436,7 @@ static s32 bhv_cmd_randomize_object(void)
         }
 
         // Max variation
-        if (randType & RAND_TYPE_MAX_VARIATION)
-        {
+        if (randType & RAND_TYPE_MAX_VARIATION) {
             switch(gOptionsSettings.gameplay.s.safeSpawns){
             case SPAWN_SAFETY_SAFE:
                 height = 500.f;
@@ -458,14 +456,12 @@ static s32 bhv_cmd_randomize_object(void)
             randomize = TRUE;
         }
         // Grounded
-        else if (randType & RAND_TYPE_GROUNDED)
-        {
+        else if (randType & RAND_TYPE_GROUNDED) {
             get_safe_position(gCurrentObject, pos, 0.f, 0.f, &gRandomizerTempSeed, FLOOR_SAFE_GROUNDED, randPosFlags);
             randomize = TRUE;
         }
         // Min variation
-        else if (randType & RAND_TYPE_MIN_VARIATION)
-        {
+        else if (randType & RAND_TYPE_MIN_VARIATION) {
             switch(gOptionsSettings.gameplay.s.safeSpawns){
             case SPAWN_SAFETY_SAFE:
                 height = 100.f;
@@ -479,8 +475,8 @@ static s32 bhv_cmd_randomize_object(void)
             get_safe_position(gCurrentObject, pos, 50.f, 200.f, &gRandomizerTempSeed, FLOOR_SAFE_HOVERING, randPosFlags);
             randomize = TRUE;
         }
-        if (randomize)
-        {
+
+        if (randomize) {
             gCurrentObject->oPosX = pos[0];
             gCurrentObject->oPosY = pos[1];
             gCurrentObject->oPosZ = pos[2];

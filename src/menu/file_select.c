@@ -930,7 +930,7 @@ static void seed_menu_check_clicked_buttons(struct Object *seedButton) {
     }
 }
 
-s32 check_clicked_text_width(s16 x, s16 y, int ID, s32 xWidth) {
+s32 check_clicked_text_width(s16 x, s16 y, UNUSED int ID, s32 xWidth) {
     s16 cursorX = sCursorPos[0] - (x - 165.f);
     s16 cursorY = sCursorPos[1] - (y - 110.0f);
     s16 maxX = xWidth;
@@ -1003,7 +1003,7 @@ void randomize_options() {
     curPreset = -1;
 }
 
-static void seed_menu_options_check_clicked_buttons(struct Object *seedButton) {
+static void seed_menu_options_check_clicked_buttons(UNUSED struct Object *seedButton) {
     if (check_clicked_text_width(240, 33, 0, 45)) {
         play_sound(SOUND_MENU_CLICK_FILE_SELECT, gGlobalSoundSource);
         sCurrentMenuLevel = MENU_LAYER_SUBMENU;
@@ -1326,7 +1326,11 @@ void check_main_menu_clicked_buttons(void) {
         sMainMenuButtons[MENU_BUTTON_SOUND_MODE]->oMenuButtonState = MENU_BUTTON_STATE_GROWING;
         sSelectedButtonID = MENU_BUTTON_SOUND_MODE;
     **/
-    {
+    if (check_clicked_button(sMainMenuButtons[MENU_BUTTON_SELECT_SEED]->oPosX,
+                                sMainMenuButtons[MENU_BUTTON_SELECT_SEED]->oPosY, 200.0f)) {
+        sMainMenuButtons[MENU_BUTTON_SELECT_SEED]->oMenuButtonState = MENU_BUTTON_STATE_GROWING;
+        sSelectedButtonID = MENU_BUTTON_SELECT_SEED;
+    } else {
         // Main Menu buttons
         s8 buttonID;
         // Configure Main Menu button group
@@ -1623,8 +1627,6 @@ void print_save_file_star_count(s8 fileIndex, s16 x, s16 y) {
 #define ERASE_X      177
 #define SAVEFILE_X1   92
 #define SAVEFILE_X2  209
-#define MARIOTEXT_X1  92
-#define MARIOTEXT_X2 207
 
 #define MARIOTEXT_X1 (submenu ? 89 : 92)
 #define MARIOTEXT_X2 (submenu ? 211 : 207)
@@ -1637,6 +1639,8 @@ void print_save_file_star_count(s8 fileIndex, s16 x, s16 y) {
 #define SEEDTEXT_Y2 (submenu ? 136 : 135)
 
 extern struct SaveBuffer gSaveBuffer;
+
+void convert_from_ascii(char *buf);
 
 void print_file_names_and_seeds(u32 submenu) {
     u32 i, xpos, ypos;
@@ -1655,7 +1659,7 @@ void print_file_names_and_seeds(u32 submenu) {
             convert_from_ascii(seed);
             xpos = i % 2 ? SEEDTEXT_X2 : SEEDTEXT_X1;
             ypos = i < 2 ? SEEDTEXT_Y1 : SEEDTEXT_Y2;
-            print_menu_generic_string(xpos, ypos, seed);
+            print_menu_generic_string(xpos, ypos, (unsigned char *)seed);
         }
     }
     gSPDisplayList(gDisplayListHead++, dl_menu_ia8_text_end);
@@ -2346,7 +2350,6 @@ char *textsModes[] = {
 #define textCountModes (sizeof(textsModes) / 4)
 
 static void page_modes() {
-    u32 i;
     if (check_clicked_text(180, 160 - MENUHEIGHT * 0, 0)) {
         gOptionsSettings.gameplay.s.keepStructure = 0;
     } else if (check_clicked_text(222, 160 - MENUHEIGHT * 0, 0)) {
@@ -2443,8 +2446,8 @@ void display_box(u32 x, u32 y, u32 width, u32 height) {
     gDPFillRectangle(gDisplayListHead++, x, y, x + width, y + height);
 }
 
-void handle_info_display(struct InfoDisplay displays[], u32 count) {
-    u32 i;
+void handle_info_display(struct InfoDisplay displays[], s32 count) {
+    s32 i;
     s16 cursorX = sCursorPos[0] + 165.f;
     s16 cursorY = sCursorPos[1] + 110.0f;
     u32 displaying = FALSE;
@@ -2578,8 +2581,6 @@ levels and will kill you on contact\x3F", 182, 3},
 };
 
 void page_modes_print() {
-    u32 i;
-    
     options_page_print_options(textCountModes, textsModes);
 
     options_page_print_on_off(gOptionsSettings.gameplay.s.keepStructure, 160 - MENUHEIGHT * 0, 190, 222);

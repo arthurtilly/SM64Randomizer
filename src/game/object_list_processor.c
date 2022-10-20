@@ -495,7 +495,7 @@ void spawn_objects_from_info(UNUSED s32 unused, struct SpawnInfo *spawnInfo) {
 
             if ((script == segmented_to_virtual(bhvSpinAirborneWarp)) && (gCurrCourseNum != COURSE_NONE) && (gOptionsSettings.gameplay.s.randomLevelSpawn)) {
                 Vec3s pos;
-                get_safe_position(object, pos, 100.f, 500.f, &gRandomSeed16, FLOOR_SAFE_GROUNDED, RAND_POSITION_FLAG_CAN_BE_UNDERWATER | RAND_POSITION_FLAG_SPAWN_TOP_OF_SLIDE | RAND_POSITION_FLAG_BBH_HMC_LIMITED_ROOMS | RAND_POSITION_FLAG_SAFE);
+                get_safe_position(object, pos, 100.f, 500.f, &gRandomSeed16, FLOOR_SAFE_HOVERING, RAND_POSITION_FLAG_CAN_BE_UNDERWATER | RAND_POSITION_FLAG_SPAWN_TOP_OF_SLIDE | RAND_POSITION_FLAG_BBH_HMC_LIMITED_ROOMS | RAND_POSITION_FLAG_SAFE);
                 vec3s_copy(spawnInfo->startPos, pos);
             }
 
@@ -647,6 +647,7 @@ void update_objects(UNUSED s32 unused) {
 
     // Update spawners and objects with surfaces
     update_terrain_objects();
+    gIgnoreCollisionDistance = FALSE;
 
     // If Mario was touching a moving platform at the end of last frame, apply
     // displacement now

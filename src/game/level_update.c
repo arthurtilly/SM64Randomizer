@@ -133,7 +133,7 @@ struct MarioState gMarioStates[1];
 struct HudDisplay gHudDisplay;
 s16 sCurrPlayMode;
 s16 sTransitionTimer;
-u8 gJrbShipRaised = 0;
+u8 gJrbShipRaised = FALSE;
 void (*sTransitionUpdate)(s16 *);
 struct WarpDest sWarpDest;
 s16 sSpecialWarpDest;
@@ -826,7 +826,7 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
             case WARP_OP_NONSTOP_JRB:
                 sDelayedWarpTimer = 32;
                 sSourceWarpNodeId = WARP_NODE_NONSTOP_JRB;
-                gJrbShipRaised = 1;
+                gJrbShipRaised = TRUE;
                 play_transition(WARP_TRANSITION_FADE_INTO_COLOR, 0x14, 0xFF, 0xFF, 0xFF);
                 break;
         }

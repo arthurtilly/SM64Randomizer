@@ -517,7 +517,7 @@ const BehaviorScript bhvCapSwitchBase[] = {
 const BehaviorScript bhvCapSwitch[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
-    RANDOMIZE_OBJ(RAND_TYPE_GROUNDED | RAND_TYPE_IMPORTANT),
+    RANDOMIZE_OBJ(RAND_TYPE_GROUNDED | RAND_TYPE_SAFE | RAND_TYPE_IMPORTANT),
     LOAD_COLLISION_DATA(capswitch_collision_050033D0),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_cap_switch_loop),
@@ -1002,7 +1002,7 @@ const BehaviorScript bhvYellowCoin[] = {
     // Yellow coin - common:
     BILLBOARD(),
     OR_INT(oFlags, (OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
-    RANDOMIZE_OBJ(RAND_TYPE_MIN_VARIATION | RAND_TYPE_CAN_BE_UNDERWATER | RAND_TYPE_HARD_HEIGHT),
+    RANDOMIZE_OBJ(RAND_TYPE_MIN_VARIATION | RAND_TYPE_CAN_BE_UNDERWATER),
     CALL_NATIVE(bhv_init_room),
     CALL_NATIVE(bhv_yellow_coin_init),
     BEGIN_LOOP(),
@@ -2745,7 +2745,7 @@ const BehaviorScript bhvJrbSlidingBox[] = {
 
 const BehaviorScript bhvShipPart3[] = {
     BEGIN(OBJ_LIST_DEFAULT),
-    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    OR_INT(oFlags, (OBJ_FLAG_PERSISTENT_RESPAWN | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     SET_HOME(),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_ship_part_3_loop),
@@ -2809,6 +2809,7 @@ const BehaviorScript bhvInSunkenShip2[] = {
     SET_FLOAT(oCollisionDistance, 4000),
     CALL(bhvSunkenShipSetRotation),
     BEGIN_LOOP(),
+        CALL_NATIVE(bhv_sunken_ship_collision_loop),
         CALL_NATIVE(load_object_collision_model),
     END_LOOP(),
 };
@@ -2980,6 +2981,7 @@ const BehaviorScript bhvBooInCastle[] = {
 const BehaviorScript bhvBooWithCage[] = {
     BEGIN(OBJ_LIST_GENACTOR),
     OR_INT(oFlags, (OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO | OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    RANDOMIZE_OBJ(RAND_TYPE_MIN_VARIATION),
     SET_HOME(),
     SET_INT(oDamageOrCoinValue, 3),
     SET_HURTBOX(/*Radius*/ 80, /*Height*/ 120),
@@ -3033,17 +3035,19 @@ const BehaviorScript bhvCourtyardBooTriplet[] = {
 const BehaviorScript bhvBoo[] = {
     BEGIN(OBJ_LIST_GENACTOR),
     SET_INT(oBehParams2ndByte, BOO_BP_NORMAL),
-    GOTO(bhvGhostHuntBoo + 1),
+    RANDOMIZE_OBJ(RAND_TYPE_MIN_VARIATION | RAND_TYPE_IMPORTANT),
+    GOTO(bhvGhostHuntBoo + 1 + 2),
 };
 
 const BehaviorScript bhvMerryGoRoundBoo[] = {
     BEGIN(OBJ_LIST_GENACTOR),
     SET_INT(oBehParams2ndByte, BOO_BP_MERRY_GO_ROUND),
-    GOTO(bhvGhostHuntBoo + 1),
+    GOTO(bhvGhostHuntBoo + 1 + 2),
 };
 
 const BehaviorScript bhvGhostHuntBoo[] = {
     BEGIN(OBJ_LIST_GENACTOR),
+    RANDOMIZE_OBJ(RAND_TYPE_MIN_VARIATION | RAND_TYPE_IMPORTANT),
     // Boo - common:
     OR_INT(oFlags, (OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO | OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     SET_INT(oIntangibleTimer, 0),
@@ -3784,8 +3788,8 @@ const BehaviorScript bhvBobombFuseSmoke[] = {
 const BehaviorScript bhvBobombBuddy[] = {
     BEGIN(OBJ_LIST_GENACTOR),
     OR_INT(oFlags, (OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO | OBJ_FLAG_HOLDABLE | OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
-    RANDOMIZE_OBJ(RAND_TYPE_GROUNDED | RAND_TYPE_SAFE),
     SET_INT(oBobombBuddyRole, 0),
+    RANDOMIZE_OBJ(RAND_TYPE_GROUNDED | RAND_TYPE_SAFE),
     LOAD_ANIMATIONS(oAnimations, bobomb_seg8_anims_0802396C),
     SET_INTERACT_TYPE(INTERACT_TEXT),
     DROP_TO_FLOOR(),
@@ -3803,7 +3807,7 @@ const BehaviorScript bhvBobombBuddyOpensCannon[] = {
     BEGIN(OBJ_LIST_GENACTOR),
     OR_INT(oFlags, (OBJ_FLAG_PERSISTENT_RESPAWN | OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO | OBJ_FLAG_HOLDABLE | OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     SET_INT(oBobombBuddyRole, 1),
-    GOTO(bhvBobombBuddy + 1 + 2),
+    GOTO(bhvBobombBuddy + 1 + 1 + 1),
 };
 
 const BehaviorScript bhvCannonClosed[] = {
@@ -4509,7 +4513,6 @@ const BehaviorScript bhvHiddenAt120Stars[] = {
     SET_FLOAT(oCollisionDistance, 4000),
     CALL_NATIVE(bhv_castle_cannon_grate_init),
     BEGIN_LOOP(),
-        CALL_NATIVE(bhv_sunken_ship_collision_loop),
         CALL_NATIVE(load_object_collision_model),
     END_LOOP(),
 #endif
@@ -6171,7 +6174,6 @@ const BehaviorScript bhvDDDPole[] = {
 const BehaviorScript bhvRedCoinStarMarker[] = {
     BEGIN(OBJ_LIST_DEFAULT),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
-    RANDOMIZE_OBJ(RAND_TYPE_GROUNDED | RAND_TYPE_MUST_BE_UNDERWATER),
     DROP_TO_FLOOR(),
     SCALE(/*Unused*/ 0, /*Field*/ 150),
     SET_INT(oFaceAnglePitch, 0x4000),
@@ -6199,7 +6201,6 @@ const BehaviorScript bhvTripletButterfly[] = {
 const BehaviorScript bhvBubba[] = {
     BEGIN(OBJ_LIST_GENACTOR),
     OR_INT(oFlags, (OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO | OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
-    RANDOMIZE_OBJ(RAND_TYPE_MAX_VARIATION),
     SET_HOME(),
     SET_OBJ_PHYSICS(/*Wall hitbox radius*/ 200, /*Gravity*/ -400, /*Bounciness*/ -50, /*Drag strength*/ 1000, /*Friction*/ 1000, /*Buoyancy*/ 0, /*Unused*/ 0, 0),
     SCALE(/*Unused*/ 0, /*Field*/ 50),
