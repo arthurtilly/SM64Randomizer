@@ -15,6 +15,13 @@ u8 gWarpDestinations[37];
 
 // Use bhvStub for avoidance points for all objects.
 // Use bhv<OBJECT> for points that only those OBJECTs should avoid.
+struct AvoidancePoint wfAvoidancePoints[] = {
+    {bhvStub, {0, 3830, 710}, 300.0f, 50.0f, AVOIDANCE_SAFETY_ALL}, // WF tower platform
+    {bhvStub, {710, 4030, 0}, 300.0f, 50.0f, AVOIDANCE_SAFETY_ALL}, // WF tower platform
+    {bhvStub, {0, 4230, -710}, 300.0f, 50.0f, AVOIDANCE_SAFETY_ALL}, // WF tower platform
+    {bhvStub, {-710, 4430, 0}, 300.0f, 50.0f, AVOIDANCE_SAFETY_ALL} // WF tower platform
+};
+
 struct AvoidancePoint jrbAvoidancePoints[] = {
     {bhvBobombBuddyOpensCannon, {1300, 1946, 2206}, 700.0f, 50.0f, AVOIDANCE_SAFETY_MED} // Under the Mr. I vanilla spawn
 };
@@ -93,7 +100,7 @@ struct AreaParams bobParams[] = {
     {-8192, 8192, 0, 4500, -8192, 8192, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL} // BoB
 };
 struct AreaParams wfParams[] = {
-    {-3300, 5100, 256, 6500, -4100, 5700, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL} // WF
+    {-3300, 5100, 256, 6500, -4100, 5700, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, ARRAY_SIZE(wfAvoidancePoints), &wfAvoidancePoints} // WF
 };
 struct AreaParams jrbParams[] = {
     {-7800, 8000, -5200, 3000, -7500, 8000, 0, 1000, ARRAY_SIZE(jrbAvoidancePoints), &jrbAvoidancePoints}, // JRB main area
