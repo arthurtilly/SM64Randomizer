@@ -165,6 +165,7 @@ s32 f32_find_wall_collision(f32 *xPtr, f32 *yPtr, f32 *zPtr, f32 offsetY, f32 ra
 /**
  * Find wall collisions and receive their push.
  */
+/**
 s32 find_wall_collisions(struct WallCollisionData *colData) {
     struct SurfaceNode *node;
     s32 numCollisions = 0;
@@ -197,6 +198,44 @@ s32 find_wall_collisions(struct WallCollisionData *colData) {
     gNumCalls.wall++;
 #endif
 
+    return numCollisions;
+}**/
+
+// Kaze version
+s32 find_wall_collisions(struct WallCollisionData *colData) {
+    struct SurfaceNode *node;
+    s32 numCollisions = 0;
+    s32 minmax[4];
+
+    if (is_outside_level_bounds(colData->x, colData->z)) {
+        return numCollisions;
+    }
+
+    minmax[0] = colData->x - colData->radius;
+    minmax[1] = colData->x + colData->radius;
+    minmax[2] = colData->z - colData->radius;
+    minmax[3] = colData->z + colData->radius;
+    for (s32 i = 0; i < 4; i++) {
+        minmax[i] = GET_CELL_COORD(minmax[i]);
+    }
+    colData->numWalls = 0;
+
+    for (s16 cellX = minmax[0]; cellX <= minmax[1]; cellX++) {
+        for (s16 cellZ = minmax[2]; cellZ <= minmax[3]; cellZ++) {
+            if (!(gCollisionFlags & COLLISION_FLAG_EXCLUDE_DYNAMIC)) {
+                node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS].next;
+                numCollisions += find_wall_collisions_from_list(node, colData);
+            }
+            node = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS].next;
+            numCollisions += find_wall_collisions_from_list(node, colData);
+        }
+    }
+
+    gCollisionFlags &= ~(COLLISION_FLAG_RETURN_FIRST | COLLISION_FLAG_EXCLUDE_DYNAMIC | COLLISION_FLAG_INCLUDE_INTANGIBLE);
+#ifdef VANILLA_DEBUG
+    // Increment the debug tracker.
+    gNumCalls.wall++;
+#endif
     return numCollisions;
 }
 

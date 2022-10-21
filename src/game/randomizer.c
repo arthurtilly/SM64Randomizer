@@ -207,17 +207,17 @@ static u8 is_floor_safe(struct Surface *floor, u8 floorSafeLevel,
 
     switch(gOptionsSettings.gameplay.s.safeSpawns){
         case SPAWN_SAFETY_SAFE:
-            norm = 0.5f;
+            norm = 0.85f;
             break;
         case SPAWN_SAFETY_HARD:
-            norm = 0.25f;
+            norm = 0.3f;
             break;
         default:
-            norm = 0.4f;
+            norm = 0.7f;
     }
 
     if ((floorSafeLevel == FLOOR_SAFE_GROUNDED) || (randPosFlags & RAND_POSITION_FLAG_SAFE)) {
-        norm = 0.9f;
+        norm = 0.95f;
     }
 
     if (floor->normal.y > norm) // Check steepness of floor
@@ -344,6 +344,7 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
     }
 
     while (TRUE) {
+        u32 dangerShiftedOverHighFloor = FALSE;
         *seed = random_u16_seeded(tempSeed);
         // Prevent objects from using the same seed to spawn.
         for (i = 0; i < gSpawnCounter; i++){
@@ -430,7 +431,6 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
             (obj->behavior != segmented_to_virtual(bhvStar)) &&
             (obj->behavior != segmented_to_virtual(bhvStarSpawnCoordinates)) &&
             (obj->behavior != segmented_to_virtual(bhvExclamationBox))) {
-            struct Surface *newFloor;
             pos[0] += get_val_in_range_uniform(-200, 200, seed);
             pos[2] += get_val_in_range_uniform(-200, 200, seed);
 
@@ -439,9 +439,12 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
             
             waterLevel = find_water_level(pos[0], pos[2]);
 
-            find_floor(pos[0], pos[1], pos[2], &newFloor);
-            if (newFloor == NULL) {
+            lowFloorHeight = find_floor(pos[0], pos[1], pos[2], &lowFloor);
+            if (lowFloor == NULL) {
                 continue;
+            }
+            if ((pos[1] - lowFloorHeight) > 800.f) {
+                dangerShiftedOverHighFloor = TRUE;
             }
         }
 
@@ -451,6 +454,9 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
         cHeight = find_ceil(pos[0], lowFloorHeight + 80, pos[2], &ceil);
 
         if (pos[1] > cHeight - 100.f) // If in a ceiling, cancel spawn
+            continue;
+
+        if (dangerShiftedOverHighFloor & (pos[1] > cHeight - 200.f)) // If no ground nearby and too close to the ceiling
             continue;
 
         // Floor Check
@@ -515,13 +521,18 @@ u16 calulate_star_total(u32 level) {
         case LEVEL_COTMC:
         case LEVEL_BITFS:
         case LEVEL_VCUTM:
-        case LEVEL_WMOTR:
         case LEVEL_BITS: // Just to be thorough
         return 1;
 
         case LEVEL_HMC:
         return calulate_star_total(LEVEL_COTMC) + 7; // Is fine since gWarpDestinations[LEVEL_COTMC] =/= LEVEL_HMC
         break;
+
+        case LEVEL_BOB:
+        case LEVEL_SSL:
+        return 6; // tryna watch out for wing cap
+        case LEVEL_WMOTR:
+        return 0; // same
 
         default:
         return 7;

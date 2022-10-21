@@ -1502,11 +1502,11 @@ void handle_controller_cursor_input(void) {
 
     // If in options menu, cursor is slower
     if (sSelectedButtonID == MENU_BUTTON_SELECT_SEED_OPTIONS) {
-        sCursorPos[0] += rawStickX / 12.0f;
-        sCursorPos[1] += rawStickY / 12.0f;
+        sCursorPos[0] += rawStickX / 12;
+        sCursorPos[1] += rawStickY / 12;
     } else {
-        sCursorPos[0] += rawStickX / 8.0f;
-        sCursorPos[1] += rawStickY / 8.0f;
+        sCursorPos[0] += rawStickX / 8;
+        sCursorPos[1] += rawStickY / 8;
     }
 
     // Stop cursor from going offscreen

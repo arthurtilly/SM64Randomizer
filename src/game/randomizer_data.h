@@ -57,6 +57,7 @@ struct AvoidancePoint wdwAvoidancePoints[] = {
 struct AvoidancePoint wdwTownAvoidancePoints[] = {
     {bhvExclamationBox, {2254, -1692, 3790}, 1100.0f, 1000.0f, AVOIDANCE_SAFETY_ALL}, // Corner of WDW Town
     {bhvStub,      {2254, -2559, 894}, 1200.0f, 50.0f, AVOIDANCE_SAFETY_ALL}, // In a building
+    {bhvStub,      {-3583, -2508, -2047}, 200.f, 200.f, AVOIDANCE_SAFETY_ALL}, // Over the lowermost water tap
 };
 
 struct AvoidancePoint rrAvoidancePoints[] = {
