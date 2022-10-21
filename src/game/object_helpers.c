@@ -1891,6 +1891,8 @@ void cur_obj_enable_rendering_if_mario_in_room(void) {
             gMarioCurrentRoom == o->oRoom
             || gDoorAdjacentRooms[gMarioCurrentRoom][0] == o->oRoom
             || gDoorAdjacentRooms[gMarioCurrentRoom][1] == o->oRoom
+            || gDoorAdjacentRooms[o->oRoom][0] == gMarioCurrentRoom
+            || gDoorAdjacentRooms[o->oRoom][1] == gMarioCurrentRoom
         );
 
         if (marioInRoom) {

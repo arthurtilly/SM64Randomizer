@@ -3319,6 +3319,11 @@ void init_camera(struct Camera *c) {
         case AREA_TTM_OUTSIDE:
             gLakituState.mode = CAMERA_MODE_RADIAL;
             break;
+        case AREA_JRB_MAIN:
+            // For JRB nonstop, it can be buggy loading back into the level.
+            // Fix this by setting the camera mode manually.
+            gLakituState.mode = CAMERA_MODE_FREE_ROAM;
+            break;
 #endif
     }
 
