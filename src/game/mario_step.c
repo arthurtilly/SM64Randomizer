@@ -259,10 +259,7 @@ s32 stationary_ground_step(struct MarioState *m) {
     if (takeStep) {
         stepResult = perform_ground_step(m);
     } else {
-        // Hackersm64: this condition fixes potential downwarps
-        if (m->pos[1] <= m->floorHeight + 160.0f) {
-            m->pos[1] = m->floorHeight;
-        }
+        m->pos[1] = m->floorHeight;
 
         vec3f_copy(marioObj->header.gfx.pos, m->pos);
         vec3s_set(marioObj->header.gfx.angle, 0, m->faceAngle[1], 0);
