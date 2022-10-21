@@ -140,7 +140,7 @@ void spawn_default_star(f32 x, f32 y, f32 z) {
     starObj = spawn_star(starObj, x, y, z);
     if (gOptionsSettings.gameplay.s.randomizeStarSpawns) {
         Vec3s pos;
-        get_safe_position(gCurrentObject, pos, 400.f, 700.f, &gRandomSeed16, FLOOR_SAFE_HOVERING, (RAND_POSITION_FLAG_CAN_BE_UNDERWATER | RAND_POSITION_FLAG_THI_A3_ABOVE_MESH | RAND_POSITION_FLAG_SPAWN_BOTTOM_OF_SLIDE | RAND_POSITION_FLAG_BBH_HMC_LIMITED_ROOMS));
+        get_safe_position(starObj, pos, 400.f, 700.f, &gRandomSeed16, FLOOR_SAFE_HOVERING, (RAND_POSITION_FLAG_CAN_BE_UNDERWATER | RAND_POSITION_FLAG_THI_A3_ABOVE_MESH | RAND_POSITION_FLAG_SPAWN_BOTTOM_OF_SLIDE | RAND_POSITION_FLAG_BBH_HMC_LIMITED_ROOMS));
         starObj->oHomeX = pos[0];
         starObj->oHomeY = pos[1];
         starObj->oHomeZ = pos[2];

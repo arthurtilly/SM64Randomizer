@@ -745,7 +745,13 @@ static void init_warp_scramble() {
                     case LEVEL_SA:
                     case LEVEL_TOTWC:
                     case LEVEL_BBH:
+
                     index = (u8) get_val_in_range_uniform(b1, 9, &seed);
+                    if (i == sB1WarpsTemp[index]) {
+                        i += 1;
+                        failedScrambles += 1;
+                        continue;
+                    }
                     tmp = sB1WarpsTemp[b1];
                     sB1WarpsTemp[b1] = sB1WarpsTemp[index];
                     sB1WarpsTemp[index] = tmp;
@@ -762,6 +768,7 @@ static void init_warp_scramble() {
                     case LEVEL_BITFS:
                     case LEVEL_VCUTM:
 
+                    index = (u8) get_val_in_range_uniform(b2, 7, &seed);
                     if ((i == LEVEL_COTMC)
                         && ((sB2WarpsTemp[index] == LEVEL_HMC)
                             || (sB2WarpsTemp[index] == LEVEL_DDD))) {
@@ -776,13 +783,11 @@ static void init_warp_scramble() {
                         failedScrambles += 1;
                         continue;
                     }
-                    if (i == sRemainingWarpsTemp[index]) {
+                    if (i == sB2WarpsTemp[index]) {
                         i += 1;
                         failedScrambles += 1;
                         continue;
                     }
-
-                    index = (u8) get_val_in_range_uniform(b2, 7, &seed);
                     tmp = sB2WarpsTemp[b2];
                     sB2WarpsTemp[b2] = sB2WarpsTemp[index];
                     sB2WarpsTemp[index] = tmp;
@@ -793,6 +798,11 @@ static void init_warp_scramble() {
                     
                     default:
                     index = (u8) get_val_in_range_uniform(b3, 7, &seed);
+                    if (i == sB3WarpsTemp[index]) {
+                        i += 1;
+                        failedScrambles += 1;
+                        continue;
+                    }
                     tmp = sB3WarpsTemp[b3];
                     sB3WarpsTemp[b3] = sB3WarpsTemp[index];
                     sB3WarpsTemp[index] = tmp;
