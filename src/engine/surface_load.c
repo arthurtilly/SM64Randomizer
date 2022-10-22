@@ -222,6 +222,21 @@ static void add_surface(struct Surface *surface, s32 dynamic) {
     }
 }
 
+s32 vec3f_normalize2(Vec3f dest) {
+    register f32 mag = (sqr(dest[0]) + sqr(dest[1]) + sqr(dest[2]));
+    if (mag > NEAR_ZERO) {
+        register f32 invsqrt = (1.0f / sqrtf(mag));
+        vec3_mul_val(dest, invsqrt);
+        return TRUE;
+    } else {
+        // Default to up vector.
+        dest[0] = 0;
+        ((u32 *) dest)[1] = FLOAT_ONE;
+        dest[2] = 0;
+        return FALSE;
+    }
+}
+
 /**
  * Initializes a Surface struct using the given vertex data
  * @param vertexData The raw data containing vertex positions
@@ -240,6 +255,10 @@ static struct Surface *read_surface_data(TerrainData *vertexData, TerrainData **
     vec3s_copy(v[2], (vertexData + offset[2]));
 
     find_vector_perpendicular_to_plane(n, v[0], v[1], v[2]);
+
+    if (!vec3f_normalize2(n)) {
+        return NULL;
+    }
 
     vec3f_normalize(n);
 

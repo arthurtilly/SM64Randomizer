@@ -1273,7 +1273,7 @@ s32 act_air_hit_wall(struct MarioState *m) {
         mario_drop_held_object(m);
     }
 
-    if (++(m->actionTimer) <= FIRSTY_LAST_FRAME) {
+    if (++(m->actionTimer) <= 2) {
         if (m->input & INPUT_A_PRESSED) {
             m->vel[1] = 52.0f;
             m->faceAngle[1] += 0x8000;
@@ -1303,8 +1303,8 @@ s32 act_air_hit_wall(struct MarioState *m) {
     set_mario_animation(m, MARIO_ANIM_START_WALLKICK);
     m->marioObj->header.gfx.angle[1] = m->wallYaw;
 #endif
-
-    return FALSE;
+    set_mario_animation(m, MARIO_ANIM_START_WALLKICK);
+    return TRUE;
 }
 
 s32 act_forward_rollout(struct MarioState *m) {
