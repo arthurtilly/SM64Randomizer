@@ -134,7 +134,9 @@ Gfx *geo_switch_area(s32 callContext, struct GraphNode *node, UNUSED void *conte
         } else {
             find_room_floor(roomFocusObj->oPosX, roomFocusObj->oPosY, roomFocusObj->oPosZ, &floor);
             if (floor) {
-                gMarioCurrentRoom = floor->room;
+                if (!gRedCoinStarCutscene) {
+                    gMarioCurrentRoom = floor->room;
+                }
                 s16 roomCase = floor->room - 1;
                 print_debug_top_down_objectinfo("areainfo %d", floor->room);
 

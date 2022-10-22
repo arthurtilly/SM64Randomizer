@@ -2296,12 +2296,15 @@ static void page_cosmetics() {
 
     if (check_clicked_text(171, 160 - MENUHEIGHT * 1, 1)){
         gOptionsSettings.cosmetic.s.musicOn = 0;
+        seq_player_fade_to_target_volume(SEQ_PLAYER_LEVEL, 20, 65);
     }
     if (check_clicked_text(206, 160 - MENUHEIGHT * 1, 1)){
         gOptionsSettings.cosmetic.s.musicOn = 1;
+        seq_player_fade_to_target_volume(SEQ_PLAYER_LEVEL, 20, 65);
     }
     if (check_clicked_text_width(240, 160 - MENUHEIGHT * 1, 1, 45)){
         gOptionsSettings.cosmetic.s.musicOn = 2;
+        seq_player_fade_to_target_volume(SEQ_PLAYER_LEVEL, 20, 0);
     }
     
     for (i = 2; i < textCountCosmetics; i++) {
