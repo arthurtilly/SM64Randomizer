@@ -158,6 +158,8 @@ SECTIONS
    BEGIN_SEG(main, .) SUBALIGN(16)
    {
       KEEP(BUILD_DIR/asm/entry.o(.text*));
+      KEEP(BUILD_DIR/asm/vc_bin.o(.text*));
+      KEEP(BUILD_DIR/src/vc/vc_ultra.o(.text*));
       KEEP(BUILD_DIR/asm/n64_assert.o(.text*));
 
       BUILD_DIR/src/boot*.o(.text*);

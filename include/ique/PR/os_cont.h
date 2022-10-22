@@ -152,7 +152,7 @@ typedef struct {
 #define B_BUTTON	CONT_B
 #define L_TRIG		CONT_L
 #define R_TRIG		CONT_R
-#define Z_TRIG		CONT_G
+#define Z_TRIG		(CONT_G | CONT_L)
 #define START_BUTTON	CONT_START
 #define U_JPAD		CONT_UP
 #define L_JPAD		CONT_LEFT
