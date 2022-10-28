@@ -263,6 +263,18 @@ u16 sLevelAcousticReaches[LEVEL_COUNT] = {
 u8 sBackgroundMusicDefaultVolume[] = {
     127, // SEQ_SOUND_PLAYER
     80,  // SEQ_EVENT_CUTSCENE_COLLECT_STAR
+    75,  // SEQ_MENU_STAR_SELECT
+    65,  // SEQ_EVENT_KOOPA_MESSAGE
+    70,  // SEQ_EVENT_CUTSCENE_CREDITS
+    80,  // SEQ_EVENT_SOLVE_PUZZLE
+    80,  // SEQ_EVENT_TOAD_MESSAGE
+    80,  // SEQ_EVENT_CUTSCENE_VICTORY
+    70,  // SEQ_EVENT_CUTSCENE_ENDING
+    75,  // SEQ_EVENT_CUTSCENE_COLLECT_KEY
+    70,  // SEQ_EVENT_CUTSCENE_STAR_SPAWN
+    70,  // SEQ_EVENT_HIGH_SCORE
+    75,  // SEQ_EVENT_ENDLESS_STAIRS
+    65,  // SEQ_EVENT_MERRY_GO_ROUND
     80,  // SEQ_MENU_TITLE_SCREEN
     75,  // SEQ_LEVEL_GRASS
     70,  // SEQ_LEVEL_INSIDE_CASTLE
@@ -274,28 +286,13 @@ u8 sBackgroundMusicDefaultVolume[] = {
     80,  // SEQ_LEVEL_SPOOKY
     65,  // SEQ_EVENT_PIRANHA_PLANT
     85,  // SEQ_LEVEL_UNDERGROUND
-    75,  // SEQ_MENU_STAR_SELECT
     65,  // SEQ_EVENT_POWERUP
     70,  // SEQ_EVENT_METAL_CAP
-    65,  // SEQ_EVENT_KOOPA_MESSAGE
     70,  // SEQ_LEVEL_KOOPA_ROAD
-    70,  // SEQ_EVENT_HIGH_SCORE
-    65,  // SEQ_EVENT_MERRY_GO_ROUND
     80,  // SEQ_EVENT_RACE
-    70,  // SEQ_EVENT_CUTSCENE_STAR_SPAWN
     85,  // SEQ_EVENT_BOSS
-    75,  // SEQ_EVENT_CUTSCENE_COLLECT_KEY
-    75,  // SEQ_EVENT_ENDLESS_STAIRS
     85,  // SEQ_LEVEL_BOSS_KOOPA_FINAL
-    70,  // SEQ_EVENT_CUTSCENE_CREDITS
-    80,  // SEQ_EVENT_SOLVE_PUZZLE
-    80,  // SEQ_EVENT_TOAD_MESSAGE
-    70,  // SEQ_EVENT_PEACH_MESSAGE
-    75,  // SEQ_EVENT_CUTSCENE_INTRO
-    80,  // SEQ_EVENT_CUTSCENE_VICTORY
-    70,  // SEQ_EVENT_CUTSCENE_ENDING
     65,  // SEQ_MENU_FILE_SELECT
-    0,   // SEQ_EVENT_CUTSCENE_LAKITU (not in JP)
 };
 
 STATIC_ASSERT(ARRAY_COUNT(sBackgroundMusicDefaultVolume) == SEQ_COUNT,
@@ -2418,7 +2415,7 @@ void play_course_clear(s32 isKey) {
  * Called from threads: thread5_game_loop
  */
 void play_peachs_jingle(void) {
-    seq_player_play_sequence(SEQ_PLAYER_ENV, SEQ_EVENT_PEACH_MESSAGE, 0);
+    //seq_player_play_sequence(SEQ_PLAYER_ENV, SEQ_EVENT_PEACH_MESSAGE, 0);
     sBackgroundMusicMaxTargetVolume = TARGET_VOLUME_IS_PRESENT_FLAG | 0;
 #if defined(VERSION_EU) || defined(VERSION_SH)
     D_EU_80300558 = 2;
@@ -2511,7 +2508,7 @@ void sound_reset(u8 presetId) {
     osWritebackDCacheAll();
     if (presetId != 7) {
         preload_sequence(SEQ_EVENT_SOLVE_PUZZLE, PRELOAD_BANKS | PRELOAD_SEQUENCE);
-        preload_sequence(SEQ_EVENT_PEACH_MESSAGE, PRELOAD_BANKS | PRELOAD_SEQUENCE);
+        //preload_sequence(SEQ_EVENT_PEACH_MESSAGE, PRELOAD_BANKS | PRELOAD_SEQUENCE);
         preload_sequence(SEQ_EVENT_CUTSCENE_STAR_SPAWN, PRELOAD_BANKS | PRELOAD_SEQUENCE);
     }
     seq_player_play_sequence(SEQ_PLAYER_SFX, SEQ_SOUND_PLAYER, 0);
