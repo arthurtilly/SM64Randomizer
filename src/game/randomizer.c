@@ -200,8 +200,7 @@ static u8 is_floor_safe(struct Surface *floor, u8 floorSafeLevel,
     s32 slipperiness;
     f32 norm;
 
-    if (((floorSafeLevel == FLOOR_SAFE_GROUNDED) || (randPosFlags & RAND_POSITION_FLAG_SAFE)
-         || (gCurrLevelNum == LEVEL_DDD))
+    if (((floorSafeLevel == FLOOR_SAFETY_HIGH) || (gCurrLevelNum == LEVEL_DDD))
         && (floor->flags & SURFACE_FLAG_DYNAMIC))
         return FALSE; // grounded objects / DDD objects can't spawn on platforms
 
@@ -216,14 +215,14 @@ static u8 is_floor_safe(struct Surface *floor, u8 floorSafeLevel,
             norm = 0.7f;
     }
 
-    if ((floorSafeLevel == FLOOR_SAFE_GROUNDED) || (randPosFlags & RAND_POSITION_FLAG_SAFE)) {
+    if ((floorSafeLevel == FLOOR_SAFETY_HIGH) || (randPosFlags & RAND_TYPE_SAFE)) {
         norm = 0.95f;
     }
 
     if (floor->normal.y > norm) // Check steepness of floor
     {
         slipperiness = find_floor_slipperiness(floor);
-        if ((randPosFlags & RAND_POSITION_FLAG_SAFE)
+        if ((randPosFlags & RAND_TYPE_SAFE) && (floorSafeLevel == FLOOR_SAFETY_HIGH)
             && ((slipperiness == SURFACE_CLASS_SLIPPERY) || (slipperiness == SURFACE_CLASS_VERY_SLIPPERY))) {
 
             // This code kills some spawns, assuming the most slippery case. This code would
@@ -237,7 +236,7 @@ static u8 is_floor_safe(struct Surface *floor, u8 floorSafeLevel,
             return TRUE;
         }
 
-        if ((gOptionsSettings.gameplay.s.safeSpawns == SPAWN_SAFETY_HARD) && (floorSafeLevel == FLOOR_SAFE_HOVERING) && !(randPosFlags & RAND_POSITION_FLAG_SAFE)) {
+        if ((gOptionsSettings.gameplay.s.safeSpawns == SPAWN_SAFETY_HARD) && (floorSafeLevel == FLOOR_SAFETY_LOW) && !(randPosFlags & RAND_TYPE_SAFE)) {
             if (floor->type < SURFACE_SAFE_FLOORS_HARD) {
                 return TRUE;
             }
@@ -319,27 +318,37 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
 
     // Handle special cases for bounds
     if ((gCurrCourseNum == COURSE_THI) && (gCurrAreaIndex == 3)) {
-        if (randPosFlags & RAND_POSITION_FLAG_THI_A3_ABOVE_MESH)
+        if (randPosFlags & RAND_TYPE_THI_A3_ABOVE_MESH)
             minY = 2200;
         else
             maxY = 1750;
     } else if ((gCurrCourseNum == COURSE_PSS)) {
-        if (randPosFlags & RAND_POSITION_FLAG_SPAWN_TOP_OF_SLIDE) {
+        if (randPosFlags & RAND_TYPE_SPAWN_TOP_OF_SLIDE) {
             minY = 6100;
             minX = 3100;
-        } else if (randPosFlags & RAND_POSITION_FLAG_SPAWN_BOTTOM_OF_SLIDE) {
+        } else if (randPosFlags & RAND_TYPE_SPAWN_BOTTOM_OF_SLIDE) {
             maxY = -3500;
             minZ = 4000;
         } else
             minY = -1000;
 
     } else if ((gCurrCourseNum == COURSE_CCM) && (gCurrAreaIndex == 2)) {
-        if (randPosFlags & RAND_POSITION_FLAG_SPAWN_TOP_OF_SLIDE) {
+        if (randPosFlags & RAND_TYPE_SPAWN_TOP_OF_SLIDE) {
             minY = 6600;
             maxX = -4800;
-        } else if (randPosFlags & RAND_POSITION_FLAG_SPAWN_BOTTOM_OF_SLIDE) {
+        } else if (randPosFlags & RAND_TYPE_SPAWN_BOTTOM_OF_SLIDE) {
             maxY = -3900;
             maxZ = -6400;
+        }
+    }
+
+    if (gOptionsSettings.gameplay.s.nonstopMode == 1) {
+        if ((obj->behavior == segmented_to_virtual(bhvStar))
+         || (obj->behavior == segmented_to_virtual(bhvStarSpawnCoordinates))
+         || (obj->behavior == segmented_to_virtual(bhvHiddenRedCoinStar))
+         || (obj->behavior == segmented_to_virtual(bhvHiddenStar))) {
+            floorSafeLevel = FLOOR_SAFETY_MEDIUM;
+            randPosFlags |= RAND_TYPE_SAFE;
         }
     }
 
@@ -375,7 +384,7 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
         // Move out of any walls. This has to be done here because otherwise
         // there's the possibility of being pushed out of the wall into OoB or a ceiling
         vec3s_resolve_wall_collisions(
-            pos, (randPosFlags & RAND_POSITION_FLAG_SPAWN_FAR_FROM_WALLS) ? 500.0f : 50.0f);
+            pos, (randPosFlags & RAND_TYPE_SPAWN_FAR_FROM_WALLS) ? 500.0f : 50.0f);
 
         lowFloorHeight = find_floor(pos[0], pos[1], pos[2], &lowFloor);
 
@@ -393,18 +402,18 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
         // Snap to ground and check if safe
         objCanBeUnderwater =
             (randPosFlags
-                 & (RAND_POSITION_FLAG_CAN_BE_UNDERWATER | RAND_POSITION_FLAG_MUST_BE_UNDERWATER)
+                 & (RAND_TYPE_CAN_BE_UNDERWATER | RAND_TYPE_MUST_BE_UNDERWATER)
              || (areaParams->areaParamFlags & AREA_PARAM_FLAG_CHANGING_WATER_LEVEL));
         waterLevel = find_water_level(pos[0], pos[2]);
         minHeight = pos[1] + minHeightRange;
         maxHeight = pos[1] + maxHeightRange;
 
         // Let objects spawn anywhere in water
-        if (floorSafeLevel != FLOOR_SAFE_GROUNDED
-            || (randPosFlags & RAND_POSITION_FLAG_MUST_BE_UNDERWATER)) {
+        if (floorSafeLevel != FLOOR_SAFETY_HIGH
+            || (randPosFlags & RAND_TYPE_MUST_BE_UNDERWATER)) {
             if ((objCanBeUnderwater && (waterLevel > maxHeight)
                  && !(areaParams->areaParamFlags & AREA_PARAM_FLAG_CHANGING_WATER_LEVEL))
-                || (randPosFlags & RAND_POSITION_FLAG_MUST_BE_UNDERWATER))
+                || (randPosFlags & RAND_TYPE_MUST_BE_UNDERWATER))
                 maxHeight = waterLevel;
         }
 
@@ -420,22 +429,19 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
         // On Dangerous setting, some objects can spawn in midair in levels with wing cap
         if ((gOptionsSettings.gameplay.s.safeSpawns == SPAWN_SAFETY_HARD) && 
             ((gCurrCourseNum == COURSE_BOB) || ((gCurrCourseNum == COURSE_SSL) && (gCurrAreaIndex == 1))) && // Only in BoB and SSL
-            (randPosFlags & RAND_POSITION_FLAG_HARD_HEIGHT) && ((*seed & 2) == 0)){ // 1/4 chance
+            (randPosFlags & RAND_TYPE_HARD_HEIGHT) && ((*seed & 2) == 0)){ // 1/4 chance
             maxHeight = maxY;            
         }
 
         pos[1] = get_val_in_range_uniform(minHeight, maxHeight, seed);
 
         if ((gOptionsSettings.gameplay.s.safeSpawns == SPAWN_SAFETY_HARD) &&
-            (floorSafeLevel != FLOOR_SAFE_GROUNDED) && !(randPosFlags & RAND_POSITION_FLAG_SAFE) &&
-            (obj->behavior != segmented_to_virtual(bhvStar)) &&
-            (obj->behavior != segmented_to_virtual(bhvStarSpawnCoordinates)) &&
-            (obj->behavior != segmented_to_virtual(bhvExclamationBox))) {
+            (floorSafeLevel == FLOOR_SAFETY_LOW) && !(randPosFlags & RAND_TYPE_SAFE)) {
             pos[0] += get_val_in_range_uniform(-200, 200, seed);
             pos[2] += get_val_in_range_uniform(-200, 200, seed);
 
             vec3s_resolve_wall_collisions(
-                pos, (randPosFlags & RAND_POSITION_FLAG_SPAWN_FAR_FROM_WALLS) ? 500.0f : 50.0f);
+                pos, (randPosFlags & RAND_TYPE_SPAWN_FAR_FROM_WALLS) ? 500.0f : 50.0f);
             
             waterLevel = find_water_level(pos[0], pos[2]);
 
@@ -471,10 +477,10 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
         if (!objCanBeUnderwater && (waterLevel > pos[1]))
             continue;
 
-        if ((randPosFlags & RAND_POSITION_FLAG_MUST_BE_UNDERWATER) && (waterLevel < pos[1]))
+        if ((randPosFlags & RAND_TYPE_MUST_BE_UNDERWATER) && (waterLevel < pos[1]))
             continue;
 
-        if (randPosFlags & RAND_POSITION_FLAG_BBH_HMC_LIMITED_ROOMS) {
+        if (randPosFlags & RAND_TYPE_LIMITED_BBH_HMC_SPAWNS) {
             if ((gCurrCourseNum == COURSE_BBH) && (lowFloor->room == 9)) {
                 continue;
             } else if ((gCurrCourseNum == COURSE_HMC) && (lowFloor->room == 8)) {

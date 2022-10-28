@@ -2229,6 +2229,7 @@ static void applyPreset() {
     curPreset = (curPreset + textCountPresets) % textCountPresets;
     
     gOptionsSettings = gPresets[curPreset];
+    seq_player_fade_to_target_volume(SEQ_PLAYER_LEVEL, 20, 65);
     play_sound(SOUND_MENU_STAR_SOUND, gGlobalSoundSource);
 }
 

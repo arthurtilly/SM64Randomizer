@@ -39,8 +39,9 @@ struct AreaParams {
 typedef struct AreaParams AreaParamsArray[];
 
 enum FloorSafeLevels {
-    FLOOR_SAFE_GROUNDED,
-    FLOOR_SAFE_HOVERING
+    FLOOR_SAFETY_LOW, // Most hovering objects
+    FLOOR_SAFETY_MEDIUM, // ! boxes, nonstop stars - won't spawn over dangerous surfaces
+    FLOOR_SAFETY_HIGH // Grounded objects and start warp - won't spawn over slippery or steep floors
 };
 
 enum RandomizerSafety {
@@ -74,16 +75,6 @@ struct nodeInfo {
     u8 f0;
     u8 f1;
 };
-
-#define RAND_POSITION_FLAG_CAN_BE_UNDERWATER (1 << 0)
-#define RAND_POSITION_FLAG_THI_A3_ABOVE_MESH (1 << 1)
-#define RAND_POSITION_FLAG_SPAWN_TOP_OF_SLIDE (1 << 2)
-#define RAND_POSITION_FLAG_SPAWN_BOTTOM_OF_SLIDE (1 << 3)
-#define RAND_POSITION_FLAG_BBH_HMC_LIMITED_ROOMS (1 << 4)
-#define RAND_POSITION_FLAG_SPAWN_FAR_FROM_WALLS (1 << 5)
-#define RAND_POSITION_FLAG_SAFE (1 << 6)
-#define RAND_POSITION_FLAG_MUST_BE_UNDERWATER (1 << 7)
-#define RAND_POSITION_FLAG_HARD_HEIGHT (1 << 8)
 
 #define AREA_PARAM_FLAG_CHANGING_WATER_LEVEL (1 << 0)
 

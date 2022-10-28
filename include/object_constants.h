@@ -59,17 +59,24 @@ enum ObjFlags {
 };
 
 enum RandoFlags {
-    RAND_TYPE_MUST_BE_UNDERWATER     = (1 <<  0), // 0x00000001
-    RAND_TYPE_MAX_VARIATION          = (1 <<  1), // 0x00000002
-    RAND_TYPE_MIN_VARIATION          = (1 <<  2), // 0x00000004
-    RAND_TYPE_GROUNDED               = (1 <<  3), // 0x00000008
-    RAND_TYPE_CAN_BE_UNDERWATER      = (1 <<  4), // 0x00000010
-    RAND_TYPE_LIMITED_BBH_HMC_SPAWNS = (1 <<  5), // 0x00000020
-    RAND_TYPE_SPAWN_FAR_FROM_WALLS   = (1 <<  6), // 0x00000040
+/* Height types */
+    RAND_TYPE_MAX_VARIATION          = (1 <<  0), // 0x00000001
+    RAND_TYPE_MIN_VARIATION          = (1 <<  1), // 0x00000002
+    RAND_TYPE_GROUNDED               = (1 <<  2), // 0x00000004
+/* Object types */
+    RAND_TYPE_IMPORTANT              = (1 <<  3), // 0x00000008
+    RAND_TYPE_RANDO_STAR             = (1 <<  4), // 0x00000010
+/* Position flags */
+    RAND_TYPE_MUST_BE_UNDERWATER     = (1 <<  5), // 0x00000020
+    RAND_TYPE_CAN_BE_UNDERWATER      = (1 <<  6), // 0x00000040
     RAND_TYPE_SAFE                   = (1 <<  7), // 0x00000080
-    RAND_TYPE_IMPORTANT              = (1 <<  8), // 0x00000100
-    RAND_TYPE_RANDO_STAR             = (1 <<  9), // 0x00000200
-    RAND_TYPE_HARD_HEIGHT            = (1 << 10), // 0x00000400
+    RAND_TYPE_SPAWN_FAR_FROM_WALLS   = (1 <<  8), // 0x00000100
+    RAND_TYPE_HARD_HEIGHT            = (1 <<  9), // 0x00000200
+/* Level-specific position flags */
+    RAND_TYPE_SPAWN_TOP_OF_SLIDE     = (1 << 10), // 0x00000400
+    RAND_TYPE_SPAWN_BOTTOM_OF_SLIDE  = (1 << 11), // 0x00000800
+    RAND_TYPE_THI_A3_ABOVE_MESH      = (1 << 12), // 0x00001000
+    RAND_TYPE_LIMITED_BBH_HMC_SPAWNS = (1 << 13), // 0x00002000
 };
 
 /* oHeldState */

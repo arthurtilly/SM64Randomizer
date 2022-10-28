@@ -354,7 +354,6 @@ static s32 bhv_cmd_set_int(void) {
 
 static s32 bhv_cmd_randomize_object(void) {
     u32 randType = BHV_CMD_GET_U32(1);
-    u32 randPosFlags = 0;
     u8 randomize = FALSE;
     Vec3s pos;
     s32 signMessage;
@@ -392,24 +391,6 @@ static s32 bhv_cmd_randomize_object(void) {
     }
 
     if (((!gOptionsSettings.gameplay.s.onlyKeyObjects) || (randType & RAND_TYPE_IMPORTANT)) && ((gOptionsSettings.gameplay.s.randomizeStarSpawns) || !(randType & RAND_TYPE_RANDO_STAR))) {
-        if (randType & RAND_TYPE_MUST_BE_UNDERWATER)
-            randPosFlags |= RAND_POSITION_FLAG_MUST_BE_UNDERWATER;
-
-        if (randType & RAND_TYPE_CAN_BE_UNDERWATER) // If can be in water
-            randPosFlags |= RAND_POSITION_FLAG_CAN_BE_UNDERWATER;
-        
-        if (randType & RAND_TYPE_SPAWN_FAR_FROM_WALLS)
-            randPosFlags |= RAND_POSITION_FLAG_SPAWN_FAR_FROM_WALLS;
-
-        if (randType & RAND_TYPE_LIMITED_BBH_HMC_SPAWNS)
-            randPosFlags |= RAND_POSITION_FLAG_BBH_HMC_LIMITED_ROOMS;
-        
-        if (randType & RAND_TYPE_SAFE)
-            randPosFlags |= RAND_POSITION_FLAG_SAFE;
-        
-        if (randType & RAND_TYPE_HARD_HEIGHT)
-            randPosFlags |= RAND_POSITION_FLAG_HARD_HEIGHT;
-        
         // Let red coins and coin formations spawn anywhere in TotWC and WMotR
         if ((gCurrentObject->behavior == segmented_to_virtual(bhvRedCoin)) ||
             (gCurrentObject->behavior == segmented_to_virtual(bhvCoinFormation)) ||
@@ -448,16 +429,12 @@ static s32 bhv_cmd_randomize_object(void) {
                 height = 600.f;
             }
 
-            if (gOptionsSettings.gameplay.s.safeSpawns != SPAWN_SAFETY_HARD && gCurrentObject->behavior == segmented_to_virtual(bhvExclamationBox)) {
-                randPosFlags |= RAND_POSITION_FLAG_SAFE;
-            }
-
-            get_safe_position(gCurrentObject, pos, 300.f, height, &gRandomizerTempSeed, FLOOR_SAFE_HOVERING, randPosFlags);
+            get_safe_position(gCurrentObject, pos, 300.f, height, &gRandomizerTempSeed, (randType & RAND_TYPE_SAFE ? FLOOR_SAFETY_MEDIUM : FLOOR_SAFETY_LOW), randType);
             randomize = TRUE;
         }
         // Grounded
         else if (randType & RAND_TYPE_GROUNDED) {
-            get_safe_position(gCurrentObject, pos, 0.f, 0.f, &gRandomizerTempSeed, FLOOR_SAFE_GROUNDED, randPosFlags);
+            get_safe_position(gCurrentObject, pos, 0.f, 0.f, &gRandomizerTempSeed, FLOOR_SAFETY_HIGH, randType);
             randomize = TRUE;
         }
         // Min variation
@@ -472,7 +449,7 @@ static s32 bhv_cmd_randomize_object(void) {
             case SPAWN_SAFETY_HARD:
                 height = 450.f;
             }
-            get_safe_position(gCurrentObject, pos, 50.f, 200.f, &gRandomizerTempSeed, FLOOR_SAFE_HOVERING, randPosFlags);
+            get_safe_position(gCurrentObject, pos, 50.f, 200.f, &gRandomizerTempSeed, (randType & RAND_TYPE_SAFE ? FLOOR_SAFETY_MEDIUM : FLOOR_SAFETY_LOW), randType);
             randomize = TRUE;
         }
 
