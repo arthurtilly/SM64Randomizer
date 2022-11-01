@@ -1299,10 +1299,6 @@ s32 act_air_hit_wall(struct MarioState *m) {
         return set_mario_action(m, ACT_SOFT_BONK, 0);
     }
 
-#if FIRSTY_LAST_FRAME > 1
-    set_mario_animation(m, MARIO_ANIM_START_WALLKICK);
-    m->marioObj->header.gfx.angle[1] = m->wallYaw;
-#endif
     set_mario_animation(m, MARIO_ANIM_START_WALLKICK);
     return TRUE;
 }
