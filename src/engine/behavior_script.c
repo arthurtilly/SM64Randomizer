@@ -358,8 +358,8 @@ static s32 bhv_cmd_randomize_object(void) {
     Vec3s pos;
     s32 signMessage;
     f32 height;
-
-    gRandomizerTempSeed = gRandomizerGameSeed + (gCurrentObject->pointerSeed/4);
+    tinymt32_t randomState;
+    tinymt32_init(&randomState, gRandomizerGameSeed + (gCurrentObject->pointerSeed/4));
 
     // Stuff for exclamation boxes when key objects only is enabled
     if ((gOptionsSettings.gameplay.s.onlyKeyObjects) && (gCurrentObject->behavior == segmented_to_virtual(bhvExclamationBox))) {
@@ -398,19 +398,19 @@ static s32 bhv_cmd_randomize_object(void) {
         {
             if (gCurrLevelNum == LEVEL_TOTWC)
             {
-                gCurrentObject->oPosX = get_val_in_range_uniform(-2000, 2000, &gRandomizerTempSeed);
-                gCurrentObject->oPosY = get_val_in_range_uniform(-1800, 1000, &gRandomizerTempSeed);
-                gCurrentObject->oPosZ = get_val_in_range_uniform(-2000, 2000, &gRandomizerTempSeed);
-                gCurrentObject->oFaceAngleYaw = get_val_in_range_uniform(0, 65536, &gRandomizerTempSeed);
+                gCurrentObject->oPosX = get_val_in_range_uniform(-2000, 2000, &randomState);
+                gCurrentObject->oPosY = get_val_in_range_uniform(-1800, 1000, &randomState);
+                gCurrentObject->oPosZ = get_val_in_range_uniform(-2000, 2000, &randomState);
+                gCurrentObject->oFaceAngleYaw = get_val_in_range_uniform(0, 65536, &randomState);
                 gCurBhvCommand++;
                 return BHV_PROC_CONTINUE;
             }
             if (gCurrLevelNum == LEVEL_WMOTR)
             {
-                gCurrentObject->oPosX = get_val_in_range_uniform(-4000, 4000, &gRandomizerTempSeed);
-                gCurrentObject->oPosY = get_val_in_range_uniform(-2000, 4000, &gRandomizerTempSeed);
-                gCurrentObject->oPosZ = get_val_in_range_uniform(-4000, 4000, &gRandomizerTempSeed);
-                gCurrentObject->oFaceAngleYaw = get_val_in_range_uniform(0, 65536, &gRandomizerTempSeed);
+                gCurrentObject->oPosX = get_val_in_range_uniform(-4000, 4000, &randomState);
+                gCurrentObject->oPosY = get_val_in_range_uniform(-2000, 4000, &randomState);
+                gCurrentObject->oPosZ = get_val_in_range_uniform(-4000, 4000, &randomState);
+                gCurrentObject->oFaceAngleYaw = get_val_in_range_uniform(0, 65536, &randomState);
                 gCurBhvCommand++;
                 return BHV_PROC_CONTINUE;
             }
@@ -429,12 +429,12 @@ static s32 bhv_cmd_randomize_object(void) {
                 height = 600.f;
             }
 
-            get_safe_position(gCurrentObject, pos, 300.f, height, &gRandomizerTempSeed, (randType & RAND_TYPE_SAFE ? FLOOR_SAFETY_MEDIUM : FLOOR_SAFETY_LOW), randType);
+            get_safe_position(gCurrentObject, pos, 300.f, height, &randomState, (randType & RAND_TYPE_SAFE ? FLOOR_SAFETY_MEDIUM : FLOOR_SAFETY_LOW), randType);
             randomize = TRUE;
         }
         // Grounded
         else if (randType & RAND_TYPE_GROUNDED) {
-            get_safe_position(gCurrentObject, pos, 0.f, 0.f, &gRandomizerTempSeed, FLOOR_SAFETY_HIGH, randType);
+            get_safe_position(gCurrentObject, pos, 0.f, 0.f, &randomState, FLOOR_SAFETY_HIGH, randType);
             randomize = TRUE;
         }
         // Min variation
@@ -449,7 +449,7 @@ static s32 bhv_cmd_randomize_object(void) {
             case SPAWN_SAFETY_HARD:
                 height = 450.f;
             }
-            get_safe_position(gCurrentObject, pos, 50.f, 200.f, &gRandomizerTempSeed, (randType & RAND_TYPE_SAFE ? FLOOR_SAFETY_MEDIUM : FLOOR_SAFETY_LOW), randType);
+            get_safe_position(gCurrentObject, pos, 50.f, 200.f, &randomState, (randType & RAND_TYPE_SAFE ? FLOOR_SAFETY_MEDIUM : FLOOR_SAFETY_LOW), randType);
             randomize = TRUE;
         }
 
@@ -459,7 +459,7 @@ static s32 bhv_cmd_randomize_object(void) {
             gCurrentObject->oPosZ = pos[2];
             if (gCurrentObject->behavior != segmented_to_virtual(bhvPushableMetalBox))
             {
-                gCurrentObject->oFaceAngleYaw = get_val_in_range_uniform(0, 65536, &gRandomizerTempSeed);
+                gCurrentObject->oFaceAngleYaw = get_val_in_range_uniform(0, 65536, &randomState);
                 gCurrentObject->oMoveAngleYaw = gCurrentObject->oFaceAngleYaw;
             }
         }
@@ -471,7 +471,7 @@ static s32 bhv_cmd_randomize_object(void) {
     }
 
     if (gCurrentObject->behavior == segmented_to_virtual(bhvMessagePanel)) {
-        signMessage= get_val_in_range_uniform(0, 169, &gRandomizerTempSeed);
+        signMessage = get_val_in_range_uniform(0, 169, &randomState);
 
         // 20 is peach's letter, this crashes the game.
         if (signMessage == 20) {

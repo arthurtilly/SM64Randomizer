@@ -3,6 +3,7 @@
 
 
 #include "seq_ids.h"
+#include "engine/math_util.h"
 
 enum AvoidanceSafety {
     AVOIDANCE_SAFETY_ALL,
@@ -113,10 +114,8 @@ extern struct OptionsSettings gOptionsSettings;
 extern struct OptionsSettings gPresets[];
 
 extern struct nodeInfo gLevelWarps[];
-extern u16 gRandomSeed16;
 extern u8 gRequiredStars[];
-extern u16 gRandomizerGameSeed;
-extern u16 gRandomizerTempSeed;
+extern u32 gRandomizerGameSeed;
 extern u8 gIsSetSeed;
 extern u8 gIgnoreCollisionDistance;
 extern u8 gWarpDestinations[];
@@ -126,13 +125,10 @@ extern u8 gSkyboxIndex;
 extern u8 multicolorOn;
 extern u8 gStarDoorReqLUT[];
 
-extern u16 gUsedSeeds[100];
-extern s32 gSpawnCounter;
-
 extern void print_generic_text_ascii_buf(s16 x, s16 y, char *buf);
 extern void print_generic_text_ascii(s16 x, s16 y, const char *src);
-extern void get_safe_position(struct Object *, Vec3s, f32, f32, u16 *, u8, u32);
-extern f32 get_val_in_range_uniform(f32, f32, u16 *);
+extern void get_safe_position(struct Object *, Vec3s, f32, f32, tinymt32_t *, u8, u32);
+extern f32 get_val_in_range_uniform(f32, f32, tinymt32_t *);
 extern void init_randomizer(s32 fileNum);
 extern u8 get_nonrandom_level();
 extern void print_seed_and_options_data(void);

@@ -873,7 +873,7 @@ void check_erase_menu_clicked_buttons(struct Object *eraseButton) {
     }
 }
 
-static u16 get_entered_seed(void) {
+static u32 get_entered_seed(void) {
     return textEnteredNumbers[0] * 10000 + textEnteredNumbers[1] * 1000 + textEnteredNumbers[2] * 100
            + textEnteredNumbers[3] * 10 + textEnteredNumbers[4];
 }
@@ -1137,7 +1137,7 @@ void load_main_menu_save_file(struct Object *fileButton, s32 fileNum) {
         sSelectedFileNum = fileNum;
 
         if (!gIsSetSeed) {
-            gRandomizerGameSeed = random_u16();
+            gRandomizerGameSeed = (u32)(random_float() * 100000);
         } else {
             gRandomizerGameSeed = get_entered_seed();
         }
@@ -1730,9 +1730,11 @@ void print_main_menu_strings(void) {
             fileText = text12345;
             break;
         case 42069:
+        case 69420:
             fileText = text42069;
             break;
         case 58008:
+        case 80085:
             fileText = text58008;
             break;
         case 62396:
@@ -2176,7 +2178,7 @@ static void seed_menu_get_clicked_numbers(void) {
                 && (cursorY > (75 + sSeedSelectCharPositions[i][1]))) {
                 gIsSetSeed = TRUE;
                 gOverwriteFileSeed = TRUE;
-                if ((textEnteredNumbers[0] != 0) || ((get_entered_seed() * 10 + i) > 65535))
+                if ((textEnteredNumbers[0] != 0) || ((get_entered_seed() * 10 + i) > 99999))
                     play_sound(SOUND_MENU_CAMERA_BUZZ, gGlobalSoundSource);
                 else {
                     play_sound(SOUND_MENU_CLICK_FILE_SELECT, gGlobalSoundSource);

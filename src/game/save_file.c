@@ -207,7 +207,7 @@ static void add_save_block_signature(void *buffer, s32 size, u16 magic) {
 }
 
 void save_main_menu_data(void) {
-    gSaveBuffer.menuData.randomNum = gRandomSeed16;
+    gSaveBuffer.menuData.randomNum = tinymt32_generate_u32(&gGlobalRandomState);
     gMainMenuDataModified = TRUE;
 
     if (gMainMenuDataModified) {
@@ -323,7 +323,6 @@ void save_file_load_all(void) {
     if (!validSlots)
         wipe_main_menu_data();
 
-    validSlots = verify_save_block_signature(&gSaveBuffer.files[file], sizeof(gSaveBuffer.files[file]), SAVE_FILE_MAGIC);
     for (file = 0; file < NUM_SAVE_FILES; file++) {
         // Verify the save file and wipe it if invalid.
         validSlots = verify_save_block_signature(&gSaveBuffer.files[file], sizeof(gSaveBuffer.files[file]), SAVE_FILE_MAGIC);
@@ -331,7 +330,7 @@ void save_file_load_all(void) {
             save_file_erase(file);
     }
 
-    gRandomSeed16 = gSaveBuffer.menuData.randomNum;
+    tinymt32_init(&gGlobalRandomState, gSaveBuffer.menuData.randomNum);
 }
 
 #ifdef PUPPYCAM

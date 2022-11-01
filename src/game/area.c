@@ -182,11 +182,6 @@ void load_obj_warp_nodes(void) {
 void clear_areas(void) {
     s32 i;
 
-    for (i = 0; i < gSpawnCounter; i++) {
-        gUsedSeeds[i] = 0;
-    }
-    gSpawnCounter = 0;
-
     gCurrentArea = NULL;
     gWarpTransition.isActive = FALSE;
     gWarpTransition.pauseRendering = FALSE;
@@ -265,13 +260,6 @@ void load_area(s32 index) {
 }
 
 void unload_area(void) {
-    s32 i;
-
-    for (i = 0; i < gSpawnCounter; i++) {
-        gUsedSeeds[i] = 0;
-    }
-    gSpawnCounter = 0;
-
     if (gCurrentArea != NULL) {
         unload_objects_from_area(0, gCurrentArea->index);
 #ifndef DISABLE_GRAPH_NODE_TYPE_FUNCTIONAL

@@ -22,9 +22,7 @@
 #include "buffers/buffers.h"
 #include "segment2.h"
 
-u16 gRandomSeed16;
-u16 gRandomizerGameSeed;
-u16 gRandomizerTempSeed;
+u32 gRandomizerGameSeed;
 
 u8 gIsSetSeed = FALSE;
 
@@ -282,10 +280,7 @@ static u8 is_in_avoidance_point(Vec3s pos, struct AreaParams *areaParams,
     return FALSE;
 }
 
-u16 gUsedSeeds[100];
-s32 gSpawnCounter;
-
-void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 maxHeightRange, u16 *seed,
+void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 maxHeightRange, tinymt32_t *randomState,
                        u8 floorSafeLevel, u32 randPosFlags) {
     struct AreaParams *areaParams = &(*sLevelParams[gCurrLevelNum - 4])[gCurrAreaIndex - 1];
     f32 minX, maxX, minY, maxY, minZ, maxZ, minHeight, maxHeight, waterLevel, lowFloorHeight, cHeight,
@@ -293,8 +288,6 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
     u32 objCanBeUnderwater;
     u8 killOnOob = FALSE;
     struct Surface *lowFloor, *ceil, *highFloor;
-    s32 i;
-    u16 tempSeed = *seed;
 
     if (areaParams == NULL) {
         pos[0] = 0;
@@ -354,20 +347,11 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
 
     while (TRUE) {
         u32 dangerShiftedOverHighFloor = FALSE;
-        *seed = random_u16_seeded(tempSeed);
-        // Prevent objects from using the same seed to spawn.
-        for (i = 0; i < gSpawnCounter; i++){
-            if (gUsedSeeds[i] == *seed) {
-                *seed = random_u16_seeded(*seed);
-                i = 0; // Technically, first array value is missed on subsequent run-throughs. -1 causes crashes however.
-            }
-        }
-        tempSeed = *seed;
 
         // Generate random position
-        pos[0] = get_val_in_range_uniform(minX, maxX, seed);
-        pos[1] = get_val_in_range_uniform(minY, maxY, seed);
-        pos[2] = get_val_in_range_uniform(minZ, maxZ, seed);
+        pos[0] = get_val_in_range_uniform(minX, maxX, randomState);
+        pos[1] = get_val_in_range_uniform(minY, maxY, randomState);
+        pos[2] = get_val_in_range_uniform(minZ, maxZ, randomState);
 
         lowFloorHeight = find_floor(pos[0], pos[1] + 20, pos[2], &lowFloor);
 
@@ -429,16 +413,16 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
         // On Dangerous setting, some objects can spawn in midair in levels with wing cap
         if ((gOptionsSettings.gameplay.s.safeSpawns == SPAWN_SAFETY_HARD) && 
             ((gCurrCourseNum == COURSE_BOB) || ((gCurrCourseNum == COURSE_SSL) && (gCurrAreaIndex == 1))) && // Only in BoB and SSL
-            (randPosFlags & RAND_TYPE_HARD_HEIGHT) && ((*seed & 2) == 0)){ // 1/4 chance
+            (randPosFlags & RAND_TYPE_HARD_HEIGHT) && ((tinymt32_generate_u32(randomState) & 2) == 0)){ // 1/4 chance
             maxHeight = maxY;            
         }
 
-        pos[1] = get_val_in_range_uniform(minHeight, maxHeight, seed);
+        pos[1] = get_val_in_range_uniform(minHeight, maxHeight, randomState);
 
         if ((gOptionsSettings.gameplay.s.safeSpawns == SPAWN_SAFETY_HARD) &&
             (floorSafeLevel == FLOOR_SAFETY_LOW) && !(randPosFlags & RAND_TYPE_SAFE)) {
-            pos[0] += get_val_in_range_uniform(-200, 200, seed);
-            pos[2] += get_val_in_range_uniform(-200, 200, seed);
+            pos[0] += get_val_in_range_uniform(-200, 200, randomState);
+            pos[2] += get_val_in_range_uniform(-200, 200, randomState);
 
             vec3s_resolve_wall_collisions(
                 pos, (randPosFlags & RAND_TYPE_SPAWN_FAR_FROM_WALLS) ? 500.0f : 50.0f);
@@ -498,22 +482,15 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
         if (!is_safe_near_walls(pos, killOnOob))
             continue;
 
-        if (gSpawnCounter < 100) {
-            gUsedSeeds[gSpawnCounter] = tempSeed;
-            gSpawnCounter++;
-        }
-
         return;
     }
 }
 
 // Only uniform if used for floats. [min, max)
-f32 get_val_in_range_uniform(f32 min, f32 max, u16 *seed) {
+f32 get_val_in_range_uniform(f32 min, f32 max, tinymt32_t *randomState) {
     if (min > max)
         return min;
-
-    *seed = random_u16_seeded(*seed);
-    return (*seed / (double) 0x10000 * (max - min)) + min;
+    return (tinymt32_generate_float(randomState) * (max - min)) + min;
 }
 
 u16 calulate_star_total(u32 level) {
@@ -551,7 +528,7 @@ u16 calulate_star_total(u32 level) {
 // If keep structure, section (0 for lobby, 1 for basement, 2 for upstairs)
 // Min factor (usually / 2 for important doors and / 3 for most )
 // Maximum stars available at this point, if lower than regular max
-u8 get_star_requirement(u8 layer, u8 section, u8 maxAvailable, u8 factor, u16 *seed) {
+u8 get_star_requirement(u8 layer, u8 section, u8 maxAvailable, u8 factor, tinymt32_t *randomState) {
     u8 bitsStars = gStarDoorReqLUT[gOptionsSettings.gameplay.s.starDoorRequirement];
     u8 maxStars = 0;
     u8 starReq;
@@ -576,49 +553,50 @@ u8 get_star_requirement(u8 layer, u8 section, u8 maxAvailable, u8 factor, u16 *s
             maxStars = (u8)(bitsStars*0.8f); // layer 2
         }
     }
-    starReq = get_val_in_range_uniform(maxStars / factor, maxStars, seed);
-    return MIN(starReq, get_val_in_range_uniform(maxAvailable - 5, maxAvailable, seed));
+    starReq = get_val_in_range_uniform(maxStars / factor, maxStars, randomState);
+    return MIN(starReq, get_val_in_range_uniform(maxAvailable - 5, maxAvailable, randomState));
 }
 
 void randomize_star_doors() {
-    u16 seed = gRandomizerGameSeed;
     u16 starTotal = calulate_star_total(LEVEL_BOB);
     u8 i, tmp, index;
     u8 starLevels[15] = {LEVEL_WF, LEVEL_PSS, LEVEL_JRB /* + SA */, LEVEL_CCM, LEVEL_BITDW,
                         /* MIPS + moat */ 8, LEVEL_BBH, LEVEL_TOTWC, LEVEL_HMC, /*BitFS*/ LEVEL_DDD, LEVEL_SL, LEVEL_THI, /*Tippy*/ 50, /*Key 2 ( TTM + WDW) */ 30, 70};
     u8 firstFloor[7] = {STAR_REQ_WF, STAR_REQ_PSS, STAR_REQ_JRB, STAR_REQ_CCM, STAR_REQ_BITDW, STAR_REQ_BBH, STAR_REQ_TOTWC};
-
+    tinymt32_t randomState;
+    tinymt32_init(&randomState, gRandomizerGameSeed);
+    
     for (i = 0; i <= 6; i++){
-        index = get_val_in_range_uniform(i, 6, &seed);
+        index = get_val_in_range_uniform(i, 6, &randomState);
         tmp = firstFloor[i];
         firstFloor[i] = firstFloor[index];
         firstFloor[index] = tmp;
 
-        gRequiredStars[firstFloor[i]] = get_star_requirement(0, 0, starTotal, 3, &seed);
+        gRequiredStars[firstFloor[i]] = get_star_requirement(0, 0, starTotal, 3, &randomState);
         starTotal += calulate_star_total(starLevels[firstFloor[i]]);
     }
 
-    gRequiredStars[STAR_REQ_BASEMENT] = get_star_requirement(0, 1, starTotal, 2, &seed);
+    gRequiredStars[STAR_REQ_BASEMENT] = get_star_requirement(0, 1, starTotal, 2, &randomState);
     starTotal += calulate_star_total(LEVEL_SSL);
     starTotal += calulate_star_total(LEVEL_LLL);
     starTotal += calulate_star_total(LEVEL_VCUTM);
 
-    gRequiredStars[STAR_REQ_HMC] = get_star_requirement(1, 1, starTotal, 3, &seed);
+    gRequiredStars[STAR_REQ_HMC] = get_star_requirement(1, 1, starTotal, 3, &randomState);
     starTotal += calulate_star_total(LEVEL_HMC);
 
-    gRequiredStars[STAR_REQ_DDD] = get_star_requirement(0, 1, starTotal, 3, &seed);
+    gRequiredStars[STAR_REQ_DDD] = get_star_requirement(0, 1, starTotal, 3, &randomState);
     starTotal += calulate_star_total(LEVEL_DDD);
 
-    gRequiredStars[STAR_REQ_UPSTAIRS] = get_star_requirement(0, 2, starTotal, 2, &seed);
+    gRequiredStars[STAR_REQ_UPSTAIRS] = get_star_requirement(0, 2, starTotal, 2, &randomState);
     starTotal += calulate_star_total(LEVEL_WDW);
     starTotal += calulate_star_total(LEVEL_TTM);
 
-    gRequiredStars[STAR_REQ_SL] = get_star_requirement(1, 2, starTotal, 3, &seed);
-    gRequiredStars[STAR_REQ_THI] = get_star_requirement(1, 2, starTotal, 3, &seed);
+    gRequiredStars[STAR_REQ_SL] = get_star_requirement(1, 2, starTotal, 3, &randomState);
+    gRequiredStars[STAR_REQ_THI] = get_star_requirement(1, 2, starTotal, 3, &randomState);
     starTotal += calulate_star_total(LEVEL_SL);
     starTotal += calulate_star_total(LEVEL_THI);
 
-    gRequiredStars[STAR_REQ_TIPPY] = get_star_requirement(1, 2, starTotal, 2, &seed);
+    gRequiredStars[STAR_REQ_TIPPY] = get_star_requirement(1, 2, starTotal, 2, &randomState);
 
     if (gOptionsSettings.gameplay.s.keepStructure) {
         gRequiredStars[STAR_REQ_BASEMENT] = 0;
@@ -689,8 +667,9 @@ static void init_warp_scramble() {
     int i, index = 0;
     int j = 0, b1 = 0, b2 = 0, b3 = 0;
     u8 tmp;
-    u16 seed = gRandomizerGameSeed;
+    tinymt32_t randomState;
     u16 failedScrambles = 0;
+    tinymt32_init(&randomState, gRandomizerGameSeed);
 
     copy_remaining_warps();
     for (i = 36; i > 0; i--) {
@@ -705,7 +684,7 @@ static void init_warp_scramble() {
         }
         if (gWarpDestinations[i] != 0) {
             if (!gOptionsSettings.gameplay.s.keepStructure) {
-                index = (u8) get_val_in_range_uniform(j, 23, &seed);
+                index = (u8) get_val_in_range_uniform(j, 23, &randomState);
                 // Forbidden cases
                 if ((i == LEVEL_BOB)
                     && (sRemainingWarpsTemp[index] == LEVEL_WMOTR)) {
@@ -752,7 +731,7 @@ static void init_warp_scramble() {
                     case LEVEL_TOTWC:
                     case LEVEL_BBH:
 
-                    index = (u8) get_val_in_range_uniform(b1, 9, &seed);
+                    index = (u8) get_val_in_range_uniform(b1, 9, &randomState);
                     if (i == sB1WarpsTemp[index]) {
                         i += 1;
                         failedScrambles += 1;
@@ -774,7 +753,7 @@ static void init_warp_scramble() {
                     case LEVEL_BITFS:
                     case LEVEL_VCUTM:
 
-                    index = (u8) get_val_in_range_uniform(b2, 7, &seed);
+                    index = (u8) get_val_in_range_uniform(b2, 7, &randomState);
                     if ((i == LEVEL_COTMC)
                         && ((sB2WarpsTemp[index] == LEVEL_HMC)
                             || (sB2WarpsTemp[index] == LEVEL_DDD))) {
@@ -803,7 +782,7 @@ static void init_warp_scramble() {
                     break;
                     
                     default:
-                    index = (u8) get_val_in_range_uniform(b3, 7, &seed);
+                    index = (u8) get_val_in_range_uniform(b3, 7, &randomState);
                     if (i == sB3WarpsTemp[index]) {
                         i += 1;
                         failedScrambles += 1;
@@ -830,7 +809,19 @@ void init_randomizer(s32 fileNum) {
     init_required_stars();
 }
 
-void set_mario_light(Lights1 *light, unsigned char r, unsigned char g, unsigned char b) {
+void get_random_color(u8 *RGB, tinymt32_t *randomState) {
+    u32 rand = tinymt32_generate_u32(randomState);
+    RGB[0] = rand & 0xFF;
+    RGB[1] = (rand >> 8) & 0xFF;
+    RGB[2] = (rand >> 16) & 0xFF;
+}
+
+void set_mario_light(Lights1 *light, tinymt32_t *randomState) {
+    u8 RGB[3];
+    get_random_color(RGB, randomState);
+    u8 r = RGB[0];
+    u8 g = RGB[1];
+    u8 b = RGB[2];
     light->a.l.col[0] = r / 2;
     light->a.l.col[1] = g / 2;
     light->a.l.col[2] = b / 2;
@@ -883,31 +874,20 @@ f32 RMSE(u8 r1, u8 r2, u8 g1, u8 g2, u8 b1, u8 b2) {
     return sqrtf(r * r + g * g + b * b);
 }
 
-void get_random_color(u8 *RGB) {
-    RGB[0] = random_u16() & 0xff;
-    RGB[1] = random_u16() & 0xff;
-    RGB[2] = random_u16() & 0xff;
-}
-
 #define MINDIFF 140.f //might be infinite loop idk how this works
 void set_mario_rando_colors(void) {
-    u16 backup = gRandomSeed16;
+    tinymt32_t randomState;
 
     if (gOptionsSettings.cosmetic.s.marioColors) {
-        gRandomSeed16 = gRandomizerGameSeed;
-        set_mario_light(segmented_to_virtual(&mario_blue_lights_group), random_u16(), random_u16(),
-                        random_u16());
-        set_mario_light(segmented_to_virtual(&mario_red_lights_group), random_u16(), random_u16(),
-                        random_u16());
-        set_mario_light(segmented_to_virtual(&mario_white_lights_group), random_u16(), random_u16(),
-                        random_u16());
-        set_mario_light(segmented_to_virtual(&mario_brown1_lights_group), random_u16(), random_u16(),
-                        random_u16());
+        tinymt32_init(&randomState, gRandomizerGameSeed);
+
+        set_mario_light(segmented_to_virtual(&mario_blue_lights_group), &randomState);
+        set_mario_light(segmented_to_virtual(&mario_red_lights_group), &randomState);
+        set_mario_light(segmented_to_virtual(&mario_white_lights_group), &randomState);
+        set_mario_light(segmented_to_virtual(&mario_brown1_lights_group), &randomState);
         if (gOptionsSettings.cosmetic.s.marioColors == 2) {
-            set_mario_light(segmented_to_virtual(&mario_beige_lights_group), random_u16(), random_u16(),
-                            random_u16());
-            set_mario_light(segmented_to_virtual(&mario_brown2_lights_group), random_u16(), random_u16(),
-                            random_u16());
+            set_mario_light(segmented_to_virtual(&mario_beige_lights_group), &randomState);
+            set_mario_light(segmented_to_virtual(&mario_brown2_lights_group), &randomState);
         }
     }
 
@@ -915,23 +895,23 @@ void set_mario_rando_colors(void) {
         u8 yellows[3];
         u8 reds[3];
         u8 blues[3];
-        gRandomSeed16 = gRandomizerGameSeed + 1;
-        get_random_color(yellows);
+        tinymt32_init(&randomState, gRandomizerGameSeed + 1);
+
+        get_random_color(yellows, &randomState);
         set_coin_color(yellows[0], yellows[1], yellows[2], coin_seg3_vertex_yellow);
 
-        get_random_color(reds);
+        get_random_color(reds, &randomState);
         while (RMSE(yellows[0], reds[0], yellows[1], reds[1], yellows[2], reds[2]) < MINDIFF) {
-            get_random_color(reds);
+            get_random_color(reds, &randomState);
         }
         set_coin_color(reds[0], reds[1], reds[2], coin_seg3_vertex_red);
 
-        get_random_color(blues);
+        get_random_color(blues, &randomState);
         while ((RMSE(yellows[0], reds[0], yellows[1], reds[1], yellows[2], reds[2]) < MINDIFF)
                || (RMSE(yellows[0], blues[0], yellows[1], blues[1], yellows[2], blues[2]) < MINDIFF)
                || (RMSE(reds[0], blues[0], reds[1], blues[1], reds[2], blues[2]) < MINDIFF)) {
-            get_random_color(blues);
+            get_random_color(blues, &randomState);
         }
         set_coin_color(blues[0], blues[1], blues[2], coin_seg3_vertex_blue);
     }
-    gRandomSeed16 = backup;
 }
