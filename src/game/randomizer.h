@@ -81,28 +81,30 @@ struct nodeInfo {
 struct OptionsSettings {
     union {
         struct {
-            u16 keepStructure:1;
-            u16 randomLevelWarp:1;
-            u16 adjustedExits:1;
-            u16 onlyKeyObjects:1;
-            u16 nonstopMode:2;
-            u16 safeSpawns:2;
-            u16 randomizeStarSpawns:1;
-            u16 randomStarDoorCounts:2;
-            u16 randomLevelSpawn:1;
-            u16 starDoorRequirement:3;
-            u16 demonOn:1;
+            u32 padding:16; // to make sure settings ids are small
+
+            u32 keepStructure:1;
+            u32 randomLevelWarp:1;
+            u32 adjustedExits:1;
+            u32 onlyKeyObjects:1;
+            u32 nonstopMode:2;
+            u32 safeSpawns:2;
+            u32 randomizeStarSpawns:1;
+            u32 randomStarDoorCounts:2;
+            u32 randomLevelSpawn:1;
+            u32 starDoorRequirement:3;
+            u32 demonOn:1;
         } s;
-        u16 w;
+        u32 w;
     } gameplay;
     union {
         struct {
-            u8 marioColors:2;
-            u8 musicOn:2;
-            u8 skyboxOn:1;
-            u8 coinsOn:1;
+            u32 marioColors:2;
+            u32 musicOn:2;
+            u32 skyboxOn:1;
+            u32 coinsOn:1;
         } s;
-        u8 w;
+        u32 w;
     } cosmetic;
 };
 

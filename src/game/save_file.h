@@ -34,7 +34,7 @@ struct SaveFile {
 
     // Note: the coordinates get set, but are never actually used, since the
     // cap can always be found in a fixed spot within the course
-    u16 seed;
+    u32 seed;
     struct OptionsSettings options;
     // Vec3s capPos;
 
@@ -65,7 +65,7 @@ struct MainMenuSaveData {
     u32 coinScoreAges[NUM_SAVE_FILES];
 
     // To increase randomization between loads.
-    u16 randomNum;
+    u32 randomNum;
     u8 soundMode: 2;
 #ifdef WIDE
     u8 wideMode: 1;
@@ -79,12 +79,14 @@ struct MainMenuSaveData {
     #ifdef PUPPYCAM
     struct gPuppyOptions saveOptions;
     #endif
+
+    u32 padding;
     struct SaveBlockSignature signature;
 };
 
 struct SaveBuffer {
     // Each of the four save files has two copies. If one is bad, the other is used as a backup.
-    struct SaveFile files[NUM_SAVE_FILES][2];
+    struct SaveFile files[NUM_SAVE_FILES];
     // Main menu data, storing config options.
     struct MainMenuSaveData menuData;
 };
@@ -96,6 +98,9 @@ extern void puppycam_check_save(void);
 #endif
 
 STATIC_ASSERT(sizeof(struct SaveBuffer) <= EEPROM_SIZE, "ERROR: Save struct too big for specified save type");
+
+STATIC_ASSERT((sizeof(struct SaveFile) & 7) == 0, "ERROR: Save file not 8 byte aligned");
+STATIC_ASSERT((sizeof(struct MainMenuSaveData) & 7) == 0, "ERROR: Menu data not 8 byte aligned");
 
 extern u8 gLastCompletedCourseNum;
 extern u8 gLastCompletedStarNum;
@@ -177,7 +182,6 @@ void save_file_do_save(s32 fileIndex);
 void save_file_erase(s32 fileIndex);
 void save_file_copy(s32 srcFileIndex, s32 destFileIndex);
 void save_file_load_all(void);
-void save_file_reload(void);
 void save_file_collect_star_or_key(s16 coinScore, s16 starIndex);
 s32 save_file_exists(s32 fileIndex);
 u32 save_file_get_max_coin_score(s32 courseIndex);

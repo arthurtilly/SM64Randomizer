@@ -860,7 +860,6 @@ void initiate_delayed_warp(void) {
         } else {
             switch (sDelayedWarpOp) {
                 case WARP_OP_GAME_OVER:
-                    // save_file_reload();
                     // If nosave nonstop mode, save the game
                     if (gOptionsSettings.gameplay.s.nonstopMode == 2) {
                         save_file_do_save(gCurrSaveFileNum - 1);

@@ -1655,7 +1655,7 @@ void print_file_names_and_seeds(u32 submenu) {
     for (i = 0; i < 4; i++) {
         if (save_file_exists(i)) {
             char seed[6];
-            sprintf(seed, "%05d", gSaveBuffer.files[i][0].seed);
+            sprintf(seed, "%05d", gSaveBuffer.files[i].seed);
             convert_from_ascii(seed);
             xpos = i % 2 ? SEEDTEXT_X2 : SEEDTEXT_X1;
             ypos = i < 2 ? SEEDTEXT_Y1 : SEEDTEXT_Y2;
