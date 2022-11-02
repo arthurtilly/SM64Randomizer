@@ -168,17 +168,19 @@ unsigned char textPreset3[] = { TEXT_PRESET3 };
 unsigned char textPreset4[] = { TEXT_PRESET4 };
 unsigned char textPreset5[] = { TEXT_PRESET5 };
 unsigned char textPreset6[] = { TEXT_PRESET6 };
+unsigned char textPreset7[] = { TEXT_PRESET7 };
 unsigned char textPreset1Desc[] = { TEXT_PRESET1DESC };
 unsigned char textPreset2Desc[] = { TEXT_PRESET2DESC };
 unsigned char textPreset3Desc[] = { TEXT_PRESET3DESC };
 unsigned char textPreset4Desc[] = { TEXT_PRESET4DESC };
 unsigned char textPreset5Desc[] = { TEXT_PRESET5DESC };
 unsigned char textPreset6Desc[] = { TEXT_PRESET6DESC };
+unsigned char textPreset7Desc[] = { TEXT_PRESET7DESC };
 unsigned char textPresetCustom[] = { TEXT_PRESET_CUSTOM };
 unsigned char textUsePreset[] = { TEXT_PRESET_TEXT };
 
-unsigned char *textsPresets[] = { textPreset1, textPreset2, textPreset3, textPreset4, textPreset5, textPreset6 };
-unsigned char *textsPresetDescriptions[] = { textPreset1Desc, textPreset2Desc, textPreset3Desc, textPreset4Desc, textPreset5Desc, textPreset6Desc };
+unsigned char *textsPresets[] = { textPreset1, textPreset2, textPreset3, textPreset4, textPreset5, textPreset6, textPreset7};
+unsigned char *textsPresetDescriptions[] = { textPreset1Desc, textPreset2Desc, textPreset3Desc, textPreset4Desc, textPreset5Desc, textPreset6Desc, textPreset7Desc};
 
 unsigned char textNew[] = { TEXT_NEW };
 unsigned char starIcon[] = { GLYPH_STAR, GLYPH_SPACE };

@@ -532,9 +532,15 @@ u8 gPreviousCastleArea;
 
 u8 get_nonrandom_level() {
     u8 i;
+    u32 currLevel = gCurrLevelNum;
+    if (currLevel == LEVEL_BOWSER_1) {
+        currLevel = LEVEL_BITDW;
+    } else if (currLevel == LEVEL_BOWSER_2) {
+        currLevel = LEVEL_BITFS;
+    }
 
     for (i = 0; i < LEVEL_MAX; i++) {
-        if (gWarpDestinations[i] == gCurrLevelNum) {
+        if (gWarpDestinations[i] == currLevel) {
             return i;
         }
     }
@@ -565,7 +571,8 @@ static void level_cmd_create_warp_node(void) {
         warpNode->node.id = id = CMD_GET(u8, 2);
         if (!gOptionsSettings.gameplay.s.adjustedExits // We want to use the warp as intended in the script if we have random warps
             || ((id != 0xF0) && (id != 0xF1)) // or if it's not a death or star warp. 
-            || (intendedLevel == 0) ) { // or if the level is not a randomized level.
+            || (intendedLevel == 0)  // or if the level is not a randomized level
+            || ((id == 0xF1) && ((gCurrLevelNum == LEVEL_BOWSER_1) || (gCurrLevelNum == LEVEL_BOWSER_2)))) { // or if it's a Bowser death warp.
             warpNode->node.destArea = CMD_GET(u8, 4);
             warpNode->node.destNode = CMD_GET(u8, 5);          
         } else{

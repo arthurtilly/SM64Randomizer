@@ -264,13 +264,15 @@
 #define TEXT_PRESET4 _("EASY")
 #define TEXT_PRESET5 _("NEW GAME")
 #define TEXT_PRESET6 _("CALM")
+#define TEXT_PRESET7 _("SPRINT")
 
 #define TEXT_PRESET1DESC _("The classic randomizer experience you know\nand love from earlier versions.")
 #define TEXT_PRESET2DESC _("The same settings as Default, but with\nwacky colors and aesthetics!")
 #define TEXT_PRESET3DESC _("A super challenging experience for the\nskilled players out there.")
 #define TEXT_PRESET4DESC _("A more peaceful and beginner-friendly\nmode for those new to the game.")
 #define TEXT_PRESET5DESC _("A mode designed to simulate playing a\nnew, shaken-up legit version of SM64!")
-#define TEXT_PRESET6DESC _("Much less randomization and vanilla warps\nfor those who don't want to be\noverwhelmed.")
+#define TEXT_PRESET6DESC _("Much less randomization and vanilla warps\nfor those who don't want to be overwhelmed.")
+#define TEXT_PRESET7DESC _("A super quick nonstop challenge! Collect 30\nstars as fast as you can and beat the game!")
 // Seed Menu
 
 // Score Menu

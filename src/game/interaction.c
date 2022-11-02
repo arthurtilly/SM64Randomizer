@@ -764,11 +764,18 @@ u32 interact_water_ring(struct MarioState *m, UNUSED u32 interactType, struct Ob
 u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct Object *obj) {
     u32 starIndex;
     u32 starGrabAction = ACT_STAR_DANCE_EXIT;
-    u32 noExit = (obj->oInteractionSubtype & INT_SUBTYPE_NO_EXIT) || gOptionsSettings.gameplay.s.nonstopMode;
+
+    u32 nonstopType = gOptionsSettings.gameplay.s.nonstopMode;
+    if ((gCurrLevelNum == LEVEL_BOWSER_1) || (gCurrLevelNum == LEVEL_BOWSER_2)) {
+        nonstopType = 0;
+    }
+
+    u32 noExit = (obj->oInteractionSubtype & INT_SUBTYPE_NO_EXIT) || nonstopType;
     u32 grandStar = (obj->oInteractionSubtype & INT_SUBTYPE_GRAND_STAR) != 0;
 
+
     if (m->health >= 0x100) {
-        if (gOptionsSettings.gameplay.s.nonstopMode != 2) {
+        if (nonstopType != 2) {
             mario_stop_riding_and_holding(m);
         }
 #if ENABLE_RUMBLE
@@ -843,7 +850,7 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
             return set_mario_action(m, ACT_JUMBO_STAR_CUTSCENE, 0);
         }
 
-        if ((gOptionsSettings.gameplay.s.nonstopMode != 2) || ((gCurrCourseNum == COURSE_JRB) && (gCurrAreaIndex == 2))) {
+        if ((nonstopType != 2) || ((gCurrCourseNum == COURSE_JRB) && (gCurrAreaIndex == 2))) {
             return set_mario_action(m, starGrabAction, noExit + 2 * grandStar);
         }
     }
