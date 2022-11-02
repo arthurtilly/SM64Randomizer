@@ -18,6 +18,8 @@
 #endif
 #include "puppycam2.h"
 #include "randomizer.h"
+#include "vc/vc_ultra.h"
+#include "game/vc_check.h"
 
 #define ALIGN4(val) (((val) + 0x3) & ~0x3)
 
@@ -71,7 +73,9 @@ static s32 read_eeprom_data(void *buffer, s32 size) {
             block_until_rumble_pak_free();
 #endif
             triesLeft--;
-            status = osEepromLongRead(&gSIEventMesgQueue, offset, buffer, size);
+            status = gIsVC ? 
+                osEepromLongReadVC(&gSIEventMesgQueue, offset, buffer, size) :
+                osEepromLongRead  (&gSIEventMesgQueue, offset, buffer, size);
 #if ENABLE_RUMBLE
             release_rumble_pak_control();
 #endif
@@ -99,7 +103,9 @@ static s32 write_eeprom_data(void *buffer, s32 size) {
             block_until_rumble_pak_free();
 #endif
             triesLeft--;
-            status = osEepromLongWrite(&gSIEventMesgQueue, offset, buffer, size);
+            status = gIsVC ?
+                osEepromLongWriteVC(&gSIEventMesgQueue, offset, buffer, size) :
+                osEepromLongWrite  (&gSIEventMesgQueue, offset, buffer, size);
 #if ENABLE_RUMBLE
             release_rumble_pak_control();
 #endif
