@@ -16,82 +16,82 @@ u8 gWarpDestinations[37];
 // Use bhvStub for avoidance points for all objects.
 // Use bhv<OBJECT> for points that only those OBJECTs should avoid.
 struct AvoidancePoint wfAvoidancePoints[] = {
-    {bhvStub, {0, 3830, 710}, 300.0f, 50.0f, AVOIDANCE_SAFETY_ALL}, // WF tower platform
-    {bhvStub, {710, 4030, 0}, 300.0f, 50.0f, AVOIDANCE_SAFETY_ALL}, // WF tower platform
-    {bhvStub, {0, 4230, -710}, 300.0f, 50.0f, AVOIDANCE_SAFETY_ALL}, // WF tower platform
-    {bhvStub, {-710, 4430, 0}, 300.0f, 50.0f, AVOIDANCE_SAFETY_ALL} // WF tower platform
+    {bhvStub, {0, 3780, 710}, 300.0f, 100.0f, AVOIDANCE_SAFETY_ALL}, // WF tower platform
+    {bhvStub, {710, 3980, 0}, 300.0f, 100.0f, AVOIDANCE_SAFETY_ALL}, // WF tower platform
+    {bhvStub, {0, 4180, -710}, 300.0f, 100.0f, AVOIDANCE_SAFETY_ALL}, // WF tower platform
+    {bhvStub, {-710, 4380, 0}, 300.0f, 100.0f, AVOIDANCE_SAFETY_ALL} // WF tower platform
 };
 
 struct AvoidancePoint jrbAvoidancePoints[] = {
-    {bhvBobombBuddyOpensCannon, {1300, 1946, 2206}, 700.0f, 50.0f, AVOIDANCE_SAFETY_MED} // Under the Mr. I vanilla spawn
+    {bhvBobombBuddyOpensCannon, {1300, 1896, 2206}, 700.0f, 100.0f, AVOIDANCE_SAFETY_MED} // Under the Mr. I vanilla spawn
 };
 
 struct AvoidancePoint ccmAvoidancePoints[] = {
-    {bhvSmallPenguin, {-4963, -4750, 0}, 6000.0f, 600.0f, AVOIDANCE_SAFETY_HARD}, // Part 1 of WKWW Pengu fixes
-    {bhvSmallPenguin, {-850, -3560, -3350}, 2500.0f, 1500.0f, AVOIDANCE_SAFETY_HARD}, // Part 2 of WKWW Pengu fixes
+    {bhvSmallPenguin, {-4963, -5350, 0}, 6000.0f, 1200.0f, AVOIDANCE_SAFETY_HARD}, // Part 1 of WKWW Pengu fixes
+    {bhvSmallPenguin, {-850, -5060, -3350}, 2500.0f, 3000.0f, AVOIDANCE_SAFETY_HARD}, // Part 2 of WKWW Pengu fixes
 
-    {bhvStub, {-4230, -1250, 1813}, 200.0f, 200.0f, AVOIDANCE_SAFETY_ALL} // Snowman's body platform
+    {bhvStub, {-4230, -1450, 1813}, 200.0f, 400.0f, AVOIDANCE_SAFETY_ALL} // Snowman's body platform
 };
 
 struct AvoidancePoint bbhAvoidancePoints[] = {
-    {bhvStub, {0, 100, 0}, 200.0f, 200.0f, AVOIDANCE_SAFETY_ALL} // In the BBH Pillar in the main room
+    {bhvStub, {0, -100, 0}, 200.0f, 400.0f, AVOIDANCE_SAFETY_ALL} // In the BBH Pillar in the main room
 };
 
 struct AvoidancePoint lllAvoidancePoints[] = {
-    {bhvStub, {-3200, 110, 3456}, 200.0f, 150.0f, AVOIDANCE_SAFETY_ALL} // Under the Mr. I vanilla spawn
+    {bhvStub, {-3200, -40, 3456}, 200.0f, 300.0f, AVOIDANCE_SAFETY_ALL} // Under the Mr. I vanilla spawn
 };
 
 struct AvoidancePoint sslPyrAvoidancePoints[] = {
-    {bhvStub, {0, 5062, 256}, 600.0f, 200.0f, AVOIDANCE_SAFETY_ALL},    // In Elevator
-    {bhvStub, {0, 300, -1400}, 1000.0f, 500.0f, AVOIDANCE_SAFETY_ALL} // Past Eyerok Loading Zone
+    {bhvStub, {0, 4862, 256}, 600.0f, 1000.0f, AVOIDANCE_SAFETY_ALL},    // In Elevator
+    {bhvStub, {0, -200, -1400}, 1000.0f, 1000.0f, AVOIDANCE_SAFETY_ALL} // Past Eyerok Loading Zone
 };
 
 struct AvoidancePoint dddAvoidancePoints[] = {
-    {bhvTreasureChestBottom, {-3177, -4600, 100}, 650.0f, 150.0f, AVOIDANCE_SAFETY_ALL} // Under Whirlpool
+    {bhvTreasureChestBottom, {-3177, -4750, 100}, 650.0f, 300.0f, AVOIDANCE_SAFETY_ALL} // Under Whirlpool
 };
 
 struct AvoidancePoint wdwAvoidancePoints[] = {
-    {bhvStub, {4069, 0, -3339}, 800.0f, 1200.0f, AVOIDANCE_SAFETY_ALL} // In cage
+    {bhvStub, {4069, -1200, -3339}, 800.0f, 2400.0f, AVOIDANCE_SAFETY_ALL} // In cage
 };
 
 struct AvoidancePoint wdwTownAvoidancePoints[] = {
-    {bhvExclamationBox, {2254, -1692, 3790}, 1100.0f, 1000.0f, AVOIDANCE_SAFETY_ALL}, // Corner of WDW Town
-    {bhvStub,      {2254, -2559, 894}, 1200.0f, 650.0f, AVOIDANCE_SAFETY_ALL}, // In a building
-    {bhvStub,      {-3583, -2508, -2047}, 200.f, 200.f, AVOIDANCE_SAFETY_ALL}, // Over the lowermost water tap
+    {bhvExclamationBox, {2254, -2692, 3790}, 1100.0f, 2000.0f, AVOIDANCE_SAFETY_ALL}, // Corner of WDW Town
+    {bhvStub,      {2254, -3209, 894}, 1200.0f, 1300.0f, AVOIDANCE_SAFETY_ALL}, // In a building
+    {bhvStub,      {-3583, -2708, -2047}, 200.f, 400.f, AVOIDANCE_SAFETY_ALL}, // Over the lowermost water tap
 };
 
 struct AvoidancePoint rrAvoidancePoints[] = {
-    {bhvBobombBuddyOpensCannon, {5020, 3819, 4050}, 1500.0f, 50.0f, AVOIDANCE_SAFETY_ALL} // Cannon Only Platform
+    {bhvBobombBuddyOpensCannon, {5020, 3769, 4050}, 1500.0f, 100.0f, AVOIDANCE_SAFETY_ALL} // Cannon Only Platform
 };
 
 struct AvoidancePoint wmotrAvoidancePoints[] = {
-    {bhvBobombBuddyOpensCannon, {-3000, 4537, -4000}, 1500.0f, 100.0f, AVOIDANCE_SAFETY_ALL} // Highest Platform
+    {bhvBobombBuddyOpensCannon, {-3000, 4437, -4000}, 1500.0f, 200.0f, AVOIDANCE_SAFETY_ALL} // Highest Platform
 };
 
 struct AvoidancePoint bitfsAvoidancePoints[] = {
-    {bhvStub, {6772, 3350, 106}, 400.0f, 500.0f, AVOIDANCE_SAFETY_ALL}, // In Bowser Warp
-    {bhvStub, {4440, -300, 280}, 700.0f, 400.0f, AVOIDANCE_SAFETY_HARD}, // Above Cage
-    {bhvStub, {6772, 4500, 106}, 850.0f, 600.0f, AVOIDANCE_SAFETY_MED}, // Above Bowser Warp
+    {bhvStub, {6772, 2850, 106}, 400.0f, 1000.0f, AVOIDANCE_SAFETY_ALL}, // In Bowser Warp
+    {bhvStub, {4440, -700, 280}, 700.0f, 800.0f, AVOIDANCE_SAFETY_HARD}, // Above Cage
+    {bhvStub, {6772, 3900, 106}, 900.0f, 1200.0f, AVOIDANCE_SAFETY_HARD}, // Above Bowser Warp
 };
 
 struct AvoidancePoint icBasAvoidancePoints[] = {
-    {bhvStub, {6000, -1074, 2000}, 1000.0f, 50.0f, AVOIDANCE_SAFETY_ALL}, // Behind DDD Painting
-    {bhvStub, {-1023, -1074, 589}, 400.0f, 50.0f, AVOIDANCE_SAFETY_ALL}   // Behind First Key Door
+    {bhvStub, {6000, -1124, 2000}, 1000.0f, 100.0f, AVOIDANCE_SAFETY_ALL}, // Behind DDD Painting
+    {bhvStub, {-1023, -1124, 589}, 400.0f, 100.0f, AVOIDANCE_SAFETY_ALL}   // Behind First Key Door
 };
 
 struct AvoidancePoint icUpAvoidancePoints[] = {
-    {bhvStub, {-1963, 2240, 4815}, 900.0f, 100.0f, AVOIDANCE_SAFETY_ALL}, // RR side under first stair
-    {bhvStub, {1250, 2240, 4815}, 900.0f, 100.0f, AVOIDANCE_SAFETY_ALL}, // WMotR side under first stair
+    {bhvStub, {-1963, 2140, 4815}, 900.0f, 200.0f, AVOIDANCE_SAFETY_ALL}, // RR side under first stair
+    {bhvStub, {1250, 2140, 4815}, 900.0f, 200.0f, AVOIDANCE_SAFETY_ALL}, // WMotR side under first stair
 
-    {bhvStub, {2975, 2816, 5884}, 300.0f, 100.0f, AVOIDANCE_SAFETY_ALL}, // WMotR entrance
+    {bhvStub, {2975, 2716, 5884}, 300.0f, 200.0f, AVOIDANCE_SAFETY_ALL}, // WMotR entrance
 
-    {bhvStub, {3135, 1613, 3141}, 100.0f, 50.0f, AVOIDANCE_SAFETY_ALL}, // SL Pillar
-    {bhvStub, {3793, 1613, 2754}, 100.0f, 50.0f, AVOIDANCE_SAFETY_ALL}, // SL Pillar
-    {bhvStub, {3230, 1613, 1328}, 100.0f, 50.0f, AVOIDANCE_SAFETY_ALL}, // SL Pillar
-    {bhvStub, {3249, 1613, 294}, 100.0f, 50.0f, AVOIDANCE_SAFETY_ALL}, // SL Pillar
-    {bhvStub, {3942, 1613, 709}, 100.0f, 50.0f, AVOIDANCE_SAFETY_ALL}, // SL Pillar
+    {bhvStub, {3135, 1563, 3141}, 100.0f, 100.0f, AVOIDANCE_SAFETY_ALL}, // SL Pillar
+    {bhvStub, {3793, 1563, 2754}, 100.0f, 100.0f, AVOIDANCE_SAFETY_ALL}, // SL Pillar
+    {bhvStub, {3230, 1563, 1328}, 100.0f, 100.0f, AVOIDANCE_SAFETY_ALL}, // SL Pillar
+    {bhvStub, {3249, 1563, 294}, 100.0f, 100.0f, AVOIDANCE_SAFETY_ALL}, // SL Pillar
+    {bhvStub, {3942, 1563, 709}, 100.0f, 100.0f, AVOIDANCE_SAFETY_ALL}, // SL Pillar
 
-    {bhvStub, {-236, 4265, -87}, 3900.0f, 1065.0f, AVOIDANCE_SAFETY_ALL}, // Endless staircase area
+    {bhvStub, {-236, 3200, -87}, 3900.0f, 2130.0f, AVOIDANCE_SAFETY_ALL}, // Endless staircase area
 };
 
 #define ARRAY_SIZE(x) (sizeof((x)) / sizeof((x)[0]))

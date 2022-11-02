@@ -273,7 +273,7 @@ static u8 is_in_avoidance_point(Vec3s pos, struct AreaParams *areaParams,
 
             if ((sqrtf(sqr(pos[0] - avoidancePos[0]) + sqr(pos[2] - avoidancePos[2]))
                 < avoidancePoint->radius)
-                && (ABS(pos[1] - avoidancePos[1]) < avoidancePoint->height)) {
+                && (pos[1] > avoidancePos[1]) && (pos[1] < avoidancePos[1] + avoidancePoint->height)) {
                 return TRUE;
             }
         

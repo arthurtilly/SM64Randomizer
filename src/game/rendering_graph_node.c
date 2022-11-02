@@ -1051,8 +1051,8 @@ void visualise_object_hitbox(struct Object *node) {
 
 void visualise_avoidance_point(struct AvoidancePoint *point) {
     Vec3f bnds1, bnds2;
-    vec3f_set(bnds1, point->pos[0], point->pos[1] - point->height, point->pos[2]);
-    vec3f_set(bnds2, point->radius, point->height * 2, point->radius);
+    vec3f_set(bnds1, point->pos[0], point->pos[1], point->pos[2]);
+    vec3f_set(bnds2, point->radius, point->height, point->radius);
     if (point->behavior != bhvStub) {
         debug_box_color(COLOR_RGBA32_DEBUG_AVOIDANCE_POINT_SPECIFIC);
     } else if (point->safety == AVOIDANCE_SAFETY_ALL) {
