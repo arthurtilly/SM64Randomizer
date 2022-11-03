@@ -236,6 +236,7 @@ void load_area(s32 index) {
     gTimeStartedLoadingArea = gGlobalTimer;
 
     gIgnoreCollisionDistance = TRUE;
+    gNumFadingWarpsPlaced = 0;
 
     if (gCurrentArea == NULL && gAreaData[index].graphNode != NULL) {
         gCurrentArea = &gAreaData[index];

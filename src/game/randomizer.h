@@ -118,6 +118,7 @@ extern u8 gRequiredStars[];
 extern u32 gRandomizerGameSeed;
 extern u8 gIsSetSeed;
 extern u8 gIgnoreCollisionDistance;
+extern u8 gNumFadingWarpsPlaced;
 extern u8 gWarpDestinations[];
 extern AreaParamsArray *sLevelParams[];
 extern u8 gRandomSongs[19];

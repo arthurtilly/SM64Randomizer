@@ -233,3 +233,18 @@ AreaParamsArray *sLevelParams[] = {
     NULL,
     &ttmParams
 };
+
+// Dimensions:
+//   Area (THI or CCM)
+//   Bounding boxes (one for each warp)
+//   Min corner and max corner (two points)
+Vec3f sFadingWarpBounds[2][2][2] = {
+    { // THI
+        { {  -500.f, -1000.f,  -5000.f }, {  500.f,    0.f, -4000.f } }, // Island
+        { { -2500.f, -1100.0f, -2500.f }, { 2500.f, 2000.f,  2500.f } }, // Mainland
+    },
+    { // CCM
+        { { -6500.f,  1500.f, -5500.f }, { 6500.f,  4600.f, 6500.f } }, // High
+        { { -6500.f, -4600.f, -5500.f }, { 6500.f, -2500.f, 6500.f } }, // Low
+    },
+};

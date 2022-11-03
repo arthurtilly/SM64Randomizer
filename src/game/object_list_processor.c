@@ -493,10 +493,21 @@ void spawn_objects_from_info(UNUSED s32 unused, struct SpawnInfo *spawnInfo) {
             object->behavior = script;
             object->pointerSeed = spawnInfo->pointerSeed;
 
+            // Warps are done here so that they randomize before Mario is spawned
             if ((script == segmented_to_virtual(bhvSpinAirborneWarp)) && (gCurrCourseNum != COURSE_NONE) && (gOptionsSettings.gameplay.s.randomLevelSpawn)) {
                 Vec3s pos;
                 get_safe_position(object, pos, 100.f, 500.f, &gGlobalRandomState, FLOOR_SAFETY_HIGH, RAND_TYPE_MAX_VARIATION | RAND_TYPE_CAN_BE_UNDERWATER | RAND_TYPE_SPAWN_TOP_OF_SLIDE | RAND_TYPE_LIMITED_BBH_HMC_SPAWNS | RAND_TYPE_SAFE);
                 vec3s_copy(spawnInfo->startPos, pos);
+            }
+
+            if ((script == segmented_to_virtual(bhvWarpPipe)) && (!gOptionsSettings.gameplay.s.onlyKeyObjects)) {
+                Vec3s pos;
+                tinymt32_t randomState;
+                tinymt32_init(&randomState, gRandomizerGameSeed + (spawnInfo->pointerSeed/4));
+                get_safe_position(object, pos, 0.f, 0.f, &randomState, FLOOR_SAFETY_HIGH, RAND_TYPE_GROUNDED | RAND_TYPE_SAFE | RAND_TYPE_SPAWN_FAR_FROM_WALLS);
+                vec3s_copy(spawnInfo->startPos, pos);
+                s16 angle = atan2s(pos[2], pos[0]) + 0x8000;
+                spawnInfo->startAngle[1] = angle;
             }
 
             // Record death/collection in the SpawnInfo

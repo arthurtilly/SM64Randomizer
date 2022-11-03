@@ -389,9 +389,11 @@ static s32 bhv_cmd_randomize_object(void) {
         }
     }
 
-    // Funny moneybag on danger setting
-    if ((gOptionsSettings.gameplay.s.safeSpawns == SPAWN_SAFETY_HARD) && (gCurrentObject->behavior == segmented_to_virtual(bhvYellowCoin))) {
-        if (tinymt32_generate_float(&randomState) < 0.002f) { // 1 in 500 chance
+    // Funny moneybag
+    if ((gOptionsSettings.gameplay.s.safeSpawns != SPAWN_SAFETY_SAFE) && (gCurrentObject->behavior == segmented_to_virtual(bhvYellowCoin))) {
+        f32 rand = tinymt32_generate_float(&randomState);
+        f32 chance = gOptionsSettings.gameplay.s.safeSpawns == SPAWN_SAFETY_HARD ? (1 / 50.f) : (1 / 200.f);
+        if (rand < chance) { // 1 in 200 on normal, 1 in 50 on danger
             mark_obj_for_deletion(gCurrentObject);
             struct Object *moneybag = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, MODEL_YELLOW_COIN, bhvMoneybagHidden, gCurrentObject->oPosX, gCurrentObject->oPosY, gCurrentObject->oPosZ, 0, 0, 0);
             moneybag->pointerSeed = gCurrentObject->pointerSeed;

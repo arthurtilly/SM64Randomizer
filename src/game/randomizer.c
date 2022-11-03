@@ -282,6 +282,8 @@ static u8 is_in_avoidance_point(Vec3s pos, struct AreaParams *areaParams,
     return FALSE;
 }
 
+u8 gNumFadingWarpsPlaced = 0;
+
 void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 maxHeightRange, tinymt32_t *randomState,
                        u8 floorSafeLevel, u32 randPosFlags) {
     struct AreaParams *areaParams = &(*sLevelParams[gCurrLevelNum - 4])[gCurrAreaIndex - 1];
@@ -290,6 +292,15 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
     u32 objCanBeUnderwater;
     u8 killOnOob = FALSE;
     struct Surface *lowFloor, *ceil, *highFloor;
+
+    f32 wallRadius = 50.f;
+    if (randPosFlags & RAND_TYPE_SPAWN_FAR_FROM_WALLS) {
+        if (obj->behavior == segmented_to_virtual(bhvWarpPipe)) {
+            wallRadius = 100.f;
+        } else {
+            wallRadius = 500.f;
+        }
+    }
 
     if (areaParams == NULL) {
         pos[0] = 0;
@@ -312,11 +323,14 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
     maxZ = areaParams->maxZ;
 
     // Handle special cases for bounds
+
+    // THI wiggler cave
     if ((gCurrCourseNum == COURSE_THI) && (gCurrAreaIndex == 3)) {
         if (randPosFlags & RAND_TYPE_THI_A3_ABOVE_MESH)
             minY = 2200;
         else
             maxY = 1750;
+    // PSS
     } else if ((gCurrCourseNum == COURSE_PSS)) {
         if (randPosFlags & RAND_TYPE_SPAWN_TOP_OF_SLIDE) {
             minY = 6100;
@@ -326,7 +340,7 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
             minZ = 4000;
         } else
             minY = -1000;
-
+    // CCM slide
     } else if ((gCurrCourseNum == COURSE_CCM) && (gCurrAreaIndex == 2)) {
         if (randPosFlags & RAND_TYPE_SPAWN_TOP_OF_SLIDE) {
             minY = 6600;
@@ -334,6 +348,21 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
         } else if (randPosFlags & RAND_TYPE_SPAWN_BOTTOM_OF_SLIDE) {
             maxY = -3900;
             maxZ = -6400;
+        }
+    // Fading warps - CCM or THI tiny island
+    } else if (obj->behavior == segmented_to_virtual(bhvFadingWarp)) {
+        if ((gCurrCourseNum == COURSE_CCM) || ((gCurrCourseNum == COURSE_THI) && (gCurrAreaIndex == 2))) {
+            s32 c = (gCurrCourseNum == COURSE_CCM); // 0 for THI, 1 for CCM
+            s32 w = gNumFadingWarpsPlaced; // 0 for first, 1 for second
+
+            minX = sFadingWarpBounds[c][w][0][0];
+            maxX = sFadingWarpBounds[c][w][1][0];
+            minY = sFadingWarpBounds[c][w][0][1];
+            maxY = sFadingWarpBounds[c][w][1][1];
+            minZ = sFadingWarpBounds[c][w][0][2];
+            maxZ = sFadingWarpBounds[c][w][1][2];
+
+            gNumFadingWarpsPlaced = 1;
         }
     }
 
@@ -370,7 +399,7 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
         // Move out of any walls. This has to be done here because otherwise
         // there's the possibility of being pushed out of the wall into OoB or a ceiling
         vec3s_resolve_wall_collisions(
-            pos, (randPosFlags & RAND_TYPE_SPAWN_FAR_FROM_WALLS) ? 500.0f : 50.0f);
+            pos, wallRadius);
 
         lowFloorHeight = find_floor(pos[0], pos[1], pos[2], &lowFloor);
 
@@ -427,7 +456,7 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
             pos[2] += get_val_in_range_uniform(-200, 200, randomState);
 
             vec3s_resolve_wall_collisions(
-                pos, (randPosFlags & RAND_TYPE_SPAWN_FAR_FROM_WALLS) ? 500.0f : 50.0f);
+                pos, wallRadius);
             
             waterLevel = find_water_level(pos[0], pos[2]);
 
@@ -473,9 +502,6 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
                 continue;
             }
         }
-
-        if ((obj->behavior == segmented_to_virtual(bhvSpinAirborneWarp)) && (lowFloor->flags & SURFACE_FLAG_DYNAMIC))
-            continue;
 
         if (is_in_avoidance_point(pos, areaParams, obj))
             continue;
@@ -818,12 +844,7 @@ void get_random_color(u8 *RGB, tinymt32_t *randomState) {
     RGB[2] = (rand >> 16) & 0xFF;
 }
 
-void set_mario_light(Lights1 *light, tinymt32_t *randomState) {
-    u8 RGB[3];
-    get_random_color(RGB, randomState);
-    u8 r = RGB[0];
-    u8 g = RGB[1];
-    u8 b = RGB[2];
+void set_mario_light(Lights1 *light, u8 r, u8 g, u8 b) {
     light->a.l.col[0] = r / 2;
     light->a.l.col[1] = g / 2;
     light->a.l.col[2] = b / 2;
@@ -836,6 +857,15 @@ void set_mario_light(Lights1 *light, tinymt32_t *randomState) {
     light->l[0].l.colc[0] = light->l[0].l.col[0];
     light->l[0].l.colc[1] = light->l[0].l.col[1];
     light->l[0].l.colc[2] = light->l[0].l.col[2];
+}
+
+void set_mario_light_random(Lights1 *light, tinymt32_t *randomState) {
+    u8 RGB[3];
+    get_random_color(RGB, randomState);
+    u8 r = RGB[0];
+    u8 g = RGB[1];
+    u8 b = RGB[2];
+    set_mario_light(light, r, g, b);
 }
 
 extern Lights1 mario_blue_lights_group;
@@ -881,15 +911,19 @@ void set_mario_rando_colors(void) {
     tinymt32_t randomState;
 
     if (gOptionsSettings.cosmetic.s.marioColors) {
-        tinymt32_init(&randomState, gRandomizerGameSeed);
+        if (gRandomizerGameSeed == 2401) {
+            set_mario_light(segmented_to_virtual(&mario_red_lights_group), 0, 255, 0);
+        } else {
+            tinymt32_init(&randomState, gRandomizerGameSeed);
 
-        set_mario_light(segmented_to_virtual(&mario_blue_lights_group), &randomState);
-        set_mario_light(segmented_to_virtual(&mario_red_lights_group), &randomState);
-        set_mario_light(segmented_to_virtual(&mario_white_lights_group), &randomState);
-        set_mario_light(segmented_to_virtual(&mario_brown1_lights_group), &randomState);
-        if (gOptionsSettings.cosmetic.s.marioColors == 2) {
-            set_mario_light(segmented_to_virtual(&mario_beige_lights_group), &randomState);
-            set_mario_light(segmented_to_virtual(&mario_brown2_lights_group), &randomState);
+            set_mario_light_random(segmented_to_virtual(&mario_blue_lights_group), &randomState);
+            set_mario_light_random(segmented_to_virtual(&mario_red_lights_group), &randomState);
+            set_mario_light_random(segmented_to_virtual(&mario_white_lights_group), &randomState);
+            set_mario_light_random(segmented_to_virtual(&mario_brown1_lights_group), &randomState);
+            if (gOptionsSettings.cosmetic.s.marioColors == 2) {
+                set_mario_light_random(segmented_to_virtual(&mario_beige_lights_group), &randomState);
+                set_mario_light_random(segmented_to_virtual(&mario_brown2_lights_group), &randomState);
+            }
         }
     }
 
