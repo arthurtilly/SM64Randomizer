@@ -82,7 +82,7 @@ struct nodeInfo {
 struct OptionsSettings {
     union {
         struct {
-            u32 padding:16; // to make sure settings ids are small
+            u32 padding:15; // to make sure settings ids are small
 
             u32 keepStructure:1;
             u32 randomLevelWarp:1;
@@ -93,7 +93,7 @@ struct OptionsSettings {
             u32 randomizeStarSpawns:1;
             u32 randomStarDoorCounts:2;
             u32 randomLevelSpawn:1;
-            u32 starDoorRequirement:3;
+            u32 starDoorRequirement:4;
             u32 demonOn:1;
         } s;
         u32 w;

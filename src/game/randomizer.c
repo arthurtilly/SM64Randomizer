@@ -125,13 +125,13 @@ char *presetStrings[] = {
 s32 curPreset = 0;
 
 struct OptionsSettings gPresets[] = {
-    {{{0, /* pad */ 0, 1, 0, 0, 0, 1, 1, 1, 1, 3, 0}}, {{0, 0, 0, 0}}},
-    {{{0, /* pad */ 0, 1, 0, 0, 0, 1, 1, 1, 1, 3, 0}}, {{1, 1, 1, 1}}},
-    {{{0, /* pad */ 0, 1, 1, 0, 0, 2, 1, 1, 1, 5, 0}}, {{2, 1, 1, 1}}},
-    {{{0, /* pad */ 0, 1, 0, 0, 1, 0, 0, 2, 0, 2, 0}}, {{0, 0, 1, 0}}},
-    {{{0, /* pad */ 1, 1, 1, 0, 1, 1, 0, 1, 0, 3, 0}}, {{1, 1, 0, 1}}},
-    {{{0, /* pad */ 1, 0, 0, 1, 0, 1, 0, 0, 0, 3, 0}}, {{0, 0, 0, 0}}},
-    {{{0, /* pad */ 0, 1, 0, 0, 2, 1, 1, 2, 1, 1, 0}}, {{1, 0, 1, 0}}},
+    {{{0, /* pad */ 0, 1, 0, 0, 0, 1, 1, 1, 1,  7, 0}}, {{0, 0, 0, 0}}},
+    {{{0, /* pad */ 0, 1, 0, 0, 0, 1, 1, 1, 1,  7, 0}}, {{1, 1, 1, 1}}},
+    {{{0, /* pad */ 1, 1, 1, 0, 0, 2, 1, 1, 1, 10, 0}}, {{2, 1, 1, 1}}},
+    {{{0, /* pad */ 0, 1, 0, 0, 1, 0, 0, 2, 0,  5, 0}}, {{0, 0, 1, 0}}},
+    {{{0, /* pad */ 1, 1, 1, 0, 1, 1, 0, 1, 0,  8, 0}}, {{1, 1, 0, 1}}},
+    {{{0, /* pad */ 1, 0, 0, 1, 0, 1, 0, 0, 0,  7, 0}}, {{0, 0, 0, 0}}},
+    {{{0, /* pad */ 0, 1, 0, 0, 2, 1, 1, 2, 1,  3, 0}}, {{1, 0, 1, 0}}},
 };
 
 unsigned char textVersion2[] = { TEXT_CURR_VERSION };
@@ -685,7 +685,7 @@ static void init_warp_scramble() {
             i = 36;
         }
         if (gWarpDestinations[i] != 0) {
-            if (!gOptionsSettings.gameplay.s.keepStructure) {
+            if (!gOptionsSettings.gameplay.s.keepStructure || gOptionsSettings.gameplay.s.adjustedExits) {
                 index = (u8) get_val_in_range_uniform(j, 23, &randomState);
                 // Forbidden cases
                 if ((i == LEVEL_BOB)

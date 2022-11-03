@@ -220,7 +220,7 @@ u8 OptionPage = 3;
 
 #define textCountPresets (sizeof(textsPresets) / 4)
 
-u8 gStarDoorReqLUT[] = {0, 30, 50, 70, 90, 110, 119};
+u8 gStarDoorReqLUT[] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 119};
 
 unsigned char *pages[] = { textAestheticOptions, textObjOptions, textWarpOptions, testPresets,
                            textGPMOptions };
@@ -979,7 +979,7 @@ void randomize_options() {
     gOptionsSettings.gameplay.s.keepStructure = random_u16() % 2;
 
     // Use two different rng calls to get an approximate normal distribution
-    gOptionsSettings.gameplay.s.starDoorRequirement = (random_u16() % 4) + (random_u16() % 4) + 1; // 0 not an option
+    gOptionsSettings.gameplay.s.starDoorRequirement = (random_u16() % 6) + (random_u16() % 6) + 1; // 1-11 - cant be 0 or 119
 
     gOptionsSettings.gameplay.s.nonstopMode = randomize_weighted_3(2, 1, 1); // weight no nonstop higher
     //gOptionsSettings.gameplay.s.demonOn = random_u16() % 2; // demon not an option
@@ -2409,7 +2409,7 @@ static void page_warps() {
     } else if (check_clicked_text(175, 160 - MENUHEIGHT * 0, 0)) {
         temp--;
     }
-    temp = (temp + 7) % 7;
+    temp = (temp + 13) % 13;
     gOptionsSettings.gameplay.s.starDoorRequirement = temp;
     
     if (check_clicked_text(170, 160 - MENUHEIGHT * 4, 0)){
