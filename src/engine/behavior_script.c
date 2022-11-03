@@ -379,11 +379,22 @@ static s32 bhv_cmd_randomize_object(void) {
 
         // If the box contains a star, despawn the box and spawn a star instead
         if (bparam != -1) {
-            struct Object *star;
             mark_obj_for_deletion(gCurrentObject);
-            star = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, MODEL_STAR, bhvStar, gCurrentObject->oPosX, gCurrentObject->oPosY, gCurrentObject->oPosZ, 0, 0, 0);
+            struct Object *star = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, MODEL_STAR, bhvStar, gCurrentObject->oPosX, gCurrentObject->oPosY, gCurrentObject->oPosZ, 0, 0, 0);
             star->oBehParams = bparam << 24;
             star->pointerSeed = gCurrentObject->pointerSeed;
+
+            gCurBhvCommand++;
+            return BHV_PROC_CONTINUE;
+        }
+    }
+
+    // Funny moneybag on danger setting
+    if ((gOptionsSettings.gameplay.s.safeSpawns == SPAWN_SAFETY_HARD) && (gCurrentObject->behavior == segmented_to_virtual(bhvYellowCoin))) {
+        if (tinymt32_generate_float(&randomState) < 0.002f) { // 1 in 500 chance
+            mark_obj_for_deletion(gCurrentObject);
+            struct Object *moneybag = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, MODEL_YELLOW_COIN, bhvMoneybagHidden, gCurrentObject->oPosX, gCurrentObject->oPosY, gCurrentObject->oPosZ, 0, 0, 0);
+            moneybag->pointerSeed = gCurrentObject->pointerSeed;
 
             gCurBhvCommand++;
             return BHV_PROC_CONTINUE;

@@ -2331,13 +2331,13 @@ char *textsObjects[] = {
 static void page_objects() {
     u32 i;
     if (check_clicked_text(156, 160 - MENUHEIGHT * 0, 0)){
-        gOptionsSettings.gameplay.s.safeSpawns = 0;
+        gOptionsSettings.gameplay.s.safeSpawns = SPAWN_SAFETY_SAFE;
     }
     if (check_clicked_text_width(191, 160 - MENUHEIGHT * 0, 0, 45)){
-        gOptionsSettings.gameplay.s.safeSpawns = 1;
+        gOptionsSettings.gameplay.s.safeSpawns = SPAWN_SAFETY_DEFAULT;
     }
     if (check_clicked_text_width(240, 160 - MENUHEIGHT * 0, 0, 45)){
-        gOptionsSettings.gameplay.s.safeSpawns = 2;
+        gOptionsSettings.gameplay.s.safeSpawns = SPAWN_SAFETY_HARD;
     }
 
     for (i = 1; i < textCountObjects; i++) {
