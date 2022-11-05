@@ -457,12 +457,12 @@ static s32 bhv_cmd_randomize_object(void) {
                 height = 100.f;
                 break;
             case SPAWN_SAFETY_DEFAULT:
-                height = 220.f;
+                height = 170.f;
                 break;
             case SPAWN_SAFETY_HARD:
-                height = 450.f;
+                height = 250.f;
             }
-            get_safe_position(gCurrentObject, pos, 50.f, 200.f, &randomState, (randType & RAND_TYPE_SAFE ? FLOOR_SAFETY_MEDIUM : FLOOR_SAFETY_LOW), randType);
+            get_safe_position(gCurrentObject, pos, 50.f, height, &randomState, (randType & RAND_TYPE_SAFE ? FLOOR_SAFETY_MEDIUM : FLOOR_SAFETY_LOW), randType);
             randomize = TRUE;
         }
 

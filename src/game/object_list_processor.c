@@ -504,7 +504,7 @@ void spawn_objects_from_info(UNUSED s32 unused, struct SpawnInfo *spawnInfo) {
                 Vec3s pos;
                 tinymt32_t randomState;
                 tinymt32_init(&randomState, gRandomizerGameSeed + (spawnInfo->pointerSeed/4));
-                get_safe_position(object, pos, 0.f, 0.f, &randomState, FLOOR_SAFETY_HIGH, RAND_TYPE_GROUNDED | RAND_TYPE_SAFE | RAND_TYPE_SPAWN_FAR_FROM_WALLS);
+                get_safe_position(object, pos, 0.f, 0.f, &randomState, FLOOR_SAFETY_HIGH, RAND_TYPE_GROUNDED | RAND_TYPE_SAFE | RAND_TYPE_SPAWN_FAR_FROM_WALLS | RAND_TYPE_CREATE_AVOIDANCE_POINT);
                 vec3s_copy(spawnInfo->startPos, pos);
                 s16 angle = atan2s(pos[2], pos[0]) + 0x8000;
                 spawnInfo->startAngle[1] = angle;

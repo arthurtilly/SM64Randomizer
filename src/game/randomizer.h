@@ -123,8 +123,9 @@ extern u8 gWarpDestinations[];
 extern AreaParamsArray *sLevelParams[];
 extern u8 gRandomSongs[19];
 extern u8 gSkyboxIndex;
-extern u8 multicolorOn;
 extern u8 gStarDoorReqLUT[];
+extern struct AvoidancePoint gDynamicAvoidancePoints[50];
+extern u8 gNumDynamicAvoidancePoints;
 
 extern void print_generic_text_ascii_buf(s16 x, s16 y, char *buf);
 extern void print_generic_text_ascii(s16 x, s16 y, const char *src);

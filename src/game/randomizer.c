@@ -28,6 +28,9 @@ u8 gIsSetSeed = FALSE;
 
 u8 gIgnoreCollisionDistance = FALSE; // hacky
 
+u8 gNumDynamicAvoidancePoints = 0;
+struct AvoidancePoint gDynamicAvoidancePoints[50];
+
 struct OptionsSettings gOptionsSettings;
 
 #include "randomizer_data.h"
@@ -245,40 +248,44 @@ static u8 is_floor_safe(struct Surface *floor, u8 floorSafeLevel,
     return FALSE;
 }
 
-static u8 is_in_avoidance_point(Vec3s pos, struct AreaParams *areaParams,
-                                struct Object *obj) { // Checks if near an avoidance point
-    struct AvoidancePoint *avoidancePoint;
-    void *behavior;
-    Vec3s avoidancePos;
-    u32 i;
-
-    if (areaParams->numAvoidancePoints > 0) {
-        for (i = 0; i < areaParams->numAvoidancePoints; i++) {
-            avoidancePoint = &(*areaParams->avoidancePoints)[i];
-            behavior = segmented_to_virtual(avoidancePoint->behavior);
-
-                
-            if(((avoidancePoint->safety == AVOIDANCE_SAFETY_ALL) 
-                || ((avoidancePoint->safety == AVOIDANCE_SAFETY_MED) && (gOptionsSettings.gameplay.s.safeSpawns == SPAWN_SAFETY_SAFE))
-                || ((avoidancePoint->safety == AVOIDANCE_SAFETY_HARD) && (gOptionsSettings.gameplay.s.safeSpawns != SPAWN_SAFETY_HARD)))){
-            } else {
-                continue;
-            }
-
-            if (behavior != segmented_to_virtual(bhvStub) && obj->behavior != behavior) {
-                continue;
-            }
-
-            vec3s_copy(avoidancePos, avoidancePoint->pos);
-
-            if ((sqrtf(sqr(pos[0] - avoidancePos[0]) + sqr(pos[2] - avoidancePos[2]))
-                < avoidancePoint->radius)
-                && (pos[1] > avoidancePos[1]) && (pos[1] < avoidancePos[1] + avoidancePoint->height)) {
-                return TRUE;
-            }
+// Checks if near a specific avoidance point
+static u32 check_avoidance_point(Vec3s pos, struct Object *obj, struct AvoidancePoint *avoidancePoint) {
+    void *behavior = segmented_to_virtual(avoidancePoint->behavior);
         
+    if(((avoidancePoint->safety == AVOIDANCE_SAFETY_ALL) 
+        || ((avoidancePoint->safety == AVOIDANCE_SAFETY_MED) && (gOptionsSettings.gameplay.s.safeSpawns == SPAWN_SAFETY_SAFE))
+        || ((avoidancePoint->safety == AVOIDANCE_SAFETY_HARD) && (gOptionsSettings.gameplay.s.safeSpawns != SPAWN_SAFETY_HARD)))){
+    } else {
+        return FALSE;
+    }
+
+    if (behavior != segmented_to_virtual(bhvStub) && obj->behavior != behavior) {
+        return FALSE;
+    }
+
+    if ((sqr(pos[0] - avoidancePoint->pos[0]) + sqr(pos[2] - avoidancePoint->pos[2]) < sqr(avoidancePoint->radius))
+        && (pos[1] > avoidancePoint->pos[1]) && (pos[1] < avoidancePoint->pos[1] + avoidancePoint->height)) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+// Checks if near any avoidance point
+static u32 is_in_avoidance_point(Vec3s pos, struct AreaParams *areaParams, struct Object *obj) {
+    struct AvoidancePoint *avoidancePoint;
+
+    for (u32 i = 0; i < areaParams->numAvoidancePoints; i++) {
+        avoidancePoint = &(*areaParams->avoidancePoints)[i];
+        if (check_avoidance_point(pos, obj, avoidancePoint)) {
+            return TRUE;
         }
     }
+    for (u32 i = 0; i < gNumDynamicAvoidancePoints; i++) {
+        if (check_avoidance_point(pos, obj, &gDynamicAvoidancePoints[i])) {
+            return TRUE;
+        }
+    }
+
     return FALSE;
 }
 
@@ -509,6 +516,19 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
         // Wall Check
         if (!is_safe_near_walls(pos, killOnOob))
             continue;
+
+        // Spawn avoidance point if needed
+        if ((randPosFlags & RAND_TYPE_CREATE_AVOIDANCE_POINT) && (gNumDynamicAvoidancePoints < 50)) {
+            struct AvoidancePoint *newPoint = &gDynamicAvoidancePoints[gNumDynamicAvoidancePoints];
+            newPoint->pos[0] = pos[0];
+            newPoint->pos[1] = pos[1] - 50.f;
+            newPoint->pos[2] = pos[2];
+            newPoint->radius = 100.f;
+            newPoint->height = 200.f;
+            newPoint->safety = AVOIDANCE_SAFETY_ALL;
+            newPoint->behavior = bhvStub;
+            gNumDynamicAvoidancePoints++;
+        }
 
         return;
     }

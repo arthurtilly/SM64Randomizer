@@ -1068,11 +1068,12 @@ extern struct Object *gMarioObject;
 void visualise_all_avoidance_points(void) {
     if (gMarioObject == NULL) return;
     struct AreaParams *areaParams = &(*sLevelParams[gCurrLevelNum - 4])[gCurrAreaIndex - 1];
-    if (areaParams->numAvoidancePoints > 0) {
-        for (u32 i = 0; i < areaParams->numAvoidancePoints; i++) {
-            struct AvoidancePoint *avoidancePoint = &(*areaParams->avoidancePoints)[i];
-            visualise_avoidance_point(avoidancePoint);
-        }
+    for (u32 i = 0; i < areaParams->numAvoidancePoints; i++) {
+        struct AvoidancePoint *avoidancePoint = &(*areaParams->avoidancePoints)[i];
+        visualise_avoidance_point(avoidancePoint);
+    }
+    for (u32 i = 0; i < gNumDynamicAvoidancePoints; i++) {
+        visualise_avoidance_point(&gDynamicAvoidancePoints[i]);
     }
 }
 #endif
