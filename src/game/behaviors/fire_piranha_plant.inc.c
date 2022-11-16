@@ -48,7 +48,7 @@ void bhv_fire_piranha_plant_init(void) {
 }
 
 static void fire_piranha_plant_act_hide(void) {
-    if ((gGlobalTimer % 30 == 0) && (o->oFirePiranhaPlantNeutralScale == 2.f)) {
+    if ((gGlobalTimer % 30 == 0) && (GET_BPARAM2(o->oBehParams))) {
         struct Object *sparkle = spawn_object(o, 149, bhvCoinSparkles);
         sparkle->oPosX += random_float() * 250 - 125;
         sparkle->oPosY += random_float() * 40;

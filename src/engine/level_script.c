@@ -486,7 +486,7 @@ u8 sNonstopNotSpawn;
 
 static void level_cmd_place_object(void) {
     if (sCurrAreaIndex != -1 && (((CMD_GET(u8, 2) & (1 << (gCurrActNum - 1))) || CMD_GET(u8, 2) == 0x1F) || sNonstopSpawn)
-        && (sNonstopNotSpawn == 0) && !((CMD_GET(u8, 2) & 0x40) && gOptionsSettings.gameplay.s.onlyKeyObjects)) {
+        && (sNonstopNotSpawn == 0) && !((CMD_GET(u8, 2) & 0x40) && (gOptionsSettings.gameplay.s.objectRandomization == 0))) {
         ModelID16 model = CMD_GET(u32, 0x18);
         struct SpawnInfo *spawnInfo = alloc_only_pool_alloc(sLevelPool, sizeof(struct SpawnInfo));
 

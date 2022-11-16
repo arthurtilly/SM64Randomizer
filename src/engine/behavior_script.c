@@ -362,7 +362,7 @@ static s32 bhv_cmd_randomize_object(void) {
     tinymt32_init(&randomState, gRandomizerGameSeed + (gCurrentObject->pointerSeed/4));
 
     // Stuff for exclamation boxes when key objects only is enabled
-    if ((gOptionsSettings.gameplay.s.onlyKeyObjects) && (gCurrentObject->behavior == segmented_to_virtual(bhvExclamationBox))) {
+    if ((gOptionsSettings.gameplay.s.objectRandomization == 0) && (gCurrentObject->behavior == segmented_to_virtual(bhvExclamationBox))) {
         s32 bparam = -1;
         // Check if the box contains star
         if (gCurrentObject->oBehParams2ndByte == 8) {
@@ -403,7 +403,7 @@ static s32 bhv_cmd_randomize_object(void) {
         }
     }
 
-    if (((!gOptionsSettings.gameplay.s.onlyKeyObjects) || (randType & RAND_TYPE_IMPORTANT)) && ((gOptionsSettings.gameplay.s.randomizeStarSpawns) || !(randType & RAND_TYPE_RANDO_STAR))) {
+    if (((gOptionsSettings.gameplay.s.objectRandomization != 0) || (randType & RAND_TYPE_IMPORTANT)) && ((gOptionsSettings.gameplay.s.randomizeStarSpawns) || !(randType & RAND_TYPE_RANDO_STAR))) {
         // Let red coins and coin formations spawn anywhere in TotWC and WMotR
         if ((gCurrentObject->behavior == segmented_to_virtual(bhvRedCoin)) ||
             (gCurrentObject->behavior == segmented_to_virtual(bhvCoinFormation)) ||

@@ -87,7 +87,7 @@ struct OptionsSettings {
             u32 keepStructure:1;
             u32 randomLevelWarp:1;
             u32 adjustedExits:1;
-            u32 onlyKeyObjects:1;
+            u32 objectRandomization:1;
             u32 nonstopMode:2;
             u32 safeSpawns:2;
             u32 randomizeStarSpawns:1;

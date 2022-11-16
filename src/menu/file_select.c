@@ -257,13 +257,13 @@ u32 pageCount = sizeof(pages) / 4;
 #define OBJECT_VARS_SET(i, val) \
 { \
     switch(i) { \
-        case 1: gOptionsSettings.gameplay.s.onlyKeyObjects = val; break; \
+        case 1: gOptionsSettings.gameplay.s.objectRandomization = val; break; \
         case 2: gOptionsSettings.gameplay.s.randomizeStarSpawns = val; \
     } \
 }
 
 #define OBJECT_VARS_GET(i) \
-((i) == 1 ? gOptionsSettings.gameplay.s.onlyKeyObjects : \
+((i) == 1 ? gOptionsSettings.gameplay.s.objectRandomization : \
 (gOptionsSettings.gameplay.s.randomizeStarSpawns))
 
 /**
@@ -989,7 +989,7 @@ void randomize_options() {
     gOptionsSettings.gameplay.s.adjustedExits = random_u16() % 2;
     gOptionsSettings.gameplay.s.randomStarDoorCounts = randomize_weighted_3(2, 3, 1); // weight no requirements lower
     gOptionsSettings.gameplay.s.safeSpawns = random_u16() % 3;
-    gOptionsSettings.gameplay.s.onlyKeyObjects = randomize_weighted_2(3, 1); // weight only key objects lower
+    gOptionsSettings.gameplay.s.objectRandomization = randomize_weighted_2(1, 3); // weight only key objects lower
     gOptionsSettings.gameplay.s.randomizeStarSpawns = random_u16() % 2;
 
     gOptionsSettings.cosmetic.s.marioColors = random_u16() % 3;
@@ -2323,7 +2323,7 @@ static void page_cosmetics() {
 
 char *textsObjects[] = {
     "SPAWN DIFFICULTY",
-    "KEY OBJECTS ONLY",
+    "OBJECT TYPES",
     "RANDOMIZE STAR SPAWNS"
 };
 #define textCountObjects (sizeof(textsObjects) / 4)
@@ -2539,9 +2539,10 @@ Controls the average difficulty of\n\
 object placements, including factors\n\
 like height and ground steepness\x3F", 188, 3},
     {"\
-If enabled, will only randomize\n\
-objects directly required to get\n\
-stars, such as red coins or bosses\x3F", 184, 3},
+Controls which kinds of objects are\n\
+randomized\x3F If set to Key, only\n\
+objects that are directly required\n\
+to obtain stars are randomized\x3F", 184, 4},
     {"\
 Whether stars that are spawned\n\
 by other objects have their\n\
@@ -2556,9 +2557,15 @@ void page_objects_print() {
     options_page_print_three(gOptionsSettings.gameplay.s.safeSpawns, 160 - MENUHEIGHT * 0,
         156, 191, 240, "SAFE", "NORMAL", "DANGER");
 
-    for (i = 1; i < textCountObjects; i++) {
-        options_page_print_on_off(OBJECT_VARS_GET(i), 160 - MENUHEIGHT * i, 190, 222);
-    }
+    u8 rgbVal = (OBJECT_VARS_GET(1) ? 40 : 255);
+    gDPSetEnvColor(gDisplayListHead++, rgbVal, rgbVal, rgbVal, sTextBaseAlpha);
+    print_generic_text_ascii(190, 160 - MENUHEIGHT, "KEY");
+    
+    rgbVal = (255+40) - rgbVal;
+    gDPSetEnvColor(gDisplayListHead++, rgbVal, rgbVal, rgbVal, sTextBaseAlpha);
+    print_generic_text_ascii(222, 160 - MENUHEIGHT, "ALL");
+
+    options_page_print_on_off(OBJECT_VARS_GET(2), 160 - MENUHEIGHT * 2, 190, 222);
 
     handle_info_display(objectInfo, textCountObjects);
     
@@ -2641,11 +2648,10 @@ lead to random levels, or if they\n\
 lead to their original level\x3F", 173, 3},
 
     {"\
-If level exits are adjusted then\n\
-Mario will return by the level\n\
-entrance he entered when leaving\n\
-a level, otherwise he will return\n\
-outside the level\x3Es original entrance\x3F", 190, 5},
+Adjusted exits will return Mario\n\
+outside of the painting he just\n\
+entered, rather than the painting\n\
+of the level he was just in\x3F", 175, 4},
 
     {"\
 Whether to randomize the star\n\

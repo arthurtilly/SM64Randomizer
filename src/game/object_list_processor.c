@@ -500,7 +500,7 @@ void spawn_objects_from_info(UNUSED s32 unused, struct SpawnInfo *spawnInfo) {
                 vec3s_copy(spawnInfo->startPos, pos);
             }
 
-            if ((script == segmented_to_virtual(bhvWarpPipe)) && (!gOptionsSettings.gameplay.s.onlyKeyObjects)) {
+            if ((script == segmented_to_virtual(bhvWarpPipe)) && (gOptionsSettings.gameplay.s.objectRandomization != 0)) {
                 Vec3s pos;
                 tinymt32_t randomState;
                 tinymt32_init(&randomState, gRandomizerGameSeed + (spawnInfo->pointerSeed/4));

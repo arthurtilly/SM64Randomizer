@@ -514,6 +514,7 @@ extern const BehaviorScript bhvFlyingBookend[];
 extern const BehaviorScript bhvBookendSpawn[];
 extern const BehaviorScript bhvHauntedBookshelfManager[];
 extern const BehaviorScript bhvBookSwitch[];
+extern const BehaviorScript bhvFirePiranhaPlantStar[];
 extern const BehaviorScript bhvFirePiranhaPlant[];
 extern const BehaviorScript bhvMovingFlame[];
 #define bhvSmallPiranhaFlame bhvMovingFlame // backwards compatibility
