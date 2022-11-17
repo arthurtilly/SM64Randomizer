@@ -6,14 +6,21 @@ static const Lights1 star_seg3_lights = gdSPDefLights1(
     0xff, 0xff, 0xff, 0x28, 0x28, 0x28
 );
 
+/**
 // 0x0302A6F0
 ALIGNED8 static const Texture star_seg3_texture_0302A6F0[] = {
 #include "actors/star/star_surface.rgba16.inc.c"
 };
+**/
 
 // 0x0302AEF0
 ALIGNED8 static const Texture star_seg3_texture_0302AEF0[] = {
 #include "actors/star/star_eye.rgba16.inc.c"
+};
+
+// 0x0302AEF0
+ALIGNED8 static const Texture star_seg3_texture_surface_new[] = {
+#include "actors/star/star_surface_new.rgba32.inc.c"
 };
 
 // 0x0302B6F0
@@ -53,11 +60,19 @@ const Gfx star_seg3_sub_dl_body[] = {
 // 0x0302B870 - 0x0302B908
 const Gfx star_seg3_dl_body[] = {
     gsDPPipeSync(),
-    gsSPSetGeometryMode(G_TEXTURE_GEN),
-    gsDPSetEnvColor(255, 255, 255, 255),
-    gsDPSetCombineMode(G_CC_DECALFADE, G_CC_DECALFADE),
-    gsDPLoadTextureBlock(star_seg3_texture_0302A6F0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_WRAP | G_TX_NOMIRROR, 5, 5, G_TX_NOLOD, G_TX_NOLOD),
+
+	gsDPSetCombineLERP(TEXEL0, PRIMITIVE, TEXEL0_ALPHA, PRIMITIVE, 0, 0, 0, ENVIRONMENT, TEXEL0, PRIMITIVE, TEXEL0_ALPHA, PRIMITIVE, 0, 0, 0, ENVIRONMENT),
+	gsSPSetGeometryMode(G_TEXTURE_GEN),
     gsSPTexture(0x07C0, 0x07C0, 0, G_TX_RENDERTILE, G_ON),
+	gsDPTileSync(),
+	gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_32b_LOAD_BLOCK, 1, star_seg3_texture_surface_new),
+	gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_32b_LOAD_BLOCK, 0, 0, 7, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, 0),
+	gsDPLoadSync(),
+	gsDPLoadBlock(7, 0, 0, 1023, 128),
+	gsDPPipeSync(),
+	gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_32b, 8, 0, 0, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, 0),
+	gsDPSetTileSize(0, 0, 0, 124, 124),
+
     gsSPDisplayList(star_seg3_sub_dl_body),
     gsDPPipeSync(),
     gsSPTexture(0x07C0, 0x07C0, 0, G_TX_RENDERTILE, G_OFF),

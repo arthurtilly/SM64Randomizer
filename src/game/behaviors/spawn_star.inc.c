@@ -34,6 +34,8 @@ void bhv_collect_star_init(void) {
         o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_STAR];
     }
 
+    init_star_color(o, gCurrCourseNum, starId);
+
     obj_set_hitbox(o, &sCollectStarHitbox);
 }
 

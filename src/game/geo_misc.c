@@ -220,3 +220,30 @@ Gfx *geo_exec_cake_end_screen(s32 callContext, struct GraphNode *node, UNUSED Ma
 
     return displayList;
 }
+
+Gfx *geo_set_star_color(s32 callContext, struct GraphNode *node, UNUSED Mat4 mtx) {
+    Gfx *dlStart, *dlHead;
+    dlStart = NULL;
+
+    if (callContext == GEO_CONTEXT_RENDER) {
+        struct GraphNodeGenerated *currentGraphNode = (struct GraphNodeGenerated *) node;
+        struct Object *objectGraphNode = (struct Object *) gCurGraphNodeObject;
+
+        u8 layer = currentGraphNode->parameter & 0xFF;
+
+        if (layer != 0) {
+            currentGraphNode->fnNode.node.flags =
+                (layer << 8) | (currentGraphNode->fnNode.node.flags & 0xFF);
+        }
+
+        dlStart = alloc_display_list(sizeof(Gfx) * 3);
+        dlHead = dlStart;
+        u8 r = (objectGraphNode->oStarColor >> 16) & 0xff;
+        u8 g = (objectGraphNode->oStarColor >> 8) & 0xff;
+        u8 b = objectGraphNode->oStarColor & 0xff;
+
+        gDPSetPrimColor(dlHead++, 0, 0, r, g, b, 0xFF);
+        gSPEndDisplayList(dlHead);
+    }
+    return dlStart;    
+}

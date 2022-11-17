@@ -29,6 +29,8 @@ void bhv_spawned_star_init(void) {
         cur_obj_set_model(MODEL_TRANSPARENT_STAR);
     }
 
+    init_star_color(o, gCurrCourseNum, param);
+
     cur_obj_play_sound_2(SOUND_GENERAL2_STAR_APPEARS);
 }
 

@@ -18,6 +18,7 @@
 #include "string.h"
 #include "color_presets.h"
 #include "randomizer.h"
+#include "object_list_processor.h"
 
 #include "config.h"
 #include "config/config_world.h"
@@ -699,8 +700,21 @@ void geo_process_generated_list(struct GraphNodeGenerated *node) {
 void geo_process_background(struct GraphNodeBackground *node) {
     Gfx *list = NULL;
 
-    if (node->fnNode.func != NULL) {
-        list = node->fnNode.func(GEO_CONTEXT_RENDER, &node->fnNode.node,
+    GraphNodeFunc nodeFunc = node->fnNode.func;
+    s32 background = node->background;
+
+    // If inside a BBH room, render black background instead of skybox
+    if (gCurrLevelNum == LEVEL_BBH && gMarioCurrentRoom != 0 &&
+                                      (gMarioCurrentRoom != 13 && // main outside area
+                                       gMarioCurrentRoom != 21 && // outside front door
+                                       gMarioCurrentRoom != 28 && // outside back door
+                                       gMarioCurrentRoom != 32)) { // outside shed door
+        nodeFunc = NULL;
+        background = 0;
+    }
+
+    if (nodeFunc != NULL) {
+        list = nodeFunc(GEO_CONTEXT_RENDER, &node->fnNode.node,
                                  (struct AllocOnlyPool *) gMatStack[gMatStackIndex]);
     }
     if (list != NULL) {
@@ -715,7 +729,7 @@ void geo_process_background(struct GraphNodeBackground *node) {
 
         gDPPipeSync(gfx++);
         gDPSetCycleType(gfx++, G_CYC_FILL);
-        gDPSetFillColor(gfx++, node->background);
+        gDPSetFillColor(gfx++, background);
         gDPFillRectangle(gfx++, GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), gBorderHeight,
         GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1, SCREEN_HEIGHT - gBorderHeight - 1);
         gDPPipeSync(gfx++);

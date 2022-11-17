@@ -107,6 +107,7 @@ void render_100_coin_star(u8 stars) {
 
         sStarSelectorModels[6]->oStarSelectorSize = 0.8f;
         sStarSelectorModels[6]->oStarSelectorType = STAR_SELECTOR_100_COINS;
+        init_star_color(sStarSelectorModels[6], gCurrCourseNum, 6);
     }
 }
 
@@ -180,6 +181,7 @@ void bhv_act_selector_init(void) {
             spawn_object_abs_with_rot(o, 0, selectorModelIDs[i], bhvActSelectorStarType,
                                     (75 + (sVisibleStars * -75) + (i * 152)), 248, -300, 0, 0, 0);
         sStarSelectorModels[i]->oStarSelectorSize = 1.0f;
+        init_star_color(sStarSelectorModels[i], gCurrCourseNum, i);
     }
 #endif
 

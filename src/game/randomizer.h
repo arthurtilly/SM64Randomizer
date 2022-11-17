@@ -135,5 +135,6 @@ extern void init_randomizer(s32 fileNum);
 extern u8 get_nonrandom_level();
 extern void print_seed_and_options_data(void);
 extern void set_mario_rando_colors(void);
+extern void init_star_color(struct Object *star, s32 courseID, s32 starID);
 
 #endif

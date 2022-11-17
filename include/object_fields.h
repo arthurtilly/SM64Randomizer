@@ -1019,6 +1019,7 @@
 
 /* General Stars */
 #define /*0x100*/ oStarOrangeNumPointer OBJECT_FIELD_VPTR(0x1E)
+#define /*0x104*/ oStarColor            OBJECT_FIELD_U32(0x1F)
 
 /* Sushi Shark */
 #define /*0x0F4*/ oSushiSharkAngleFromHome OBJECT_FIELD_S32(0x1B)

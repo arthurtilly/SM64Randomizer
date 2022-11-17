@@ -857,11 +857,59 @@ void init_randomizer(s32 fileNum) {
     init_required_stars();
 }
 
+// stolen from stackoverflow
+f32 hue_to_rgb(f32 p, f32 q, f32 t) {
+    if (t < 0.f)
+        t += 1.f;
+    if (t > 1.f)
+        t -= 1.f;
+
+    if (t < 1/6.f)
+        return p + (q - p) * 6 * t;
+    if (t < 1/2.f)
+        return q;
+    if (t < 2/3.f)
+        return p + (q - p) * (2/3.f - t) * 6;
+    return p;
+}
+
+void hsl_to_rgb(u8 h, u8 s, u8 l, u8 *RGB) {
+    f32 r,g,b;
+    f32 hf = h / 255.0f;
+    f32 sf = s / 255.0f;
+    f32 lf = l / 255.0f;
+
+    if (s == 0.f) {
+        r = g = b = lf;
+    } else {
+        f32 q = (lf < 1/2.f) ? (lf * (1 + sf)) : (lf + sf - lf * sf);
+        f32 p = 2 * lf - q;
+        r = hue_to_rgb(p, q, hf + 1/3.f);
+        g = hue_to_rgb(p, q, hf);
+        b = hue_to_rgb(p, q, hf - 1/3.f);
+    }
+
+    RGB[0] = r * 255;
+    RGB[1] = g * 255;
+    RGB[2] = b * 255;
+}
+
 void get_random_color(u8 *RGB, tinymt32_t *randomState) {
     u32 rand = tinymt32_generate_u32(randomState);
-    RGB[0] = rand & 0xFF;
-    RGB[1] = (rand >> 8) & 0xFF;
-    RGB[2] = (rand >> 16) & 0xFF;
+    hsl_to_rgb(rand & 0xFF,
+               0xFF,
+               ((rand >> 8) & 0x7F) + ((rand >> 16) & 0x7F),
+               RGB);
+}
+
+void init_star_color(struct Object *star, s32 courseID, s32 starID) {
+    s32 index = courseID * 8 + starID;
+    tinymt32_t randomState;
+    tinymt32_init(&randomState, index * 0x20000 + gRandomizerGameSeed);
+
+    u8 RGB[3];
+    get_random_color(RGB, &randomState);
+    star->oStarColor = (RGB[0] << 16) | (RGB[1] << 8) | RGB[2];
 }
 
 void set_mario_light(Lights1 *light, u8 r, u8 g, u8 b) {

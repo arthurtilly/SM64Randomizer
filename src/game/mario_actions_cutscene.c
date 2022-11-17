@@ -592,6 +592,7 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
         switch (++m->actionTimer) {
             case 1:
                 celebStar = spawn_object(m->marioObj, MODEL_STAR, bhvCelebrationStar);
+                init_star_color(celebStar, gCurrCourseNum, GET_BPARAM1(m->interactObj->oBehParams));
 #ifdef STAR_DANCE_USES_STARS_MODEL
                 celebStar->header.gfx.sharedChild = m->interactObj->header.gfx.sharedChild;
 #else
@@ -845,7 +846,8 @@ s32 act_unlocking_star_door(struct MarioState *m) {
             break;
         case ACT_STATE_UNLOCKING_STAR_DOOR_SUMMON_STAR:
             if (is_anim_at_end(m)) {
-                spawn_object(m->marioObj, MODEL_STAR, bhvUnlockDoorStar);
+                struct Object *star = spawn_object(m->marioObj, MODEL_STAR, bhvUnlockDoorStar);
+                init_star_color(star, random_u16() & 0xFF, random_u16() & 0x7);
                 m->actionState = ACT_STATE_UNLOCKING_STAR_DOOR_APPROACH_DOOR;
             }
             break;
@@ -2029,6 +2031,7 @@ static void end_peach_cutscene_mario_landing(struct MarioState *m) {
         sEndJumboStarObj = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_STAR, bhvStaticObject, 0,
                                                      2528, -1800, 0, 0, 0);
         obj_scale(sEndJumboStarObj, 3.0f);
+        init_star_color(sEndJumboStarObj, COURSE_BITS, 7);
         advance_cutscene_step(m);
     }
 }
