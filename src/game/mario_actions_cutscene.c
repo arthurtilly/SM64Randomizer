@@ -2031,7 +2031,7 @@ static void end_peach_cutscene_mario_landing(struct MarioState *m) {
         sEndJumboStarObj = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_STAR, bhvStaticObject, 0,
                                                      2528, -1800, 0, 0, 0);
         obj_scale(sEndJumboStarObj, 3.0f);
-        init_star_color(sEndJumboStarObj, COURSE_BITS, 7);
+        init_star_color(sEndJumboStarObj, COURSE_CAKE_END, 0);
         advance_cutscene_step(m);
     }
 }

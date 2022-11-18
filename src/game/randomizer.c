@@ -128,13 +128,13 @@ char *presetStrings[] = {
 s32 curPreset = 0;
 
 struct OptionsSettings gPresets[] = {
-    {{{0, /* pad */ 0, 1, 0, 1, 0, 1, 1, 1, 1,  7, 0}}, {{0, 0, 0, 0}}},
-    {{{0, /* pad */ 0, 1, 0, 1, 0, 1, 1, 1, 1,  7, 0}}, {{1, 1, 1, 1}}},
-    {{{0, /* pad */ 1, 1, 1, 1, 0, 2, 1, 1, 1, 10, 0}}, {{2, 1, 1, 1}}},
-    {{{0, /* pad */ 0, 1, 0, 1, 1, 0, 0, 2, 0,  5, 0}}, {{0, 0, 1, 0}}},
-    {{{0, /* pad */ 1, 1, 1, 1, 1, 1, 0, 1, 0,  8, 0}}, {{1, 1, 0, 1}}},
-    {{{0, /* pad */ 1, 0, 0, 0, 0, 1, 0, 0, 0,  7, 0}}, {{0, 0, 0, 0}}},
-    {{{0, /* pad */ 0, 1, 0, 1, 2, 1, 1, 2, 1,  3, 0}}, {{1, 0, 1, 0}}},
+    {{{0, /* pad */ 0, 1, 0, 1, 0, 1, 1, 1, 1,  7, 0}}, {{0, 0, 0, 0, 0}}},
+    {{{0, /* pad */ 0, 1, 0, 1, 0, 1, 1, 1, 1,  7, 0}}, {{1, 1, 1, 1, 1}}},
+    {{{0, /* pad */ 1, 1, 1, 1, 0, 2, 1, 1, 1, 10, 0}}, {{2, 1, 1, 1, 2}}},
+    {{{0, /* pad */ 0, 1, 0, 1, 1, 0, 0, 2, 0,  5, 0}}, {{0, 0, 1, 0, 0}}},
+    {{{0, /* pad */ 1, 1, 1, 1, 1, 1, 0, 1, 0,  8, 0}}, {{1, 1, 0, 1, 3}}},
+    {{{0, /* pad */ 1, 0, 0, 0, 0, 1, 0, 0, 0,  7, 0}}, {{0, 0, 0, 0, 0}}},
+    {{{0, /* pad */ 0, 1, 0, 1, 2, 1, 1, 2, 1,  3, 0}}, {{1, 0, 1, 0, 1}}},
 };
 
 unsigned char textVersion2[] = { TEXT_CURR_VERSION };
@@ -903,7 +903,21 @@ void get_random_color(u8 *RGB, tinymt32_t *randomState) {
 }
 
 void init_star_color(struct Object *star, s32 courseID, s32 starID) {
-    s32 index = courseID * 8 + starID;
+    s32 index;
+    switch (gOptionsSettings.cosmetic.s.starColors) {
+        case STAR_COLOR_OFF:
+            star->oStarColor = 0xFFFF29;
+            return;
+        case STAR_COLOR_PER_STAR:
+            index = courseID * 8 + starID;
+            break;
+        case STAR_COLOR_PER_LEVEL:
+            index = courseID;
+            break;
+        case STAR_COLOR_GLOBAL:
+            index = 0;
+            break;
+    }
     tinymt32_t randomState;
     tinymt32_init(&randomState, index * 0x20000 + gRandomizerGameSeed);
 

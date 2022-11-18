@@ -229,16 +229,14 @@ u32 pageCount = sizeof(pages) / 4;
 #define COSMETIC_VARS_SET(i, val) \
 { \
     switch(i) { \
-        case 1: gOptionsSettings.cosmetic.s.musicOn = val; break; \
-        case 2: gOptionsSettings.cosmetic.s.skyboxOn = val; break; \
-        case 3: gOptionsSettings.cosmetic.s.coinsOn = val; \
+        case 2: gOptionsSettings.cosmetic.s.coinsOn = val; break; \
+        case 3: gOptionsSettings.cosmetic.s.skyboxOn = val; \
     } \
 }
 
 #define COSMETIC_VARS_GET(i) \
-((i) == 1 ? gOptionsSettings.cosmetic.s.musicOn : \
-((i) == 2 ? gOptionsSettings.cosmetic.s.skyboxOn : \
-(gOptionsSettings.cosmetic.s.coinsOn)))
+((i) == 2 ? gOptionsSettings.cosmetic.s.coinsOn : \
+(gOptionsSettings.cosmetic.s.skyboxOn))
 
 #define WARPS_VARS_SET(i, val) \
 { \
@@ -996,6 +994,7 @@ void randomize_options() {
     gOptionsSettings.cosmetic.s.musicOn = random_u16() % 2; // music off not option
     gOptionsSettings.cosmetic.s.skyboxOn = random_u16() % 2;
     gOptionsSettings.cosmetic.s.coinsOn = random_u16() % 2;
+    gOptionsSettings.cosmetic.s.starColors = random_u16() % 4;
 
     if (!gOptionsSettings.gameplay.s.randomLevelWarp) {
         gOptionsSettings.gameplay.s.adjustedExits = 0;
@@ -2229,6 +2228,8 @@ static void draw_select_seed_menu(void) {
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 }
 
+extern void seq_player_fade_to_target_volume(s32 player, s32 fadeDuration, u8 targetVolume);
+
 static void applyPreset() {
     curPreset = (curPreset + textCountPresets) % textCountPresets;
     
@@ -2239,27 +2240,33 @@ static void applyPreset() {
 
 #define MENUHEIGHT 17
 
+#define OPTIONS_Y(line) (160 - MENUHEIGHT * (line))
+
 void options_page_print_options(u32 textCount, char *textList[]) {
     u32 i;
     
     gDPSetEnvColor(gDisplayListHead++, 0, 0, 0, sTextBaseAlpha);
     for (i = 0; i < textCount; i++) {
-        print_generic_text_ascii(23 + 1, 160 - MENUHEIGHT * i - 1, textList[i]);
+        print_generic_text_ascii(23 + 1, OPTIONS_Y(i) - 1, textList[i]);
     }
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha);
     for (i = 0; i < textCount; i++) {
-        print_generic_text_ascii(23, 160 - MENUHEIGHT * i, textList[i]);
+        print_generic_text_ascii(23, OPTIONS_Y(i), textList[i]);
     }
 }
 
-void options_page_print_on_off(u32 isOn, s16 y, s16 x1, s16 x2) {
-    u8 rgbVal = (isOn ? 40 : 255);
+void options_page_print_two(u32 currentSelected, s16 y, s16 x1, s16 x2, const char *str1, const char *str2) {
+    u8 rgbVal = (currentSelected ? 40 : 255);
     gDPSetEnvColor(gDisplayListHead++, rgbVal, rgbVal, rgbVal, sTextBaseAlpha);
-    print_generic_text_ascii(x1, y, "OFF");
+    print_generic_text_ascii(x1, y, str1);
     
     rgbVal = (255+40) - rgbVal;
     gDPSetEnvColor(gDisplayListHead++, rgbVal, rgbVal, rgbVal, sTextBaseAlpha);
-    print_generic_text_ascii(x2, y, "ON");
+    print_generic_text_ascii(x2, y, str2);
+}
+
+void options_page_print_on_off(u32 isOn, s16 y, s16 x1, s16 x2) {
+    options_page_print_two(isOn, y, x1, x2, "OFF", "ON");
 }
 
 void options_page_print_three(u32 currentSelected, s16 y, 
@@ -2279,43 +2286,53 @@ void options_page_print_three(u32 currentSelected, s16 y,
 }
 
 char *textsCosmetic[] = {
-    "RANDOM MARIO COLORS",
+    "MARIO COLORS",
+    "STAR COLORS",
+    "COIN COLORS",
+    "RANDOM SKYBOXES",
     "RANDOM MUSIC",
-    "RANDOM SKYBOX",
-    "RANDOM COIN COLORS"
 };
 #define textCountCosmetics (sizeof(textsCosmetic) / 4)
 
 static void page_cosmetics() {
     u32 i;
     
-    if (check_clicked_text(165, 160 - MENUHEIGHT * 0, 0)){
+    if (check_clicked_text(165, OPTIONS_Y(0), 0)){
         gOptionsSettings.cosmetic.s.marioColors = 0;
     }
-    if (check_clicked_text_width(198, 160 - MENUHEIGHT * 0, 0, 45)){
+    if (check_clicked_text_width(198, OPTIONS_Y(0), 0, 45)){
         gOptionsSettings.cosmetic.s.marioColors = 1;
     }
-    if (check_clicked_text(250, 160 - MENUHEIGHT * 0, 0)){
+    if (check_clicked_text(250, OPTIONS_Y(0), 0)){
         gOptionsSettings.cosmetic.s.marioColors = 2;
     }
 
-    if (check_clicked_text(171, 160 - MENUHEIGHT * 1, 1)){
+    s32 temp = gOptionsSettings.cosmetic.s.starColors;
+    if (check_clicked_text(236, OPTIONS_Y(1), 0)) {
+        temp++;
+    } else if (check_clicked_text(159, OPTIONS_Y(1), 0)) {
+        temp--;
+    }
+    temp = (temp + 4) % 4;
+    gOptionsSettings.cosmetic.s.starColors = temp;
+
+    if (check_clicked_text(171, OPTIONS_Y(4), 1)){
         gOptionsSettings.cosmetic.s.musicOn = 0;
         seq_player_fade_to_target_volume(SEQ_PLAYER_LEVEL, 20, 65);
     }
-    if (check_clicked_text(206, 160 - MENUHEIGHT * 1, 1)){
+    if (check_clicked_text(206, OPTIONS_Y(4), 1)){
         gOptionsSettings.cosmetic.s.musicOn = 1;
         seq_player_fade_to_target_volume(SEQ_PLAYER_LEVEL, 20, 65);
     }
-    if (check_clicked_text_width(240, 160 - MENUHEIGHT * 1, 1, 45)){
+    if (check_clicked_text_width(240, OPTIONS_Y(4), 1, 45)){
         gOptionsSettings.cosmetic.s.musicOn = 2;
         seq_player_fade_to_target_volume(SEQ_PLAYER_LEVEL, 20, 0);
     }
     
-    for (i = 2; i < textCountCosmetics; i++) {
-        if (check_clicked_text(180, 160 - MENUHEIGHT * i, i)) {
+    for (i = 2; i < 4; i++) {
+        if (check_clicked_text(180, OPTIONS_Y(i), i)) {
             COSMETIC_VARS_SET(i, 0)
-        } else if (check_clicked_text(222, 160 - MENUHEIGHT * i, i)) {
+        } else if (check_clicked_text(222, OPTIONS_Y(i), i)) {
             COSMETIC_VARS_SET(i, 1)
         }
     }
@@ -2330,20 +2347,20 @@ char *textsObjects[] = {
 
 static void page_objects() {
     u32 i;
-    if (check_clicked_text(156, 160 - MENUHEIGHT * 0, 0)){
+    if (check_clicked_text(156, OPTIONS_Y(0), 0)){
         gOptionsSettings.gameplay.s.safeSpawns = SPAWN_SAFETY_SAFE;
     }
-    if (check_clicked_text_width(191, 160 - MENUHEIGHT * 0, 0, 45)){
+    if (check_clicked_text_width(191, OPTIONS_Y(0), 0, 45)){
         gOptionsSettings.gameplay.s.safeSpawns = SPAWN_SAFETY_DEFAULT;
     }
-    if (check_clicked_text_width(240, 160 - MENUHEIGHT * 0, 0, 45)){
+    if (check_clicked_text_width(240, OPTIONS_Y(0), 0, 45)){
         gOptionsSettings.gameplay.s.safeSpawns = SPAWN_SAFETY_HARD;
     }
 
     for (i = 1; i < textCountObjects; i++) {
-        if (check_clicked_text(180, 160 - MENUHEIGHT * i, i)) {
+        if (check_clicked_text(180, OPTIONS_Y(i), i)) {
             OBJECT_VARS_SET(i, 0);
-        } else if (check_clicked_text(222, 160 - MENUHEIGHT * i, i)) {
+        } else if (check_clicked_text(222, OPTIONS_Y(i), i)) {
             OBJECT_VARS_SET(i, 1);
         }
     }
@@ -2358,34 +2375,34 @@ char *textsModes[] = {
 #define textCountModes (sizeof(textsModes) / 4)
 
 static void page_modes() {
-    if (check_clicked_text(180, 160 - MENUHEIGHT * 0, 0)) {
+    if (check_clicked_text(180, OPTIONS_Y(0), 0)) {
         gOptionsSettings.gameplay.s.keepStructure = 0;
-    } else if (check_clicked_text(222, 160 - MENUHEIGHT * 0, 0)) {
+    } else if (check_clicked_text(222, OPTIONS_Y(0), 0)) {
         gOptionsSettings.gameplay.s.keepStructure = 1;
     }
 
-    if (check_clicked_text(180, 160 - MENUHEIGHT * 2, 0)) {
-        gOptionsSettings.gameplay.s.demonOn = 0;
-    } else if (check_clicked_text(222, 160 - MENUHEIGHT * 2, 0)) {
-        gOptionsSettings.gameplay.s.demonOn = 1;
-    }
-
-    if (check_clicked_text(166, 160 - MENUHEIGHT * 1, 0)){
+    if (check_clicked_text(166, OPTIONS_Y(1), 0)){
         gOptionsSettings.gameplay.s.nonstopMode = 0;
     }
-    if (check_clicked_text(197, 160 - MENUHEIGHT * 1, 0)){
+    if (check_clicked_text(197, OPTIONS_Y(1), 0)){
         gOptionsSettings.gameplay.s.nonstopMode = 1;
     }
-    if (check_clicked_text_width(231, 160 - MENUHEIGHT * 1, 0, 45)){
+    if (check_clicked_text_width(231, OPTIONS_Y(1), 0, 45)){
         gOptionsSettings.gameplay.s.nonstopMode = 2;
+    }
+
+    if (check_clicked_text(180, OPTIONS_Y(2), 0)) {
+        gOptionsSettings.gameplay.s.demonOn = 0;
+    } else if (check_clicked_text(222, OPTIONS_Y(2), 0)) {
+        gOptionsSettings.gameplay.s.demonOn = 1;
     }
 }
 
 static void page_presets() {
-    if (check_clicked_text(280, 170 - MENUHEIGHT * 1, 0)) {
+    if (check_clicked_text(280, OPTIONS_Y(1) + 10, 0)) {
         curPreset++;
         applyPreset();
-    } else if (check_clicked_text(170, 170 - MENUHEIGHT * 1, 0)) {
+    } else if (check_clicked_text(170, OPTIONS_Y(1) + 10, 0)) {
         curPreset--;
         applyPreset();
     }
@@ -2404,34 +2421,34 @@ char *textsWarps[] = {
 static void page_warps() {
     u32 i;
     s32 temp = gOptionsSettings.gameplay.s.starDoorRequirement;
-    if (check_clicked_text(222, 160 - MENUHEIGHT * 0, 0)) {
+    if (check_clicked_text(222, OPTIONS_Y(0), 0)) {
         temp++;
-    } else if (check_clicked_text(175, 160 - MENUHEIGHT * 0, 0)) {
+    } else if (check_clicked_text(175, OPTIONS_Y(0), 0)) {
         temp--;
     }
     temp = (temp + 13) % 13;
     gOptionsSettings.gameplay.s.starDoorRequirement = temp;
     
-    if (check_clicked_text(170, 160 - MENUHEIGHT * 4, 0)){
+    if (check_clicked_text(170, OPTIONS_Y(4), 0)){
         gOptionsSettings.gameplay.s.randomStarDoorCounts = 0; // ON
     }
-    if (check_clicked_text(202, 160 - MENUHEIGHT * 4, 0)){
+    if (check_clicked_text(202, OPTIONS_Y(4), 0)){
         gOptionsSettings.gameplay.s.randomStarDoorCounts = 1; // OFF
 
     }
-    if (check_clicked_text(230, 160 - MENUHEIGHT * 4, 0)){
+    if (check_clicked_text(230, OPTIONS_Y(4), 0)){
         gOptionsSettings.gameplay.s.randomStarDoorCounts = 2; // No requirements
     }
     for (i = 1; i < textCountWarps-1; i++) {
         // If level warps are off, cant change adjusted exits
         if ((i == 3) && (!gOptionsSettings.gameplay.s.randomLevelWarp)) continue;
-        if (check_clicked_text(180, 160 - MENUHEIGHT * i, i)) {
+        if (check_clicked_text(180, OPTIONS_Y(i), i)) {
             WARPS_VARS_SET(i, 0)
             // If level warps set to off, disable adjusted exits
             if (i == 2) {
                 gOptionsSettings.gameplay.s.adjustedExits = 0;
             }
-        } else if (check_clicked_text(222, 160 - MENUHEIGHT * i, i)) {
+        } else if (check_clicked_text(222, OPTIONS_Y(i), i)) {
             WARPS_VARS_SET(i, 1)
         }
     }
@@ -2497,20 +2514,40 @@ keep his hair and skin their\n\
 regular color\x3F", 170, 4},
 
     {"\
-Randomize the music that plays\n\
-within each level, or during\n\
-events\x3F Selecting MUTED will\n\
-play no music at all\x3F", 168, 4},
-
-    {"\
-Randomize the skybox displayed\n\
-in the background of each level\x3F", 168, 2},
+Randomize the color of stars\x3F\n\
+Star colors can be unique for\n\
+every star, tied to the level,\n\
+or fixed for the whole game\x3F", 157, 4},
 
     {"\
 Randomize the color of yellow,\n\
 red and blue coins\x3F Coin colors\n\
 will always be relatively\n\
 distinct from each other\x3F", 162, 4},
+
+    {"\
+Randomize the skybox displayed\n\
+in the background of each level\x3F", 168, 2},
+
+    {"\
+Randomize the music that plays\n\
+within each level, or during\n\
+events\x3F Selecting MUTED will\n\
+play no music at all\x3F", 168, 4},
+};
+
+char *textsStarSettings[] = {
+    "OFF",
+    "PER STAR",
+    "PER LEVEL",
+    "GLOBAL"
+};
+
+u8 textsStarSettingsX[] = {
+    205,
+    191,
+    189,
+    197
 };
 
 void page_cosmetics_print() {
@@ -2518,14 +2555,20 @@ void page_cosmetics_print() {
     
     options_page_print_options(textCountCosmetics, textsCosmetic);
     
-    options_page_print_three(gOptionsSettings.cosmetic.s.marioColors, 160 - MENUHEIGHT * 0,
+    options_page_print_three(gOptionsSettings.cosmetic.s.marioColors, OPTIONS_Y(0),
         165, 198, 250, "OFF", "CLOTHES", "ALL");
 
-    options_page_print_three(gOptionsSettings.cosmetic.s.musicOn, 160 - MENUHEIGHT * 1,
+    options_page_print_three(gOptionsSettings.cosmetic.s.musicOn, OPTIONS_Y(4),
         171, 206, 240, "OFF", "ON", "MUTED");
 
-    for (i = 2; i < textCountCosmetics; i++) {
-        options_page_print_on_off(COSMETIC_VARS_GET(i), 160 - MENUHEIGHT * i, 190, 222);
+    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha);
+    print_generic_string(174, OPTIONS_Y(1), textPlus);
+    print_generic_text_ascii(textsStarSettingsX[gOptionsSettings.cosmetic.s.starColors], OPTIONS_Y(1),
+                             textsStarSettings[gOptionsSettings.cosmetic.s.starColors]);
+    print_generic_string(244, OPTIONS_Y(1), textMinus);
+
+    for (i = 2; i < 4; i++) {
+        options_page_print_on_off(COSMETIC_VARS_GET(i), OPTIONS_Y(i), 190, 222);
     }
 
     handle_info_display(aestheticInfo, textCountCosmetics);
@@ -2540,7 +2583,7 @@ object placements, including factors\n\
 like height and ground steepness\x3F", 188, 3},
     {"\
 Controls which kinds of objects are\n\
-randomized\x3F If set to Key, only\n\
+randomized\x3F If set to KEY, only\n\
 objects that are directly required\n\
 to obtain stars are randomized\x3F", 184, 4},
     {"\
@@ -2550,22 +2593,15 @@ positions randomized or not\x3F", 170, 3},
 };
 
 void page_objects_print() {
-    u32 i;
-    
     options_page_print_options(textCountObjects, textsObjects);
     
-    options_page_print_three(gOptionsSettings.gameplay.s.safeSpawns, 160 - MENUHEIGHT * 0,
+    options_page_print_three(gOptionsSettings.gameplay.s.safeSpawns, OPTIONS_Y(0),
         156, 191, 240, "SAFE", "NORMAL", "DANGER");
 
-    u8 rgbVal = (OBJECT_VARS_GET(1) ? 40 : 255);
-    gDPSetEnvColor(gDisplayListHead++, rgbVal, rgbVal, rgbVal, sTextBaseAlpha);
-    print_generic_text_ascii(190, 160 - MENUHEIGHT, "KEY");
-    
-    rgbVal = (255+40) - rgbVal;
-    gDPSetEnvColor(gDisplayListHead++, rgbVal, rgbVal, rgbVal, sTextBaseAlpha);
-    print_generic_text_ascii(222, 160 - MENUHEIGHT, "ALL");
+    options_page_print_two(gOptionsSettings.gameplay.s.objectRandomization, OPTIONS_Y(1),
+        190, 222, "KEY", "ALL");
 
-    options_page_print_on_off(OBJECT_VARS_GET(2), 160 - MENUHEIGHT * 2, 190, 222);
+    options_page_print_on_off(OBJECT_VARS_GET(2), OPTIONS_Y(2), 190, 222);
 
     handle_info_display(objectInfo, textCountObjects);
     
@@ -2598,10 +2634,10 @@ levels and will kill you on contact\x3F", 182, 3},
 void page_modes_print() {
     options_page_print_options(textCountModes, textsModes);
 
-    options_page_print_on_off(gOptionsSettings.gameplay.s.keepStructure, 160 - MENUHEIGHT * 0, 190, 222);
-    options_page_print_on_off(gOptionsSettings.gameplay.s.demonOn, 160 - MENUHEIGHT * 2, 190, 222);
+    options_page_print_on_off(gOptionsSettings.gameplay.s.keepStructure, OPTIONS_Y(0), 190, 222);
+    options_page_print_on_off(gOptionsSettings.gameplay.s.demonOn, OPTIONS_Y(2), 190, 222);
     
-    options_page_print_three(gOptionsSettings.gameplay.s.nonstopMode, 160 - MENUHEIGHT * 1,
+    options_page_print_three(gOptionsSettings.gameplay.s.nonstopMode, OPTIONS_Y(1),
         166, 197, 231, "OFF", "SAVE", "NOSAVE");
 
     handle_info_display(modeInfo, textCountModes);
@@ -2616,17 +2652,17 @@ void page_presets_print() {
         u32 offset = 1 - i; // 1 on first run, 0 on second
         gDPSetEnvColor(gDisplayListHead++, color, color, color, sTextBaseAlpha);
 
-        print_generic_string(28 + offset, 170 - MENUHEIGHT * 1 - offset, textUsePreset);
+        print_generic_string(28 + offset, OPTIONS_Y(1) + 10 - offset, textUsePreset);
         if (curPreset >= 0) {
-            print_generic_string(get_str_x_pos_from_center(230, textsPresets[curPreset], 0) + offset, 170 - MENUHEIGHT * 1 - offset, textsPresets[curPreset]);
-            print_generic_string(40 + offset,170-MENUHEIGHT * 4 - offset, textsPresetDescriptions[curPreset]);
+            print_generic_string(get_str_x_pos_from_center(230, textsPresets[curPreset], 0) + offset, OPTIONS_Y(1) + 10 - offset, textsPresets[curPreset]);
+            print_generic_string(40 + offset, OPTIONS_Y(4) + 10 - offset, textsPresetDescriptions[curPreset]);
         } else {
-            print_generic_string(210 + offset, 170 - MENUHEIGHT * 1 - offset, textPresetCustom);
+            print_generic_string(210 + offset, OPTIONS_Y(1) + 10 - offset, textPresetCustom);
         }
     }
 
-    print_generic_string(170, 170 - MENUHEIGHT * 1, textPlus);
-    print_generic_string(280, 170 - MENUHEIGHT * 1, textMinus);
+    print_generic_string(170, OPTIONS_Y(1) + 10, textPlus);
+    print_generic_string(280, OPTIONS_Y(1) + 10, textMinus);
 
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha);
 }
@@ -2667,29 +2703,29 @@ void page_warps_print() {
     options_page_print_options(textCountWarps, textsWarps);
     
     int_to_str(gStarDoorReqLUT[gOptionsSettings.gameplay.s.starDoorRequirement], strNumStars);
-    print_generic_string(190, 160 - MENUHEIGHT * 0, textPlus);
+    print_generic_string(190, OPTIONS_Y(0), textPlus);
     if (gStarDoorReqLUT[gOptionsSettings.gameplay.s.starDoorRequirement] < 10) {
-        print_generic_string(211, 160 - MENUHEIGHT * 0, strNumStars);
+        print_generic_string(211, OPTIONS_Y(0), strNumStars);
     } else if (gStarDoorReqLUT[gOptionsSettings.gameplay.s.starDoorRequirement] < 100) {
-        print_generic_string(207, 160 - MENUHEIGHT * 0, strNumStars);
+        print_generic_string(207, OPTIONS_Y(0), strNumStars);
     } else {
-        print_generic_string(203, 160 - MENUHEIGHT * 0, strNumStars);
+        print_generic_string(203, OPTIONS_Y(0), strNumStars);
     }
-    print_generic_string(230, 160 - MENUHEIGHT * 0, textMinus);
+    print_generic_string(230, OPTIONS_Y(0), textMinus);
 
 
-    options_page_print_three(gOptionsSettings.gameplay.s.randomStarDoorCounts, 160 - MENUHEIGHT * 4,
+    options_page_print_three(gOptionsSettings.gameplay.s.randomStarDoorCounts, OPTIONS_Y(4),
         170, 202, 230, "OFF", "ON", "NONE");
 
     for (i = 1; i < textCountWarps-1; i++) {
         // If level warps are off, adjusted exits is greyed out
         if ((i == 3) && (!gOptionsSettings.gameplay.s.randomLevelWarp)) {
                 gDPSetEnvColor(gDisplayListHead++, 96, 96, 96, sTextBaseAlpha);
-                print_generic_text_ascii(190, 160 - MENUHEIGHT * i, "OFF");
+                print_generic_text_ascii(190, OPTIONS_Y(i), "OFF");
                 gDPSetEnvColor(gDisplayListHead++, 96, 96, 96, sTextBaseAlpha);
-                print_generic_text_ascii(222, 160 - MENUHEIGHT * i, "ON");
+                print_generic_text_ascii(222, OPTIONS_Y(i), "ON");
         } else {
-            options_page_print_on_off(WARPS_VARS_GET(i), 160 - MENUHEIGHT * i, 190, 222);
+            options_page_print_on_off(WARPS_VARS_GET(i), OPTIONS_Y(i), 190, 222);
         }
     }
 

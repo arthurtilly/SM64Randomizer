@@ -91,6 +91,7 @@ void bhv_klepto_init(void) {
             o->oAction = KLEPTO_ACT_WAIT_FOR_MARIO;
         }
     }
+    init_star_color(o, gCurrCourseNum, 0);
 }
 
 static void klepto_change_target(void) {

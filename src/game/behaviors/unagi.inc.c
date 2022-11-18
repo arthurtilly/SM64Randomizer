@@ -22,6 +22,7 @@ void bhv_unagi_init(void) {
         o->oBehParams = (1 << 24) | (UNAGI_BP_IN_CAVE << 16);
         o->oBehParams2ndByte = UNAGI_BP_IN_CAVE;
     }
+    init_star_color(o, gCurrCourseNum, 1);
 
     if (o->oBehParams2ndByte != UNAGI_BP_IN_CAVE) {
         o->oPathedStartWaypoint = segmented_to_virtual(jrb_seg7_trajectory_unagi_1);

@@ -1,3 +1,5 @@
+#include "game/geo_misc.h"
+
 // 0x0C000000
 const GeoLayout klepto_geo[] = {
    GEO_SHADOW(SHADOW_CIRCLE_4_VERTS, 0x96, 250),
@@ -39,6 +41,7 @@ const GeoLayout klepto_geo[] = {
                            GEO_OPEN_NODE(),
                               GEO_SCALE(0x00, 16384),
                               GEO_OPEN_NODE(),
+                                 GEO_ASM(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, geo_set_star_color),
                                  GEO_ASM(0, geo_offset_klepto_held_object),
                                  GEO_TRANSLATE_ROTATE_WITH_DL(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, 0, 100, 0, 180, 270, 0, star_seg3_dl_body),
                                  GEO_ASM(0, geo_offset_klepto_held_object),

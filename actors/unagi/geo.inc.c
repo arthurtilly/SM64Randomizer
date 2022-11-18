@@ -1,3 +1,5 @@
+#include "game/geo_misc.h"
+
 // 0x0C00010C
 const GeoLayout unagi_geo[] = {
    GEO_CULLING_RADIUS(2000),
@@ -21,6 +23,7 @@ const GeoLayout unagi_geo[] = {
                            GEO_OPEN_NODE(),
                               GEO_SCALE(0x00, 16384),
                               GEO_OPEN_NODE(),
+                                 GEO_ASM(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, geo_set_star_color),
                                  GEO_TRANSLATE_ROTATE_WITH_DL(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, 2000, 0, 0, 0, 0, 0, star_seg3_dl_body),
                                  GEO_TRANSLATE_ROTATE_WITH_DL(LAYER_OCCLUDE_SILHOUETTE_ALPHA, 2000, 0, 0, 0, 0, 0, star_seg3_dl_eyes),
                               GEO_CLOSE_NODE(),

@@ -82,11 +82,11 @@ struct nodeInfo {
 struct OptionsSettings {
     union {
         struct {
-            u32 padding:15; // to make sure settings ids are small
+            u32 padding:14; // to make sure settings ids are small
 
             u32 keepStructure:1;
             u32 randomLevelWarp:1;
-            u32 adjustedExits:1;
+            u32 adjustedExits:2;
             u32 objectRandomization:1;
             u32 nonstopMode:2;
             u32 safeSpawns:2;
@@ -104,9 +104,17 @@ struct OptionsSettings {
             u32 musicOn:2;
             u32 skyboxOn:1;
             u32 coinsOn:1;
+            u32 starColors:2;
         } s;
         u32 w;
     } cosmetic;
+};
+
+enum StarColors {
+    STAR_COLOR_OFF,
+    STAR_COLOR_PER_STAR,
+    STAR_COLOR_PER_LEVEL,
+    STAR_COLOR_GLOBAL
 };
 
 extern s32 curPreset;
