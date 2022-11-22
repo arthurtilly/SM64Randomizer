@@ -354,7 +354,7 @@
 #define TEXT_42069 _("NICE MEME")
 #define TEXT_58008 _("HOW INAPPROPRIATE") // baggage
 #define TEXT_62396 _("HAPPY BIRTHDAY") // zimbo
-#define TEXT_65222 _("TRANS RIGHTS")
+//#define TEXT_65222 _("TRANS RIGHTS") (doesnt work anymore sadge)
 
 // course complete menu
 #define TEXT_CONGRATULATIONS _("CONGRATULATIONS")

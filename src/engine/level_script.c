@@ -584,6 +584,13 @@ static void level_cmd_create_warp_node(void) {
             }
             warpNode->node.destLevel = gLevelWarps[intendedLevel].level;
         }
+        // If warping to THI and random level spawn is ON, 50/50 chance to warp to either area.
+        if ((gCurrCourseNum == COURSE_NONE) && // Must be warping from overworld
+            (warpNode->node.destLevel == LEVEL_THI) &&
+            (gOptionsSettings.gameplay.s.randomLevelSpawn) &&
+            (gOptionsSettings.gameplay.s.randomLevelWarp)) {
+            warpNode->node.destArea = random_u16() % 2 + 1;
+        }
 
         warpNode->object = NULL;
 
@@ -651,6 +658,11 @@ static void level_cmd_create_painting_warp_node(void) {
         if ((gCurrCourseNum == COURSE_NONE) && (gWarpDestinations[destLevel] != 0) && gOptionsSettings.gameplay.s.randomLevelWarp) {
             node->destLevel = gWarpDestinations[destLevel];
             node->destArea = 1; // Only painting area warp not to area 1 is THI.
+
+            // If warping to THI and random level spawn is ON, 50/50 chance to warp to either area.
+            if ((node->destLevel == LEVEL_THI) && (gOptionsSettings.gameplay.s.randomLevelSpawn) && (random_u16() % 2)) {
+                node->destArea = 2;
+            }
         } else {
             node->destLevel = destLevel;
             node->destArea = CMD_GET(u8, 4);

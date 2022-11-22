@@ -68,6 +68,11 @@ struct AvoidancePoint wmotrAvoidancePoints[] = {
     {bhvBobombBuddyOpensCannon, {-3000, 4437, -4000}, 1500.0f, 200.0f, AVOIDANCE_SAFETY_ALL} // Highest Platform
 };
 
+struct AvoidancePoint bitdwAvoidancePoints[] = {
+    {bhvStub, {-672, 500, 537}, 1000.0f, 400.0f, AVOIDANCE_SAFETY_HARD}, // Slopes under low seesaw platform
+    {bhvStub, {1998, 500, 537}, 1000.0f, 400.0f, AVOIDANCE_SAFETY_HARD}, // Slopes under high seesaw platform
+};
+
 struct AvoidancePoint bitfsAvoidancePoints[] = {
     {bhvStub, {6772, 2850, 106}, 400.0f, 1000.0f, AVOIDANCE_SAFETY_ALL}, // In Bowser Warp
     {bhvStub, {4440, -700, 280}, 700.0f, 800.0f, AVOIDANCE_SAFETY_HARD}, // Above Cage
@@ -176,7 +181,7 @@ struct AreaParams vcutmParams[] = {
     {-6500, 5000, -3300, 6500, -6500, 1700, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL} // VCutM
 };
 struct AreaParams bitdwParams[] = {
-    {-8000, 7500, -3400, 3800, -3000, 4400, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL} // BitDW
+    {-8000, 7500, -3400, 3800, -3000, 4400, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, ARRAY_SIZE(bitdwAvoidancePoints), &bitdwAvoidancePoints} // BitDW
 };
 struct AreaParams bitfsParams[] = {
     {-8000, 8000, -3000, 6000, -2500, 1500, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, ARRAY_SIZE(bitfsAvoidancePoints), &bitfsAvoidancePoints} // BitFS

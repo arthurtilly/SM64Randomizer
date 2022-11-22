@@ -1680,7 +1680,7 @@ unsigned char text12345[] = { TEXT_12345 };
 unsigned char text42069[] = { TEXT_42069 };
 unsigned char text58008[] = { TEXT_58008 };
 unsigned char text62396[] = { TEXT_62396 };
-unsigned char text65222[] = { TEXT_65222 };
+//unsigned char text65222[] = { TEXT_65222 };
 
 unsigned char textSM64Rando[] = { TEXT_SM64_RANDO };
 unsigned char textArthur[] = { TEXT_BY_ARTHUR };
@@ -1741,9 +1741,9 @@ void print_main_menu_strings(void) {
         case 62396:
             fileText = text62396;
             break;
-        case 65222:
-            fileText = text65222;
-            break;
+        //case 65222:
+            //fileText = text65222;
+            //break;
         default:
             fileText = textSM64Rando;
     }
