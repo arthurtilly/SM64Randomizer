@@ -218,6 +218,11 @@ void draw_skybox_tile_grid(Gfx **dlist, s8 background, s8 player, s8 colorIndex)
     for (row = 0; row < (3 * SKYBOX_SIZE); row++) {
         for (col = 0; col < (3 * SKYBOX_SIZE); col++) {
             s32 tileIndex = sSkyBoxInfo[player].upperLeftTile + row * SKYBOX_COLS + col;
+
+            if (tileIndex >= SKYBOX_ROWS * SKYBOX_COLS) {
+                continue;
+            }
+
             const Texture *texture;
 
             if (gOptionsSettings.cosmetic.s.skyboxOn) {
