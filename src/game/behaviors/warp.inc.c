@@ -32,12 +32,5 @@ void bhv_fading_warp_loop() {
         o->hitboxHeight = 50.0f;
     }
 
-    if ((gOptionsSettings.gameplay.s.objectRandomization != 0) && (gGlobalTimer % 5 == 0)) {
-        struct Object *sparkle = spawn_object(o, 149, bhvCoinSparkles);
-        sparkle->oPosX += random_float() * 100 - 50;
-        sparkle->oPosY += random_float() * 100 - 50;
-        sparkle->oPosZ += random_float() * 100 - 50;
-    }
-
     o->oInteractStatus = INT_STATUS_NONE;
 }

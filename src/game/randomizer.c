@@ -289,8 +289,6 @@ static u32 is_in_avoidance_point(Vec3s pos, struct AreaParams *areaParams, struc
     return FALSE;
 }
 
-u8 gNumFadingWarpsPlaced = 0;
-
 void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 maxHeightRange, tinymt32_t *randomState,
                        u8 floorSafeLevel, u32 randPosFlags) {
     struct AreaParams *areaParams = &(*sLevelParams[gCurrLevelNum - 4])[gCurrAreaIndex - 1];
@@ -302,11 +300,7 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
 
     f32 wallRadius = 50.f;
     if (randPosFlags & RAND_TYPE_SPAWN_FAR_FROM_WALLS) {
-        if (obj->behavior == segmented_to_virtual(bhvWarpPipe)) {
-            wallRadius = 100.f;
-        } else {
-            wallRadius = 500.f;
-        }
+        wallRadius = 500.f;
     }
 
     if (areaParams == NULL) {
@@ -355,21 +349,6 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
         } else if (randPosFlags & RAND_TYPE_SPAWN_BOTTOM_OF_SLIDE) {
             maxY = -3900;
             maxZ = -6400;
-        }
-    // Fading warps - CCM or THI tiny island
-    } else if (obj->behavior == segmented_to_virtual(bhvFadingWarp)) {
-        if ((gCurrCourseNum == COURSE_CCM) || ((gCurrCourseNum == COURSE_THI) && (gCurrAreaIndex == 2))) {
-            s32 c = (gCurrCourseNum == COURSE_CCM); // 0 for THI, 1 for CCM
-            s32 w = gNumFadingWarpsPlaced; // 0 for first, 1 for second
-
-            minX = sFadingWarpBounds[c][w][0][0];
-            maxX = sFadingWarpBounds[c][w][1][0];
-            minY = sFadingWarpBounds[c][w][0][1];
-            maxY = sFadingWarpBounds[c][w][1][1];
-            minZ = sFadingWarpBounds[c][w][0][2];
-            maxZ = sFadingWarpBounds[c][w][1][2];
-
-            gNumFadingWarpsPlaced = 1;
         }
     }
 

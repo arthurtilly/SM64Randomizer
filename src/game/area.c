@@ -237,7 +237,6 @@ void load_area(s32 index) {
 
     // Clear randomizer data
     gIgnoreCollisionDistance = TRUE;
-    gNumFadingWarpsPlaced = 0;
     gNumDynamicAvoidancePoints = 0;
 
     if (gCurrentArea == NULL && gAreaData[index].graphNode != NULL) {
