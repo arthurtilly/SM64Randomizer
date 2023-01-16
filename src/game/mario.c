@@ -1262,8 +1262,10 @@ void update_mario_geometry_inputs(struct MarioState *m) {
     f32 gasLevel;
     f32 ceilToFloorDist;
 
-    f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 60.0f, 50.0f);
-    f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 30.0f, 24.0f);
+    if (m->action != ACT_DEBUG_FREE_MOVE) {
+        f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 60.0f, 50.0f);
+        f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 30.0f, 24.0f);
+    }
 
     m->floorHeight = find_floor(m->pos[0], m->pos[1], m->pos[2], &m->floor);
 
@@ -1699,6 +1701,16 @@ u8 sDemonTimer = 0;
  */
 s32 execute_mario_action(UNUSED struct Object *obj) {
     s32 inLoop = TRUE;
+
+#ifdef ENABLE_DEBUG_FREE_MOVE
+    Vec3s posR;
+    vec3f_to_vec3s(posR, gMarioState->pos);
+    if (raycast_wall_check(posR)) {
+        print_text(20,20,"SAFE");
+    } else {
+        print_text(20,20,"DANGER");
+    }
+#endif
 
     // Updates once per frame:
     vec3f_get_dist_and_lateral_dist_and_angle(gMarioState->prevPos, gMarioState->pos, &gMarioState->moveSpeed, &gMarioState->lateralSpeed, &gMarioState->movePitch, &gMarioState->moveYaw);

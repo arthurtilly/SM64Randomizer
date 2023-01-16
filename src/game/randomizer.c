@@ -16,7 +16,6 @@
 #include "text_strings.h"
 #include "ingame_menu.h"
 #include "print.h"
-#include "raycaster.h"
 #include "menu/file_select.h"
 #include "save_file.h"
 #include "buffers/buffers.h"
@@ -289,13 +288,46 @@ static u32 is_in_avoidance_point(Vec3s pos, struct AreaParams *areaParams, struc
     return FALSE;
 }
 
+u32 raycast_wall_check(Vec3s pos) {
+    s16 yaw = 0;
+    struct Surface *surf;
+    Vec3f checkPos;
+    vec3_copy_y_off(checkPos, pos, 50.0f);
+    Vec3f hitPos;
+
+    for (u32 i = 0; i < 8; i++) {
+        Vec3f rayDir;
+        vec3f_set(rayDir, 0x10000 * sins(yaw), 0, 0x10000 * coss(yaw));
+
+        find_surface_on_ray(checkPos, rayDir, &surf, hitPos,
+            (RAYCAST_FIND_FLOOR | RAYCAST_FIND_WALL | RAYCAST_FIND_CEIL));
+
+        if (surf != NULL) {
+            f32 det = vec3f_dot(&surf->normal.x, rayDir);
+            if (det > 0) {
+                return FALSE;
+            }
+        }
+
+        yaw += 0x2000;
+    }
+    return TRUE;
+}
+
+static void vec3s_resolve_wall_collisions(Vec3s pos, f32 radius) {
+    Vec3f pos2;
+    
+    vec3s_to_vec3f(pos2, pos);
+    f32_find_wall_collision(&pos2[0], &pos2[1], &pos2[2], 0.0f, radius);
+    vec3f_to_vec3s(pos, pos2);
+}
+
 void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 maxHeightRange, tinymt32_t *randomState,
                        u8 floorSafeLevel, u32 randPosFlags) {
     struct AreaParams *areaParams = &(*sLevelParams[gCurrLevelNum - 4])[gCurrAreaIndex - 1];
     f32 minX, maxX, minY, maxY, minZ, maxZ, minHeight, maxHeight, waterLevel, lowFloorHeight, cHeight,
         highFloorHeight;
     u32 objCanBeUnderwater;
-    u8 killOnOob = FALSE;
     struct Surface *lowFloor, *ceil, *highFloor;
 
     f32 wallRadius = 50.f;
@@ -308,12 +340,6 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
         pos[1] = 5000;
         pos[2] = 0;
         return;
-    }
-
-    // Kill wall rays on OoB for these courses
-    if ((gCurrCourseNum == COURSE_JRB) || (gCurrCourseNum == COURSE_BBH)
-        || (gCurrCourseNum == COURSE_DDD) || (gCurrCourseNum == COURSE_WDW)) {
-        killOnOob = TRUE;
     }
 
     minX = areaParams->minX;
@@ -493,7 +519,7 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
             continue;
 
         // Wall Check
-        if (!is_safe_near_walls(pos, killOnOob))
+        if (!raycast_wall_check(pos))
             continue;
 
         // Spawn avoidance point if needed

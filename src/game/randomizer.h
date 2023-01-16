@@ -31,8 +31,6 @@ struct AreaParams {
 
     u32 areaParamFlags;
 
-    f32 wallCheckRaycasterSearchDist;
-
     u32 numAvoidancePoints;
     AvoidancePointArray *avoidancePoints;
 };

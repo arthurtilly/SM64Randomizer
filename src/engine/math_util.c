@@ -1395,7 +1395,7 @@ s32 anim_spline_poll(Vec3f result) {
  *                    RAYCASTING                  *
  **************************************************/
 
-#define RAY_OFFSET 30.0f /* How many units to extrapolate surfaces when testing for a raycast */
+#define RAY_OFFSET  0.0f /* How many units to extrapolate surfaces when testing for a raycast */
 #define RAY_STEPS      4 /* How many steps to do when casting rays, default to quartersteps.  */
 
 /**
@@ -1436,8 +1436,8 @@ s32 ray_surface_intersect(Vec3f orig, Vec3f dir, f32 dir_length, struct Surface 
     vec3f_cross(h, dir, e2);
     // Determine the cos(angle) difference between ray and surface normals.
     f32 det = vec3f_dot(e1, h);
-    // Check if we're perpendicular or pointing away from the surface.
-    if (det < NEAR_ZERO) return FALSE;
+    // Check if we're perpendicular from the surface.
+    if ((det > -NEAR_ZERO) && (det < NEAR_ZERO)) return FALSE;
     // Check if we're making contact with the surface.
     // Make f the inverse of the cos(angle) between ray and surface normals.
     f32 f = 1.0f / det; // invDet

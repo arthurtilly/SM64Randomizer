@@ -27,7 +27,6 @@
 #include "engine/colors.h"
 #include "profiling.h"
 #include "randomizer.h"
-#include "raycaster.h"
 
 struct SpawnInfo gPlayerSpawnInfos[1];
 struct GraphNode *gGraphNodePointers[MODEL_ID_COUNT];
@@ -242,8 +241,6 @@ void load_area(s32 index) {
     if (gCurrentArea == NULL && gAreaData[index].graphNode != NULL) {
         gCurrentArea = &gAreaData[index];
         gCurrAreaIndex = gCurrentArea->index;
-
-        update_raycaster_params();
 
         if (gCurrentArea->terrainData != NULL) {
             load_area_terrain(index, gCurrentArea->terrainData, gCurrentArea->surfaceRooms,

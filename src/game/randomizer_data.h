@@ -103,104 +103,104 @@ struct AvoidancePoint icUpAvoidancePoints[] = {
 
 // Main courses
 struct AreaParams bobParams[] = {
-    {-8192, 8192, 0, 4500, -8192, 8192, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL} // BoB
+    {-8192, 8192, 0, 4500, -8192, 8192, 0, 0, NULL} // BoB
 };
 struct AreaParams wfParams[] = {
-    {-3300, 5100, 256, 6500, -4100, 5700, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, ARRAY_SIZE(wfAvoidancePoints), &wfAvoidancePoints} // WF
+    {-3300, 5100, 256, 6500, -4100, 5700, 0, ARRAY_SIZE(wfAvoidancePoints), &wfAvoidancePoints} // WF
 };
 struct AreaParams jrbParams[] = {
-    {-7800, 8000, -5200, 3000, -7500, 8000, 0, 1000, ARRAY_SIZE(jrbAvoidancePoints), &jrbAvoidancePoints}, // JRB main area
-    {-1000, 1200, -300, 1500, -3000, 3500, AREA_PARAM_FLAG_CHANGING_WATER_LEVEL, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL} // JRB sunken ship
+    {-7800, 8000, -5200, 3000, -7500, 8000, 0, ARRAY_SIZE(jrbAvoidancePoints), &jrbAvoidancePoints}, // JRB main area
+    {-1000, 1200, -300, 1500, -3000, 3500, AREA_PARAM_FLAG_CHANGING_WATER_LEVEL, 0, NULL} // JRB sunken ship
 };
 struct AreaParams ccmParams[] = {
-    {-6500, 6500, -4600, 4600, -5500, 6500, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, ARRAY_SIZE(ccmAvoidancePoints), &ccmAvoidancePoints}, // CCM main area
-    {-7500, 7500, -5800, 7400, -7000, 7000, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL} // CCM slide
+    {-6500, 6500, -4600, 4600, -5500, 6500, 0, ARRAY_SIZE(ccmAvoidancePoints), &ccmAvoidancePoints}, // CCM main area
+    {-7500, 7500, -5800, 7400, -7000, 7000, 0, 0, NULL} // CCM slide
 };
 struct AreaParams bbhParams[] = {
-    {-4200, 5500, -3000, 3500, -4000, 6700, 0, 800, ARRAY_SIZE(bbhAvoidancePoints), &bbhAvoidancePoints} // BBH
+    {-4200, 5500, -3000, 3500, -4000, 6700, 0, ARRAY_SIZE(bbhAvoidancePoints), &bbhAvoidancePoints} // BBH
 };
 struct AreaParams hmcParams[] = {
-    {-7800, 7600, -6300, 3000, -8192, 8192, 0, 800, 0, NULL} // HMC
+    {-7800, 7600, -6300, 3000, -8192, 8192, 0, 0, NULL} // HMC
 };
 struct AreaParams lllParams[] = {
-    {-8192, 8192, 0, 1600, -8192, 8192, 0, 300, ARRAY_SIZE(lllAvoidancePoints), &lllAvoidancePoints}, // LLL main area
-    {-3000, 3000, 0, 5000, -3000, 3000, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL} // LLL volcano
+    {-8192, 8192, 0, 1600, -8192, 8192, 0, ARRAY_SIZE(lllAvoidancePoints), &lllAvoidancePoints}, // LLL main area
+    {-3000, 3000, 0, 5000, -3000, 3000, 0, 0, NULL} // LLL volcano
 };
 struct AreaParams sslParams[] = {
-    {-8192, 8192, -250, 2000, -8192, 8192, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL}, // SSL main area
-    {-4000, 4000, -250, 5500, -4200, 6600, 0, 700, ARRAY_SIZE(sslPyrAvoidancePoints), &sslPyrAvoidancePoints}, // SSL pyramid
-    {-1000, 1000, -1500, -500, -4000, -1800, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL} // SSL eyerok
+    {-8192, 8192, -250, 2000, -8192, 8192, 0, 0, NULL}, // SSL main area
+    {-4000, 4000, -250, 5500, -4200, 6600, 0, ARRAY_SIZE(sslPyrAvoidancePoints), &sslPyrAvoidancePoints}, // SSL pyramid
+    {-1000, 1000, -1500, -500, -4000, -1800, 0, 0, NULL} // SSL eyerok
 };
 struct AreaParams dddParams[] = {
-    {-6500, 2000, -5200, 1000, -3500, 3500, 0, 1000, ARRAY_SIZE(dddAvoidancePoints), &dddAvoidancePoints}, // DDD starting area
-    {-1500, 7000, -4000, 1600, -4000, 6000, 0, 1000, 0, NULL} // DDD sub area
+    {-6500, 2000, -5200, 1000, -3500, 3500, 0, ARRAY_SIZE(dddAvoidancePoints), &dddAvoidancePoints}, // DDD starting area
+    {-1500, 7000, -4000, 1600, -4000, 6000, 0, 0, NULL} // DDD sub area
 };
 struct AreaParams slParams[] = {
-    {-7891, 6868, 800, 5500, -7891, 7892, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL}, // SL main area
-    {-2000, 2000, 0, 650, -2000, 2500, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL} // SL igloo
+    {-7891, 6868, 800, 5500, -7891, 7892, 0, 0, NULL}, // SL main area
+    {-2000, 2000, 0, 650, -2000, 2500, 0, 0, NULL} // SL igloo
 };
 struct AreaParams wdwParams[] = {
-    {-3800, 4500, 0, 5000, -3800, 4500, AREA_PARAM_FLAG_CHANGING_WATER_LEVEL, 800, ARRAY_SIZE(wdwAvoidancePoints), &wdwAvoidancePoints}, // WDW starting area
-    {-3800, 2300, -2500, 250, -2300, 3800, AREA_PARAM_FLAG_CHANGING_WATER_LEVEL, 1200, ARRAY_SIZE(wdwTownAvoidancePoints), &wdwTownAvoidancePoints} // WDW downtown
+    {-3800, 4500, 0, 5000, -3800, 4500, AREA_PARAM_FLAG_CHANGING_WATER_LEVEL, ARRAY_SIZE(wdwAvoidancePoints), &wdwAvoidancePoints}, // WDW starting area
+    {-3800, 2300, -2500, 250, -2300, 3800, AREA_PARAM_FLAG_CHANGING_WATER_LEVEL, ARRAY_SIZE(wdwTownAvoidancePoints), &wdwTownAvoidancePoints} // WDW downtown
 };
 struct AreaParams ttmParams[] = {
-    {-4100, 5300, -4500, 3200, -5300, 6700, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL}, // TTM main area
-    {-2600, 8192, -200, 8192, -2900, 8192, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL}, // TTM slide first section
-    {-8192, 8192, -7000, 6300, -8192, 8192, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL}, // TTM slide second section
-    {-8192, 8192, -8192, 5500, -8192, 8192, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL} // TTM slide third section
+    {-4100, 5300, -4500, 3200, -5300, 6700, 0, 0, NULL}, // TTM main area
+    {-2600, 8192, -200, 8192, -2900, 8192, 0, 0, NULL}, // TTM slide first section
+    {-8192, 8192, -7000, 6300, -8192, 8192, 0, 0, NULL}, // TTM slide second section
+    {-8192, 8192, -8192, 5500, -8192, 8192, 0, 0, NULL} // TTM slide third section
 };
 struct AreaParams thiParams[] = {
-    {-8192, 8192, -3400, 5000, -8192, 8192, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL}, // THI huge island
-    {-2500, 2500, -1100, 2000, -5000, 2500, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL}, // THI small island
-    {-2000, 2000, 500, 2500, -2000, 2000, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL} // THI wiggler's cave
+    {-8192, 8192, -3400, 5000, -8192, 8192, 0, 0, NULL}, // THI huge island
+    {-2500, 2500, -1100, 2000, -5000, 2500, 0, 0, NULL}, // THI small island
+    {-2000, 2000, 500, 2500, -2000, 2000, 0, 0, NULL} // THI wiggler's cave
 };
 struct AreaParams ttcParams[] = {
-    {-2000, 3000, -5200, 7500, -2000, 3000, 0, 500, 0, NULL} // TTC
+    {-2000, 3000, -5200, 7500, -2000, 3000, 0, 0, NULL} // TTC
 };
 struct AreaParams rrParams[] = {
-    {-8000, 7500, -4600, 7200, -7000, 7500, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, ARRAY_SIZE(rrAvoidancePoints), &rrAvoidancePoints} // RR
+    {-8000, 7500, -4600, 7200, -7000, 7500, 0, ARRAY_SIZE(rrAvoidancePoints), &rrAvoidancePoints} // RR
 };
 
 // Secret courses
 struct AreaParams pssParams[] = {
-    {-7700, 6000, -4500, 7500, -7200, 6600, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL} // PSS
+    {-7700, 6000, -4500, 7500, -7200, 6600, 0, 0, NULL} // PSS
 };
 struct AreaParams saParams[] = {
-    {-2750, 2750, -4250, -250, -2750, 2750, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL} // SA
+    {-2750, 2750, -4250, -250, -2750, 2750, 0, 0, NULL} // SA
 };
 struct AreaParams wmotrParams[] = {
-    {-4200, 4600, -2750, 5500, -5200, 6000, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, ARRAY_SIZE(wmotrAvoidancePoints), &wmotrAvoidancePoints} // WMotR
+    {-4200, 4600, -2750, 5500, -5200, 6000, 0, ARRAY_SIZE(wmotrAvoidancePoints), &wmotrAvoidancePoints} // WMotR
 };
 struct AreaParams totwcParams[] = {
-    {-1500, 1500, -2100, -500, -1500, 1500, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL} // TotWC
+    {-1500, 1500, -2100, -500, -1500, 1500, 0, 0, NULL} // TotWC
 };
 struct AreaParams cotmcParams[] = {
-    {-5000, 1400, -600, 1500, -7500, 2000, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL} // CotMC
+    {-5000, 1400, -600, 1500, -7500, 2000, 0, 0, NULL} // CotMC
 };
 struct AreaParams vcutmParams[] = {
-    {-6500, 5000, -3300, 6500, -6500, 1700, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL} // VCutM
+    {-6500, 5000, -3300, 6500, -6500, 1700, 0, 0, NULL} // VCutM
 };
 struct AreaParams bitdwParams[] = {
-    {-8000, 7500, -3400, 3800, -3000, 4400, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, ARRAY_SIZE(bitdwAvoidancePoints), &bitdwAvoidancePoints} // BitDW
+    {-8000, 7500, -3400, 3800, -3000, 4400, 0, ARRAY_SIZE(bitdwAvoidancePoints), &bitdwAvoidancePoints} // BitDW
 };
 struct AreaParams bitfsParams[] = {
-    {-8000, 8000, -3000, 6000, -2500, 1500, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, ARRAY_SIZE(bitfsAvoidancePoints), &bitfsAvoidancePoints} // BitFS
+    {-8000, 8000, -3000, 6000, -2500, 1500, 0, ARRAY_SIZE(bitfsAvoidancePoints), &bitfsAvoidancePoints} // BitFS
 };
 struct AreaParams bitsParams[] = {
-    {-7500, 7600, -5000, 7000, -7000, 500, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL} // BitS
+    {-7500, 7600, -5000, 7000, -7000, 500, 0, 0, NULL} // BitS
 };
 
 // Castle areas
 struct AreaParams cgParams[] = {
-    {-8192, 8192, -500, 7500, -7000, 7000, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL} // Castle grounds
+    {-8192, 8192, -500, 7500, -7000, 7000, 0, 0, NULL} // Castle grounds
 };
 struct AreaParams ccParams[] = {
-    {-3700, 3700, -200, 500, -3800, 500, 0, WALL_CHECK_RAYCASTER_DEFAULT_SEARCH_DIST, 0, NULL} // Castle courtyard
+    {-3700, 3700, -200, 500, -3800, 500, 0, 0, NULL} // Castle courtyard
 };
 struct AreaParams icParams[] = {
-    {-7500, 4300, -1000, 600, -5000, 2200, 0, 1000, 0, NULL}, // Castle foyer
-    {-7300, 4300, 500, 5300, -3700, 7000, 0, 2000, ARRAY_SIZE(icUpAvoidancePoints), &icUpAvoidancePoints}, // Castle upstairs
-    {-4200, 7800, -2500, -500, -4000, 3000, 0, 1000, ARRAY_SIZE(icBasAvoidancePoints), &icBasAvoidancePoints} // Castle basement
+    {-7500, 4300, -1000, 600, -5000, 2200, 0, 0, NULL}, // Castle foyer
+    {-7300, 4300, 500, 5300, -3700, 7000, 0, ARRAY_SIZE(icUpAvoidancePoints), &icUpAvoidancePoints}, // Castle upstairs
+    {-4200, 7800, -2500, -500, -4000, 3000, 0, ARRAY_SIZE(icBasAvoidancePoints), &icBasAvoidancePoints} // Castle basement
 };
 
 AreaParamsArray *sLevelParams[] = {
