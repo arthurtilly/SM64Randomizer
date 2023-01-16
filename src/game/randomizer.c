@@ -198,7 +198,7 @@ static s32 find_floor_slipperiness(struct Surface *floor) {
 }
 
 static u8 is_floor_safe(struct Surface *floor, u8 floorSafeLevel,
-                        u8 randPosFlags) { // Checks if floor triangle can be spawned on
+                        u32 randPosFlags) { // Checks if floor triangle can be spawned on
     s32 slipperiness;
     f32 norm;
 
@@ -221,29 +221,31 @@ static u8 is_floor_safe(struct Surface *floor, u8 floorSafeLevel,
         norm = 0.95f;
     }
 
-    if (floor->normal.y > norm) // Check steepness of floor
-    {
-        slipperiness = find_floor_slipperiness(floor);
-        if ((randPosFlags & RAND_TYPE_SAFE) && (floorSafeLevel == FLOOR_SAFETY_HIGH)
-            && ((slipperiness == SURFACE_CLASS_SLIPPERY) || (slipperiness == SURFACE_CLASS_VERY_SLIPPERY))) {
+    if (floor->normal.y <= norm) {
+        return FALSE;
+    }
 
-            // This code kills some spawns, assuming the most slippery case. This code would
-            // probably be better to refactor based off slipperiness in general.
-            if (floor->normal.y <= 0.9848077f) {
-                return FALSE; // Don't spawn on slippery surfaces if you are a warp or safe object
-            }
-        }
+    slipperiness = find_floor_slipperiness(floor);
+    if ((randPosFlags & RAND_TYPE_SAFE) && (floorSafeLevel == FLOOR_SAFETY_HIGH)
+        && ((slipperiness == SURFACE_CLASS_SLIPPERY) || (slipperiness == SURFACE_CLASS_VERY_SLIPPERY))) {
 
-        if (floor->type < SURFACE_SAFE_FLOORS_GENERAL) {
-            return TRUE;
-        }
-
-        if ((gOptionsSettings.gameplay.s.safeSpawns == SPAWN_SAFETY_HARD) && (floorSafeLevel == FLOOR_SAFETY_LOW) && !(randPosFlags & RAND_TYPE_SAFE)) {
-            if (floor->type < SURFACE_SAFE_FLOORS_HARD) {
-                return TRUE;
-            }
+        // This code kills some spawns, assuming the most slippery case. This code would
+        // probably be better to refactor based off slipperiness in general.
+        if (floor->normal.y <= 0.99f) {
+            return FALSE; // Don't spawn on slippery surfaces if you are a warp or safe object
         }
     }
+
+    if (floor->type < SURFACE_SAFE_FLOORS_GENERAL) {
+        return TRUE;
+    }
+
+    if ((gOptionsSettings.gameplay.s.safeSpawns == SPAWN_SAFETY_HARD) && (floorSafeLevel == FLOOR_SAFETY_LOW) && !(randPosFlags & RAND_TYPE_SAFE)) {
+        if (floor->type < SURFACE_SAFE_FLOORS_HARD) {
+            return TRUE;
+        }
+    }
+
     return FALSE;
 }
 

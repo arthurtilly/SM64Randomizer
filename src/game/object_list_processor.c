@@ -495,9 +495,7 @@ void spawn_objects_from_info(UNUSED s32 unused, struct SpawnInfo *spawnInfo) {
 
             // Warps are done here so that they randomize before Mario is spawned
             if ((script == segmented_to_virtual(bhvSpinAirborneWarp)) && (gCurrCourseNum != COURSE_NONE) && (gOptionsSettings.gameplay.s.randomLevelSpawn)) {
-                Vec3s pos;
-                get_safe_position(object, pos, 100.f, 500.f, &gGlobalRandomState, FLOOR_SAFETY_HIGH, RAND_TYPE_MAX_VARIATION | RAND_TYPE_CAN_BE_UNDERWATER | RAND_TYPE_SPAWN_TOP_OF_SLIDE | RAND_TYPE_LIMITED_BBH_HMC_SPAWNS | RAND_TYPE_SAFE);
-                vec3s_copy(spawnInfo->startPos, pos);
+                get_safe_position(object, spawnInfo->startPos, 700.f, 900.f, &gGlobalRandomState, FLOOR_SAFETY_HIGH, RAND_TYPE_MAX_VARIATION | RAND_TYPE_CAN_BE_UNDERWATER | RAND_TYPE_SPAWN_TOP_OF_SLIDE | RAND_TYPE_LIMITED_BBH_HMC_SPAWNS | RAND_TYPE_SAFE);
             }
 
             // Record death/collection in the SpawnInfo
