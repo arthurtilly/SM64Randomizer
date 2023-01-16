@@ -717,63 +717,94 @@ static void copy_remaining_warps() { // Initialises sRemainingWarpsTemp for use 
 }
 
 static void init_warp_scramble() {
-    int i, index = 0;
-    int j = 0, b1 = 0, b2 = 0, b3 = 0;
+    int currentEntrance, index = 0;
+    int warpsProcessed = 0, lobbyWarpsProcessed = 0, basementWarpsProcessed = 0, upstairsWarpsProcessed = 0;
     u8 tmp;
     tinymt32_t randomState;
     u16 failedScrambles = 0;
     tinymt32_init(&randomState, gRandomizerGameSeed);
 
     copy_remaining_warps();
-    for (i = 36; i > 0; i--) {
+
+    // Iterate backwards over every level
+    // currentEntrance: Level ID of the entrance currently being randomized
+    // gWarpDestinations[currentEntrance]: Level ID of the level the current entrance leads to.
+    //     Will be the same as currentEntrance until set, or 0 if it doesnt exist.
+    for (currentEntrance = 36; currentEntrance > 0; currentEntrance--) {
         if (failedScrambles > 50) {
             copy_remaining_warps();
             failedScrambles = 0;
-            j = 0;
-            b1 = 0;
-            b2 = 0;
-            b3 = 0;
-            i = 36;
+            warpsProcessed = 0;
+            lobbyWarpsProcessed = 0;
+            basementWarpsProcessed = 0;
+            upstairsWarpsProcessed = 0;
+            currentEntrance = 36;
         }
-        if (gWarpDestinations[i] != 0) {
+
+        if (gWarpDestinations[currentEntrance] != 0) { // Ignore non-existant levels
             if (!gOptionsSettings.gameplay.s.keepStructure || gOptionsSettings.gameplay.s.adjustedExits) {
-                index = (u8) get_val_in_range_uniform(j, 23, &randomState);
+                index = (u8) get_val_in_range_uniform(warpsProcessed, 23, &randomState);
+
                 // Forbidden cases
-                if ((i == LEVEL_BOB)
-                    && (sRemainingWarpsTemp[index] == LEVEL_WMOTR)) {
-                    i += 1;
+                // WMotR can't spawn in the BoB painting
+                if ((currentEntrance == LEVEL_BOB) && (sRemainingWarpsTemp[index] == LEVEL_WMOTR)) {
+                    currentEntrance += 1;
                     failedScrambles += 1;
                     continue;
                 }
-                if ((i == LEVEL_COTMC)
-                    && ((sRemainingWarpsTemp[index] == LEVEL_HMC)
-                        || (sRemainingWarpsTemp[index] == LEVEL_DDD))) {
-                    i += 1;
-                    failedScrambles += 1;
-                    continue;
+
+                // HMC and DDD can't spawn in the CotMC or BitFS entrances
+                if ((currentEntrance == LEVEL_COTMC) || (currentEntrance == LEVEL_BITFS)) {
+                    if ((sRemainingWarpsTemp[index] == LEVEL_HMC) || (sRemainingWarpsTemp[index] == LEVEL_DDD)) {
+                        currentEntrance += 1;
+                        failedScrambles += 1;
+                        continue;
+                    }
                 }
-                if ((i == LEVEL_BITFS)
-                    && ((sRemainingWarpsTemp[index] == LEVEL_DDD)
-                        || (sRemainingWarpsTemp[index] == LEVEL_HMC))) {
-                    i += 1;
-                    failedScrambles += 1;
-                    continue;
-                }
-                if (i == sRemainingWarpsTemp[index]) {
-                    i += 1;
-                    failedScrambles += 1;
-                    continue;
+
+                // If Keep Structure is on, additional requirements for Bowser levels
+                if (gOptionsSettings.gameplay.s.keepStructure) {
+                    // If the level is BitDW, it must spawn in the lobby
+                    if (sRemainingWarpsTemp[index] == LEVEL_BITDW) {
+                        if ((currentEntrance != LEVEL_BOB) &&
+                            (currentEntrance != LEVEL_JRB) &&
+                            (currentEntrance != LEVEL_WF) &&
+                            (currentEntrance != LEVEL_CCM) &&
+                            (currentEntrance != LEVEL_PSS) &&
+                            (currentEntrance != LEVEL_BITDW) &&
+                            (currentEntrance != LEVEL_SA) &&
+                            (currentEntrance != LEVEL_TOTWC) &&
+                            (currentEntrance != LEVEL_BBH)) {
+                            currentEntrance += 1;
+                            failedScrambles += 1;
+                            continue;
+                        }
+                    }
+                    // If the level is BitFS, it must spawn in the basement, and not in CotMC
+                    if (sRemainingWarpsTemp[index] == LEVEL_BITFS) {
+                        if ((currentEntrance != LEVEL_HMC) &&
+                            (currentEntrance != LEVEL_LLL) &&
+                            (currentEntrance != LEVEL_SSL) &&
+                            (currentEntrance != LEVEL_DDD) &&
+                            (currentEntrance != LEVEL_VCUTM)) {
+                            currentEntrance += 1;
+                            failedScrambles += 1;
+                            continue;
+                        }
+                    }
                 }
 
                 // Use simple scramble algorithm to scramble the list
-                tmp = sRemainingWarpsTemp[j];
-                sRemainingWarpsTemp[j] = sRemainingWarpsTemp[index];
+                tmp = sRemainingWarpsTemp[warpsProcessed];
+                sRemainingWarpsTemp[warpsProcessed] = sRemainingWarpsTemp[index];
                 sRemainingWarpsTemp[index] = tmp;
 
-                gWarpDestinations[i] = sRemainingWarpsTemp[j];
-                j++;
-            } else {
-                switch (gWarpDestinations[i]) {
+                gWarpDestinations[currentEntrance] = sRemainingWarpsTemp[warpsProcessed];
+                warpsProcessed++;
+
+            } else { // Keep Structure ON
+                switch (currentEntrance) {
+                    // Lobby courses
                     case LEVEL_BOB:
                     case LEVEL_JRB:
                     case LEVEL_WF:
@@ -783,21 +814,24 @@ static void init_warp_scramble() {
                     case LEVEL_SA:
                     case LEVEL_TOTWC:
                     case LEVEL_BBH:
+                        index = (u8) get_val_in_range_uniform(lobbyWarpsProcessed, 9, &randomState);
 
-                    index = (u8) get_val_in_range_uniform(b1, 9, &randomState);
-                    if (i == sB1WarpsTemp[index]) {
-                        i += 1;
-                        failedScrambles += 1;
-                        continue;
-                    }
-                    tmp = sB1WarpsTemp[b1];
-                    sB1WarpsTemp[b1] = sB1WarpsTemp[index];
-                    sB1WarpsTemp[index] = tmp;
+                        // Courses can't lead to themselves
+                        if (currentEntrance == sB1WarpsTemp[index]) {
+                            currentEntrance += 1;
+                            failedScrambles += 1;
+                            continue;
+                        }
 
-                    gWarpDestinations[i] = sB1WarpsTemp[b1];
-                    b1++;
-                    break;
+                        tmp = sB1WarpsTemp[lobbyWarpsProcessed];
+                        sB1WarpsTemp[lobbyWarpsProcessed] = sB1WarpsTemp[index];
+                        sB1WarpsTemp[index] = tmp;
 
+                        gWarpDestinations[currentEntrance] = sB1WarpsTemp[lobbyWarpsProcessed];
+                        lobbyWarpsProcessed++;
+                        break;
+
+                    // Basement courses
                     case LEVEL_SSL:
                     case LEVEL_HMC:
                     case LEVEL_LLL:
@@ -805,49 +839,50 @@ static void init_warp_scramble() {
                     case LEVEL_DDD:
                     case LEVEL_BITFS:
                     case LEVEL_VCUTM:
+                        index = (u8) get_val_in_range_uniform(basementWarpsProcessed, 7, &randomState);
 
-                    index = (u8) get_val_in_range_uniform(b2, 7, &randomState);
-                    if ((i == LEVEL_COTMC)
-                        && ((sB2WarpsTemp[index] == LEVEL_HMC)
-                            || (sB2WarpsTemp[index] == LEVEL_DDD))) {
-                        i += 1;
-                        failedScrambles += 1;
-                        continue;
-                    }
-                    if ((i == LEVEL_BITFS)
-                        && ((sB2WarpsTemp[index] == LEVEL_DDD)
-                            || (sB2WarpsTemp[index] == LEVEL_HMC))) {
-                        i += 1;
-                        failedScrambles += 1;
-                        continue;
-                    }
-                    if (i == sB2WarpsTemp[index]) {
-                        i += 1;
-                        failedScrambles += 1;
-                        continue;
-                    }
-                    tmp = sB2WarpsTemp[b2];
-                    sB2WarpsTemp[b2] = sB2WarpsTemp[index];
-                    sB2WarpsTemp[index] = tmp;
+                        // HMC, DDD and BitFS can't spawn in the CotMC or BitFS entrances
+                        if ((currentEntrance == LEVEL_COTMC) || (currentEntrance == LEVEL_BITFS)) {
+                            if ((sB2WarpsTemp[index] == LEVEL_HMC) || (sB2WarpsTemp[index] == LEVEL_DDD) || (sB2WarpsTemp[index] == LEVEL_BITFS)) {
+                                currentEntrance += 1;
+                                failedScrambles += 1;
+                                continue;
+                            }
+                        }
 
-                    gWarpDestinations[i] = sB2WarpsTemp[b2];
-                    b2++;
-                    break;
-                    
+                        // Courses can't lead to themselves
+                        if (currentEntrance == sB2WarpsTemp[index]) {
+                            currentEntrance += 1;
+                            failedScrambles += 1;
+                            continue;
+                        }
+
+                        tmp = sB2WarpsTemp[basementWarpsProcessed];
+                        sB2WarpsTemp[basementWarpsProcessed] = sB2WarpsTemp[index];
+                        sB2WarpsTemp[index] = tmp;
+
+                        gWarpDestinations[currentEntrance] = sB2WarpsTemp[basementWarpsProcessed];
+                        basementWarpsProcessed++;
+                        break;
+
+                    // Upstairs courses
                     default:
-                    index = (u8) get_val_in_range_uniform(b3, 7, &randomState);
-                    if (i == sB3WarpsTemp[index]) {
-                        i += 1;
-                        failedScrambles += 1;
-                        continue;
-                    }
-                    tmp = sB3WarpsTemp[b3];
-                    sB3WarpsTemp[b3] = sB3WarpsTemp[index];
-                    sB3WarpsTemp[index] = tmp;
+                        index = (u8) get_val_in_range_uniform(upstairsWarpsProcessed, 7, &randomState);
 
-                    gWarpDestinations[i] = sB3WarpsTemp[b3];
-                    b3++;
-                    break;
+                        // Courses can't lead to themselves
+                        if (currentEntrance == sB3WarpsTemp[index]) {
+                            currentEntrance += 1;
+                            failedScrambles += 1;
+                            continue;
+                        }
+
+                        tmp = sB3WarpsTemp[upstairsWarpsProcessed];
+                        sB3WarpsTemp[upstairsWarpsProcessed] = sB3WarpsTemp[index];
+                        sB3WarpsTemp[index] = tmp;
+
+                        gWarpDestinations[currentEntrance] = sB3WarpsTemp[upstairsWarpsProcessed];
+                        upstairsWarpsProcessed++;
+                        break;
                 }
 
             }
