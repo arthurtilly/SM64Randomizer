@@ -341,20 +341,19 @@
 #define TEXT_CURR_VERSION _("Version: v1.1 beta 2")
 #define TEXT_SM64_RANDO _("SM64 RANDOMIZER")
 
-#define TEXT_00012 _("1 2 OATMEAL") // heroic
-#define TEXT_00112 _("THIS IS THE 1 12") // josh
-#define TEXT_00320 _("GIVE RANDO SOURCE") // alo
-#define TEXT_00360 _("CHRISGRIN") // josh
-#define TEXT_00404 _("404 NOT FOUND") // baggage
-#define TEXT_00650 _("YA MUDDAS") // chrism
+#define TEXT_00012 _("1 2 OATMEAL")
+#define TEXT_00112 _("THIS IS THE 1 12")
+#define TEXT_00320 _("GIVE RANDO SOURCE")
+#define TEXT_00360 _("CHRISGRIN")
+#define TEXT_00404 _("404 NOT FOUND")
+#define TEXT_00650 _("YA MUDDAS")
 #define TEXT_02401 _("L IS REAL")
 #define TEXT_02639 _("YOUR STUPID")
 #define TEXT_11037 _("NO THATS WRONG")
 #define TEXT_12345 _("NOT VERY CREATIVE")
 #define TEXT_42069 _("NICE MEME")
-#define TEXT_58008 _("HOW INAPPROPRIATE") // baggage
-#define TEXT_62396 _("HAPPY BIRTHDAY") // zimbo
-//#define TEXT_65222 _("TRANS RIGHTS") (doesnt work anymore sadge)
+#define TEXT_58008 _("HOW INAPPROPRIATE")
+#define TEXT_62396 _("HAPPY BIRTHDAY")
 
 // course complete menu
 #define TEXT_CONGRATULATIONS _("CONGRATULATIONS")

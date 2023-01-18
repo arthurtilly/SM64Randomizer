@@ -41,7 +41,7 @@
 // -- WATER RING --
 
 // Fix the water rings in DDD by checking for interaction rather than normals.
-#define FIX_WATER_RINGS
+// #define FIX_WATER_RINGS
 
 // -- POWER STAR --
 
