@@ -981,6 +981,7 @@ u32 interact_warp_door(struct MarioState *m, UNUSED u32 interactType, struct Obj
             m->usedObj = obj;
             return set_mario_action(m, doorAction, actionArg);
         } else if (!sDisplayingDoorText) {
+            text = DIALOG_024 << 16;
             text += warpDoorId - numStars;
 
             sDisplayingDoorText = TRUE;

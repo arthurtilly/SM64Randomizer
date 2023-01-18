@@ -369,6 +369,7 @@ extern const BehaviorScript bhvSmallBomp[];
 extern const BehaviorScript bhvLargeBomp[];
 extern const BehaviorScript bhvWfSlidingPlatform[];
 extern const BehaviorScript bhvMoneybag[];
+extern const BehaviorScript bhvMoneybagHiddenRando[];
 extern const BehaviorScript bhvMoneybagHidden[];
 extern const BehaviorScript bhvPitBowlingBall[];
 extern const BehaviorScript bhvFreeBowlingBall[];

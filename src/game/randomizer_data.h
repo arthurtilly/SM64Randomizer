@@ -96,7 +96,7 @@ struct AvoidancePoint icUpAvoidancePoints[] = {
     {bhvStub, {3249, 1563, 294}, 100.0f, 100.0f, AVOIDANCE_SAFETY_ALL}, // SL Pillar
     {bhvStub, {3942, 1563, 709}, 100.0f, 100.0f, AVOIDANCE_SAFETY_ALL}, // SL Pillar
 
-    {bhvStub, {-236, 3200, -87}, 3900.0f, 2130.0f, AVOIDANCE_SAFETY_ALL}, // Endless staircase area
+    {bhvStub, {-236, 3100, -87}, 3900.0f, 2130.0f, AVOIDANCE_SAFETY_ALL}, // Endless staircase area
 };
 
 #define ARRAY_SIZE(x) (sizeof((x)) / sizeof((x)[0]))

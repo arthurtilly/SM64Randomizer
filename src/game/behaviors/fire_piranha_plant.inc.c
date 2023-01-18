@@ -43,7 +43,7 @@ void bhv_fire_piranha_plant_init(void) {
     }
 
     // The tracker is accurate between area swaps
-    sNumKilledFirePiranhaPlants = 5 - count_objects_with_behavior(bhvFirePiranhaPlant);
+    sNumKilledFirePiranhaPlants = 5 - count_objects_with_behavior(bhvFirePiranhaPlantStar);
     sNumActiveFirePiranhaPlants = /* sNumKilledFirePiranhaPlants = */ 0;
 }
 

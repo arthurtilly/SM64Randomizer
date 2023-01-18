@@ -4297,10 +4297,16 @@ const BehaviorScript bhvMoneybag[] = {
     END_LOOP(),
 };
 
-const BehaviorScript bhvMoneybagHidden[] = {
+const BehaviorScript bhvMoneybagHiddenRando[] = {
     BEGIN(OBJ_LIST_LEVEL),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     RANDOMIZE_OBJ(RAND_TYPE_GROUNDED),
+    GOTO(bhvMoneybagHidden + 1 + 1),
+};
+
+const BehaviorScript bhvMoneybagHidden[] = {
+    BEGIN(OBJ_LIST_LEVEL),
+    OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     SET_FLOAT(oGraphYOffset, 27),
     BILLBOARD(),
     SET_HITBOX(/*Radius*/ 110, /*Height*/ 100),

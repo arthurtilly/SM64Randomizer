@@ -1397,7 +1397,7 @@ void check_main_menu_clicked_buttons(void) {
  * sSelectedButtonID is MENU_BUTTON_NONE when the file select
  * is loaded, and that checks what buttonID is clicked in the main menu.
  */
-void bhv_menu_button_manager_loop(void) {
+void __attribute__((optimize("no-jump-tables"))) bhv_menu_button_manager_loop(void) {
     switch (sSelectedButtonID) {
         case MENU_BUTTON_NONE: check_main_menu_clicked_buttons(); break;
 

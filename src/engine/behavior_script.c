@@ -395,7 +395,7 @@ static s32 bhv_cmd_randomize_object(void) {
         f32 chance = gOptionsSettings.gameplay.s.safeSpawns == SPAWN_SAFETY_HARD ? (1 / 50.f) : (1 / 200.f);
         if (rand < chance) { // 1 in 200 on normal, 1 in 50 on danger
             mark_obj_for_deletion(gCurrentObject);
-            struct Object *moneybag = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, MODEL_YELLOW_COIN, bhvMoneybagHidden, gCurrentObject->oPosX, gCurrentObject->oPosY, gCurrentObject->oPosZ, 0, 0, 0);
+            struct Object *moneybag = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, MODEL_YELLOW_COIN, bhvMoneybagHiddenRando, gCurrentObject->oPosX, gCurrentObject->oPosY, gCurrentObject->oPosZ, 0, 0, 0);
             moneybag->pointerSeed = gCurrentObject->pointerSeed;
 
             gCurBhvCommand++;

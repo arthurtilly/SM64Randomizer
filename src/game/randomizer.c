@@ -446,6 +446,12 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
                 maxHeight = waterLevel;
         }
 
+        // For the start warp, always spawn above the water
+        if ((obj->behavior == segmented_to_virtual(bhvSpinAirborneWarp)) && (waterLevel > pos[1])) {
+            minHeight = waterLevel + minHeightRange;
+            maxHeight = waterLevel + maxHeightRange;
+        }
+
         // Prevent objects from spawning too high above water in BBH
         if ((gCurrCourseNum == COURSE_BBH) && (pos[1] < waterLevel) && (maxHeight > waterLevel))
             maxHeight = waterLevel + 100.f;
