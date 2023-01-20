@@ -55,6 +55,7 @@ enum ObjectList {
                           //      if there are not enough object slots: they will also
                           //      be manually unloaded to make room for slots if the list
                           //      gets exhausted.
+    OBJ_LIST_STATIC_SURFACE,
     NUM_OBJ_LISTS
 };
 

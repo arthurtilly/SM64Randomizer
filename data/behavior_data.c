@@ -771,7 +771,7 @@ const BehaviorScript bhvRotatingPlatform[] = {
 };
 
 const BehaviorScript bhvTower[] = {
-    BEGIN(OBJ_LIST_SURFACE),
+    BEGIN(OBJ_LIST_STATIC_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     LOAD_COLLISION_DATA(wf_seg7_collision_tower),
     SET_FLOAT(oCollisionDistance, 3000),
@@ -783,7 +783,7 @@ const BehaviorScript bhvTower[] = {
 };
 
 const BehaviorScript bhvBulletBillCannon[] = {
-    BEGIN(OBJ_LIST_SURFACE),
+    BEGIN(OBJ_LIST_STATIC_SURFACE),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     LOAD_COLLISION_DATA(wf_seg7_collision_bullet_bill_cannon),
     SET_FLOAT(oCollisionDistance, 300),
@@ -2695,7 +2695,7 @@ const BehaviorScript bhvRockSolid[] = {
 };
 
 const BehaviorScript bhvBowserSubDoor[] = {
-    BEGIN(OBJ_LIST_SURFACE),
+    BEGIN(OBJ_LIST_STATIC_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_ACTIVE_FROM_AFAR | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     LOAD_COLLISION_DATA(ddd_seg7_collision_bowser_sub_door),
     SET_FLOAT(oDrawingDistance, 20000),
@@ -2707,7 +2707,7 @@ const BehaviorScript bhvBowserSubDoor[] = {
 };
 
 const BehaviorScript bhvBowsersSub[] = {
-    BEGIN(OBJ_LIST_SURFACE),
+    BEGIN(OBJ_LIST_STATIC_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_ACTIVE_FROM_AFAR | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     SET_FLOAT(oDrawingDistance, 20000),
     SET_FLOAT(oCollisionDistance, 20000),
@@ -2754,7 +2754,7 @@ const BehaviorScript bhvShipPart3[] = {
 };
 
 const BehaviorScript bhvInSunkenShip3[] = {
-    BEGIN(OBJ_LIST_SURFACE),
+    BEGIN(OBJ_LIST_STATIC_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_PERSISTENT_RESPAWN | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     LOAD_COLLISION_DATA(jrb_seg7_collision_in_sunken_ship_3),
     SET_HOME(),
@@ -2796,13 +2796,13 @@ const BehaviorScript bhvSunkenShipPart2[] = {
 };
 
 const BehaviorScript bhvInSunkenShip[] = {
-    BEGIN(OBJ_LIST_SURFACE),
+    BEGIN(OBJ_LIST_STATIC_SURFACE),
     LOAD_COLLISION_DATA(jrb_seg7_collision_in_sunken_ship),
     GOTO(bhvInSunkenShip2 + 1 + 2),
 };
 
 const BehaviorScript bhvInSunkenShip2[] = {
-    BEGIN(OBJ_LIST_SURFACE),
+    BEGIN(OBJ_LIST_STATIC_SURFACE),
     LOAD_COLLISION_DATA(jrb_seg7_collision_in_sunken_ship_2),
     // Sunken ship - common:
     OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
@@ -5066,7 +5066,7 @@ const BehaviorScript bhvDecorativePendulum[] = {
 };
 
 const BehaviorScript bhvTreasureChestsShip[] = {
-    BEGIN(OBJ_LIST_DEFAULT),
+    BEGIN(OBJ_LIST_SPAWNER),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     DROP_TO_FLOOR(),
     CALL_NATIVE(bhv_treasure_chest_ship_init),
@@ -5076,7 +5076,7 @@ const BehaviorScript bhvTreasureChestsShip[] = {
 };
 
 const BehaviorScript bhvTreasureChestsJrb[] = {
-    BEGIN(OBJ_LIST_DEFAULT),
+    BEGIN(OBJ_LIST_SPAWNER),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     DROP_TO_FLOOR(),
     CALL_NATIVE(bhv_treasure_chest_jrb_init),
@@ -5086,7 +5086,7 @@ const BehaviorScript bhvTreasureChestsJrb[] = {
 };
 
 const BehaviorScript bhvTreasureChests[] = {
-    BEGIN(OBJ_LIST_DEFAULT),
+    BEGIN(OBJ_LIST_SPAWNER),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     DROP_TO_FLOOR(),
     CALL_NATIVE(bhv_treasure_chest_init),
