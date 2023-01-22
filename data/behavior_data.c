@@ -889,10 +889,11 @@ const BehaviorScript bhvFadingWarp[] = {
 };
 
 const BehaviorScript bhvWarp[] = {
-    BEGIN(OBJ_LIST_LEVEL),
+    BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     SET_INT(oInteractType, INTERACT_WARP),
     SET_INT(oIntangibleTimer, 0),
+    CALL_NATIVE(bhv_warp_init),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_warp_loop),
     END_LOOP(),
@@ -905,6 +906,7 @@ const BehaviorScript bhvWarpPipe[] = {
     LOAD_COLLISION_DATA(warp_pipe_seg3_collision_03009AC8),
     SET_FLOAT(oDrawingDistance, 16000),
     SET_INT(oIntangibleTimer, 0),
+    CALL_NATIVE(bhv_warp_init),
     SET_HITBOX(/*Radius*/ 70, /*Height*/ 50),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_warp_loop),

@@ -324,6 +324,18 @@ static void vec3s_resolve_wall_collisions(Vec3s pos, f32 radius) {
     vec3f_to_vec3s(pos, pos2);
 }
 
+void create_dynamic_avoidance_point(Vec3f pos, f32 radius, f32 height, f32 downOffset) {
+    struct AvoidancePoint *newPoint = &gDynamicAvoidancePoints[gNumDynamicAvoidancePoints];
+    newPoint->pos[0] = pos[0];
+    newPoint->pos[1] = pos[1] - downOffset;
+    newPoint->pos[2] = pos[2];
+    newPoint->radius = radius;
+    newPoint->height = height;
+    newPoint->safety = AVOIDANCE_SAFETY_ALL;
+    newPoint->behavior = bhvStub;
+    gNumDynamicAvoidancePoints++;
+}
+
 void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 maxHeightRange, tinymt32_t *randomState,
                        u8 floorSafeLevel, u32 randPosFlags) {
     struct AreaParams *areaParams = &(*sLevelParams[gCurrLevelNum - 4])[gCurrAreaIndex - 1];
@@ -532,15 +544,9 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
 
         // Spawn avoidance point if needed
         if ((randPosFlags & RAND_TYPE_CREATE_AVOIDANCE_POINT) && (gNumDynamicAvoidancePoints < 50)) {
-            struct AvoidancePoint *newPoint = &gDynamicAvoidancePoints[gNumDynamicAvoidancePoints];
-            newPoint->pos[0] = pos[0];
-            newPoint->pos[1] = pos[1] - 50.f;
-            newPoint->pos[2] = pos[2];
-            newPoint->radius = 100.f;
-            newPoint->height = 200.f;
-            newPoint->safety = AVOIDANCE_SAFETY_ALL;
-            newPoint->behavior = bhvStub;
-            gNumDynamicAvoidancePoints++;
+            Vec3f fpos;
+            vec3_copy(fpos, pos);
+            create_dynamic_avoidance_point(fpos, 100.f, 200.f, 50.f);
         }
 
         return;

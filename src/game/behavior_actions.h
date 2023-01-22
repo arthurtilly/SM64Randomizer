@@ -60,6 +60,7 @@ void bhv_tower_door_loop(void);
 void bhv_wf_rotating_wooden_platform_loop(void);
 void bhv_koopa_shell_underwater_loop(void);
 void bhv_fading_warp_loop(void);
+void bhv_warp_init(void);
 void bhv_warp_loop(void);
 void bhv_white_puff_exploding_loop(void);
 void bhv_spawned_star_init(void);
