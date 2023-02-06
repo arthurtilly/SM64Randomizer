@@ -405,24 +405,54 @@ static s32 bhv_cmd_randomize_object(void) {
 
     if (((gOptionsSettings.gameplay.s.objectRandomization != 0) || (randType & RAND_TYPE_IMPORTANT)) && ((gOptionsSettings.gameplay.s.randomizeStarSpawns) || !(randType & RAND_TYPE_RANDO_STAR))) {
         // Let red coins and coin formations spawn anywhere in TotWC and WMotR
-        if ((gCurrentObject->behavior == segmented_to_virtual(bhvRedCoin)) ||
-            (gCurrentObject->behavior == segmented_to_virtual(bhvCoinFormation)) ||
-            (gCurrentObject->behavior == segmented_to_virtual(bhvYellowCoin)))
-        {
-            if (gCurrLevelNum == LEVEL_TOTWC)
-            {
-                gCurrentObject->oPosX = get_val_in_range_uniform(-2000, 2000, &randomState);
-                gCurrentObject->oPosY = get_val_in_range_uniform(-1800, 1000, &randomState);
-                gCurrentObject->oPosZ = get_val_in_range_uniform(-2000, 2000, &randomState);
-                gCurrentObject->oFaceAngleYaw = get_val_in_range_uniform(0, 65536, &randomState);
-                gCurBhvCommand++;
-                return BHV_PROC_CONTINUE;
-            }
-            if (gCurrLevelNum == LEVEL_WMOTR)
-            {
-                gCurrentObject->oPosX = get_val_in_range_uniform(-4000, 4000, &randomState);
-                gCurrentObject->oPosY = get_val_in_range_uniform(-2000, 4000, &randomState);
-                gCurrentObject->oPosZ = get_val_in_range_uniform(-4000, 4000, &randomState);
+        if ((gCurrLevelNum == LEVEL_TOTWC) || (gCurrLevelNum == LEVEL_WMOTR)) {
+            if ((gCurrentObject->behavior == segmented_to_virtual(bhvRedCoin)) ||
+                (gCurrentObject->behavior == segmented_to_virtual(bhvCoinFormation)) ||
+                (gCurrentObject->behavior == segmented_to_virtual(bhvYellowCoin))) {
+                f32 coinMinX, coinMaxX, coinMinY, coinMaxY, coinMinZ, coinMaxZ;
+                if (gCurrLevelNum == LEVEL_TOTWC) {
+                    coinMinX = -2000;
+                    coinMaxX = 2000;
+                    coinMinY = -1800;
+                    coinMaxY = 1000;
+                    coinMinZ = -2000;
+                    coinMaxZ = 2000;
+                } else {
+                    coinMinX = -4000;
+                    coinMaxX = 4000;
+                    coinMinY = -2000;
+                    coinMaxY = 4000;
+                    coinMinZ = -4000;
+                    coinMaxZ = 4000;
+                }
+
+                // Simple checks to make sure the coin does not spawn inside geometry
+                while (TRUE) {
+                    struct Surface *surf;
+                    gCurrentObject->oPosX = get_val_in_range_uniform(coinMinX, coinMaxX, &randomState);
+                    gCurrentObject->oPosY = get_val_in_range_uniform(coinMinY, coinMaxY, &randomState);
+                    gCurrentObject->oPosZ = get_val_in_range_uniform(coinMinZ, coinMaxZ, &randomState);
+                    
+                    f32 floorHeight = find_floor(gCurrentObject->oPosX, gCurrentObject->oPosY, gCurrentObject->oPosZ, &surf);
+                    f32 ceilHeight = find_ceil(gCurrentObject->oPosX, floorHeight + 80, gCurrentObject->oPosZ, &surf);
+
+                    // Ceiling check
+                    if (gCurrentObject->oPosY > ceilHeight - 100.f)
+                        continue;
+
+                    floorHeight = find_floor(gCurrentObject->oPosX, ceilHeight - 80, gCurrentObject->oPosZ, &surf);
+
+                    // Floor check
+                    if (gCurrentObject->oPosY < floorHeight - 20.f)
+                        continue;
+
+                    // Wall check
+                    if (!raycast_wall_check(&gCurrentObject->oPosVec))
+                        continue;
+
+                    break;
+                }
+
                 gCurrentObject->oFaceAngleYaw = get_val_in_range_uniform(0, 65536, &randomState);
                 gCurBhvCommand++;
                 return BHV_PROC_CONTINUE;

@@ -521,6 +521,10 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
                 < 1500)) // If under floor and not large distance, deny height
             continue;
 
+        if ((pos[1] - highFloorHeight) < (minHeightRange - 50.f)) {
+            continue;
+        }
+
         if (!objCanBeUnderwater && (waterLevel > pos[1]))
             continue;
 
