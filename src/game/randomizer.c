@@ -140,30 +140,31 @@ unsigned char textVersion2[] = { TEXT_CURR_VERSION };
 
 void print_seed_and_options_data(void) {
     char buf[20];
+    s32 ypos = (gIsConsole ? 10 : 4);
     u32 i;
     u32 verXPos;
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
     
     sprintf(buf, "%s Seed", (gIsSetSeed ? "Set" : "Random"));
-    print_generic_text_ascii_buf(8,32,buf);
+    print_generic_text_ascii_buf(8, ypos + 28, buf);
     sprintf(buf, "Seed\xE6 %05d", gRandomizerGameSeed);
-    print_generic_text_ascii_buf(8,18,buf);
+    print_generic_text_ascii_buf(8, ypos + 14, buf);
     
     for (i = 0; i < ARRAY_COUNT(gPresets); i++) {
         if (gOptionsSettings.gameplay.w == gPresets[i].gameplay.w) {
             sprintf(buf, "Preset\xE6 %s", presetStrings[i]);
-            print_generic_text_ascii_buf(8,4,buf);
+            print_generic_text_ascii_buf(8,ypos,buf);
             goto presetFound; // don't kill me please
         }
     }
     
     sprintf(buf, "Settings ID\xE6 %d", gOptionsSettings.gameplay.w);
-    print_generic_text_ascii_buf(8,4,buf);
+    print_generic_text_ascii_buf(8,ypos,buf);
 
 presetFound:
     verXPos = 310 - 2*(310 - get_str_x_pos_from_center(310,textVersion2,0));
-    print_generic_string(verXPos, 4, textVersion2);
+    print_generic_string(verXPos, ypos, textVersion2);
 
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
 }

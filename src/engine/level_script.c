@@ -682,8 +682,7 @@ static void level_cmd_create_whirlpool(void) {
     if (CMD_GET(u8, 3) == WHIRLPOOL_COND_ALWAYS
         || (CMD_GET(u8, 3) == WHIRLPOOL_COND_BOWSER2_NOT_BEATEN   && !beatBowser2)
         || (CMD_GET(u8, 3) == WHIRLPOOL_COND_BOWSER2_BEATEN       && beatBowser2)
-        || (CMD_GET(u8, 3) == WHIRLPOOL_COND_AT_LEAST_SECOND_STAR && gCurrActNum >= 2)
-        || (gOptionsSettings.gameplay.s.nonstopMode)) {
+        || (CMD_GET(u8, 3) == WHIRLPOOL_COND_AT_LEAST_SECOND_STAR && (gCurrActNum >= 2 || gOptionsSettings.gameplay.s.nonstopMode))) {
         if (sCurrAreaIndex != -1 && index < 2) {
             if ((whirlpool = gAreas[sCurrAreaIndex].whirlpools[index]) == NULL) {
                 whirlpool = alloc_only_pool_alloc(sLevelPool, sizeof(struct Whirlpool));
