@@ -28,6 +28,10 @@
 #include "game/puppycam2.h"
 #include "game/puppyprint.h"
 #include "game/puppylights.h"
+#include "game/randomizer.h"
+#include "level_table.h"
+#include "behavior_script.h"
+#include "segment_symbols.h"
 
 #include "config.h"
 
@@ -287,8 +291,29 @@ static void level_cmd_load_raw(void) {
     sCurrentCmd = CMD_NEXT;
 }
 
+u8 *sSkyBoxPtrs[][2] = {
+    {_water_skybox_yay0SegmentRomStart,       _water_skybox_yay0SegmentRomEnd},
+    {_bitfs_skybox_yay0SegmentRomStart,       _bitfs_skybox_yay0SegmentRomEnd},
+    {_wdw_skybox_yay0SegmentRomStart,         _wdw_skybox_yay0SegmentRomEnd},
+    {_cloud_floor_skybox_yay0SegmentRomStart, _cloud_floor_skybox_yay0SegmentRomEnd},
+    {_ccm_skybox_yay0SegmentRomStart,         _ccm_skybox_yay0SegmentRomEnd},
+    {_ssl_skybox_yay0SegmentRomStart,         _ssl_skybox_yay0SegmentRomEnd},
+    {_bbh_skybox_yay0SegmentRomStart,         _bbh_skybox_yay0SegmentRomEnd},
+    {_bidw_skybox_yay0SegmentRomStart,        _bidw_skybox_yay0SegmentRomEnd},
+    {_clouds_skybox_yay0SegmentRomStart,      _clouds_skybox_yay0SegmentRomEnd},
+    {_bits_skybox_yay0SegmentRomStart,        _bits_skybox_yay0SegmentRomEnd},
+};
+
+u8 gSkyboxIndex;
+
 static void level_cmd_load_yay0(void) {
-    load_segment_decompress(CMD_GET(s16, 2), CMD_GET(void *, 4), CMD_GET(void *, 8));
+    if ((CMD_GET(s16, 2) != 0xA) | (!gOptionsSettings.cosmetic.s.skyboxOn)) {
+        load_segment_decompress(CMD_GET(s16, 2), CMD_GET(void *, 4), CMD_GET(void *, 8));
+    } else { // Skybox Segment
+        gSkyboxIndex = random_u16_seeded(gRandomizerGameSeed + gCurrLevelNum) % ARRAY_COUNT(sSkyBoxPtrs);
+        load_segment_decompress(CMD_GET(s16, 2), sSkyBoxPtrs[gSkyboxIndex][0], sSkyBoxPtrs[gSkyboxIndex][1]);
+    }
+
     sCurrentCmd = CMD_NEXT;
 }
 
@@ -442,22 +467,6 @@ static void level_cmd_load_model_from_geo(void) {
     sCurrentCmd = CMD_NEXT;
 }
 
-static void level_cmd_23(void) {
-    ModelID16 model = (CMD_GET(ModelID16, 2) & 0x0FFF);
-    s16 layer = (((u16)CMD_GET(s16, 2)) >> 12);
-    void *dl  = CMD_GET(void *, 4);
-    s32 scale = CMD_GET(s32, 8);
-
-    if (model < MODEL_ID_COUNT) {
-        // GraphNodeScale has a GraphNode at the top. This
-        // is being stored to the array, so cast the pointer.
-        gLoadedGraphNodes[model] =
-            (struct GraphNode *) init_graph_node_scale(sLevelPool, 0, layer, dl, scale);
-    }
-
-    sCurrentCmd = CMD_NEXT;
-}
-
 static void level_cmd_init_mario(void) {
     vec3_zero(gMarioSpawnInfo->startPos);
     vec3_zero(gMarioSpawnInfo->startAngle);
@@ -472,11 +481,12 @@ static void level_cmd_init_mario(void) {
     sCurrentCmd = CMD_NEXT;
 }
 
+u8 sNonstopSpawn;
+u8 sNonstopNotSpawn;
+
 static void level_cmd_place_object(void) {
-    if (
-        sCurrAreaIndex != -1
-        && ((CMD_GET(u8, 2) & (1 << (gCurrActNum - 1))) || (CMD_GET(u8, 2) == 0x1F))
-    ) {
+    if (sCurrAreaIndex != -1 && (((CMD_GET(u8, 2) & (1 << (gCurrActNum - 1))) || CMD_GET(u8, 2) == 0x1F) || sNonstopSpawn)
+        && (sNonstopNotSpawn == 0) && !((CMD_GET(u8, 2) & 0x40) && (gOptionsSettings.gameplay.s.objectRandomization == 0))) {
         ModelID16 model = CMD_GET(u32, 0x18);
         struct SpawnInfo *spawnInfo = alloc_only_pool_alloc(sLevelPool, sizeof(struct SpawnInfo));
 
@@ -495,22 +505,92 @@ static void level_cmd_place_object(void) {
         spawnInfo->behaviorScript = CMD_GET(void *, 20);
         spawnInfo->model = gLoadedGraphNodes[model];
         spawnInfo->next = gAreas[sCurrAreaIndex].objectSpawnInfos;
+        spawnInfo->pointerSeed = (uintptr_t)sCurrentCmd;
 
         gAreas[sCurrAreaIndex].objectSpawnInfos = spawnInfo;
     }
 
+    sNonstopSpawn = sNonstopNotSpawn = 0;
     sCurrentCmd = CMD_NEXT;
 }
 
+static void level_cmd_place_object_ns(void) {
+    if (gOptionsSettings.gameplay.s.nonstopMode) {
+        sNonstopSpawn = 1;
+    }
+    level_cmd_place_object();
+}
+
+static void level_cmd_place_obj_not_ns(void) {
+    if (gOptionsSettings.gameplay.s.nonstopMode) {
+        sNonstopNotSpawn = 1;
+    }
+    level_cmd_place_object();
+}
+
+u8 gPreviousCastleArea;
+
+u8 get_nonrandom_level() {
+    u8 i;
+    u32 currLevel = gCurrLevelNum;
+    if (currLevel == LEVEL_BOWSER_1) {
+        currLevel = LEVEL_BITDW;
+    } else if (currLevel == LEVEL_BOWSER_2) {
+        currLevel = LEVEL_BITFS;
+    }
+
+    for (i = 0; i < LEVEL_MAX; i++) {
+        if (gWarpDestinations[i] == currLevel) {
+            return i;
+        }
+    }
+
+    return 0;
+}
+
 static void level_cmd_create_warp_node(void) {
+    u8 destLevel;
+    u8 id;
+    u8 intendedLevel; // The level if this were not randomized
+
     if (sCurrAreaIndex != -1) {
         struct ObjectWarpNode *warpNode =
             alloc_only_pool_alloc(sLevelPool, sizeof(struct ObjectWarpNode));
 
-        warpNode->node.id = CMD_GET(u8, 2);
-        warpNode->node.destLevel = CMD_GET(u8, 3) + CMD_GET(u8, 6);
-        warpNode->node.destArea = CMD_GET(u8, 4);
-        warpNode->node.destNode = CMD_GET(u8, 5);
+        destLevel = CMD_GET(u8, 3) + CMD_GET(u8, 6);
+        if (((gCurrCourseNum == COURSE_NONE)
+             || ((gCurrCourseNum == COURSE_HMC) || (destLevel == LEVEL_COTMC)))
+            && (gWarpDestinations[destLevel] != 0) && gOptionsSettings.gameplay.s.randomLevelWarp) {
+            warpNode->node.destLevel = gWarpDestinations[destLevel];
+        } else {
+            warpNode->node.destLevel = destLevel;
+        }
+
+        intendedLevel = get_nonrandom_level(); // We have to find what the level is supposed to be, rather than where we are.
+
+        warpNode->node.id = id = CMD_GET(u8, 2);
+        if (!gOptionsSettings.gameplay.s.adjustedExits // We want to use the warp as intended in the script if we have random warps
+            || ((id != 0xF0) && (id != 0xF1)) // or if it's not a death or star warp. 
+            || (intendedLevel == 0)  // or if the level is not a randomized level
+            || ((id == 0xF1) && ((gCurrLevelNum == LEVEL_BOWSER_1) || (gCurrLevelNum == LEVEL_BOWSER_2)))) { // or if it's a Bowser death warp.
+            warpNode->node.destArea = CMD_GET(u8, 4);
+            warpNode->node.destNode = CMD_GET(u8, 5);          
+        } else{
+            warpNode->node.destArea = gLevelWarps[intendedLevel].area;
+            if (id == 0xF0) {
+                warpNode->node.destNode = gLevelWarps[intendedLevel].f0;
+            } else {
+                warpNode->node.destNode = gLevelWarps[intendedLevel].f1;          
+            }
+            warpNode->node.destLevel = gLevelWarps[intendedLevel].level;
+        }
+        // If warping to THI and random level spawn is ON, 50/50 chance to warp to either area.
+        if ((gCurrCourseNum == COURSE_NONE) && // Must be warping from overworld
+            (warpNode->node.destLevel == LEVEL_THI) &&
+            (gOptionsSettings.gameplay.s.randomLevelSpawn) &&
+            (gOptionsSettings.gameplay.s.randomLevelWarp)) {
+            warpNode->node.destArea = random_u16() % 2 + 1;
+        }
 
         warpNode->object = NULL;
 
@@ -558,6 +638,7 @@ static void level_cmd_set_terrain_type(void) {
 
 static void level_cmd_create_painting_warp_node(void) {
     s32 i;
+    u8 destLevel;
     struct WarpNode *node;
 
     if (sCurrAreaIndex != -1) {
@@ -573,28 +654,20 @@ static void level_cmd_create_painting_warp_node(void) {
         node = &gAreas[sCurrAreaIndex].paintingWarpNodes[CMD_GET(u8, 2)];
 
         node->id = 1;
-        node->destLevel = CMD_GET(u8, 3) + CMD_GET(u8, 6);
-        node->destArea = CMD_GET(u8, 4);
-        node->destNode = CMD_GET(u8, 5);
-    }
+        destLevel = CMD_GET(u8, 3) + CMD_GET(u8, 6);
+        if ((gCurrCourseNum == COURSE_NONE) && (gWarpDestinations[destLevel] != 0) && gOptionsSettings.gameplay.s.randomLevelWarp) {
+            node->destLevel = gWarpDestinations[destLevel];
+            node->destArea = 1; // Only painting area warp not to area 1 is THI.
 
-    sCurrentCmd = CMD_NEXT;
-}
-
-static void level_cmd_3A(void) {
-    struct UnusedArea28 *val4;
-
-    if (sCurrAreaIndex != -1) {
-        if ((val4 = gAreas[sCurrAreaIndex].unused) == NULL) {
-            val4 = gAreas[sCurrAreaIndex].unused =
-                alloc_only_pool_alloc(sLevelPool, sizeof(struct UnusedArea28));
+            // If warping to THI and random level spawn is ON, 50/50 chance to warp to either area.
+            if ((node->destLevel == LEVEL_THI) && (gOptionsSettings.gameplay.s.randomLevelSpawn) && (random_u16() % 2)) {
+                node->destArea = 2;
+            }
+        } else {
+            node->destLevel = destLevel;
+            node->destArea = CMD_GET(u8, 4);
         }
-
-        val4->unk00 = CMD_GET(s16, 2);
-        val4->unk02 = CMD_GET(s16, 4);
-        val4->unk04 = CMD_GET(s16, 6);
-        val4->unk06 = CMD_GET(s16, 8);
-        val4->unk08 = CMD_GET(s16, 10);
+        node->destNode = CMD_GET(u8, 5);
     }
 
     sCurrentCmd = CMD_NEXT;
@@ -609,7 +682,7 @@ static void level_cmd_create_whirlpool(void) {
     if (CMD_GET(u8, 3) == WHIRLPOOL_COND_ALWAYS
         || (CMD_GET(u8, 3) == WHIRLPOOL_COND_BOWSER2_NOT_BEATEN   && !beatBowser2)
         || (CMD_GET(u8, 3) == WHIRLPOOL_COND_BOWSER2_BEATEN       && beatBowser2)
-        || (CMD_GET(u8, 3) == WHIRLPOOL_COND_AT_LEAST_SECOND_STAR && gCurrActNum >= 2)) {
+        || (CMD_GET(u8, 3) == WHIRLPOOL_COND_AT_LEAST_SECOND_STAR && (gCurrActNum >= 2 || gOptionsSettings.gameplay.s.nonstopMode))) {
         if (sCurrAreaIndex != -1 && index < 2) {
             if ((whirlpool = gAreas[sCurrAreaIndex].whirlpools[index]) == NULL) {
                 whirlpool = alloc_only_pool_alloc(sLevelPool, sizeof(struct Whirlpool));
@@ -724,18 +797,26 @@ static void level_cmd_nop(void) {
 }
 
 static void level_cmd_show_dialog(void) {
-    if (sCurrAreaIndex != -1) {
+    /** if (sCurrAreaIndex != -1) {
         if (CMD_GET(u8, 2) < 2) {
             gAreas[sCurrAreaIndex].dialog[CMD_GET(u8, 2)] = CMD_GET(u8, 3);
         }
-    }
+    } **/
     sCurrentCmd = CMD_NEXT;
 }
 
 static void level_cmd_set_music(void) {
     if (sCurrAreaIndex != -1) {
         gAreas[sCurrAreaIndex].musicParam = CMD_GET(s16, 2);
-        gAreas[sCurrAreaIndex].musicParam2 = CMD_GET(s16, 4);
+        
+        if (gOptionsSettings.cosmetic.s.musicOn == 1) {
+            s32 i = random_u16_seeded(gRandomizerGameSeed + gCurrLevelNum * 8 + sCurrAreaIndex) % sizeof(gRandomSongs);
+            gAreas[sCurrAreaIndex].musicParam2 = gRandomSongs[i];
+        } else if (gOptionsSettings.cosmetic.s.musicOn == 2) {
+            gAreas[sCurrAreaIndex].musicParam2 = 0;
+        } else {            
+            gAreas[sCurrAreaIndex].musicParam2 = CMD_GET(s16, 4);
+        }
     }
     sCurrentCmd = CMD_NEXT;
 }
@@ -915,7 +996,7 @@ static void (*LevelScriptJumpTable[])(void) = {
     /*LEVEL_CMD_END_AREA                    */ level_cmd_end_area,
     /*LEVEL_CMD_LOAD_MODEL_FROM_DL          */ level_cmd_load_model_from_dl,
     /*LEVEL_CMD_LOAD_MODEL_FROM_GEO         */ level_cmd_load_model_from_geo,
-    /*LEVEL_CMD_23                          */ level_cmd_23,
+    /*LEVEL_CMD_OBJ_WITH_ACTS_NS            */ level_cmd_place_object_ns,
     /*LEVEL_CMD_PLACE_OBJECT                */ level_cmd_place_object,
     /*LEVEL_CMD_INIT_MARIO                  */ level_cmd_init_mario,
     /*LEVEL_CMD_CREATE_WARP_NODE            */ level_cmd_create_warp_node,
@@ -938,7 +1019,7 @@ static void (*LevelScriptJumpTable[])(void) = {
     /*LEVEL_CMD_SET_MENU_MUSIC              */ level_cmd_set_menu_music,
     /*LEVEL_CMD_FADEOUT_MUSIC               */ level_cmd_fadeout_music,
     /*LEVEL_CMD_SET_MACRO_OBJECTS           */ level_cmd_set_macro_objects,
-    /*LEVEL_CMD_3A                          */ level_cmd_3A,
+    /*LEVEL_CMD_OBJ_WITH_ACTS_NOT_NS        */ level_cmd_place_obj_not_ns,
     /*LEVEL_CMD_CREATE_WHIRLPOOL            */ level_cmd_create_whirlpool,
     /*LEVEL_CMD_GET_OR_SET_VAR              */ level_cmd_get_or_set_var,
     /*LEVEL_CMD_PUPPYVOLUME                 */ level_cmd_puppyvolume,

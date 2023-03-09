@@ -475,6 +475,36 @@ ALWAYS_INLINE s32 absi(s32 in) {
 
 #define FLT_IS_NONZERO(x) (absf(x) > NEAR_ZERO)
 
+/* TinyMT 32-bit implementation */
+
+#define TINYMT32_MEXP 127
+#define TINYMT32_SH0 1
+#define TINYMT32_SH1 10
+#define TINYMT32_SH8 8
+#define TINYMT32_MASK 0x7fffffffU
+#define TINYMT32_MUL (1.0f / 16777216.0f)
+
+#define TINYMT32_MAT1 0x8f7011eeU
+#define TINYMT32_MAT2 0xfc78ff1fU
+#define TINYMT32_TMAT 0x3793fdffU
+/**
+ * tinymt32 internal state vector and parameters
+ */
+struct TINYMT32_T {
+    u32 status[4];
+};
+
+typedef struct TINYMT32_T tinymt32_t;
+
+extern void tinymt32_init(tinymt32_t * random, u32 seed);
+extern u32 tinymt32_generate_u32(tinymt32_t * random);
+extern f32 tinymt32_generate_float(tinymt32_t * random);
+
+extern tinymt32_t gGlobalRandomState;
+
+/* End of TinyMT 32-bit implementation */
+
+u16 random_u16_seeded(u32 seed);
 u16 random_u16(void);
 f32 random_float(void);
 s32 random_sign(void);

@@ -87,10 +87,10 @@ void bhv_goomba_triplet_spawner_update(void) {
                     s16 dz = 500.0f * sins(angle);
 #ifdef FLOOMBAS
                     spawn_object_relative((o->oBehParams2ndByte & GOOMBA_TRIPLET_SPAWNER_BP_SIZE_MASK) | (goombaFlag >> 6),
-                                          dx, 0, dz, o, MODEL_GOOMBA, (o->oIsFloomba ? bhvFloomba : bhvGoomba));
+                                          dx, 0, dz, o, MODEL_GOOMBA, (o->oIsFloomba ? bhvFloomba : bhvGoombaTriplet));
 #else
                     spawn_object_relative((o->oBehParams2ndByte & GOOMBA_TRIPLET_SPAWNER_BP_SIZE_MASK) | (goombaFlag >> 6),
-                                          dx, 0, dz, o, MODEL_GOOMBA, bhvGoomba);
+                                          dx, 0, dz, o, MODEL_GOOMBA, bhvGoombaTriplet);
 #endif
                 }
             }

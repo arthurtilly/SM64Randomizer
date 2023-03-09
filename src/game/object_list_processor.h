@@ -24,7 +24,7 @@ enum gTimeStopStateFlags {
 /**
  * The maximum number of objects that can be loaded at once.
  */
-#define OBJECT_POOL_CAPACITY 240
+#define OBJECT_POOL_CAPACITY 280
 
 /**
  * Every object is categorized into an object list, which controls the order
@@ -55,6 +55,7 @@ enum ObjectList {
                           //      if there are not enough object slots: they will also
                           //      be manually unloaded to make room for slots if the list
                           //      gets exhausted.
+    OBJ_LIST_STATIC_SURFACE,
     NUM_OBJ_LISTS
 };
 

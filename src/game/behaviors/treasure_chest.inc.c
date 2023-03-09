@@ -39,9 +39,6 @@ void bhv_treasure_chest_top_loop(void) {
             if (o->oFaceAnglePitch < -0x4000) {
                 o->oFaceAnglePitch = -0x4000;
                 o->oAction = TREASURE_CHEST_TOP_ACT_OPENED;
-                if (o->parentObj->oBehParams2ndByte != TREASURE_CHEST_BP_4) {
-                    spawn_orange_number(o->parentObj->oBehParams2ndByte, 0, -40, 0);
-                }
             }
             break;
 
@@ -61,16 +58,24 @@ void bhv_treasure_chest_top_loop(void) {
 }
 
 void bhv_treasure_chest_bottom_init(void) {
+    struct Object *num = spawn_orange_number(o->oBehParams2ndByte, 0, 0, 0);
+    num->oOrangeNumType = 2;
     spawn_object_relative(0, 0, 102, -77, o, MODEL_TREASURE_CHEST_LID, bhvTreasureChestTop);
     obj_set_hitbox(o, &sTreasureChestBottomHitbox);
 }
 
 void bhv_treasure_chest_bottom_loop(void) {
+    if (o->parentObj->oAction == TREASURE_CHEST_TOP_ACT_OPENED && o->oBehParams2ndByte == 4) {
+        o->oBehParams |= o->parentObj->oBehParams & 0xFF000000;
+        spawn_default_star(o->oPosX, o->oPosY + 300.0f, o->oPosZ);
+        o->parentObj->oAction = TREASURE_CHEST_TOP_ACT_CLOSING;
+    }
+
     switch (o->oAction) {
         case TREASURE_CHEST_BOTTOM_ACT_CLOSE:
             if ((!o->parentObj->oTreasureChestDoCloseChests)
                 && is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 150)
-                && obj_check_if_facing_toward_angle(o->oMoveAngleYaw, gMarioObject->header.gfx.angle[1] + 0x8000, 0x3000)) {
+                && !obj_check_if_facing_toward_angle(o->oMoveAngleYaw, gMarioObject->header.gfx.angle[1], 0x2800)) {
                 if (o->parentObj->oTreasureChestNumOpenedChests == o->oBehParams2ndByte) {
                     play_sound(SOUND_GENERAL2_RIGHT_ANSWER, gGlobalSoundSource);
                     o->parentObj->oTreasureChestNumOpenedChests++;
@@ -106,6 +111,7 @@ void bhv_treasure_chest_bottom_loop(void) {
 void spawn_treasure_chest(s8 param, s32 x, s32 y, s32 z, s16 yaw) {
     struct Object *chestBaseObj = spawn_object_abs_with_rot(o, 0, MODEL_TREASURE_CHEST_BASE,
                                                             bhvTreasureChestBottom, x, y, z, 0, yaw, 0);
+    chestBaseObj->pointerSeed = (x + y + z + yaw) * 4; // funny hack
     chestBaseObj->oBehParams2ndByte = param;
 }
 
@@ -166,12 +172,12 @@ void bhv_treasure_chest_jrb_loop(void) {
         case TREASURE_CHEST_ACT_REWARD:
             if (o->oTimer == 60) {
                 spawn_mist_particles();
-                spawn_default_star(-1800.0f, -2500.0f, -1700.0f);
+                // spawn_default_star(-1800.0f, -2500.0f, -1700.0f);
                 o->oAction = TREASURE_CHEST_ACT_END;
             }
             break;
 
-        case TREASURE_CHEST_ACT_END:
+        default:
             break;
     }
 }
@@ -198,12 +204,12 @@ void bhv_treasure_chest_loop(void) {
         case TREASURE_CHEST_ACT_REWARD:
             if (o->oTimer == 60) {
                 spawn_mist_particles();
-                spawn_default_star(-1900.0f, -4000.0f, -1400.0f);
+                // spawn_default_star(-1900.0f, -4000.0f, -1400.0f);
                 o->oAction = TREASURE_CHEST_ACT_END;
             }
             break;
 
-        case TREASURE_CHEST_ACT_END:
+        default:
             break;
     }
 }

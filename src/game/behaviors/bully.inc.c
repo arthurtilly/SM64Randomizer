@@ -199,9 +199,11 @@ void bully_act_level_death(void) {
             spawn_mist_particles();
 
             if (o->oBullySubtype == BULLY_STYPE_CHILL) {
-                spawn_default_star(130.0f, 1600.0f, -4335.0f);
+                // spawn_default_star(130.0f, 1600.0f, -4335.0f);
+                spawn_default_star(gMarioState->pos[0], gMarioState->pos[1] + 250.f, gMarioState->pos[2]);
             } else {
-                spawn_default_star(0, 950.0f, -6800.0f);
+                // spawn_default_star(0, 950.0f, -6800.0f);
+                spawn_default_star(gMarioState->pos[0], gMarioState->pos[1] + 250.f, gMarioState->pos[2]);
                 spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvLllTumblingBridge,
                                           0, 154, -5631, 0, 0, 0);
             }
@@ -211,6 +213,14 @@ void bully_act_level_death(void) {
 
 void bhv_bully_loop(void) {
     vec3f_copy(&o->oBullyPrevVec, &o->oPosVec);
+
+	if ((o->oBullySubtype == BULLY_STYPE_MINION) && (gGlobalTimer % 4 == 0))
+	{
+		struct Object *sparkle = spawn_object(o, 149, bhvCoinSparkles);
+		sparkle->oPosX += random_float() * 150 - 75;
+		sparkle->oPosY += random_float() * 50;
+		sparkle->oPosZ += random_float() * 150 - 75;
+	}
 
     //! Because this function runs no matter what, Mario is able to interrupt the bully's
     //  death action by colliding with it. Since the bully hitbox is tall enough to collide
@@ -253,13 +263,13 @@ void bhv_bully_loop(void) {
             o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
             break;
     }
-
-    set_object_visibility(o, 3000);
+    set_object_visibility(o, 16000);
 }
 
 void big_bully_spawn_minion(s32 x, s32 y, s32 z, s16 yaw) {
     struct Object *bully =
         spawn_object_abs_with_rot(o, 0, MODEL_BULLY, bhvSmallBully, x, y, z, 0, yaw, 0);
+    bully->pointerSeed = (x + y + z) * 4;
     bully->oBullySubtype = BULLY_STYPE_MINION;
     bully->oBehParams2ndByte = BULLY_BP_SIZE_SMALL;
 }
@@ -279,7 +289,8 @@ void bhv_big_bully_with_minions_init(void) {
 void big_bully_spawn_star(void) {
     if (obj_lava_death() == TRUE) {
         spawn_mist_particles();
-        spawn_default_star(3700.0f, 600.0f, -5500.0f);
+        //spawn_default_star(3700.0f, 600.0f, -5500.0f);
+        spawn_default_star(gMarioState->pos[0], gMarioState->pos[1] + 250.f, gMarioState->pos[2]);
     }
 }
 

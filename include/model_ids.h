@@ -421,7 +421,6 @@
 // group 16
 #define MODEL_CHILL_BULLY                 0x64        // chilly_chief_geo
 #define MODEL_BIG_CHILL_BULLY             0x65        // chilly_chief_big_geo
-#define MODEL_MONEYBAG                    0x66        // moneybag_geo
 
 // group 17
 #define MODEL_SWOOP                       0x64        // swoop_geo
@@ -442,7 +441,7 @@
 #define MODEL_TTM_SLIDE_EXIT_PODIUM       0x7B        // ttm_geo_000DF4
 #define MODEL_WOODEN_SIGNPOST             0x7C        // wooden_signpost_geo
 #define MODEL_UNKNOWN_7D                  0x7D        // referenced in macro presets. Unknown usage
-// find me
+#define MODEL_MONEYBAG                    0x7E        // moneybag_geo
 #define MODEL_CANNON_BARREL               0x7F        // cannon_barrel_geo
 #define MODEL_CANNON_BASE                 0x80        // cannon_base_geo
 #define MODEL_BREAKABLE_BOX               0x81        // breakable_box_geo
@@ -534,7 +533,6 @@
 #define MODEL_CASTLE_STAR_DOOR_8_STARS    0xD5        // castle_geo_000F00
 #define MODEL_CASTLE_STAR_DOOR_70_STARS   0xD6        // castle_geo_000F00
 #define MODEL_RED_COIN                    0xD7        // red_coin_geo
-#define MODEL_RED_COIN_NO_SHADOW          0xD8        // red_coin_no_shadow_geo
 #define MODEL_METAL_BOX                   0xD9        // metal_box_geo
 #define MODEL_METAL_BOX_DL                0xDA        // metal_box_dl
 #define MODEL_NUMBER                      0xDB        // number_geo

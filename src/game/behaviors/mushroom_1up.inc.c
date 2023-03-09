@@ -1,7 +1,20 @@
 // mushroom_1up.inc.c
 
+struct Object *gGreenDemonPtr;
+
 void bhv_1up_interact(void) {
     if (obj_check_if_collided_with_object(o, gMarioObject)) {
+        if (o->behavior == segmented_to_virtual(bhvGreenDemon)){
+            // Green Demon
+            if (gMarioState->action & ACT_FLAG_INTANGIBLE) {
+                return;
+            } else {
+                gMarioState->health = 0xFF;
+            }
+        } else {
+            // Default Play
+            gMarioState->numLives++;
+        }
         play_sound(SOUND_GENERAL_COLLECT_1UP, gGlobalSoundSource);
 #ifdef MUSHROOMS_HEAL
         gMarioState->healCounter   = 31;
@@ -9,7 +22,6 @@ void bhv_1up_interact(void) {
         gMarioState->breathCounter = 31;
 #endif
 #endif
-        gMarioState->numLives++;
 #ifdef SAVE_NUM_LIVES
         save_file_set_num_lives(gMarioState->numLives);
 #endif
@@ -25,6 +37,11 @@ void bhv_1up_common_init(void) {
     o->oGravity = 3.0f;
     o->oFriction = 1.0f;
     o->oBuoyancy = 1.0f;
+    
+    if (o->behavior == segmented_to_virtual(bhvGreenDemon)) {
+        o->header.gfx.activeAreaIndex = -1;
+        gGreenDemonPtr = o;
+    }
 }
 
 void bhv_1up_init(void) {

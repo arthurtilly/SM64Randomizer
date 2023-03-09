@@ -8,10 +8,10 @@
 
 // The distance from Mario at which coin formations spawn their coins. Vanilla is 2000.0f.
 // Set this to o->oDrawingDistance for a more reasonable range at the cost of performance.
-#define COIN_FORMATION_DISTANCE 2000.0f
+#define COIN_FORMATION_DISTANCE 5000.0f
 
 // Moving Coins flicker and disappear when they hit lava instead of being instantly deleted.
-#define COIN_LAVA_FLICKER
+// #define COIN_LAVA_FLICKER
 
 // Allows for retries on collecting the remaining blue coins from a blue coin switch.
 // #define BLUE_COIN_SWITCH_RETRY
@@ -23,7 +23,7 @@
 
 // Floombas! These fellas sport custom behaviors (bhvFloomba, bhvFloombaTripletSpawner) and of course the iconic Floomba texture.
 // Also supports macros (macro_floomba, macro_huge_floomba, macro_tiny_floomba, macro_floomba_triplet_spawner, macro_floomba_quintuplet_spawner).
-#define FLOOMBAS
+// #define FLOOMBAS
 
 // -- HOOT --
 
@@ -31,7 +31,7 @@
 #define HOOT_YAW_FIX
 
 // Causes leaf particles to occasionally fall from trees which contain Hoot.
-#define HOOT_TREE_PARTICLES
+// #define HOOT_TREE_PARTICLES
 
 // -- MR I --
 
@@ -41,17 +41,17 @@
 // -- WATER RING --
 
 // Fix the water rings in DDD by checking for interaction rather than normals.
-#define FIX_WATER_RINGS
+// #define FIX_WATER_RINGS
 
 // -- POWER STAR --
 
 // Collecting a Power Star will fully heal Mario.
-#define POWER_STARS_HEAL
+// #define POWER_STARS_HEAL
 
 // -- 1-UP MUSHROOM --
 
 // Collecting a 1-Up Mushroom will fully heal Mario.
-#define MUSHROOMS_HEAL
+// #define MUSHROOMS_HEAL
 
 // -- PLATFORM ON TRACK --
 

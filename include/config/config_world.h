@@ -36,7 +36,7 @@
  */
 
 // Set this to the extended bounds mode you want, then do "make clean".
-#define EXTENDED_BOUNDS_MODE 1
+#define EXTENDED_BOUNDS_MODE 0
 
 // Don't touch the stuff past this point unless you know what you're doing!
 
@@ -71,13 +71,13 @@ STATIC_ASSERT(((EXTENDED_BOUNDS_MODE >= 0) && (EXTENDED_BOUNDS_MODE <= 3)), "You
 // The amount of cells in each axis in an area.
 #define NUM_CELLS                   (2 * LEVEL_BOUNDARY_MAX / CELL_SIZE)
 // The maximum amount of collision surfaces (static and dynamic combined)
-#define SURFACE_POOL_SIZE           (LEVEL_BOUNDARY_MAX / 2) // Vanilla: 2300
+#define SURFACE_POOL_SIZE           3000
 // The maximum amount of SurfaceNodes (static and dynamic combined).
 // Each cell has a SurfaceNode for every surface which intersects it,
 // so each cell a Surface intersects with gets its own SurfaceNode,
 // so larger surfaces means more SurfaceNodes.
 // Multiply SURFACE_POOL_SIZE by the average amount of cells the surfaces intersect.
-#define SURFACE_NODE_POOL_SIZE      (SURFACE_POOL_SIZE * 4) // Vanilla: 7000
+#define SURFACE_NODE_POOL_SIZE      7000
 
 // Flags for error messages.
 #define NOT_ENOUGH_ROOM_FOR_SURFACES (1 << 0)

@@ -39,6 +39,7 @@ struct SpawnInfo {
     /*0x14*/ void *behaviorScript;
     /*0x18*/ struct GraphNode *model;
     /*0x1C*/ struct SpawnInfo *next;
+    /*0x20*/ uintptr_t pointerSeed;
 };
 
 struct UnusedArea28 {
@@ -179,6 +180,7 @@ extern struct Area *gCurrentArea;
 extern s16 gCurrSaveFileNum;
 extern s16 gCurrLevelNum;
 
+extern u32 gTimeStartedLoadingArea;
 
 void override_viewport_and_clip(Vp *a, Vp *b, u8 c, u8 d, u8 e);
 void print_intro_text(void);

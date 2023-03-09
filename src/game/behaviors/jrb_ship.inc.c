@@ -22,9 +22,19 @@ void bhv_sunken_ship_part_loop(void) {
     cur_obj_disable_rendering();
 }
 
+void bhv_sunken_ship_collision_loop(void) {
+    if ((gCurrActNum > 1) || gJrbShipRaised)
+        obj_mark_for_deletion(o);
+}
+
+
 void bhv_ship_part_3_loop(void) {
     s16 initialPitch = o->oFaceAnglePitch;
     s16 initialRoll = o->oFaceAngleRoll;
+
+    if ((gCurrActNum == 1) && !(gJrbShipRaised)) {
+        obj_mark_for_deletion(o);
+    }
 
     cur_obj_set_pos_to_home_with_debug();
 
@@ -46,7 +56,9 @@ void bhv_jrb_sliding_box_loop(void) {
     Vec3f shipToBoxPos2;
     Vec3s shipRotation;
     struct Object *shipObj;
-    if (o->oJrbSlidingBoxShipObj == NULL) {
+    if ((gCurrActNum == 1) && !(gJrbShipRaised)) {
+        obj_mark_for_deletion(o);
+    } else if (o->oJrbSlidingBoxShipObj == NULL) {
         shipObj = cur_obj_nearest_object_with_behavior(bhvInSunkenShip3);
 
         if (shipObj != NULL) {

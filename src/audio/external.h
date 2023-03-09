@@ -4,11 +4,20 @@
 #include <PR/ultratypes.h>
 
 #include "types.h"
+#include "game/randomizer.h"
+#include "engine/math_util.h"
 
 // Sequence arguments, passed to seq_player_play_sequence. seqId may be bit-OR'ed with
 // SEQ_VARIATION; this will load the same sequence, but set a variation
 // bit which may be read by the sequence script.
 #define SEQUENCE_ARGS(priority, seqId) (((priority) << 8) | (seqId))
+
+#define SEQUENCE_ARGS_R(priority, seqId) ((priority << 8) | \
+    ((gOptionsSettings.cosmetic.s.musicOn == 1) ? \
+        (((seqId) & 0x80) | gRandomSongs[random_u16_seeded(gRandomizerGameSeed - (seqId)) % sizeof(gRandomSongs)]) \
+    : (gOptionsSettings.cosmetic.s.musicOn == 2 ? \
+        0 \
+    : seqId)))
 
 enum SoundModes {
     SOUND_MODE_STEREO,

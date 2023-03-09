@@ -17,6 +17,7 @@ enum ObjCollisionFlags {
 };
 
 //! Lots of these are duplicates
+struct Object *spawn_orange_number(s8 arg0, s16 arg1, s16 arg2, s16 arg3);
 void set_yoshi_as_not_dead(void);
 s32 coin_step(s16 *collisionFlagsPtr);
 void moving_coin_flicker(void);

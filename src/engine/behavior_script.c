@@ -15,6 +15,10 @@
 #include "graph_node.h"
 #include "surface_collision.h"
 #include "game/puppylights.h"
+#include "game/randomizer.h"
+#include "game/spawn_object.h"
+#include "level_table.h"
+#include "game/area.h"
 
 // Macros for retrieving arguments from behavior scripts.
 #define BHV_CMD_GET_1ST_U8(index)  (u8)((gCurBhvCommand[index] >> 24) & 0xFF) // unused
@@ -348,14 +352,179 @@ static s32 bhv_cmd_set_int(void) {
     return BHV_PROC_CONTINUE;
 }
 
-// Command 0x36: Unused. Sets the specified field to an integer. Wastes 4 bytes of space for no reason at all.
-static s32 bhv_cmd_set_int_unused(void) {
-    u8 field = BHV_CMD_GET_2ND_U8(0);
-    s32 value = BHV_CMD_GET_2ND_S16(1); // Taken from 2nd word instead of 1st
+static s32 bhv_cmd_randomize_object(void) {
+    u32 randType = BHV_CMD_GET_U32(1);
+    u8 randomize = FALSE;
+    Vec3s pos;
+    s32 signMessage;
+    f32 height;
+    tinymt32_t randomState;
+    tinymt32_init(&randomState, gRandomizerGameSeed + (gCurrentObject->pointerSeed/4));
 
-    cur_obj_set_int(field, value);
+    // Stuff for exclamation boxes when key objects only is enabled
+    if ((gOptionsSettings.gameplay.s.objectRandomization == 0) && (gCurrentObject->behavior == segmented_to_virtual(bhvExclamationBox))) {
+        s32 bparam = -1;
+        // Check if the box contains star
+        if (gCurrentObject->oBehParams2ndByte == 8) {
+            bparam = gCurrentObject->oBehParams >> 24;
+        } else if (gCurrentObject->oBehParams2ndByte >= 10 && gCurrentObject->oBehParams2ndByte <= 14) {
+            bparam = gCurrentObject->oBehParams2ndByte - 9;
+        }
+        
+        if ((gCurrLevelNum == LEVEL_JRB && gCurrAreaIndex == 2) || (gCurrLevelNum == LEVEL_PSS)) {
+            bparam = -1; // If in jrb ship, stay a box, but still randomize
+        } else {
+            randType &= ~RAND_TYPE_IMPORTANT; // Other boxes shouldnt be randomized
+        }
 
-    gCurBhvCommand += 2; // Twice as long
+        // If the box contains a star, despawn the box and spawn a star instead
+        if (bparam != -1) {
+            mark_obj_for_deletion(gCurrentObject);
+            struct Object *star = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, MODEL_STAR, bhvStar, gCurrentObject->oPosX, gCurrentObject->oPosY, gCurrentObject->oPosZ, 0, 0, 0);
+            star->oBehParams = bparam << 24;
+            star->pointerSeed = gCurrentObject->pointerSeed;
+
+            gCurBhvCommand++;
+            return BHV_PROC_CONTINUE;
+        }
+    }
+
+    // Funny moneybag
+    if ((gOptionsSettings.gameplay.s.safeSpawns != SPAWN_SAFETY_SAFE) && (gCurrentObject->behavior == segmented_to_virtual(bhvYellowCoin))) {
+        f32 rand = tinymt32_generate_float(&randomState);
+        f32 chance = gOptionsSettings.gameplay.s.safeSpawns == SPAWN_SAFETY_HARD ? (1 / 50.f) : (1 / 200.f);
+        if (rand < chance) { // 1 in 200 on normal, 1 in 50 on danger
+            mark_obj_for_deletion(gCurrentObject);
+            struct Object *moneybag = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, MODEL_YELLOW_COIN, bhvMoneybagHiddenRando, gCurrentObject->oPosX, gCurrentObject->oPosY, gCurrentObject->oPosZ, 0, 0, 0);
+            moneybag->pointerSeed = gCurrentObject->pointerSeed;
+
+            gCurBhvCommand++;
+            return BHV_PROC_CONTINUE;
+        }
+    }
+
+    if (((gOptionsSettings.gameplay.s.objectRandomization != 0) || (randType & RAND_TYPE_IMPORTANT)) && ((gOptionsSettings.gameplay.s.randomizeStarSpawns) || !(randType & RAND_TYPE_RANDO_STAR))) {
+        // Let red coins and coin formations spawn anywhere in TotWC and WMotR
+        if ((gCurrLevelNum == LEVEL_TOTWC) || (gCurrLevelNum == LEVEL_WMOTR)) {
+            if ((gCurrentObject->behavior == segmented_to_virtual(bhvRedCoin)) ||
+                (gCurrentObject->behavior == segmented_to_virtual(bhvCoinFormation)) ||
+                (gCurrentObject->behavior == segmented_to_virtual(bhvYellowCoin))) {
+                f32 coinMinX, coinMaxX, coinMinY, coinMaxY, coinMinZ, coinMaxZ;
+                if (gCurrLevelNum == LEVEL_TOTWC) {
+                    coinMinX = -2000;
+                    coinMaxX = 2000;
+                    coinMinY = -1800;
+                    coinMaxY = 1000;
+                    coinMinZ = -2000;
+                    coinMaxZ = 2000;
+                } else {
+                    coinMinX = -4000;
+                    coinMaxX = 4000;
+                    coinMinY = -2000;
+                    coinMaxY = 4000;
+                    coinMinZ = -4000;
+                    coinMaxZ = 4000;
+                }
+
+                // Simple checks to make sure the coin does not spawn inside geometry
+                while (TRUE) {
+                    struct Surface *surf;
+                    gCurrentObject->oPosX = get_val_in_range_uniform(coinMinX, coinMaxX, &randomState);
+                    gCurrentObject->oPosY = get_val_in_range_uniform(coinMinY, coinMaxY, &randomState);
+                    gCurrentObject->oPosZ = get_val_in_range_uniform(coinMinZ, coinMaxZ, &randomState);
+                    
+                    f32 floorHeight = find_floor(gCurrentObject->oPosX, gCurrentObject->oPosY, gCurrentObject->oPosZ, &surf);
+                    f32 ceilHeight = find_ceil(gCurrentObject->oPosX, floorHeight + 80, gCurrentObject->oPosZ, &surf);
+
+                    // Ceiling check
+                    if (gCurrentObject->oPosY > ceilHeight - 100.f)
+                        continue;
+
+                    floorHeight = find_floor(gCurrentObject->oPosX, ceilHeight - 80, gCurrentObject->oPosZ, &surf);
+
+                    // Floor check
+                    if (gCurrentObject->oPosY < floorHeight - 20.f)
+                        continue;
+
+                    // Wall check
+                    if (!raycast_wall_check(&gCurrentObject->oPosVec))
+                        continue;
+
+                    break;
+                }
+
+                gCurrentObject->oFaceAngleYaw = get_val_in_range_uniform(0, 65536, &randomState);
+                gCurBhvCommand++;
+                return BHV_PROC_CONTINUE;
+            }
+        }
+
+        // Max variation
+        if (randType & RAND_TYPE_MAX_VARIATION) {
+            switch(gOptionsSettings.gameplay.s.safeSpawns){
+            case SPAWN_SAFETY_SAFE:
+                height = 500.f;
+                break;
+            case SPAWN_SAFETY_HARD:
+                height = 660.f;
+                break;
+            default:
+                height = 600.f;
+            }
+
+            get_safe_position(gCurrentObject, pos, 300.f, height, &randomState, (randType & RAND_TYPE_SAFE ? FLOOR_SAFETY_MEDIUM : FLOOR_SAFETY_LOW), randType);
+            randomize = TRUE;
+        }
+        // Grounded
+        else if (randType & RAND_TYPE_GROUNDED) {
+            get_safe_position(gCurrentObject, pos, 0.f, 0.f, &randomState, FLOOR_SAFETY_HIGH, randType);
+            randomize = TRUE;
+        }
+        // Min variation
+        else if (randType & RAND_TYPE_MIN_VARIATION) {
+            switch(gOptionsSettings.gameplay.s.safeSpawns){
+            case SPAWN_SAFETY_SAFE:
+                height = 100.f;
+                break;
+            case SPAWN_SAFETY_DEFAULT:
+                height = 170.f;
+                break;
+            case SPAWN_SAFETY_HARD:
+                height = 250.f;
+            }
+            get_safe_position(gCurrentObject, pos, 50.f, height, &randomState, (randType & RAND_TYPE_SAFE ? FLOOR_SAFETY_MEDIUM : FLOOR_SAFETY_LOW), randType);
+            randomize = TRUE;
+        }
+
+        if (randomize) {
+            gCurrentObject->oPosX = pos[0];
+            gCurrentObject->oPosY = pos[1];
+            gCurrentObject->oPosZ = pos[2];
+            if (gCurrentObject->behavior != segmented_to_virtual(bhvPushableMetalBox))
+            {
+                gCurrentObject->oFaceAngleYaw = get_val_in_range_uniform(0, 65536, &randomState);
+                gCurrentObject->oMoveAngleYaw = gCurrentObject->oFaceAngleYaw;
+            }
+        }
+
+        gCurrentObject->oHomeX = gCurrentObject->oPosX;
+        gCurrentObject->oHomeY = gCurrentObject->oPosY;
+        gCurrentObject->oHomeZ = gCurrentObject->oPosZ;
+        gCurrentObject->oMoveAngleYaw = gCurrentObject->oFaceAngleYaw;
+    }
+
+    if (gCurrentObject->behavior == segmented_to_virtual(bhvMessagePanel)) {
+        signMessage = get_val_in_range_uniform(0, 169, &randomState);
+
+        // 20 is peach's letter, this crashes the game.
+        if (signMessage == 20) {
+            signMessage = 0;
+        }
+
+        gCurrentObject->oBehParams2ndByte = signMessage; // randomize sign messages
+    }
+
+    gCurBhvCommand++;
     return BHV_PROC_CONTINUE;
 }
 
@@ -809,7 +978,7 @@ static BhvCommandProc BehaviorCmdTable[] = {
     /*BHV_CMD_PARENT_BIT_CLEAR      */ bhv_cmd_parent_bit_clear,
     /*BHV_CMD_ANIMATE_TEXTURE       */ bhv_cmd_animate_texture,
     /*BHV_CMD_DISABLE_RENDERING     */ bhv_cmd_disable_rendering,
-    /*BHV_CMD_SET_INT_UNUSED        */ bhv_cmd_set_int_unused,
+    /*BHV_CMD_RANDOMIZE_OBJECT      */ bhv_cmd_randomize_object,
     /*BHV_CMD_SPAWN_WATER_DROPLET   */ bhv_cmd_spawn_water_droplet,
 };
 

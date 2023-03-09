@@ -268,6 +268,9 @@ Gfx *geo_wdw_set_initial_water_level(s32 callContext, UNUSED struct GraphNode *n
         } else {
             wdwWaterHeight = 1024;
         }
+
+        wdwWaterHeight = 31; // set WDW water level to always be lowest
+
         for (i = 0; i < *gEnvironmentRegions; i++) {
             gEnvironmentRegions[i * 6 + 6] = wdwWaterHeight;
         }

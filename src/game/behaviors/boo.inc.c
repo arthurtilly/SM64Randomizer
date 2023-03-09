@@ -52,13 +52,7 @@ static s32 boo_should_be_stopped(void) {
 }
 
 static s32 boo_should_be_active(void) {
-    f32 activationRadius;
-
-    if (cur_obj_has_behavior(bhvBalconyBigBoo)) {
-        activationRadius = 5000.0f;
-    } else {
-        activationRadius = 1500.0f;
-    }
+    f32 activationRadius = 5000.f;
 
     if (cur_obj_has_behavior(bhvMerryGoRoundBigBoo) || cur_obj_has_behavior(bhvMerryGoRoundBoo)) {
         if (gMarioOnMerryGoRound == TRUE) {
@@ -82,11 +76,6 @@ static s32 boo_should_be_active(void) {
 
 void bhv_courtyard_boo_triplet_init(void) {
     s32 i;
-#ifndef UNLOCK_ALL
-    if (gHudDisplay.stars < SPAWN_CASTLE_BOO_STAR_REQUIREMENT) {
-        obj_mark_for_deletion(o);
-    } else
-#endif
     {
         for (i = 0; i < 3; i++) {
             struct Object *boo = spawn_object_relative( BOO_BP_NORMAL,
@@ -96,6 +85,7 @@ void bhv_courtyard_boo_triplet_init(void) {
                 o, MODEL_BOO, bhvGhostHuntBoo );
             OR_BPARAM1(boo->oBehParams, COIN_INSIDE_BOO_BP_YELLOW_COIN);
             boo->oMoveAngleYaw = random_u16();
+            boo->pointerSeed = (o->pointerSeed + i)* 4;
         }
     }
 }
@@ -373,7 +363,7 @@ static void boo_act_0(void) {
     o->oMoveAngleYaw = o->oBooInitialMoveYaw;
     boo_stop();
 
-    o->oBooParentBigBoo = cur_obj_nearest_object_with_behavior(bhvGhostHuntBigBoo);
+    o->oBooParentBigBoo = (gCurrActNum == 1) ? cur_obj_nearest_object_with_behavior(bhvGhostHuntBigBoo) : NULL;
     o->oBooBaseScale = 1.0f;
     o->oBooTargetOpacity = 255;
 
@@ -437,7 +427,7 @@ static void boo_act_2(void) {
 
 static void boo_act_3(void) {
     if (boo_update_during_death()) {
-        if (o->oBehParams2ndByte != 0) {
+        if (o->oBehParams2ndByte != 0 || gCurrActNum != 1) {
             obj_mark_for_deletion(o);
         } else {
             o->oAction = 4;
@@ -565,17 +555,22 @@ static void big_boo_act_2(void) {
 }
 
 static void big_boo_spawn_ghost_hunt_star(void) {
-    spawn_default_star(980.0f, 1100.0f, 250.0f);
+    //spawn_default_star(980.0f, 1100.0f, 250.0f);
+    struct Surface *floor;
+    spawn_default_star(o->oPosX, find_floor(o->oPosX, o->oPosY, o->oPosZ, &floor) + 300.0f, o->oPosZ);
 }
 
 static void big_boo_spawn_balcony_star(void) {
-    spawn_default_star(700.0f, 3200.0f, 1900.0f);
+    //spawn_default_star(700.0f, 3200.0f, 1900.0f);
+    struct Surface *floor;
+    spawn_default_star(o->oPosX, find_floor(o->oPosX, o->oPosY, o->oPosZ, &floor) + 300.0f, o->oPosZ);
 }
 
 static void big_boo_spawn_merry_go_round_star(void) {
     struct Object *merryGoRound;
-
-    spawn_default_star(-1600.0f, -2100.0f, 205.0f);
+    struct Surface *floor;
+    //spawn_default_star(-1600.0f, -2100.0f, 205.0f);
+    spawn_default_star(o->oPosX, find_floor(o->oPosX, o->oPosY, o->oPosZ, &floor) + 300.0f, o->oPosZ);
 
     merryGoRound = cur_obj_nearest_object_with_behavior(bhvMerryGoRound);
 
@@ -626,9 +621,9 @@ static void big_boo_act_4(void) {
         if (o->oTimer > 60 && o->oDistanceToMario < 600.0f) {
             obj_set_pos(o,  973, 0, 717);
 
-            spawn_object_relative(0, 0, 0,    0, o, MODEL_BBH_STAIRCASE_STEP, bhvBooStaircase);
-            spawn_object_relative(1, 0, 0, -200, o, MODEL_BBH_STAIRCASE_STEP, bhvBooStaircase);
-            spawn_object_relative(2, 0, 0,  200, o, MODEL_BBH_STAIRCASE_STEP, bhvBooStaircase);
+            // spawn_object_relative(0, 0, 0,    0, o, MODEL_BBH_STAIRCASE_STEP, bhvBooStaircase);
+            // spawn_object_relative(1, 0, 0, -200, o, MODEL_BBH_STAIRCASE_STEP, bhvBooStaircase);
+            // spawn_object_relative(2, 0, 0,  200, o, MODEL_BBH_STAIRCASE_STEP, bhvBooStaircase);
 
             obj_mark_for_deletion(o);
         }
@@ -706,11 +701,6 @@ static void boo_with_cage_act_3(void) {
 }
 
 void bhv_boo_with_cage_init(void) {
-#ifndef UNLOCK_ALL
-    if (gHudDisplay.stars < SPAWN_CASTLE_BOO_STAR_REQUIREMENT) {
-        obj_mark_for_deletion(o);
-    } else
-#endif
     {
         struct Object *cage = spawn_object(o, MODEL_HAUNTED_CAGE, bhvBooCage);
         cage->oBehParams = o->oBehParams;
@@ -791,7 +781,7 @@ void bhv_boo_in_castle_loop(void) {
     if (o->oAction == 0) {
         cur_obj_hide();
 #ifndef UNLOCK_ALL
-        if (gHudDisplay.stars < SPAWN_CASTLE_BOO_STAR_REQUIREMENT) {
+        if (gHudDisplay.stars < gRequiredStars[STAR_REQ_BBH]) {
             obj_mark_for_deletion(o);
         }
 #endif

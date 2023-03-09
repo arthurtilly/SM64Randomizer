@@ -24,6 +24,7 @@
 #include "sound_init.h"
 #include "rumble_init.h"
 #include "config.h"
+#include "randomizer.h"
 
 u8  sDelayInvincTimer;
 s16 sInvulnerable;
@@ -763,19 +764,20 @@ u32 interact_water_ring(struct MarioState *m, UNUSED u32 interactType, struct Ob
 u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct Object *obj) {
     u32 starIndex;
     u32 starGrabAction = ACT_STAR_DANCE_EXIT;
-#ifdef NON_STOP_STARS
- #ifdef KEYS_EXIT_LEVEL
-    u32 noExit = !obj_has_model(obj, MODEL_BOWSER_KEY);
- #else
-    u32 noExit = TRUE;
- #endif
-#else // !NON_STOP_STARS
-    u32 noExit = (obj->oInteractionSubtype & INT_SUBTYPE_NO_EXIT) != 0;
-#endif // !NON_STOP_STARS
+
+    u32 nonstopType = gOptionsSettings.gameplay.s.nonstopMode;
+    if ((gCurrLevelNum == LEVEL_BOWSER_1) || (gCurrLevelNum == LEVEL_BOWSER_2)) {
+        nonstopType = 0;
+    }
+
+    u32 noExit = (obj->oInteractionSubtype & INT_SUBTYPE_NO_EXIT) || nonstopType;
     u32 grandStar = (obj->oInteractionSubtype & INT_SUBTYPE_GRAND_STAR) != 0;
 
+
     if (m->health >= 0x100) {
-        mario_stop_riding_and_holding(m);
+        if (nonstopType != 2) {
+            mario_stop_riding_and_holding(m);
+        }
 #if ENABLE_RUMBLE
         queue_rumble_data(5, 80);
 #endif
@@ -840,11 +842,17 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
         play_sound(SOUND_MENU_STAR_SOUND, m->marioObj->header.gfx.cameraToObject);
         update_mario_sound_and_camera(m);
 
+        if (((struct Object *)obj->oStarOrangeNumPointer) != NULL) {
+            obj_mark_for_deletion((struct Object *)obj->oStarOrangeNumPointer);
+        }
+        
         if (grandStar) {
             return set_mario_action(m, ACT_JUMBO_STAR_CUTSCENE, 0);
         }
 
-        return set_mario_action(m, starGrabAction, noExit + 2 * grandStar);
+        if ((nonstopType != 2) || ((gCurrCourseNum == COURSE_JRB) && (gCurrAreaIndex == 2))) {
+            return set_mario_action(m, starGrabAction, noExit + 2 * grandStar);
+        }
     }
 
     return FALSE;
@@ -917,14 +925,17 @@ u32 interact_warp(struct MarioState *m, UNUSED u32 interactType, struct Object *
 
 u32 interact_warp_door(struct MarioState *m, UNUSED u32 interactType, struct Object *obj) {
     u32 doorAction = ACT_UNINITIALIZED;
+    u32 text = DIALOG_024 << 16;
+    u32 numStars = save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1);
 #ifndef UNLOCK_ALL
     u32 saveFlags = save_file_get_flags();
-    s16 warpDoorId = (obj->oBehParams >> 24);
+    u32 warpDoorId = (obj->oBehParams >> 24) & 0xFF;
 #endif
 
     if (m->action == ACT_WALKING || m->action == ACT_DECELERATING) {
 #ifndef UNLOCK_ALL
-        if (warpDoorId == 1 && !(saveFlags & SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR)) {
+        if (gOptionsSettings.gameplay.s.keepStructure) {
+        if (warpDoorId == 0xFE && !(saveFlags & SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR)) {
             if (!(saveFlags & SAVE_FLAG_HAVE_KEY_2)) {
                 if (!sDisplayingDoorText) {
                     set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG,
@@ -938,7 +949,7 @@ u32 interact_warp_door(struct MarioState *m, UNUSED u32 interactType, struct Obj
             doorAction = ACT_UNLOCKING_KEY_DOOR;
         }
 
-        if (warpDoorId == 2 && !(saveFlags & SAVE_FLAG_UNLOCKED_BASEMENT_DOOR)) {
+        if (warpDoorId == 0xFF && !(saveFlags & SAVE_FLAG_UNLOCKED_BASEMENT_DOOR)) {
             if (!(saveFlags & SAVE_FLAG_HAVE_KEY_1)) {
                 if (!sDisplayingDoorText) {
                     // Moat door skip was intended confirmed
@@ -952,9 +963,10 @@ u32 interact_warp_door(struct MarioState *m, UNUSED u32 interactType, struct Obj
 
             doorAction = ACT_UNLOCKING_KEY_DOOR;
         }
+        }
 #endif
 
-        if (m->action == ACT_WALKING || m->action == ACT_DECELERATING) {
+        if ((numStars >= warpDoorId || warpDoorId >= 0xFE)) {
             u32 actionArg = should_push_or_pull_door(m, obj) + WARP_FLAG_DOOR_IS_WARP;
 
             if (doorAction == 0) {
@@ -968,6 +980,12 @@ u32 interact_warp_door(struct MarioState *m, UNUSED u32 interactType, struct Obj
             m->interactObj = obj;
             m->usedObj = obj;
             return set_mario_action(m, doorAction, actionArg);
+        } else if (!sDisplayingDoorText) {
+            text = DIALOG_024 << 16;
+            text += warpDoorId - numStars;
+
+            sDisplayingDoorText = TRUE;
+            return set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, text);
         }
     }
 
@@ -975,6 +993,10 @@ u32 interact_warp_door(struct MarioState *m, UNUSED u32 interactType, struct Obj
 }
 
 u32 get_door_save_file_flag(struct Object *door) {
+    if (gOptionsSettings.gameplay.s.randomStarDoorCounts != 0) {
+        return 0;
+    }
+
     u32 saveFileFlag = 0;
     s16 requiredNumStars = door->oBehParams >> 24;
 
@@ -1028,27 +1050,19 @@ u32 interact_door(struct MarioState *m, UNUSED u32 interactType, struct Object *
             return set_mario_action(m, enterDoorAction, actionArg);
 #ifndef UNLOCK_ALL
         } else if (!sDisplayingDoorText) {
-            u32 text = DIALOG_022 << 16;
-
-            switch (requiredNumStars) {
-                case  1: text = DIALOG_024 << 16; break;
-                case  3: text = DIALOG_025 << 16; break;
-                case  8: text = DIALOG_026 << 16; break;
-                case 30: text = DIALOG_027 << 16; break;
-                case 50: text = DIALOG_028 << 16; break;
-                case 70: text = DIALOG_029 << 16; break;
+            u32 text;
+            if (requiredNumStars == gRequiredStars[STAR_REQ_BITS]) {
+                text = DIALOG_029 << 16;
+                text += requiredNumStars;
+            } else {
+                text = DIALOG_024 << 16;
+                text += requiredNumStars - numStars;
             }
-
-            text += requiredNumStars - numStars;
 
             sDisplayingDoorText = TRUE;
             return set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, text);
         }
 #endif
-    } else if (m->action == ACT_IDLE && sDisplayingDoorText == TRUE && requiredNumStars == 70) {
-        m->interactObj = obj;
-        m->usedObj     = obj;
-        return set_mario_action(m, ACT_ENTERING_STAR_DOOR, should_push_or_pull_door(m, obj));
     }
 
     return FALSE;
@@ -1573,9 +1587,9 @@ u32 interact_cap(struct MarioState *m, UNUSED u32 interactType, struct Object *o
         m->flags |= capFlag;
 
         switch (capFlag) {
-            case MARIO_VANISH_CAP: capTime =  600; capMusic = SEQUENCE_ARGS(4, SEQ_EVENT_POWERUP  ); break;
-            case MARIO_METAL_CAP:  capTime =  600; capMusic = SEQUENCE_ARGS(4, SEQ_EVENT_METAL_CAP); break;
-            case MARIO_WING_CAP:   capTime = 1800; capMusic = SEQUENCE_ARGS(4, SEQ_EVENT_POWERUP  ); break;
+            case MARIO_VANISH_CAP: capTime =  600; capMusic = SEQUENCE_ARGS_R(4, SEQ_EVENT_POWERUP  ); break;
+            case MARIO_METAL_CAP:  capTime =  600; capMusic = SEQUENCE_ARGS_R(4, SEQ_EVENT_METAL_CAP); break;
+            case MARIO_WING_CAP:   capTime = 1800; capMusic = SEQUENCE_ARGS_R(4, SEQ_EVENT_POWERUP  ); break;
         }
 
         if (capTime > m->capTimer) {
@@ -1808,11 +1822,13 @@ void check_kick_or_punch_wall(struct MarioState *m) {
     }
 }
 
+extern u8 gFirstMarioFrame;
+
 void mario_process_interactions(struct MarioState *m) {
     sDelayInvincTimer = FALSE;
     sInvulnerable = (m->action & ACT_FLAG_INVULNERABLE) || m->invincTimer != 0;
 
-    if (!(m->action & ACT_FLAG_INTANGIBLE) && m->collidedObjInteractTypes != 0) {
+    if (!(m->action & ACT_FLAG_INTANGIBLE) && m->collidedObjInteractTypes != 0 && !gFirstMarioFrame) {
         s32 i;
         for (i = 0; i < ARRAY_COUNT(sInteractionHandlers); i++) {
             u32 interactType = sInteractionHandlers[i].interactType;
@@ -1828,6 +1844,8 @@ void mario_process_interactions(struct MarioState *m) {
                 }
             }
         }
+    } else if (gFirstMarioFrame) {
+        gFirstMarioFrame--;
     }
 
     if (m->invincTimer > 0 && !sDelayInvincTimer) {

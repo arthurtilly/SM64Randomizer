@@ -17,6 +17,8 @@
 #include "behavior_data.h"
 #include "string.h"
 #include "color_presets.h"
+#include "randomizer.h"
+#include "object_list_processor.h"
 
 #include "config.h"
 #include "config/config_world.h"
@@ -373,8 +375,9 @@ void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
     switch_ucode(GRAPH_NODE_UCODE_DEFAULT);
 #endif
 #ifdef VISUAL_DEBUG
+    if ( hitboxView) visualise_all_avoidance_points();
     if ( hitboxView) render_debug_boxes(DEBUG_UCODE_DEFAULT | DEBUG_BOX_CLEAR);
-    if (surfaceView) visual_surface_loop();
+    // if (surfaceView) visual_surface_loop();
 #endif
 }
 
@@ -697,8 +700,21 @@ void geo_process_generated_list(struct GraphNodeGenerated *node) {
 void geo_process_background(struct GraphNodeBackground *node) {
     Gfx *list = NULL;
 
-    if (node->fnNode.func != NULL) {
-        list = node->fnNode.func(GEO_CONTEXT_RENDER, &node->fnNode.node,
+    GraphNodeFunc nodeFunc = node->fnNode.func;
+    s32 background = node->background;
+
+    // If inside a BBH room, render black background instead of skybox
+    if (gCurrLevelNum == LEVEL_BBH && gMarioCurrentRoom != 0 &&
+                                      (gMarioCurrentRoom != 13 && // main outside area
+                                       gMarioCurrentRoom != 21 && // outside front door
+                                       gMarioCurrentRoom != 28 && // outside back door
+                                       gMarioCurrentRoom != 32)) { // outside shed door
+        nodeFunc = NULL;
+        background = 0;
+    }
+
+    if (nodeFunc != NULL) {
+        list = nodeFunc(GEO_CONTEXT_RENDER, &node->fnNode.node,
                                  (struct AllocOnlyPool *) gMatStack[gMatStackIndex]);
     }
     if (list != NULL) {
@@ -713,7 +729,7 @@ void geo_process_background(struct GraphNodeBackground *node) {
 
         gDPPipeSync(gfx++);
         gDPSetCycleType(gfx++, G_CYC_FILL);
-        gDPSetFillColor(gfx++, node->background);
+        gDPSetFillColor(gfx++, background);
         gDPFillRectangle(gfx++, GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), gBorderHeight,
         GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1, SCREEN_HEIGHT - gBorderHeight - 1);
         gDPPipeSync(gfx++);
@@ -1046,13 +1062,41 @@ void visualise_object_hitbox(struct Object *node) {
         debug_box(bnds1, bnds2, (DEBUG_SHAPE_BOX | DEBUG_UCODE_REJ));
     }
 }
+
+void visualise_avoidance_point(struct AvoidancePoint *point) {
+    Vec3f bnds1, bnds2;
+    vec3f_set(bnds1, point->pos[0], point->pos[1], point->pos[2]);
+    vec3f_set(bnds2, point->radius, point->height, point->radius);
+    if (point->behavior != bhvStub) {
+        debug_box_color(COLOR_RGBA32_DEBUG_AVOIDANCE_POINT_SPECIFIC);
+    } else if (point->safety == AVOIDANCE_SAFETY_ALL) {
+        debug_box_color(COLOR_RGBA32_DEBUG_AVOIDANCE_POINT_ALL);
+    } else {
+        debug_box_color(COLOR_RGBA32_DEBUG_AVOIDANCE_POINT_SAFETY);
+    }
+    debug_box(bnds1, bnds2, (DEBUG_SHAPE_CYLINDER | DEBUG_UCODE_REJ));
+}
+
+extern AreaParamsArray *sLevelParams[];
+extern struct Object *gMarioObject;
+void visualise_all_avoidance_points(void) {
+    if (gMarioObject == NULL) return;
+    struct AreaParams *areaParams = &(*sLevelParams[gCurrLevelNum - 4])[gCurrAreaIndex - 1];
+    for (u32 i = 0; i < areaParams->numAvoidancePoints; i++) {
+        struct AvoidancePoint *avoidancePoint = &(*areaParams->avoidancePoints)[i];
+        visualise_avoidance_point(avoidancePoint);
+    }
+    for (u32 i = 0; i < gNumDynamicAvoidancePoints; i++) {
+        visualise_avoidance_point(&gDynamicAvoidancePoints[i]);
+    }
+}
 #endif
 
 /**
  * Process an object node.
  */
 void geo_process_object(struct Object *node) {
-    if (node->header.gfx.areaIndex == gCurGraphNodeRoot->areaIndex) {
+    if ((node->header.gfx.areaIndex == gCurGraphNodeRoot->areaIndex) || (node->header.gfx.activeAreaIndex == -1)) {
         if (node->header.gfx.throwMatrix != NULL) {
             mtxf_mul(gMatStack[gMatStackIndex + 1], *node->header.gfx.throwMatrix,
                      gMatStack[gMatStackIndex]);
@@ -1078,7 +1122,7 @@ void geo_process_object(struct Object *node) {
 
             if (node->header.gfx.sharedChild != NULL) {
 #ifdef VISUAL_DEBUG
-                if (hitboxView) visualise_object_hitbox(node);
+                // if (hitboxView) visualise_object_hitbox(node);
 #endif
                 gCurGraphNodeObject = (struct GraphNodeObject *) node;
                 node->header.gfx.sharedChild->parent = &node->header.gfx.node;

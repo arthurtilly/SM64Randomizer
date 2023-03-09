@@ -9,7 +9,8 @@ void bub_spawner_act_spawn_bubs(void) {
     s32 amt = o->oCheepCheepSpawnerSpawnAmount;
     if (o->oDistanceToMario < 1500.0f) {
         for (i = 0; i < amt; i++) {
-            spawn_object(o, MODEL_BUB, bhvBub);
+            struct Object *bub = spawn_object(o, MODEL_BUB, bhvBub);
+            bub->pointerSeed = o->pointerSeed + (i*4);
         }
         o->oAction = BUB_SPAWNER_ACT_IDLE;
     }

@@ -3,7 +3,7 @@
 void bhv_hidden_star_init(void) {
     s16 remainingTriggers = count_objects_with_behavior(bhvHiddenStarTrigger);
     if (remainingTriggers == 0) {
-        struct Object *starObj = spawn_object_abs_with_rot(o, 0, MODEL_STAR, bhvStar, o->oPosX, o->oPosY, o->oPosZ, 0, 0, 0);
+        struct Object *starObj = spawn_object_abs_with_rot(o, 0, MODEL_STAR, bhvStarNoRandom, o->oPosX, o->oPosY, o->oPosZ, 0, 0, 0);
         starObj->oBehParams = o->oBehParams;
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
@@ -30,6 +30,13 @@ void bhv_hidden_star_loop(void) {
 }
 
 void bhv_hidden_star_trigger_loop(void) {
+    if (gGlobalTimer % 5 == 0) {
+        struct Object *sparkle = spawn_object(o, 149, bhvCoinSparkles);
+        sparkle->oPosX += random_float() * 100 - 50;
+        sparkle->oPosY += random_float() * 100 - 50;
+        sparkle->oPosZ += random_float() * 100 - 50;
+    }
+
     if (obj_check_if_collided_with_object(o, gMarioObject)) {
         struct Object *hiddenStar = cur_obj_nearest_object_with_behavior(bhvHiddenStar);
 

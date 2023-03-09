@@ -32,7 +32,7 @@ void bhv_fire_piranha_plant_init(void) {
     obj_set_hitbox(o, &sFirePiranhaPlantHitbox);
 
     if (GET_BPARAM2(o->oBehParams) != FIRE_PIRANHA_PLANT_BP_NORMAL) {
-        o->oFlags |= OBJ_FLAG_PERSISTENT_RESPAWN;
+        // o->oFlags |= OBJ_FLAG_PERSISTENT_RESPAWN; //! We don't want these to respawn.
         o->oHealth = 1;
 
         if (GET_BPARAM3(o->oBehParams)) {
@@ -42,10 +42,19 @@ void bhv_fire_piranha_plant_init(void) {
         }
     }
 
-    sNumActiveFirePiranhaPlants = sNumKilledFirePiranhaPlants = 0;
+    // The tracker is accurate between area swaps
+    sNumKilledFirePiranhaPlants = 5 - count_objects_with_behavior(bhvFirePiranhaPlantStar);
+    sNumActiveFirePiranhaPlants = /* sNumKilledFirePiranhaPlants = */ 0;
 }
 
 static void fire_piranha_plant_act_hide(void) {
+    if ((gGlobalTimer % 30 == 0) && (GET_BPARAM2(o->oBehParams))) {
+        struct Object *sparkle = spawn_object(o, 149, bhvCoinSparkles);
+        sparkle->oPosX += random_float() * 250 - 125;
+        sparkle->oPosY += random_float() * 40;
+        sparkle->oPosZ += random_float() * 250 - 125;
+    }
+
     if (o->oFirePiranhaPlantDeathSpinTimer != 0) {
         o->oMoveAngleYaw += (s32) o->oFirePiranhaPlantDeathSpinVel;
         approach_f32_ptr(&o->oFirePiranhaPlantDeathSpinVel, 0.0f, 200.0f);
@@ -64,7 +73,8 @@ static void fire_piranha_plant_act_hide(void) {
 
             if (GET_BPARAM2(o->oBehParams) != FIRE_PIRANHA_PLANT_BP_NORMAL && o->oHealth == 0) {
                 if (++sNumKilledFirePiranhaPlants == 5) {
-                    spawn_default_star(-6300.0f, -1850.0f, -6300.0f);
+                    // spawn_default_star(-6300.0f, -1850.0f, -6300.0f);
+                    spawn_default_star(o->oPosX, o->oPosY + 300.0f, o->oPosZ);
                 }
 
                 obj_die_if_health_non_positive();

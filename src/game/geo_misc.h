@@ -25,6 +25,7 @@ extern Gfx *geo_exec_inside_castle_light(s32 callContext, struct GraphNode *node
 extern Gfx *geo_exec_flying_carpet_timer_update(s32 callContext, struct GraphNode *node, UNUSED Mat4 mtx);
 extern Gfx *geo_exec_flying_carpet_create(s32 callContext, struct GraphNode *node, UNUSED Mat4 mtx);
 extern Gfx *geo_exec_cake_end_screen(s32 callContext, struct GraphNode *node, UNUSED Mat4 mtx);
+extern Gfx *geo_set_star_color(s32 callContext, struct GraphNode *node, UNUSED Mat4 mtx);
 
 #define gLoadBlockTexture(dl, width, height, format, image)                                                  \
 {                                                                                                            \

@@ -415,7 +415,7 @@ static const Vtx coin_seg3_vertex_red[] = {
     {{{   -35,     70,      0}, 0, {     0,      0}, {0xff, 0x00, 0x00, 0xff}}},
 };
 #else
-static const Vtx coin_seg3_vertex_yellow[] = {
+Vtx coin_seg3_vertex_yellow[] = {
     {{{   -32,      0,      0}, 0, {     0,   1984}, {0xff, 0xff, 0x00, 0xff}}},
     {{{    32,      0,      0}, 0, {  1984,   1984}, {0xff, 0xff, 0x00, 0xff}}},
     {{{    32,     64,      0}, 0, {  1984,      0}, {0xff, 0xff, 0x00, 0xff}}},
@@ -423,7 +423,7 @@ static const Vtx coin_seg3_vertex_yellow[] = {
 };
 
 // 0x03005700
-static const Vtx coin_seg3_vertex_blue[] = {
+Vtx coin_seg3_vertex_blue[] = {
     {{{   -50,      0,      0}, 0, {     0,   1984}, {0x78, 0x78, 0xff, 0xff}}},
     {{{    50,      0,      0}, 0, {  1984,   1984}, {0x78, 0x78, 0xff, 0xff}}},
     {{{    50,    100,      0}, 0, {  1984,      0}, {0x78, 0x78, 0xff, 0xff}}},
@@ -431,7 +431,7 @@ static const Vtx coin_seg3_vertex_blue[] = {
 };
 
 // 0x03005740
-static const Vtx coin_seg3_vertex_red[] = {
+Vtx coin_seg3_vertex_red[] = {
     {{{   -35,      0,      0}, 0, {     0,   1984}, {0xff, 0x00, 0x00, 0xff}}},
     {{{    35,      0,      0}, 0, {  1984,   1984}, {0xff, 0x00, 0x00, 0xff}}},
     {{{    35,     70,      0}, 0, {  1984,      0}, {0xff, 0x00, 0x00, 0xff}}},

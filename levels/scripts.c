@@ -106,11 +106,11 @@ const LevelScript level_main_scripts_entry[] = {
     LOAD_MODEL_FROM_GEO(MODEL_RED_FLAME_SHADOW,        red_flame_shadow_geo),
     LOAD_MODEL_FROM_GEO(MODEL_1UP,                     mushroom_1up_geo),
     LOAD_MODEL_FROM_GEO(MODEL_RED_COIN,                red_coin_geo),
-    LOAD_MODEL_FROM_GEO(MODEL_RED_COIN_NO_SHADOW,      red_coin_no_shadow_geo),
     LOAD_MODEL_FROM_GEO(MODEL_NUMBER,                  number_geo),
     LOAD_MODEL_FROM_GEO(MODEL_EXPLOSION,               explosion_geo),
     LOAD_MODEL_FROM_GEO(MODEL_DIRT_ANIMATION,          dirt_animation_geo),
     LOAD_MODEL_FROM_GEO(MODEL_CARTOON_STAR,            cartoon_star_geo),
+    LOAD_MODEL_FROM_GEO(MODEL_MONEYBAG,                moneybag_geo),
 #ifdef IA8_30FPS_COINS
     LOAD_MODEL_FROM_GEO(MODEL_SILVER_COIN,             silver_coin_geo),
     LOAD_MODEL_FROM_GEO(MODEL_SILVER_COIN_NO_SHADOW,   silver_coin_no_shadow_geo),
@@ -339,7 +339,6 @@ const LevelScript script_func_global_16[] = {
 const LevelScript script_func_global_17[] = {
     LOAD_MODEL_FROM_GEO(MODEL_CHILL_BULLY,             chilly_chief_geo),
     LOAD_MODEL_FROM_GEO(MODEL_BIG_CHILL_BULLY,         chilly_chief_big_geo),
-    LOAD_MODEL_FROM_GEO(MODEL_MONEYBAG,                moneybag_geo),
     RETURN(),
 };
 

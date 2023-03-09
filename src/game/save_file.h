@@ -8,6 +8,7 @@
 #include "puppycam2.h"
 
 #include "course_table.h"
+#include "randomizer.h"
 
 #if defined(SRAM)
     #define EEPROM_SIZE 0x8000
@@ -30,14 +31,13 @@ struct SaveFile {
     // cap can always be found in a fixed spot within the course
     u8 capLevel;
     u8 capArea;
-#ifdef SAVE_NUM_LIVES
-    s8 numLives;
-    u8 filler[5];
-#else
+
     // Note: the coordinates get set, but are never actually used, since the
     // cap can always be found in a fixed spot within the course
-    Vec3s capPos; // 48 bits
-#endif
+    u32 seed;
+    struct OptionsSettings options;
+    // Vec3s capPos;
+
 
     u32 flags;
 
@@ -63,6 +63,9 @@ struct MainMenuSaveData {
     // the older the high score is. This is used for tie-breaking when displaying
     // on the high score screen.
     u32 coinScoreAges[NUM_SAVE_FILES];
+
+    // To increase randomization between loads.
+    u32 randomNum;
     u8 soundMode: 2;
 #ifdef WIDE
     u8 wideMode: 1;
@@ -70,21 +73,20 @@ struct MainMenuSaveData {
 
 #if MULTILANG
     u8 language: 2;
-#define SUBTRAHEND 8
-#else
-#define SUBTRAHEND 6
 #endif
     u8 firstBoot;
 
     #ifdef PUPPYCAM
     struct gPuppyOptions saveOptions;
     #endif
+
+    u32 padding;
     struct SaveBlockSignature signature;
 };
 
 struct SaveBuffer {
     // Each of the four save files has two copies. If one is bad, the other is used as a backup.
-    struct SaveFile files[NUM_SAVE_FILES][2];
+    struct SaveFile files[NUM_SAVE_FILES];
     // Main menu data, storing config options.
     struct MainMenuSaveData menuData;
 };
@@ -96,6 +98,9 @@ extern void puppycam_check_save(void);
 #endif
 
 STATIC_ASSERT(sizeof(struct SaveBuffer) <= EEPROM_SIZE, "ERROR: Save struct too big for specified save type");
+
+STATIC_ASSERT((sizeof(struct SaveFile) & 7) == 0, "ERROR: Save file not 8 byte aligned");
+STATIC_ASSERT((sizeof(struct MainMenuSaveData) & 7) == 0, "ERROR: Menu data not 8 byte aligned");
 
 extern u8 gLastCompletedCourseNum;
 extern u8 gLastCompletedStarNum;
@@ -132,6 +137,7 @@ enum SaveProgressFlags {
     SAVE_FLAG_CAP_ON_UKIKI           = (1 << 18), /* 0x00040000 */
     SAVE_FLAG_CAP_ON_MR_BLIZZARD     = (1 << 19), /* 0x00080000 */
     SAVE_FLAG_UNLOCKED_50_STAR_DOOR  = (1 << 20), /* 0x00100000 */
+    SAVE_FLAG_IS_SET_SEED            = (1 << 21), /* 0x00200000 */
     SAVE_FLAG_COLLECTED_TOAD_STAR_1  = (1 << 24), /* 0x01000000 */
     SAVE_FLAG_COLLECTED_TOAD_STAR_2  = (1 << 25), /* 0x02000000 */
     SAVE_FLAG_COLLECTED_TOAD_STAR_3  = (1 << 26), /* 0x04000000 */
@@ -170,11 +176,12 @@ extern struct WarpCheckpoint gWarpCheckpoint;
 extern s8 gMainMenuDataModified;
 extern s8 gSaveFileModified;
 
+void save_main_menu_data(void);
+void save_file_set_seed_and_options(s32 fileNum);
 void save_file_do_save(s32 fileIndex);
 void save_file_erase(s32 fileIndex);
 void save_file_copy(s32 srcFileIndex, s32 destFileIndex);
 void save_file_load_all(void);
-void save_file_reload(void);
 void save_file_collect_star_or_key(s16 coinScore, s16 starIndex);
 s32 save_file_exists(s32 fileIndex);
 u32 save_file_get_max_coin_score(s32 courseIndex);

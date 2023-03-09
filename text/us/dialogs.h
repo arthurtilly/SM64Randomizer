@@ -294,12 +294,9 @@ This key doesn't fit!\n\
 Maybe it's for the\n\
 basement..."))
 
-DEFINE_DIALOG(DIALOG_024, 1, 5, 95, 200, _("\
-You need Star power to\n\
-open this door. Recover a\n\
-Power Star from an enemy\n\
-inside one of the castle's\n\
-paintings."))
+DEFINE_DIALOG(DIALOG_024, 1, 2, 95, 200, _("\
+You need [%] more Stars\n\
+to open this door."))
 
 DEFINE_DIALOG(DIALOG_025, 1, 4, 95, 200, _("\
 It takes the power of\n\
@@ -328,7 +325,7 @@ Stars."))
 DEFINE_DIALOG(DIALOG_029, 1, 5, 95, 200, _("\
 To open the door that\n\
 leads to the 『endless』\n\
-stairs, you need 70\n\
+stairs, you need [%]\n\
 Stars.\n\
 Bwa ha ha!"))
 

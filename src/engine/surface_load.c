@@ -14,6 +14,8 @@
 #include "game/object_list_processor.h"
 #include "surface_load.h"
 #include "game/puppyprint.h"
+#include "game/ingame_menu.h"
+#include "game/randomizer.h"
 
 #include "config.h"
 
@@ -124,6 +126,10 @@ static void add_surface_to_cell(s32 dynamic, s32 cellX, s32 cellZ, struct Surfac
     } else {
         listIndex = SPATIAL_PARTITION_WALLS;
         sortDir = 0; // insertion order
+
+        if (surface->normal.x < -0.707 || surface->normal.x > 0.707) {
+            surface->flags |= SURFACE_FLAG_X_PROJECTION;
+        }
     }
 
     s32 surfacePriority = surface->upperY * sortDir;
@@ -167,13 +173,6 @@ static s32 lower_cell_index(s32 coord) {
     // [0, NUM_CELLS)
     s32 index = coord / CELL_SIZE;
 
-    // Include extra cell if close to boundary
-    //! Some wall checks are larger than the buffer, meaning wall checks can
-    //  miss walls that are near a cell border.
-    if (coord % CELL_SIZE < 50) {
-        index--;
-    }
-
     // Potentially > NUM_CELLS - 1, but since the upper index is <= NUM_CELLS - 1, not exploitable
     return MAX(0, index);
 }
@@ -192,13 +191,6 @@ static s32 upper_cell_index(s32 coord) {
 
     // [0, NUM_CELLS)
     s32 index = coord / CELL_SIZE;
-
-    // Include extra cell if close to boundary
-    //! Some wall checks are larger than the buffer, meaning wall checks can
-    //  miss walls that are near a cell border.
-    if (coord % CELL_SIZE > CELL_SIZE - 50) {
-        index++;
-    }
 
     // Potentially < 0, but since lower index is >= 0, not exploitable
     return MIN((NUM_CELLS - 1), index);
@@ -230,6 +222,21 @@ static void add_surface(struct Surface *surface, s32 dynamic) {
     }
 }
 
+s32 vec3f_normalize2(Vec3f dest) {
+    register f32 mag = (sqr(dest[0]) + sqr(dest[1]) + sqr(dest[2]));
+    if (mag > NEAR_ZERO) {
+        register f32 invsqrt = (1.0f / sqrtf(mag));
+        vec3_mul_val(dest, invsqrt);
+        return TRUE;
+    } else {
+        // Default to up vector.
+        dest[0] = 0;
+        ((u32 *) dest)[1] = FLOAT_ONE;
+        dest[2] = 0;
+        return FALSE;
+    }
+}
+
 /**
  * Initializes a Surface struct using the given vertex data
  * @param vertexData The raw data containing vertex positions
@@ -248,6 +255,10 @@ static struct Surface *read_surface_data(TerrainData *vertexData, TerrainData **
     vec3s_copy(v[2], (vertexData + offset[2]));
 
     find_vector_perpendicular_to_plane(n, v[0], v[1], v[2]);
+
+    if (!vec3f_normalize2(n)) {
+        return NULL;
+    }
 
     vec3f_normalize(n);
 
@@ -566,7 +577,7 @@ void transform_object_vertices(TerrainData **data, TerrainData *vertexData) {
 /**
  * Load in the surfaces for the o. This includes setting the flags, exertion, and room.
  */
-void load_object_surfaces(TerrainData **data, TerrainData *vertexData) {
+void load_object_surfaces(TerrainData **data, TerrainData *vertexData, s32 dynamic) {
     s32 i;
 
     s32 surfaceType = *(*data)++;
@@ -601,7 +612,7 @@ void load_object_surfaces(TerrainData **data, TerrainData *vertexData) {
 
             surface->flags |= flags;
             surface->room = room;
-            add_surface(surface, TRUE);
+            add_surface(surface, dynamic);
         }
 
 #ifdef ALL_SURFACES_HAVE_FORCE
@@ -665,7 +676,7 @@ void load_object_collision_model(void) {
     // Update if no Time Stop, in range, and in the current room.
     if (
         !(gTimeStopState & TIME_STOP_ACTIVE)
-        && (marioDist < o->oCollisionDistance)
+        && (marioDist < o->oCollisionDistance || gIgnoreCollisionDistance)
         && !(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)
     ) {
         collisionData++;
@@ -673,8 +684,39 @@ void load_object_collision_model(void) {
 
         // TERRAIN_LOAD_CONTINUE acts as an "end" to the terrain data.
         while (*collisionData != TERRAIN_LOAD_CONTINUE) {
-            load_object_surfaces(&collisionData, vertexData);
+            load_object_surfaces(&collisionData, vertexData, TRUE);
         }
     }
     COND_BIT((marioDist < o->oDrawingDistance), o->header.gfx.node.flags, GRAPH_RENDER_ACTIVE);
+}
+
+void load_static_object_collision_model(void) {
+    s16 vertexData[600];
+
+    s16 *collisionData = gCurrentObject->collisionData;
+
+    collisionData++;
+
+    transform_object_vertices(&collisionData, vertexData);
+
+    // TERRAIN_LOAD_CONTINUE acts as an "end" to the terrain data.
+    while (*collisionData != TERRAIN_LOAD_CONTINUE) {
+        load_object_surfaces(&collisionData, vertexData, FALSE);
+    }
+}
+
+void load_static_object_visual_model(void) {
+    f32 marioDist = gCurrentObject->oDistanceToMario;
+
+    // On an object's first frame, the distance is set to 19000.0f.
+    // If the distance hasn't been updated, update it now.
+    if (gCurrentObject->oDistanceToMario == 19000.0f) {
+        marioDist = dist_between_objects(gCurrentObject, gMarioObject);
+    }
+
+    if (marioDist < gCurrentObject->oDrawingDistance) {
+        gCurrentObject->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
+    } else {
+        gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
+    }
 }

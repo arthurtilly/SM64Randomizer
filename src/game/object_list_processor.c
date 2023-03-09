@@ -22,6 +22,10 @@
 #include "puppyprint.h"
 #include "puppylights.h"
 #include "profiling.h"
+#include "engine/math_util.h"
+#include "randomizer.h"
+#include "main.h"
+#include "course_table.h"
 
 
 /**
@@ -150,7 +154,7 @@ s32 gEnvironmentLevels[20];
 RoomData gDoorAdjacentRooms[60][2];
 s16 gMarioCurrentRoom;
 s16 gTHIWaterDrained;
-s16 gTTCSpeedSetting;
+s16 gTTCSpeedSetting = TTC_SPEED_STOPPED;
 s16 gMarioShotFromCannon;
 s16 gCCMEnteredSlide;
 s16 gNumRoomedObjectsInMarioRoom;
@@ -166,7 +170,8 @@ struct ObjectNode gObjectListArray[16];
 /**
  * The order that object lists are processed in a frame.
  */
-s8 sObjectListUpdateOrder[] = { OBJ_LIST_SPAWNER,
+s8 sObjectListUpdateOrder[] = { OBJ_LIST_STATIC_SURFACE,
+                                OBJ_LIST_SPAWNER,
                                 OBJ_LIST_SURFACE,
                                 OBJ_LIST_POLELIKE,
                                 OBJ_LIST_PLAYER,
@@ -327,8 +332,12 @@ s32 update_objects_during_time_stop(struct ObjectNode *objList, struct ObjectNod
                 unfrozen = TRUE;
             }
 
-            if ((gCurrentObject->oInteractType & (INTERACT_DOOR | INTERACT_WARP_DOOR))
-                && !(gTimeStopState & TIME_STOP_MARIO_AND_DOORS)) {
+            if (gCurrentObject->behavior == segmented_to_virtual(bhvOrangeNumber)) {
+                unfrozen = TRUE;
+            }
+
+            if ((gCurrentObject->oInteractType & (INTERACT_DOOR | INTERACT_WARP_DOOR)) &&
+                !(gTimeStopState & TIME_STOP_MARIO_AND_DOORS)) {
                 unfrozen = TRUE;
             }
 
@@ -483,7 +492,12 @@ void spawn_objects_from_info(UNUSED s32 unused, struct SpawnInfo *spawnInfo) {
             object->oBehParams2ndByte = GET_BPARAM2(spawnInfo->behaviorArg);
 
             object->behavior = script;
-            object->unused1 = 0;
+            object->pointerSeed = spawnInfo->pointerSeed;
+
+            // Warps are done here so that they randomize before Mario is spawned
+            if ((script == segmented_to_virtual(bhvSpinAirborneWarp)) && (gCurrCourseNum != COURSE_NONE) && (gOptionsSettings.gameplay.s.randomLevelSpawn)) {
+                get_safe_position(object, spawnInfo->startPos, 700.f, 900.f, &gGlobalRandomState, FLOOR_SAFETY_HIGH, RAND_TYPE_MAX_VARIATION | RAND_TYPE_CAN_BE_UNDERWATER | RAND_TYPE_SPAWN_TOP_OF_SLIDE | RAND_TYPE_LIMITED_BBH_HMC_SPAWNS | RAND_TYPE_SAFE);
+            }
 
             // Record death/collection in the SpawnInfo
             object->respawnInfoType = RESPAWN_INFO_TYPE_NORMAL;
@@ -547,6 +561,8 @@ void clear_objects(void) {
  * Update spawner and surface objects.
  */
 void update_terrain_objects(void) {
+    gObjectCounter = update_objects_in_list(&gObjectLists[OBJ_LIST_STATIC_SURFACE]);
+
     gObjectCounter = update_objects_in_list(&gObjectLists[OBJ_LIST_SPAWNER]);
     profiler_update(PROFILER_TIME_SPAWNER);
 
@@ -561,7 +577,7 @@ void update_terrain_objects(void) {
 void update_non_terrain_objects(void) {
     s32 listIndex;
 
-    s32 i = 2;
+    s32 i = 3;
     while ((listIndex = sObjectListUpdateOrder[i]) != -1) {
         if (listIndex == OBJ_LIST_PLAYER) {
             profiler_update(PROFILER_TIME_BEHAVIOR_BEFORE_MARIO);
@@ -633,6 +649,7 @@ void update_objects(UNUSED s32 unused) {
 
     // Update spawners and objects with surfaces
     update_terrain_objects();
+    gIgnoreCollisionDistance = FALSE;
 
     // If Mario was touching a moving platform at the end of last frame, apply
     // displacement now

@@ -13,6 +13,17 @@ struct ObjectHitbox sUnagiHitbox = {
 };
 
 void bhv_unagi_init(void) {
+    // This code puts unagi into the proper hole for Nonstop after leaving the ship.
+    if (gJrbShipRaised) {
+        o->oHomeX = o->oPosX = 8270;
+        o->oHomeY = o->oPosY = -3130;
+        o->oHomeZ = o->oPosZ = 1846;
+        o->oMoveAngleYaw = o->oFaceAngleYaw = 285 * 0x8000 / 180;
+        o->oBehParams = (1 << 24) | (UNAGI_BP_IN_CAVE << 16);
+        o->oBehParams2ndByte = UNAGI_BP_IN_CAVE;
+    }
+    init_star_color(o, gCurrCourseNum, 1);
+
     if (o->oBehParams2ndByte != UNAGI_BP_IN_CAVE) {
         o->oPathedStartWaypoint = segmented_to_virtual(jrb_seg7_trajectory_unagi_1);
         if (o->oBehParams2ndByte == UNAGI_BP_IN_SHIP) {

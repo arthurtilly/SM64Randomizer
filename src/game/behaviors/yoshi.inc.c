@@ -15,8 +15,8 @@ void bhv_yoshi_init(void) {
     if (sYoshiDead == TRUE) {
 #else
     if ((save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_NUM_TO_INDEX(COURSE_MIN), COURSE_NUM_TO_INDEX(COURSE_MAX)) < 120)
-        || sYoshiDead == TRUE) {
 #endif
+        || sYoshiDead == TRUE) {
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
 }

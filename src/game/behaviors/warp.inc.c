@@ -1,5 +1,9 @@
 // warp.inc.c
 
+void bhv_warp_init(void) {
+    create_dynamic_avoidance_point(&o->oPosVec, 120.f, 300.f, 20.f);
+}
+
 void bhv_warp_loop(void) {
     if (o->oTimer == 0) {
         u16 radius = GET_BPARAM1(o->oBehParams);

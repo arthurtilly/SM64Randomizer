@@ -7,6 +7,10 @@
  * dummy object referenced by ukiki (bhvUkikiCageChild).
  */
 
+void bhv_ukiki_cage_star_init(void) {
+    init_star_color(o, gCurrCourseNum, 1);
+}
+
 /**
  * Behavior for the cage star.
  * Only really used for initializing then spawning the star.

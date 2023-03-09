@@ -8,6 +8,7 @@
 #include "surface_load.h"
 #include "game/puppyprint.h"
 #include "game/rendering_graph_node.h"
+#include "game/randomizer.h"
 
 #include "config.h"
 #include "config/config_world.h"
@@ -25,37 +26,133 @@ Vec3s gVec3sZero = {     0,     0,     0 };
 Vec3i gVec3iZero = {     0,     0,     0 };
 Vec3s gVec3sOne  = {     1,     1,     1 };
 
-static u16 gRandomSeed16;
+/* TinyMT 32-bit implementation */
+
+/**
+ * This function changes internal state of tinymt32.
+ * Users should not call this function directly.
+ * @param random tinymt internal status
+ */
+static void tinymt32_next_state(tinymt32_t * random) {
+    u32 x;
+    u32 y;
+
+    y = random->status[3];
+    x = (random->status[0] & TINYMT32_MASK)
+        ^ random->status[1]
+        ^ random->status[2];
+    x ^= (x << TINYMT32_SH0);
+    y ^= (y >> TINYMT32_SH0) ^ x;
+    random->status[0] = random->status[1];
+    random->status[1] = random->status[2];
+    random->status[2] = x ^ (y << TINYMT32_SH1);
+    random->status[3] = y;
+    s32 a = -((s32)(y & 1)) & (s32)TINYMT32_MAT1;
+    s32 b = -((s32)(y & 1)) & (s32)TINYMT32_MAT2;
+    random->status[1] ^= (u32)a;
+    random->status[2] ^= (u32)b;
+}
+
+/**
+ * This function outputs 32-bit unsigned integer from internal state.
+ * Users should not call this function directly.
+ * @param random tinymt internal status
+ * @return 32-bit unsigned pseudorandom number
+ */
+static u32 tinymt32_temper(tinymt32_t * random) {
+    u32 t0, t1;
+    t0 = random->status[3];
+    t1 = random->status[0]
+        + (random->status[2] >> TINYMT32_SH8);
+    t0 ^= t1;
+    if ((t1 & 1) != 0) {
+        t0 ^= TINYMT32_TMAT;
+    }
+    return t0;
+}
+
+/**
+ * This function outputs 32-bit unsigned integer from internal state.
+ * @param random tinymt internal status
+ * @return 32-bit unsigned integer r (0 <= r < 2^32)
+ */
+u32 tinymt32_generate_u32(tinymt32_t * random) {
+    tinymt32_next_state(random);
+    return tinymt32_temper(random);
+}
+
+/**
+ * This function outputs floating point number from internal state.
+ * This function is implemented using multiplying by (1 / 2^24).
+ * @param random tinymt internal status
+ * @return floating point number r (0.0 <= r < 1.0)
+ */
+f32 tinymt32_generate_float(tinymt32_t * random) {
+    tinymt32_next_state(random);
+    return (f32)(tinymt32_temper(random) >> 8) * TINYMT32_MUL;
+}
+
+#define MIN_LOOP 8
+#define PRE_LOOP 8
+
+/**
+ * This function certificate the period of 2^127-1.
+ * @param random tinymt state vector.
+ */
+static void period_certification(tinymt32_t * random) {
+    if ((random->status[0] & TINYMT32_MASK) == 0 &&
+        random->status[1] == 0 &&
+        random->status[2] == 0 &&
+        random->status[3] == 0) {
+        random->status[0] = 'T';
+        random->status[1] = 'I';
+        random->status[2] = 'N';
+        random->status[3] = 'Y';
+    }
+}
+
+/**
+ * This function initializes the internal state array with a 32-bit
+ * unsigned integer seed.
+ * @param random tinymt state vector.
+ * @param seed a 32-bit unsigned integer used as a seed.
+ */
+void tinymt32_init(tinymt32_t * random, u32 seed) {
+
+    random->status[0] = seed;
+    random->status[1] = TINYMT32_MAT1;
+    random->status[2] = TINYMT32_MAT2;
+    random->status[3] = TINYMT32_TMAT;
+    for (u32 i = 1; i < MIN_LOOP; i++) {
+        random->status[i & 3] ^= i + 1812433253U
+            * (random->status[(i - 1) & 3]
+               ^ (random->status[(i - 1) & 3] >> 30));
+    }
+    period_certification(random);
+    for (u32 i = 0; i < PRE_LOOP; i++) {
+        tinymt32_next_state(random);
+    }
+}
+
+tinymt32_t gGlobalRandomState;
+
+/* End of TinyMT 32-bit implementation */
 
 // Generate a pseudorandom integer from 0 to 65535 from the random seed, and update the seed.
+// Only for seeded generation that is meant to be used once.
+u16 random_u16_seeded(u32 seed) {
+    tinymt32_t randomState;
+    tinymt32_init(&randomState, seed);
+    return tinymt32_generate_u32(&randomState) & 0xFFFF;
+}
+
 u16 random_u16(void) {
-    if (gRandomSeed16 == 22026) {
-        gRandomSeed16 = 0;
-    }
-
-    u16 temp1 = (((gRandomSeed16 & 0x00FF) << 8) ^ gRandomSeed16);
-
-    gRandomSeed16 = ((temp1 & 0x00FF) << 8) + ((temp1 & 0xFF00) >> 8);
-
-    temp1 = (((temp1 & 0x00FF) << 1) ^ gRandomSeed16);
-    u16 temp2 = ((temp1 >> 1) ^ 0xFF80);
-
-    if ((temp1 & 0x1) == 0) {
-        if (temp2 == 43605) {
-            gRandomSeed16 = 0;
-        } else {
-            gRandomSeed16 = (temp2 ^ 0x1FF4);
-        }
-    } else {
-        gRandomSeed16 = (temp2 ^ 0x8180);
-    }
-
-    return gRandomSeed16;
+    return tinymt32_generate_u32(&gGlobalRandomState) & 0xFFFF;
 }
 
 // Generate a pseudorandom float in the range [0, 1).
 f32 random_float(void) {
-    return ((f32) random_u16() / (f32) 0x10000);
+    return tinymt32_generate_float(&gGlobalRandomState);
 }
 
 // Return either -1 or 1 with a 50:50 chance.
@@ -1298,7 +1395,7 @@ s32 anim_spline_poll(Vec3f result) {
  *                    RAYCASTING                  *
  **************************************************/
 
-#define RAY_OFFSET 30.0f /* How many units to extrapolate surfaces when testing for a raycast */
+#define RAY_OFFSET  0.0f /* How many units to extrapolate surfaces when testing for a raycast */
 #define RAY_STEPS      4 /* How many steps to do when casting rays, default to quartersteps.  */
 
 /**
@@ -1339,8 +1436,8 @@ s32 ray_surface_intersect(Vec3f orig, Vec3f dir, f32 dir_length, struct Surface 
     vec3f_cross(h, dir, e2);
     // Determine the cos(angle) difference between ray and surface normals.
     f32 det = vec3f_dot(e1, h);
-    // Check if we're perpendicular or pointing away from the surface.
-    if (det < NEAR_ZERO) return FALSE;
+    // Check if we're perpendicular from the surface.
+    if ((det > -NEAR_ZERO) && (det < NEAR_ZERO)) return FALSE;
     // Check if we're making contact with the surface.
     // Make f the inverse of the cos(angle) between ray and surface normals.
     f32 f = 1.0f / det; // invDet

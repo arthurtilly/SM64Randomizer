@@ -205,7 +205,7 @@ void play_infinite_stairs_music(void) {
     u8 shouldPlay = FALSE;
 
     /* Infinite stairs? */
-    if (gCurrLevelNum == LEVEL_CASTLE && gCurrAreaIndex == 2 && gMarioState->numStars < 70) {
+    if (gCurrLevelNum == LEVEL_CASTLE && gCurrAreaIndex == 2 && gMarioState->numStars < gRequiredStars[STAR_REQ_BITS]) {
         if (gMarioState->floor != NULL && gMarioState->floor->room == 6) {
             if (gMarioState->pos[2] < 2540.0f) {
                 shouldPlay = TRUE;
@@ -277,8 +277,9 @@ void play_cutscene_music(u16 seqArgs) {
  * Called from threads: thread5_game_loop
  */
 void play_shell_music(void) {
-    play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_EVENT_POWERUP | SEQ_VARIATION), 0);
-    sCurrentShellMusic = SEQUENCE_ARGS(4, SEQ_EVENT_POWERUP | SEQ_VARIATION);
+    u16 seqArgs = SEQUENCE_ARGS_R(4, SEQ_EVENT_POWERUP);
+    play_music(SEQ_PLAYER_LEVEL, seqArgs, 0);
+    sCurrentShellMusic = seqArgs;
 }
 
 /**
@@ -296,7 +297,7 @@ void stop_shell_music(void) {
  */
 void play_cap_music(u16 seqArgs) {
     play_music(SEQ_PLAYER_LEVEL, seqArgs, 0);
-    if (sCurrentCapMusic != MUSIC_NONE && sCurrentCapMusic != seqArgs) {
+    if (sCurrentCapMusic != MUSIC_NONE) {
         stop_background_music(sCurrentCapMusic);
     }
     sCurrentCapMusic = seqArgs;

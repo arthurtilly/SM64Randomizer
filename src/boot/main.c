@@ -20,6 +20,7 @@
 #include "game/puppyprint.h"
 #include "game/puppylights.h"
 #include "game/profiling.h"
+#include "game/vc_check.h"
 
 // Message IDs
 enum MessageIDs {
@@ -304,6 +305,7 @@ void thread3_main(UNUSED void *arg) {
     setup_mesg_queues();
     alloc_pool();
     load_engine_code_segment();
+    gIsVC = IS_VC();
 #ifndef UNF
     crash_screen_init();
 #endif

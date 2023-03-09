@@ -18,6 +18,7 @@
 #include "behavior_data.h"
 #include "level_table.h"
 #include "rumble_init.h"
+#include "randomizer.h"
 
 #define MIN_SWIM_STRENGTH 160
 #define MIN_SWIM_SPEED 16.0f
@@ -130,6 +131,11 @@ static void apply_water_current(struct MarioState *m, Vec3f step) {
 
         step[0] += currentSpeed * sins(currentAngle);
         step[2] += currentSpeed * coss(currentAngle);
+    }
+
+    // Horrible, horrible hack. Makes this work for JRB nonstop.
+    if ((gCurrLevelNum == LEVEL_JRB) && (gCurrActNum == 1) && (!gJrbShipRaised) && gOptionsSettings.gameplay.s.nonstopMode) {
+        return;
     }
 
     for (i = 0; i < 2; i++) {

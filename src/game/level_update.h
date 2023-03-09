@@ -28,7 +28,8 @@ enum WarpOperation {
     WARP_OP_DEMO_NEXT,
     WARP_OP_CREDITS_START,
     WARP_OP_CREDITS_NEXT,
-    WARP_OP_DEMO_END
+    WARP_OP_DEMO_END,
+    WARP_OP_NONSTOP_JRB
 };
 
 enum SpecialWarpDestinations {
@@ -122,6 +123,7 @@ struct HudDisplay {
 
 extern struct HudDisplay gHudDisplay;
 extern s8 gNeverEnteredCastle;
+extern u8 gJrbShipRaised;
 
 enum HUDDisplayFlag {
     HUD_DISPLAY_FLAG_LIVES            = (1 <<  0), // 0x0001
@@ -162,6 +164,7 @@ enum WarpNodes {
     WARP_NODE_DEATH         = 0xF1,
     WARP_NODE_LOOK_UP       = 0xF2,
     WARP_NODE_WARP_FLOOR    = 0xF3,
+    WARP_NODE_NONSTOP_JRB   = 0xF4,
     WARP_NODE_CREDITS_MIN   = 0xF8,
     WARP_NODE_CREDITS_START = 0xF8,
     WARP_NODE_CREDITS_NEXT  = 0xF9,
@@ -169,6 +172,8 @@ enum WarpNodes {
 };
 
 u16 level_control_timer(s32 timerOp);
+void set_play_mode(s16 playMode);
+void warp_special(s32 arg);
 void fade_into_special_warp(u32 arg, u32 color);
 void load_level_init_text(u32 arg);
 s16 level_trigger_warp(struct MarioState *m, s32 warpOp);

@@ -75,6 +75,8 @@
  */
 
 // BSS
+u8 gRedCoinStarCutscene = FALSE;
+
 /**
  * Stores Lakitu's position from the last frame, used for transitioning in next_lakitu_state()
  */
@@ -3175,7 +3177,7 @@ void reset_camera(struct Camera *c) {
     sObjectCutscene = CUTSCENE_NONE;
     gRecentCutscene = CUTSCENE_NONE;
 }
-
+u32 gCurrentIntendedLevel;
 void init_camera(struct Camera *c) {
     struct Surface *floor = NULL;
     Vec3f marioOffset;
@@ -3183,7 +3185,16 @@ void init_camera(struct Camera *c) {
 
     sCreditsPlayer2Pitch = 0;
     sCreditsPlayer2Yaw = 0;
-    gPrevLevel = gCurrLevelArea / 16;
+
+    /**
+     * This code allows the camera to function if we are not using vanilla level exits (and instead are exiting from where we entered).
+     */
+    if (gOptionsSettings.gameplay.s.adjustedExits && (gCurrentIntendedLevel != 0)) {
+        gPrevLevel = gCurrentIntendedLevel;
+    } else {
+        gPrevLevel = gCurrLevelArea / 16;
+    }
+    gCurrentIntendedLevel = get_nonrandom_level();
     gCurrLevelArea = gCurrLevelNum * 16 + gCurrentArea->index;
     sSelectionFlags &= CAM_MODE_MARIO_SELECTED;
     sFramesPaused = 0;
@@ -3308,6 +3319,11 @@ void init_camera(struct Camera *c) {
         case AREA_TTM_OUTSIDE:
             gLakituState.mode = CAMERA_MODE_RADIAL;
             break;
+        case AREA_JRB_MAIN:
+            // For JRB nonstop, it can be buggy loading back into the level.
+            // Fix this by setting the camera mode manually.
+            gLakituState.mode = CAMERA_MODE_FREE_ROAM;
+            break;
 #endif
     }
 
@@ -3428,6 +3444,11 @@ Gfx *geo_camera_main(s32 callContext, struct GraphNode *g, void *context) {
             break;
         case GEO_CONTEXT_RENDER:
             update_graph_node_camera(gc);
+            break;
+        case AREA_JRB_MAIN:
+            // For JRB nonstop, it can be buggy loading back into the level.
+            // Fix this by setting the camera mode manually.
+            gLakituState.mode = CAMERA_MODE_FREE_ROAM;
             break;
     }
     return NULL;
@@ -4514,14 +4535,14 @@ s32 offset_yaw_outward_radial(struct Camera *c, s16 areaYaw) {
  * Plays the background music that starts while peach reads the intro message.
  */
 void cutscene_intro_peach_play_message_music(void) {
-    play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_EVENT_PEACH_MESSAGE), 0);
+    //play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_EVENT_PEACH_MESSAGE), 0);
 }
 
 /**
  * Plays the music that starts after peach fades and Lakitu appears.
  */
 void cutscene_intro_peach_play_lakitu_flying_music(void) {
-    play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(15, SEQ_EVENT_CUTSCENE_INTRO), 0);
+    //play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(15, SEQ_EVENT_CUTSCENE_INTRO), 0);
 }
 
 void play_camera_buzz_if_cdown(void) {
@@ -5323,7 +5344,7 @@ void cam_rr_exit_building_side(struct Camera *c) {
 
 void cam_rr_exit_building_top(struct Camera *c) {
     set_camera_mode_8_directions(c);
-    if (c->pos[1] < 6343.f) {
+    if (c->pos[1] < 6343.f && !(gRedCoinStarCutscene)) {
         c->pos[1] = 7543.f;
         gLakituState.goalPos[1] = c->pos[1];
         gLakituState.curPos[1] = c->pos[1];
@@ -5342,7 +5363,7 @@ void cam_rr_enter_building(struct Camera *c) {
         set_camera_mode_fixed(c, -2953, 798, -3943);
     }
     // Prevent the camera from being above the roof
-    if (c->pos[1] > 6043.f) {
+    if (c->pos[1] > 6043.f && !(gRedCoinStarCutscene)) {
         c->pos[1] = 6043.f;
     }
 }
@@ -5741,6 +5762,7 @@ void cam_bbh_room_9_mr_i_transition(struct Camera *c) {
 
 void cam_bbh_room_13_balcony(struct Camera *c) {
     set_camera_mode_fixed(c, 210, 420, 3109);
+    transition_to_camera_mode(c, CAMERA_MODE_8_DIRECTIONS, 20);
 }
 
 void cam_bbh_room_0(struct Camera *c) {
@@ -6257,14 +6279,6 @@ s16 camera_course_processing(struct Camera *c) {
                             transition_to_camera_mode(c, CAMERA_MODE_8_DIRECTIONS, 90);
                             s8DirModeBaseYaw = DEGREES(90);
                             break;
-
-                        case SURFACE_BOSS_FIGHT_CAMERA:
-                            if (gCurrActNum == 1) {
-                                set_camera_mode_boss_fight(c);
-                            } else {
-                                set_camera_mode_radial(c, 60);
-                            }
-                            break;
                         default:
                             set_camera_mode_radial(c, 60);
                     }
@@ -6301,14 +6315,10 @@ s16 camera_course_processing(struct Camera *c) {
 
             case AREA_BOB:
                 if (set_mode_if_not_set_by_surface(c, CAMERA_MODE_NONE) == 0) {
-                    if (sMarioGeometry.currFloorType == SURFACE_BOSS_FIGHT_CAMERA) {
-                        set_camera_mode_boss_fight(c);
+                    if (c->mode == CAMERA_MODE_CLOSE) {
+                        transition_to_camera_mode(c, CAMERA_MODE_RADIAL, 60);
                     } else {
-                        if (c->mode == CAMERA_MODE_CLOSE) {
-                            transition_to_camera_mode(c, CAMERA_MODE_RADIAL, 60);
-                        } else {
-                            set_camera_mode_radial(c, 60);
-                        }
+                        set_camera_mode_radial(c, 60);
                     }
                 }
                 break;
@@ -7379,13 +7389,13 @@ void cutscene_dance_default_rotate(struct Camera *c) {
         // These two functions move the camera away and then towards Mario.
         cutscene_event(cutscene_dance_rotate_move_back, c, 50, 80);
         cutscene_event(cutscene_dance_rotate_move_towards_mario, c, 70, 90);
-    } else {
-        // secret star, 100 coin star, or bowser red coin star.
+    } {
         if ((sMarioCamState->action != ACT_STAR_DANCE_NO_EXIT)
             && (sMarioCamState->action != ACT_STAR_DANCE_WATER)
             && (sMarioCamState->action != ACT_STAR_DANCE_EXIT)) {
             gCutsceneTimer = CUTSCENE_STOP;
             c->cutscene = 0;
+            set_fov_function(CAM_FOV_DEFAULT);
             transition_next_state(c, 20);
             sStatusFlags |= CAM_FLAG_UNUSED_CUTSCENE_ACTIVE;
         }
@@ -7516,6 +7526,16 @@ void cutscene_dance_closeup(struct Camera *c) {
         cutscene_event(cutscene_dance_closeup_shake_fov, c, 40, 40);
     }
     set_handheld_shake(HAND_CAM_SHAKE_CUTSCENE);
+
+    if ((sMarioCamState->action != ACT_STAR_DANCE_NO_EXIT)
+        && (sMarioCamState->action != ACT_STAR_DANCE_WATER)
+        && (sMarioCamState->action != ACT_STAR_DANCE_EXIT)) {
+        gCutsceneTimer = CUTSCENE_STOP;
+        c->cutscene = 0;
+        set_fov_function(CAM_FOV_DEFAULT);
+        transition_next_state(c, 20);
+        sStatusFlags |= CAM_FLAG_UNUSED_CUTSCENE_ACTIVE;
+    }
 }
 
 /**
@@ -7611,6 +7631,16 @@ void cutscene_dance_fly_away(struct Camera *c) {
     cutscene_event(cutscene_dance_fly_away_shake_fov, c, 40, 40);
     set_fov_function(CAM_FOV_DEFAULT);
     set_handheld_shake(HAND_CAM_SHAKE_STAR_DANCE);
+
+    if ((sMarioCamState->action != ACT_STAR_DANCE_NO_EXIT)
+        && (sMarioCamState->action != ACT_STAR_DANCE_WATER)
+        && (sMarioCamState->action != ACT_STAR_DANCE_EXIT)) {
+        gCutsceneTimer = CUTSCENE_STOP;
+        c->cutscene = 0;
+        set_fov_function(CAM_FOV_DEFAULT);
+        transition_next_state(c, 20);
+        sStatusFlags |= CAM_FLAG_UNUSED_CUTSCENE_ACTIVE;
+    }
 }
 
 /**
@@ -8002,6 +8032,8 @@ void cutscene_red_coin_star_warp(struct Camera *c) {
     s16 pitch, yaw, posYaw;
     struct Object *obj = gCutsceneFocus;
 
+    gRedCoinStarCutscene = TRUE;
+
     vec3f_set(sCutsceneVars[1].point, obj->oHomeX, obj->oHomeY, obj->oHomeZ);
     vec3f_get_dist_and_angle(sCutsceneVars[1].point, c->pos, &dist, &pitch, &yaw);
     posYaw = calculate_yaw(sCutsceneVars[1].point, c->pos);
@@ -8043,6 +8075,7 @@ void cutscene_red_coin_star(struct Camera *c) {
  * End the red coin star spawning cutscene
  */
 void cutscene_red_coin_star_end(struct Camera *c) {
+    gRedCoinStarCutscene = FALSE;
     retrieve_info_star(c);
     gCutsceneTimer = CUTSCENE_STOP;
     c->cutscene = 0;
@@ -8739,7 +8772,7 @@ void cutscene_non_painting_set_cam_pos(struct Camera *c) {
             break;
 
         case LEVEL_COTMC:
-            vec3f_set(c->pos, 3465.f, -1008.f, -2961.f);
+            vec3f_set(c->pos, 2500.f, -4010.f, 5630.f);
             break;
 
         case LEVEL_RR:

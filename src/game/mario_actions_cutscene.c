@@ -27,6 +27,8 @@
 #include "seq_ids.h"
 #include "sound_init.h"
 #include "rumble_init.h"
+#include "randomizer.h"
+#include "print.h"
 
 static struct Object *sIntroWarpPipeObj;
 static struct Object *sEndPeachObj;
@@ -49,7 +51,7 @@ static s8 sPeachManualBlinkTime = 0;
 static s8 sPeachIsBlinking = FALSE;
 static s8 sPeachBlinkTimes[7] = { 2, 3, 2, 1, 2, 3, 2 };
 
-static u8 sStarsNeededForDialog[] = { 1, 3, 8, 30, 50, 70 };
+// static u8 sStarsNeededForDialog[] = { 1, 3, 8, 30, 50, 70 };
 
 /**
  * Data for the jumbo star cutscene. It specifies the flight path after triple
@@ -207,8 +209,9 @@ Gfx *geo_switch_peach_eyes(s32 callContext, struct GraphNode *node, UNUSED s32 c
  * if so, return the dialog ID. Otherwise, return 0. A dialog is returned if
  * numStars has reached a milestone and prevNumStarsForDialog has not reached it.
  */
-s32 get_star_collection_dialog(struct MarioState *m) {
-    s32 i;
+s32 get_star_collection_dialog(UNUSED struct MarioState *m) {
+    return 0;
+/**
     s32 dialogID = 0;
     s32 numStarsRequired;
 
@@ -222,6 +225,7 @@ s32 get_star_collection_dialog(struct MarioState *m) {
 
     m->prevNumStarsForDialog = m->numStars;
     return dialogID;
+**/
 }
 
 // save menu handler
@@ -454,7 +458,7 @@ s32 act_reading_automatic_dialog(struct MarioState *m) {
             disable_time_stop();
             if (gNeverEnteredCastle) {
                 gNeverEnteredCastle = FALSE;
-                play_cutscene_music(SEQUENCE_ARGS(0, SEQ_LEVEL_INSIDE_CASTLE));
+                play_cutscene_music(SEQUENCE_ARGS_R(0, SEQ_LEVEL_INSIDE_CASTLE));
             }
             if (m->prevAction == ACT_STAR_DANCE_WATER) {
                 set_mario_action(m, ACT_WATER_IDLE, 0); // 100c star?
@@ -556,7 +560,7 @@ s32 act_debug_free_move(struct MarioState *m) {
 
     // TODO: Add ability to ignore collision
     //      - spawn pseudo floor object to prevent OOB death
-    resolve_and_return_wall_collisions(pos, 60.0f, 50.0f, &wallData);
+    /**resolve_and_return_wall_collisions(pos, 60.0f, 50.0f, &wallData);
 
     set_mario_wall(m, ((wallData.numWalls > 0) ? wallData.walls[0] : NULL));
     f32 floorHeight = find_floor(pos[0], pos[1], pos[2], &floor);
@@ -572,7 +576,8 @@ s32 act_debug_free_move(struct MarioState *m) {
             pos[1] = ceilHeight - 160.0f;
         }
         vec3f_copy(m->pos, pos);
-    }
+    }**/
+    vec3f_copy(m->pos, pos);
 
     m->faceAngle[1] = m->intendedYaw;
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
@@ -588,6 +593,7 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
         switch (++m->actionTimer) {
             case 1:
                 celebStar = spawn_object(m->marioObj, MODEL_STAR, bhvCelebrationStar);
+                init_star_color(celebStar, gCurrCourseNum, GET_BPARAM1(m->interactObj->oBehParams));
 #ifdef STAR_DANCE_USES_STARS_MODEL
                 celebStar->header.gfx.sharedChild = m->interactObj->header.gfx.sharedChild;
 #else
@@ -615,7 +621,9 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
                 break;
 
             case 80:
-                if (!(m->actionArg & 1)) {
+                if (gOptionsSettings.gameplay.s.nonstopMode && gCurrLevelNum == LEVEL_JRB && gCurrAreaIndex == 2) {
+                    level_trigger_warp(m, WARP_OP_NONSTOP_JRB);
+                } else if (!(m->actionArg & 1)) {
                     level_trigger_warp(m, WARP_OP_STAR_EXIT);
                 } else {
                     enable_time_stop();
@@ -673,7 +681,7 @@ s32 act_fall_after_star_grab(struct MarioState *m) {
         m->particleFlags |= PARTICLE_WATER_SPLASH;
         return set_mario_action(m, ACT_STAR_DANCE_WATER, m->actionArg);
     }
-    if (perform_air_step(m, AIR_STEP_CHECK_LEDGE_GRAB) == AIR_STEP_LANDED) {
+    if (perform_air_step(m, AIR_STEP_CHECK_NONE) == AIR_STEP_LANDED) {
         play_mario_landing_sound(m, SOUND_ACTION_TERRAIN_LANDING);
         set_mario_action(m, m->actionArg & 1 ? ACT_STAR_DANCE_NO_EXIT : ACT_STAR_DANCE_EXIT,
                          m->actionArg);
@@ -811,7 +819,7 @@ s32 act_unlocking_key_door(struct MarioState *m) {
     stop_and_set_height_to_floor(m);
 
     if (is_anim_at_end(m)) {
-        if (GET_BPARAM1(m->usedObj->oBehParams) == KEY_DOOR_BP1_UPSTAIRS) {
+        if (GET_BPARAM1(m->usedObj->oBehParams) == 0xFE) {
             save_file_set_flags(SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR);
             save_file_clear_flags(SAVE_FLAG_HAVE_KEY_2);
         } else {
@@ -839,7 +847,8 @@ s32 act_unlocking_star_door(struct MarioState *m) {
             break;
         case ACT_STATE_UNLOCKING_STAR_DOOR_SUMMON_STAR:
             if (is_anim_at_end(m)) {
-                spawn_object(m->marioObj, MODEL_STAR, bhvUnlockDoorStar);
+                struct Object *star = spawn_object(m->marioObj, MODEL_STAR, bhvUnlockDoorStar);
+                init_star_color(star, random_u16() & 0xFF, random_u16() & 0x7);
                 m->actionState = ACT_STATE_UNLOCKING_STAR_DOOR_APPROACH_DOOR;
             }
             break;
@@ -1019,7 +1028,7 @@ s32 act_spawn_spin_airborne(struct MarioState *m) {
     }
 
     // updates all velocity variables based on m->forwardVel
-    mario_set_forward_vel(m, m->forwardVel);
+    mario_set_forward_vel(m, 0);
 
     // landed on floor, play spawn land animation
     if (perform_air_step(m, AIR_STEP_CHECK_NONE) == AIR_STEP_LANDED) {
@@ -2023,6 +2032,7 @@ static void end_peach_cutscene_mario_landing(struct MarioState *m) {
         sEndJumboStarObj = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_STAR, bhvStaticObject, 0,
                                                      2528, -1800, 0, 0, 0);
         obj_scale(sEndJumboStarObj, 3.0f);
+        init_star_color(sEndJumboStarObj, COURSE_CAKE_END, 0);
         advance_cutscene_step(m);
     }
 }

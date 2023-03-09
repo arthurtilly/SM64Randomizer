@@ -26,6 +26,7 @@
 #include "debug_box.h"
 #include "engine/colors.h"
 #include "profiling.h"
+#include "randomizer.h"
 
 struct SpawnInfo gPlayerSpawnInfos[1];
 struct GraphNode *gGraphNodePointers[MODEL_ID_COUNT];
@@ -56,6 +57,7 @@ Color gWarpTransGreen = 0;
 Color gWarpTransBlue = 0;
 s16 gCurrSaveFileNum = 1;
 s16 gCurrLevelNum = LEVEL_MIN;
+u32 gTimeStartedLoadingArea = 0;
 
 /*
  * The following two tables are used in get_mario_spawn_type() to determine spawn type
@@ -183,6 +185,7 @@ void clear_areas(void) {
     gWarpTransition.isActive = FALSE;
     gWarpTransition.pauseRendering = FALSE;
     gMarioSpawnInfo->areaIndex = -1;
+    gJrbShipRaised = FALSE;
 
     for (i = 0; i < AREA_COUNT; i++) {
         gAreaData[i].index = i;
@@ -229,6 +232,12 @@ void clear_area_graph_nodes(void) {
 }
 
 void load_area(s32 index) {
+    gTimeStartedLoadingArea = gGlobalTimer;
+
+    // Clear randomizer data
+    gIgnoreCollisionDistance = TRUE;
+    gNumDynamicAvoidancePoints = 0;
+
     if (gCurrentArea == NULL && gAreaData[index].graphNode != NULL) {
         gCurrentArea = &gAreaData[index];
         gCurrAreaIndex = gCurrentArea->index;

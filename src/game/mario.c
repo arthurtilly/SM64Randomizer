@@ -1262,8 +1262,10 @@ void update_mario_geometry_inputs(struct MarioState *m) {
     f32 gasLevel;
     f32 ceilToFloorDist;
 
-    f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 60.0f, 50.0f);
-    f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 30.0f, 24.0f);
+    if (m->action != ACT_DEBUG_FREE_MOVE) {
+        f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 60.0f, 50.0f);
+        f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 30.0f, 24.0f);
+    }
 
     m->floorHeight = find_floor(m->pos[0], m->pos[1], m->pos[2], &m->floor);
 
@@ -1691,11 +1693,24 @@ void queue_rumble_particles(struct MarioState *m) {
 }
 #endif
 
+u8 sDemonStart = 0;
+u8 sDemonTimer = 0;
+
 /**
  * Main function for executing Mario's behavior. Returns particleFlags.
  */
 s32 execute_mario_action(UNUSED struct Object *obj) {
     s32 inLoop = TRUE;
+
+#ifdef ENABLE_DEBUG_FREE_MOVE
+    Vec3s posR;
+    vec3f_to_vec3s(posR, gMarioState->pos);
+    if (raycast_wall_check(posR)) {
+        print_text(20,20,"SAFE");
+    } else {
+        print_text(20,20,"DANGER");
+    }
+#endif
 
     // Updates once per frame:
     vec3f_get_dist_and_lateral_dist_and_angle(gMarioState->prevPos, gMarioState->pos, &gMarioState->moveSpeed, &gMarioState->lateralSpeed, &gMarioState->movePitch, &gMarioState->moveYaw);
@@ -1733,6 +1748,22 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
         // If Mario is OOB, stop executing actions.
         if (gMarioState->floor == NULL) {
             return ACTIVE_PARTICLE_NONE;
+        }
+
+        if (sDemonStart) {
+            if ((gMarioState->action & ACT_GROUP_MOVING) || (gMarioState->action & ACT_GROUP_AIRBORNE) || (gMarioState->action & ACT_GROUP_SUBMERGED)) {
+                        sDemonTimer = 100;
+                        sDemonStart = 0;
+            }
+        } else if (sDemonTimer > 1) {
+            sDemonTimer--;
+        } else if (sDemonTimer == 1) {
+            if ((gCurrLevelNum != LEVEL_CASTLE) && (gCurrLevelNum != LEVEL_CASTLE_COURTYARD) && (gCurrLevelNum != LEVEL_CASTLE_GROUNDS)) {
+                if ((gCurrLevelNum != LEVEL_BOWSER_1) && (gCurrLevelNum != LEVEL_BOWSER_2) && (gCurrLevelNum != LEVEL_BOWSER_3)) {
+                    spawn_object(gMarioState->marioObj, MODEL_1UP, bhvGreenDemon);
+                }
+            }
+            sDemonTimer = 0;
         }
 
         // The function can loop through many action shifts in one frame,
@@ -1850,11 +1881,25 @@ void init_mario(void) {
 
     Vec3s capPos;
     if (save_file_get_cap_pos(capPos)) {
-        struct Object *capObject = spawn_object(gMarioState->marioObj, MODEL_MARIOS_CAP, bhvNormalCap);
-        vec3s_to_vec3f(&capObject->oPosVec, capPos);
-
-        capObject->oForwardVel = 0;
-        capObject->oMoveAngleYaw = 0;
+        save_file_clear_flags(SAVE_FLAG_CAP_ON_GROUND);
+        switch (gCurrCourseNum) {
+            case COURSE_SSL:
+                save_file_set_flags(SAVE_FLAG_CAP_ON_KLEPTO);
+                break;
+            case COURSE_SL:
+                save_file_set_flags(SAVE_FLAG_CAP_ON_MR_BLIZZARD);
+                break;
+            case COURSE_TTM:
+                save_file_set_flags(SAVE_FLAG_CAP_ON_UKIKI);
+                break;
+            default:
+                save_file_set_flags(SAVE_FLAG_CAP_ON_KLEPTO);
+                break;
+        }
+    }
+    set_mario_rando_colors();
+    if (gOptionsSettings.gameplay.s.demonOn && (cur_obj_nearest_object_with_behavior(bhvGreenDemon) == NULL)) {
+        sDemonStart = 1;
     }
 }
 
