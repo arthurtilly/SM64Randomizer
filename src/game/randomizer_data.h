@@ -38,7 +38,8 @@ struct AvoidancePoint bbhAvoidancePoints[] = {
 };
 
 struct AvoidancePoint lllAvoidancePoints[] = {
-    {bhvStub, {-3200, -40, 3456}, 200.0f, 300.0f, AVOIDANCE_SAFETY_ALL} // Under the Mr. I vanilla spawn
+    {bhvStub, {-3200, -40, 3456}, 200.0f, 300.0f, AVOIDANCE_SAFETY_ALL}, // Under the Mr. I vanilla spawn
+    {bhvStub, {0, 90, 0}, 250.0f, 500.0f, AVOIDANCE_SAFETY_ALL} // Inside the volcano
 };
 
 struct AvoidancePoint sslPyrAvoidancePoints[] = {
