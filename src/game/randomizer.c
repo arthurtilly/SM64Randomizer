@@ -626,7 +626,7 @@ u8 get_star_requirement(u8 layer, u8 section, u8 maxAvailable, u8 factor, tinymt
         }
     }
     starReq = get_val_in_range_uniform(maxStars / factor, maxStars, randomState);
-    return MIN(starReq, get_val_in_range_uniform(maxAvailable - 5, maxAvailable, randomState));
+    return MIN(starReq, get_val_in_range_uniform(MAX(maxAvailable - 5, 0), maxAvailable, randomState));
 }
 
 void randomize_star_doors() {
