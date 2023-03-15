@@ -347,7 +347,7 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
 
     f32 wallRadius = 50.f;
     if (randPosFlags & RAND_TYPE_SPAWN_FAR_FROM_WALLS) {
-        wallRadius = 500.f;
+        wallRadius = 300.f;
     }
 
     if (areaParams == NULL) {
