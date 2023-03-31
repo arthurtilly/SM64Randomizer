@@ -76,7 +76,7 @@ struct AvoidancePoint bitdwAvoidancePoints[] = {
 
 struct AvoidancePoint bitfsAvoidancePoints[] = {
     {bhvStub, {6772, 2850, 106}, 400.0f, 1000.0f, AVOIDANCE_SAFETY_ALL}, // In Bowser Warp
-    {bhvStub, {4440, -700, 280}, 700.0f, 800.0f, AVOIDANCE_SAFETY_HARD}, // Above Cage
+    {bhvStub, {4000, -700, 280}, 1000.0f, 800.0f, AVOIDANCE_SAFETY_HARD}, // Above Cage
     {bhvStub, {6772, 3900, 106}, 900.0f, 1200.0f, AVOIDANCE_SAFETY_HARD}, // Above Bowser Warp
 };
 
