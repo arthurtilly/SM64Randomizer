@@ -2,10 +2,13 @@
 
 #ifndef FIX_WATER_RINGS
 f32 water_ring_calc_mario_dist(void) {
-    Vec3f marioDist;
-    vec3_diff(marioDist, &o->oPosVec, gMarioObject->header.gfx.pos);
-    marioDist[1] += 80.0f;
-    return vec3_dot(marioDist, &o->oWaterRingNormalVec);
+    f32 marioDistX = o->oPosX - gMarioObject->header.gfx.pos[0];
+    f32 marioDistY = o->oPosY - (gMarioObject->header.gfx.pos[1] + 80.0f);
+    f32 marioDistZ = o->oPosZ - gMarioObject->header.gfx.pos[2];
+    f32 marioDistInFront = marioDistX * o->oWaterRingNormalX + marioDistY * o->oWaterRingNormalY
+                           + marioDistZ * o->oWaterRingNormalZ;
+
+    return marioDistInFront;
 }
 #endif
 
@@ -43,23 +46,18 @@ void bhv_jet_stream_water_ring_init(void) {
 }
 
 void water_ring_check_collection(UNUSED f32 avgScale, struct Object *ringManager) {
-#ifdef FIX_WATER_RINGS
-    if (o->oInteractStatus & INT_STATUS_INTERACTED) {
-#else
     f32 marioDistInFront = water_ring_calc_mario_dist();
+    struct Object *ringSpawner;
 
     if (!is_point_close_to_object(o, gMarioObject->header.gfx.pos[0],
-                                     gMarioObject->header.gfx.pos[1] + 80.0f,
-                                     gMarioObject->header.gfx.pos[2],
-                                     (avgScale + 0.2f) * 120.0f)) {
+                              gMarioObject->header.gfx.pos[1] + 80.0f, gMarioObject->header.gfx.pos[2],
+                              (avgScale + 0.2) * 120.0)) {
         o->oWaterRingMarioDistInFront = marioDistInFront;
         return;
     }
 
-    if (o->oWaterRingMarioDistInFront * marioDistInFront < 0.0f) {
-#endif
-        struct Object *ringSpawner = o->parentObj;
-
+    if (o->oWaterRingMarioDistInFront * marioDistInFront < 0) {
+        ringSpawner = o->parentObj;
         if (ringSpawner) {
             if ((o->oWaterRingIndex == ringManager->oWaterRingMgrLastRingCollected + 1)
                 || (ringSpawner->oWaterRingSpawnerRingsCollected == 0)) {
@@ -79,9 +77,7 @@ void water_ring_check_collection(UNUSED f32 avgScale, struct Object *ringManager
         o->oAction = WATER_RING_ACT_COLLECTED;
     }
 
-#ifndef FIX_WATER_RINGS
     o->oWaterRingMarioDistInFront = marioDistInFront;
-#endif
 }
 
 void water_ring_set_scale(f32 avgScale) {
