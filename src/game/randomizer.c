@@ -485,11 +485,26 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
 
         if ((gOptionsSettings.gameplay.s.safeSpawns == SPAWN_SAFETY_HARD) &&
             (floorSafeLevel == FLOOR_SAFETY_LOW) && !(randPosFlags & RAND_TYPE_SAFE)) {
+            Vec3f oldPos;
+            vec3s_to_vec3f(oldPos, pos);
             pos[0] += get_val_in_range_uniform(-200, 200, randomState);
             pos[2] += get_val_in_range_uniform(-200, 200, randomState);
 
             vec3s_resolve_wall_collisions(
                 pos, wallRadius);
+
+            // Make sure it doesnt shift through a surface
+            Vec3f rayDir;
+            vec3s_to_vec3f(rayDir, pos);
+            vec3f_sub(rayDir, oldPos);
+            struct Surface *surf;
+            Vec3f hitPos;
+            find_surface_on_ray(oldPos, rayDir, &surf, hitPos,
+            (RAYCAST_FIND_FLOOR | RAYCAST_FIND_WALL | RAYCAST_FIND_CEIL));
+
+            if (surf != NULL) {
+                continue;
+            }
             
             waterLevel = find_water_level(pos[0], pos[2]);
 
