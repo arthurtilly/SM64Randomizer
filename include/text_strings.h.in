@@ -338,7 +338,7 @@
 #define TEXT_FILE_MARIO_QUESTION _("Mario!")
 
 #define TEXT_BY_ARTHUR _("Creators: Arthurtilly, JoshDuMan, nim, Kaze Emanuar")
-#define TEXT_CURR_VERSION _("Version: v1.1.1 beta")
+#define TEXT_CURR_VERSION _("Version: v1.1.1")
 #define TEXT_SM64_RANDO _("SM64 RANDOMIZER")
 
 #define TEXT_00012 _("1 2 OATMEAL")
