@@ -15,6 +15,7 @@
 #include "game/object_list_processor.h"
 #include "game/save_file.h"
 #include "game/sound_init.h"
+#include "game/vc_check.h"
 #include "goddard/renderer.h"
 #include "geo_layout.h"
 #include "graph_node.h"
@@ -320,13 +321,15 @@ static void level_cmd_load_yay0(void) {
 static void level_cmd_load_mario_head(void) {
 #ifdef KEEP_MARIO_HEAD
     // TODO: Fix these hardcoded sizes
-    void *addr = main_pool_alloc(DOUBLE_SIZE_ON_64_BIT(0xE1000), MEMORY_POOL_LEFT);
-    if (addr != NULL) {
-        gdm_init(addr, DOUBLE_SIZE_ON_64_BIT(0xE1000));
-        gd_add_to_heap(gZBuffer, sizeof(gZBuffer)); // 0x25800
-        gd_add_to_heap(gFramebuffer0, 3 * sizeof(gFramebuffer0)); // 0x70800
-        gdm_setup();
-        gdm_maketestdl(CMD_GET(s16, 2));
+    if (!gIsVC) {
+        void *addr = main_pool_alloc(DOUBLE_SIZE_ON_64_BIT(0xE1000), MEMORY_POOL_LEFT);
+        if (addr != NULL) {
+            gdm_init(addr, DOUBLE_SIZE_ON_64_BIT(0xE1000));
+            gd_add_to_heap(gZBuffer, sizeof(gZBuffer)); // 0x25800
+            gd_add_to_heap(gFramebuffer0, 3 * sizeof(gFramebuffer0)); // 0x70800
+            gdm_setup();
+            gdm_maketestdl(CMD_GET(s16, 2));
+        }
     }
 #endif
     sCurrentCmd = CMD_NEXT;

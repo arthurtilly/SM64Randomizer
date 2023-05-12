@@ -24,6 +24,7 @@
 #include "save_file.h"
 #include "skybox.h"
 #include "sound_init.h"
+#include "vc_check.h"
 #include "puppycam2.h"
 
 #include "config.h"
@@ -87,6 +88,9 @@ struct GraphNodeObject gMirrorMario;  // copy of Mario's geo node for drawing mi
  * Geo node script that draws Mario's head on the title screen.
  */
 Gfx *geo_draw_mario_head_goddard(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
+    if (gIsVC)
+        return NULL;
+
     Gfx *gfx = NULL;
     struct GraphNodeGenerated *asGenerated = (struct GraphNodeGenerated *) node;
 
