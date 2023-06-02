@@ -134,7 +134,7 @@ LINK_LIBRARIES = $(foreach i,$(LIBRARIES),-l$(i))
 #==============================================================================#
 
 # Default non-gcc opt flags
-DEFAULT_OPT_FLAGS = -Ofast -freorder-blocks-algorithm=simple -fno-jump-tables -falign-functions=32 -fno-inline -finline-limit=0
+DEFAULT_OPT_FLAGS = -Ofast -freorder-blocks-algorithm=simple -falign-functions=32 -fno-inline -finline-limit=0
 # Note: -fno-associative-math is used here to suppress warnings, ideally we would enable this as an optimization but
 # this conflicts with -ftrapping-math apparently.
 # TODO: Figure out how to allow -fassociative-math to be enabled
