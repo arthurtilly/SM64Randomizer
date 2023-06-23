@@ -135,6 +135,7 @@ extern u8 gNumDynamicAvoidancePoints;
 extern void print_generic_text_ascii_buf(s16 x, s16 y, char *buf);
 extern void print_generic_text_ascii(s16 x, s16 y, const char *src);
 extern void create_dynamic_avoidance_point(Vec3f pos, f32 radius, f32 height, f32 downOffset);
+extern u32 raycast_wall_check(Vec3s pos);
 extern void get_safe_position(struct Object *, Vec3s, f32, f32, tinymt32_t *, u8, u32);
 extern f32 get_val_in_range_uniform(f32, f32, tinymt32_t *);
 extern void init_randomizer(s32 fileNum);

@@ -357,7 +357,7 @@ static s32 bhv_cmd_randomize_object(void) {
     u8 randomize = FALSE;
     Vec3s pos;
     s32 signMessage;
-    f32 height;
+    f32 height = 0;
     tinymt32_t randomState;
     tinymt32_init(&randomState, gRandomizerGameSeed + (gCurrentObject->pointerSeed/4));
 
@@ -447,7 +447,9 @@ static s32 bhv_cmd_randomize_object(void) {
                         continue;
 
                     // Wall check
-                    if (!raycast_wall_check(&gCurrentObject->oPosVec))
+                    Vec3s posS;
+                    vec3f_to_vec3s(posS, &gCurrentObject->oPosVec);
+                    if (!raycast_wall_check(posS))
                         continue;
 
                     break;

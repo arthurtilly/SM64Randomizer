@@ -37,8 +37,12 @@ struct AvoidancePoint bbhAvoidancePoints[] = {
     {bhvStub, {0, -100, 0}, 200.0f, 400.0f, AVOIDANCE_SAFETY_ALL} // In the BBH Pillar in the main room
 };
 
+struct AvoidancePoint hmcAvoidancePoints[] = {
+    {bhvStub, {-5717, 237, -632}, 1200.0f, 1200.0f, AVOIDANCE_SAFETY_HARD} // Above bottomless pit
+};
+
 struct AvoidancePoint lllAvoidancePoints[] = {
-    {bhvStub, {-3200, -40, 3456}, 200.0f, 300.0f, AVOIDANCE_SAFETY_ALL}, // Under the Mr. I vanilla spawn
+    {bhvStub, {-3200, -40, 3456}, 200.0f, 1500.0f, AVOIDANCE_SAFETY_ALL}, // Under the Mr. I vanilla spawn
     {bhvStub, {0, 90, 0}, 250.0f, 1000.0f, AVOIDANCE_SAFETY_ALL} // Inside the volcano
 };
 
@@ -59,6 +63,10 @@ struct AvoidancePoint wdwTownAvoidancePoints[] = {
     {bhvExclamationBox, {2254, -2692, 3790}, 1100.0f, 2000.0f, AVOIDANCE_SAFETY_ALL}, // Corner of WDW Town
     {bhvStub,      {2254, -3209, 894}, 1200.0f, 1300.0f, AVOIDANCE_SAFETY_ALL}, // In a building
     {bhvStub,      {-3583, -2708, -2047}, 200.f, 400.f, AVOIDANCE_SAFETY_ALL}, // Over the lowermost water tap
+};
+
+struct AvoidancePoint thiHugeAvoidancePoints[] = {
+    {bhvMessagePanel, {-4874, -2969, 6452}, 300.0f, 200.0f, AVOIDANCE_SAFETY_ALL} // Small tunnel
 };
 
 struct AvoidancePoint rrAvoidancePoints[] = {
@@ -121,7 +129,7 @@ struct AreaParams bbhParams[] = {
     {-4200, 5500, -3000, 3500, -4000, 6700, 0, ARRAY_SIZE(bbhAvoidancePoints), &bbhAvoidancePoints} // BBH
 };
 struct AreaParams hmcParams[] = {
-    {-7800, 7600, -6300, 3000, -8192, 8192, 0, 0, NULL} // HMC
+    {-7800, 7600, -6300, 3000, -8192, 8192, 0, ARRAY_SIZE(hmcAvoidancePoints), &hmcAvoidancePoints} // HMC
 };
 struct AreaParams lllParams[] = {
     {-8192, 8192, 0, 1600, -8192, 8192, 0, ARRAY_SIZE(lllAvoidancePoints), &lllAvoidancePoints}, // LLL main area
@@ -151,7 +159,7 @@ struct AreaParams ttmParams[] = {
     {-8192, 8192, -8192, 5500, -8192, 8192, 0, 0, NULL} // TTM slide third section
 };
 struct AreaParams thiParams[] = {
-    {-8192, 8192, -3400, 5000, -8192, 8192, 0, 0, NULL}, // THI huge island
+    {-8192, 8192, -3400, 5000, -8192, 8192, 0, ARRAY_SIZE(thiHugeAvoidancePoints), &thiHugeAvoidancePoints}, // THI huge island
     {-2500, 2500, -1100, 2000, -5000, 2500, 0, 0, NULL}, // THI small island
     {-2000, 2000, 500, 2500, -2000, 2000, 0, 0, NULL} // THI wiggler's cave
 };

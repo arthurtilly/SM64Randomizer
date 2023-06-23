@@ -270,6 +270,8 @@ void switch_ucode(s32 ucode) {
 }
 #endif
 
+void visualise_all_avoidance_points(void);
+
 /**
  * Process a master list node. This has been modified, so now it runs twice, for each microcode.
  * It iterates through the first 5 layers of if the first index using F3DLX2.Rej, then it switches

@@ -517,8 +517,6 @@ s32 act_reading_sign(struct MarioState *m) {
 }
 
 s32 act_debug_free_move(struct MarioState *m) {
-    struct WallCollisionData wallData;
-    struct Surface *floor, *ceil;
     Vec3f pos;
 
     f32 speed = (gPlayer1Controller->buttonDown & B_BUTTON) ? 4.0f : 1.0f;
