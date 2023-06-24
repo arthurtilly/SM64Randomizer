@@ -876,6 +876,8 @@ u32 interact_bbh_entrance(struct MarioState *m, UNUSED u32 interactType, struct 
     return FALSE;
 }
 
+u32 gLowerPyramidElevator = FALSE; // hacky
+
 u32 interact_warp(struct MarioState *m, UNUSED u32 interactType, struct Object *obj) {
     u32 action;
 
@@ -916,6 +918,7 @@ u32 interact_warp(struct MarioState *m, UNUSED u32 interactType, struct Object *
 #endif
 
             mario_stop_riding_object(m);
+            gLowerPyramidElevator = (gCurrCourseNum == COURSE_SSL) && (obj->oBehParams2ndByte == 0x1E);
             return set_mario_action(m, ACT_DISAPPEARED, (WARP_OP_WARP_OBJECT << 16) + 2);
         }
     }

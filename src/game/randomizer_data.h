@@ -46,6 +46,10 @@ struct AvoidancePoint lllAvoidancePoints[] = {
     {bhvStub, {0, 90, 0}, 250.0f, 1000.0f, AVOIDANCE_SAFETY_ALL} // Inside the volcano
 };
 
+struct AvoidancePoint sslAvoidancePoints[] = {
+    {bhvStub, {-2047, 1250, -1023}, 720.0f, 800.0f, AVOIDANCE_SAFETY_HARD},    // Top of pyramid
+};
+
 struct AvoidancePoint sslPyrAvoidancePoints[] = {
     {bhvStub, {0, 4862, 256}, 600.0f, 1000.0f, AVOIDANCE_SAFETY_ALL},    // In Elevator
     {bhvStub, {0, -200, -1400}, 1000.0f, 1000.0f, AVOIDANCE_SAFETY_ALL} // Past Eyerok Loading Zone
@@ -136,7 +140,7 @@ struct AreaParams lllParams[] = {
     {-3000, 3000, 0, 5000, -3000, 3000, 0, 0, NULL} // LLL volcano
 };
 struct AreaParams sslParams[] = {
-    {-8192, 8192, -250, 2000, -8192, 8192, 0, 0, NULL}, // SSL main area
+    {-8192, 8192, -250, 2000, -8192, 8192, 0, ARRAY_SIZE(sslAvoidancePoints), &sslAvoidancePoints}, // SSL main area
     {-4000, 4000, -250, 5500, -4200, 6600, 0, ARRAY_SIZE(sslPyrAvoidancePoints), &sslPyrAvoidancePoints}, // SSL pyramid
     {-1000, 1000, -1500, -500, -4000, -1800, 0, 0, NULL} // SSL eyerok
 };

@@ -20,6 +20,8 @@ void bhv_pyramid_elevator_init(void) {
     }
 }
 
+extern u32 gLowerPyramidElevator;
+
 void bhv_pyramid_elevator_loop(void) {
     switch (o->oAction) {
         /**
@@ -27,7 +29,7 @@ void bhv_pyramid_elevator_loop(void) {
          * transition to the starting state.
          */
         case PYRAMID_ELEVATOR_IDLE:
-            if (gMarioObject->platform == o) {
+            if ((gOptionsSettings.gameplay.s.randomLevelSpawn) ? gLowerPyramidElevator : (gMarioObject->platform == o)) {
                 o->oAction = PYRAMID_ELEVATOR_START_MOVING;
             }
             break;
