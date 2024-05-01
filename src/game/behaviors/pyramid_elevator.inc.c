@@ -29,7 +29,7 @@ void bhv_pyramid_elevator_loop(void) {
          * transition to the starting state.
          */
         case PYRAMID_ELEVATOR_IDLE:
-            if ((gOptionsSettings.gameplay.s.randomLevelSpawn) ? gLowerPyramidElevator : (gMarioObject->platform == o)) {
+            if (gLowerPyramidElevator && o->oTimer == 20) {
                 o->oAction = PYRAMID_ELEVATOR_START_MOVING;
             }
             break;
