@@ -379,7 +379,7 @@ void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
 #ifdef VISUAL_DEBUG
     if ( hitboxView) visualise_all_avoidance_points();
     if ( hitboxView) render_debug_boxes(DEBUG_UCODE_DEFAULT | DEBUG_BOX_CLEAR);
-    // if (surfaceView) visual_surface_loop();
+    if (surfaceView) visual_surface_loop();
 #endif
 }
 

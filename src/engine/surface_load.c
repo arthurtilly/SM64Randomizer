@@ -690,31 +690,3 @@ void load_object_collision_model(void) {
     COND_BIT((marioDist < o->oDrawingDistance), o->header.gfx.node.flags, GRAPH_RENDER_ACTIVE);
 }
 
-void load_static_object_collision_model(void) {
-    TerrainData *collisionData = gCurrentObject->collisionData;
-
-    collisionData++;
-
-    transform_object_vertices(&collisionData, sVertexData);
-
-    // TERRAIN_LOAD_CONTINUE acts as an "end" to the terrain data.
-    while (*collisionData != TERRAIN_LOAD_CONTINUE) {
-        load_object_surfaces(&collisionData, sVertexData, FALSE);
-    }
-}
-
-void load_static_object_visual_model(void) {
-    f32 marioDist = gCurrentObject->oDistanceToMario;
-
-    // On an object's first frame, the distance is set to 19000.0f.
-    // If the distance hasn't been updated, update it now.
-    if (gCurrentObject->oDistanceToMario == 19000.0f) {
-        marioDist = dist_between_objects(gCurrentObject, gMarioObject);
-    }
-
-    if (marioDist < gCurrentObject->oDrawingDistance) {
-        gCurrentObject->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
-    } else {
-        gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
-    }
-}

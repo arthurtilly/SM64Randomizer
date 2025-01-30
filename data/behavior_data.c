@@ -771,19 +771,18 @@ const BehaviorScript bhvRotatingPlatform[] = {
 };
 
 const BehaviorScript bhvTower[] = {
-    BEGIN(OBJ_LIST_STATIC_SURFACE),
+    BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     LOAD_COLLISION_DATA(wf_seg7_collision_tower),
     SET_FLOAT(oCollisionDistance, 3000),
     SET_FLOAT(oDrawingDistance, 20000),
-    CALL_NATIVE(load_object_collision_model),
-    CALL_NATIVE(load_static_object_collision_model),
     BEGIN_LOOP(),
+        CALL_NATIVE(load_object_collision_model),
     END_LOOP(),
 };
 
 const BehaviorScript bhvBulletBillCannon[] = {
-    BEGIN(OBJ_LIST_STATIC_SURFACE),
+    BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     LOAD_COLLISION_DATA(wf_seg7_collision_bullet_bill_cannon),
     SET_FLOAT(oCollisionDistance, 300),
@@ -2697,26 +2696,26 @@ const BehaviorScript bhvRockSolid[] = {
 };
 
 const BehaviorScript bhvBowserSubDoor[] = {
-    BEGIN(OBJ_LIST_STATIC_SURFACE),
+    BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_ACTIVE_FROM_AFAR | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     LOAD_COLLISION_DATA(ddd_seg7_collision_bowser_sub_door),
     SET_FLOAT(oDrawingDistance, 20000),
     SET_FLOAT(oCollisionDistance, 20000),
-    CALL_NATIVE(load_object_collision_model),
-    CALL_NATIVE(bhv_bowsers_sub_init),
     BEGIN_LOOP(),
+        CALL_NATIVE(bhv_bowsers_sub_loop),
+        CALL_NATIVE(load_object_collision_model),
     END_LOOP(),
 };
 
 const BehaviorScript bhvBowsersSub[] = {
-    BEGIN(OBJ_LIST_STATIC_SURFACE),
+    BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_ACTIVE_FROM_AFAR | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     SET_FLOAT(oDrawingDistance, 20000),
     SET_FLOAT(oCollisionDistance, 20000),
     LOAD_COLLISION_DATA(ddd_seg7_collision_submarine),
-    CALL_NATIVE(load_object_collision_model),
-    CALL_NATIVE(bhv_bowsers_sub_init),
     BEGIN_LOOP(),
+        CALL_NATIVE(bhv_bowsers_sub_loop),
+        CALL_NATIVE(load_object_collision_model),
     END_LOOP(),
 };
 
@@ -2756,7 +2755,7 @@ const BehaviorScript bhvShipPart3[] = {
 };
 
 const BehaviorScript bhvInSunkenShip3[] = {
-    BEGIN(OBJ_LIST_STATIC_SURFACE),
+    BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_PERSISTENT_RESPAWN | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     LOAD_COLLISION_DATA(jrb_seg7_collision_in_sunken_ship_3),
     SET_HOME(),
@@ -2798,13 +2797,13 @@ const BehaviorScript bhvSunkenShipPart2[] = {
 };
 
 const BehaviorScript bhvInSunkenShip[] = {
-    BEGIN(OBJ_LIST_STATIC_SURFACE),
+    BEGIN(OBJ_LIST_SURFACE),
     LOAD_COLLISION_DATA(jrb_seg7_collision_in_sunken_ship),
     GOTO(bhvInSunkenShip2 + 1 + 2),
 };
 
 const BehaviorScript bhvInSunkenShip2[] = {
-    BEGIN(OBJ_LIST_STATIC_SURFACE),
+    BEGIN(OBJ_LIST_SURFACE),
     LOAD_COLLISION_DATA(jrb_seg7_collision_in_sunken_ship_2),
     // Sunken ship - common:
     OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),

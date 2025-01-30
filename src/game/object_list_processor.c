@@ -170,8 +170,7 @@ struct ObjectNode gObjectListArray[16];
 /**
  * The order that object lists are processed in a frame.
  */
-s8 sObjectListUpdateOrder[] = { OBJ_LIST_STATIC_SURFACE,
-                                OBJ_LIST_SPAWNER,
+s8 sObjectListUpdateOrder[] = { OBJ_LIST_SPAWNER,
                                 OBJ_LIST_SURFACE,
                                 OBJ_LIST_POLELIKE,
                                 OBJ_LIST_PLAYER,
@@ -561,8 +560,6 @@ void clear_objects(void) {
  * Update spawner and surface objects.
  */
 void update_terrain_objects(void) {
-    gObjectCounter = update_objects_in_list(&gObjectLists[OBJ_LIST_STATIC_SURFACE]);
-
     gObjectCounter = update_objects_in_list(&gObjectLists[OBJ_LIST_SPAWNER]);
     profiler_update(PROFILER_TIME_SPAWNER);
 
@@ -577,7 +574,7 @@ void update_terrain_objects(void) {
 void update_non_terrain_objects(void) {
     s32 listIndex;
 
-    s32 i = 3;
+    s32 i = 2;
     while ((listIndex = sObjectListUpdateOrder[i]) != -1) {
         if (listIndex == OBJ_LIST_PLAYER) {
             profiler_update(PROFILER_TIME_BEHAVIOR_BEFORE_MARIO);
