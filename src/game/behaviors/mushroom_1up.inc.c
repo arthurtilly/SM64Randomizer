@@ -13,7 +13,7 @@ void bhv_1up_interact(void) {
             }
         } else {
             // Default Play
-            gMarioState->numLives++;
+            // gMarioState->numLives++;
         }
         play_sound(SOUND_GENERAL_COLLECT_1UP, gGlobalSoundSource);
 #ifdef MUSHROOMS_HEAL
@@ -21,9 +21,6 @@ void bhv_1up_interact(void) {
 #ifdef BREATH_METER
         gMarioState->breathCounter = 31;
 #endif
-#endif
-#ifdef SAVE_NUM_LIVES
-        save_file_set_num_lives(gMarioState->numLives);
 #endif
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
 #if ENABLE_RUMBLE

@@ -738,9 +738,9 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
 
             case WARP_OP_DEATH:
 #ifndef DISABLE_LIVES
-                if (m->numLives == 0) {
+                // if (m->numLives == 0) {
                     sDelayedWarpOp = WARP_OP_GAME_OVER;
-                }
+                // }
 #endif
                 sDelayedWarpTimer = 48;
                 sSourceWarpNodeId = WARP_NODE_DEATH;
@@ -758,11 +758,11 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                      || ((gOptionsSettings.gameplay.s.adjustedExits) && ((gCurrLevelNum == LEVEL_PSS) || (gCurrLevelNum == LEVEL_TOTWC)))) {
                     // We only want this in either the default situation or if we are using randomization in these levels.
 #ifndef DISABLE_LIVES
-                    if (m->numLives == 0) {
+                    // if (m->numLives == 0) {
                         sDelayedWarpOp = WARP_OP_GAME_OVER;
-                    } else {
-                        sSourceWarpNodeId = WARP_NODE_DEATH;
-                    }
+                    // } else {
+                        // sSourceWarpNodeId = WARP_NODE_DEATH;
+                    // }
 #else
                     sSourceWarpNodeId = WARP_NODE_DEATH;
 #endif
@@ -946,7 +946,6 @@ void update_hud_values(void) {
         }
 #endif
 
-#if BUGFIX_MAX_LIVES
         if (gMarioState->numCoins > 999) {
             gMarioState->numCoins = 999;
         }
@@ -954,11 +953,6 @@ void update_hud_values(void) {
         if (gHudDisplay.coins > 999) {
             gHudDisplay.coins = 999;
         }
-#else
-        if (gMarioState->numCoins > 999) {
-            gMarioState->numLives = (s8) 999; //! Wrong variable
-        }
-#endif
 
         gHudDisplay.stars = gMarioState->numStars;
         gHudDisplay.lives = gMarioState->numLives;
@@ -1060,23 +1054,8 @@ s32 play_mode_paused(void) {
         if (gDebugLevelSelect) {
             fade_into_special_warp(WARP_SPECIAL_LEVEL_SELECT, 1);
         } else {
-            if (gMenuOptSelectIndex == 3) {
-                if (gMarioState->numLives == 0) {
-                    if (gOptionsSettings.gameplay.s.nonstopMode == 2) {
-                        save_file_do_save(gCurrSaveFileNum - 1);
-                    }
-                    fade_into_special_warp(-3, 0);
-                } else {
-                    struct ObjectWarpNode *warpNode = area_get_warp_node(WARP_NODE_DEATH);
-
-                    initiate_warp(warpNode->node.destLevel & 0x7F, warpNode->node.destArea,
-                                    warpNode->node.destNode, 0);
-                    fade_into_special_warp(0, 0);
-                }
-            } else {
-                initiate_warp(LEVEL_CASTLE, 1, 0x1F, 0);
-                fade_into_special_warp(0, 0);
-            }
+            initiate_warp(LEVEL_CASTLE, 1, 0x1F, 0);
+            fade_into_special_warp(0, 0);
             gSavedCourseNum = COURSE_NONE;
         }
 

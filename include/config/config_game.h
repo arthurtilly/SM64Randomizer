@@ -18,7 +18,7 @@
 // #define SAVE_NUM_LIVES
 
 // This is the number of lives Mario starts with after a game over or starting the game for the first time (must be lower than 127).
-#define DEFAULT_NUM_LIVES 4
+#define DEFAULT_NUM_LIVES 0
 
 // This can be 0..127.
 #define MAX_NUM_LIVES   100
