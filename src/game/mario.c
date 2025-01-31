@@ -1411,6 +1411,20 @@ void set_submerged_cam_preset_and_spawn_bubbles(struct MarioState *m) {
     }
 }
 
+// Decrement mario's health by a certain number
+// If health segments visibly change, kill him
+void ironmario_decrement_health(struct MarioState *m, int hp) {
+    s32 oldHealthWedges = m->health >> 8;
+    m->health -= hp;
+    s32 newHealthWedges = m->health >> 8;
+    if (newHealthWedges != oldHealthWedges) {
+        m->health = 0xFF;
+    }
+    if (m->health < 0x100) {
+        m->health = 0xFF;
+    }
+}
+
 /**
  * Both increments and decrements Mario's HP.
  */
@@ -1422,26 +1436,23 @@ void update_mario_health(struct MarioState *m) {
         if (((u32) m->healCounter | (u32) m->hurtCounter) == 0) {
             if ((m->input & INPUT_IN_POISON_GAS) && !(m->action & ACT_FLAG_INTANGIBLE)) {
                 if (!(m->flags & MARIO_METAL_CAP) && !gDebugLevelSelect) {
-                    m->health -= 4;
+                    ironmario_decrement_health(m, 4);
                 }
             } else {
                 if ((m->action & ACT_FLAG_SWIMMING) && !(m->action & ACT_FLAG_INTANGIBLE)) {
                     terrainIsSnow = (m->area->terrainType & TERRAIN_MASK) == TERRAIN_SNOW;
-#ifdef BREATH_METER
-                    // when in snow terrains lose 3 health.
-                    if ((m->pos[1] < (m->waterLevel - 140)) && terrainIsSnow) {
-                        m->health -= 3;
-                    }
-#else
                     // When Mario is near the water surface, recover health (unless in snow),
                     // when in snow terrains lose 3 health.
                     // If using the debug level select, do not lose any HP to water.
                     if ((m->pos[1] >= (m->waterLevel - 140)) && !terrainIsSnow) {
                         m->health += 0x1A;
                     } else if (!gDebugLevelSelect) {
-                        m->health -= (terrainIsSnow ? 3 : 1);
+                        if (terrainIsSnow) {
+                            ironmario_decrement_health(m, 3);
+                        } else {
+                            m->health -= 1; // NOT ironmario
+                        }
                     }
-#endif
                 }
             }
         }
@@ -1451,7 +1462,7 @@ void update_mario_health(struct MarioState *m) {
             m->healCounter--;
         }
         if (m->hurtCounter > 0) {
-            m->health -= 0x40;
+            m->health = 0xFF;
             m->hurtCounter--;
         }
 
