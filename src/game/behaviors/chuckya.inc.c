@@ -31,7 +31,7 @@ void common_anchor_mario_behavior(f32 forwardVel, f32 yVel, s32 flag) {
 }
 
 void bhv_chuckya_anchor_mario_loop(void) {
-    common_anchor_mario_behavior(40.0f, 40.0f, INT_STATUS_MARIO_DROPPED_BY_OBJ);
+    common_anchor_mario_behavior(80.0f, 120.0f, INT_STATUS_MARIO_DROPPED_BY_OBJ);
 }
 
 void chuckya_act_0(void) {

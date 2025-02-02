@@ -27,8 +27,8 @@ void bhv_heave_ho_throw_mario_loop(void) {
         case 2:
             cur_obj_play_sound_2(SOUND_OBJ_HEAVEHO_TOSSED);
             gMarioObject->oInteractStatus |= INT_STATUS_MARIO_THROWN_BY_OBJ;
-            gMarioStates[0].forwardVel = -45.0f;
-            gMarioStates[0].vel[1] = 95.0f;
+            gMarioStates[0].forwardVel = -90.0f;
+            gMarioStates[0].vel[1] = 150.0f;
             o->parentObj->oHeaveHoThrowState = 0;
             break;
     }
