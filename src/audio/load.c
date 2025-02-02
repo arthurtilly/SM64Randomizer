@@ -930,8 +930,8 @@ void audio_init() {
     gAlBankSets = soundAlloc(&gAudioInitPool, 0x400);
     audio_dma_copy_immediate((uintptr_t) gBankSetsData, gAlBankSets, 0x400);
 #else
-    gAlBankSets = soundAlloc(&gAudioInitPool, 0x100);
-    audio_dma_copy_immediate((uintptr_t) gBankSetsData, gAlBankSets, 0x100);
+    gAlBankSets = soundAlloc(&gAudioInitPool, 0x400);
+    audio_dma_copy_immediate((uintptr_t) gBankSetsData, gAlBankSets, 0x400);
 #endif
 
     init_sequence_players();
