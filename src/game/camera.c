@@ -10331,7 +10331,7 @@ struct Cutscene sCutsceneUnlockKeyDoor[] = {
  * Cutscene that plays when Mario exits bowser's arena after getting the key.
  */
 struct Cutscene sCutsceneExitBowserSuccess[] = {
-    { cutscene_exit_bowser_succ, 190 },
+    { cutscene_exit_bowser_succ, 55 },
     { cutscene_non_painting_end, 0 }
 };
 
@@ -10347,7 +10347,7 @@ struct Cutscene sCutsceneExitBowserDeath[] = {
  * Cutscene that plays when Mario exits a non-painting course, like HMC.
  */
 struct Cutscene sCutsceneExitSpecialSuccess[] = {
-    { cutscene_exit_non_painting_succ, 163 },
+    { cutscene_exit_non_painting_succ, 55 },
     { cutscene_non_painting_end, 0 }
 };
 
