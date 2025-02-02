@@ -55,6 +55,28 @@ s8 gLevelToCourseNumTable[] = {
 STATIC_ASSERT(ARRAY_COUNT(gLevelToCourseNumTable) == LEVEL_COUNT - 1,
               "change this array if you are adding levels");
 #ifdef EEP
+
+s32 osEepromLongWriteLagless(OSMesgQueue *mq, u8 address, u8 *buffer, int length)
+{
+    s32 ret = 0;
+    if (address > EEPROM_MAXBLOCKS) return -1;
+    while (length > 0)
+    {
+        if ((ret = osEepromWrite(mq, address, buffer))) return ret;
+        length -= EEPROM_BLOCK_SIZE;
+        address++;
+        buffer += EEPROM_BLOCK_SIZE;
+#if 0
+        osSetTimer(
+            &__osEepromTimer, OS_USEC_TO_CYCLES(EEPROM_WAIT), 0,
+            &__osEepromTimerQ, &__osEepromTimerMsg
+        );
+        osRecvMesg(&__osEepromTimerQ, NULL, OS_MESG_BLOCK);
+#endif
+    }
+    return ret;
+}
+
 /**
  * Read from EEPROM to a given address.
  * The EEPROM address is computed using the offset of the destination address from gSaveBuffer.
@@ -103,9 +125,7 @@ static s32 write_eeprom_data(void *buffer, s32 size) {
             block_until_rumble_pak_free();
 #endif
             triesLeft--;
-            status = gIsVC
-                   ? osEepromLongWriteVC(&gSIEventMesgQueue, offset, buffer, size)
-                   : osEepromLongWrite  (&gSIEventMesgQueue, offset, buffer, size);
+            status = osEepromLongWriteLagless  (&gSIEventMesgQueue, offset, buffer, size);
 #if ENABLE_RUMBLE
             release_rumble_pak_control();
 #endif
