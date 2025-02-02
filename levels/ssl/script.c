@@ -16,6 +16,7 @@
 #include "levels/ssl/header.h"
 
 static const LevelScript script_func_local_1[] = {
+    OBJECT(/*model*/ MODEL_EXCLAMATION_BOX, /*pos*/ 0,0,0, /*angle*/ 0,0,0, /*behParam*/ (EXCLAMATION_BOX_BP_GREEN_DEMON << 16), /*beh*/ bhvExclamationBox),
     OBJECT(/*model*/ MODEL_SSL_PYRAMID_TOP, /*pos*/ -2047, 1536, -1023, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvPyramidTop),
     RETURN(),
 };

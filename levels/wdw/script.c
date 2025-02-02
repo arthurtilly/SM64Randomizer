@@ -16,6 +16,7 @@
 #include "levels/wdw/header.h"
 
 static const LevelScript script_func_local_1[] = {
+    OBJECT(/*model*/ MODEL_EXCLAMATION_BOX, /*pos*/ 0,0,0, /*angle*/ 0,0,0, /*behParam*/ (EXCLAMATION_BOX_BP_GREEN_DEMON << 16), /*beh*/ bhvExclamationBox),
     OBJECT(/*model*/ MODEL_WDW_SQUARE_FLOATING_PLATFORM,      /*pos*/  3390,    0,   384, /*angle*/ 0, 180, 0, /*behParam*/ 0x00000000, /*beh*/ bhvWdwSquareFloatingPlatform),
     OBJECT(/*model*/ MODEL_WDW_SQUARE_FLOATING_PLATFORM,      /*pos*/  -767,  384,  3584, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvWdwSquareFloatingPlatform),
     OBJECT(/*model*/ MODEL_WDW_SQUARE_FLOATING_PLATFORM,      /*pos*/  -767,  384,  1536, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvWdwSquareFloatingPlatform),

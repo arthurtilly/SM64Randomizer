@@ -17,6 +17,7 @@
 
 
 static const LevelScript script_func_local_1[] = {
+    OBJECT(/*model*/ MODEL_EXCLAMATION_BOX, /*pos*/ 0,0,0, /*angle*/ 0,0,0, /*behParam*/ (EXCLAMATION_BOX_BP_GREEN_DEMON << 16), /*beh*/ bhvExclamationBox),
     OBJECT(/*model*/ MODEL_STAR, /*pos*/  700, 4500,  690, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvStar),
     OBJECT(/*model*/ MODEL_STAR, /*pos*/ 4350, 1350, 4350, /*angle*/ 0, 0, 0, /*behParam*/ 0x02000000, /*beh*/ bhvStar),
     OBJECT(/*model*/ MODEL_NONE, /*pos*/ 5000, 1200,    0, /*angle*/ 0, 0, 0, /*behParam*/ 0x04000000, /*beh*/ bhvHiddenRedCoinStar),

@@ -18,6 +18,7 @@
 
 // Unlike most levels, level geometry objects in LLL are defined as regular objects instead of terrain objects.
 static const LevelScript script_func_local_1[] = {
+    OBJECT(/*model*/ MODEL_EXCLAMATION_BOX, /*pos*/ 0,0,0, /*angle*/ 0,0,0, /*behParam*/ (EXCLAMATION_BOX_BP_GREEN_DEMON << 16), /*beh*/ bhvExclamationBox),
     OBJECT(/*model*/ MODEL_LEVEL_GEOMETRY_03, /*pos*/  3840,   0, -5631, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvStaticObject),
     OBJECT(/*model*/ MODEL_LEVEL_GEOMETRY_04, /*pos*/  4992,   0,  -639, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvStaticObject),
     OBJECT(/*model*/ MODEL_LEVEL_GEOMETRY_05, /*pos*/  7168,   0,  1408, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvStaticObject),

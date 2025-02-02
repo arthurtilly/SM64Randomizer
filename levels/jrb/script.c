@@ -16,6 +16,7 @@
 #include "levels/jrb/header.h"
 
 static const LevelScript script_func_local_1[] = {
+    OBJECT(/*model*/ MODEL_EXCLAMATION_BOX, /*pos*/ 0,0,0, /*angle*/ 0,0,0, /*behParam*/ (EXCLAMATION_BOX_BP_GREEN_DEMON << 16), /*beh*/ bhvExclamationBox),
     // OBJECT_WITH_ACTS(/*model*/ MODEL_JRB_SUNKEN_SHIP,          /*pos*/  2385,  3589,  3727, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvSunkenShipPart,          /*acts*/ ACT_1),
     // OBJECT_WITH_ACTS(/*model*/ MODEL_JRB_SUNKEN_SHIP_BACK,     /*pos*/  2385,  3589,  3727, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvSunkenShipPart,          /*acts*/ ACT_1),
     OBJECT(/*model*/ MODEL_JRB_SHIP_LEFT_HALF_PART,  /*pos*/  5385, -5520,  2428, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvSunkenShipPart2),

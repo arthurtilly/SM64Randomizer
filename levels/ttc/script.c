@@ -16,6 +16,7 @@
 #include "levels/ttc/header.h"
 
 static const LevelScript script_func_local_1[] = {
+    OBJECT(/*model*/ MODEL_EXCLAMATION_BOX, /*pos*/ 0,0,0, /*angle*/ 0,0,0, /*behParam*/ (EXCLAMATION_BOX_BP_GREEN_DEMON << 16), /*beh*/ bhvExclamationBox),
     OBJECT(/*model*/ MODEL_NONE,   /*pos*/ -1080,  -840,  1573, /*angle*/ 0,   0, 0, /*behParam*/ 0x00560000, /*beh*/ bhvPoleGrabbing),
     OBJECT(/*model*/ MODEL_THWOMP, /*pos*/  1919,  6191,  1919, /*angle*/ 0, 225, 0, /*behParam*/ 0x00000000, /*beh*/ bhvThwomp2),
     RETURN(),

@@ -4845,6 +4845,7 @@ const BehaviorScript bhvGreenDemon[] = {
     BILLBOARD(),
     SET_HITBOX_WITH_OFFSET(/*Radius*/ 30, /*Height*/ 30, /*Downwards offset*/ 0),
     SET_FLOAT(oGraphYOffset, 30),
+    SET_INT(oAnimState, 1),
     CALL_NATIVE(bhv_1up_common_init),
     BEGIN_LOOP(),
         SET_INT(oIntangibleTimer, 0),
