@@ -125,7 +125,9 @@ static s32 write_eeprom_data(void *buffer, s32 size) {
             block_until_rumble_pak_free();
 #endif
             triesLeft--;
-            status = osEepromLongWriteLagless  (&gSIEventMesgQueue, offset, buffer, size);
+            status = gIsVC
+                   ? osEepromLongWriteVC(&gSIEventMesgQueue, offset, buffer, size)
+                   : osEepromLongWriteLagless  (&gSIEventMesgQueue, offset, buffer, size);
 #if ENABLE_RUMBLE
             release_rumble_pak_control();
 #endif
