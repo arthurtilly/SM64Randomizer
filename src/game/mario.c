@@ -1771,7 +1771,8 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
         } else if (sDemonTimer == 1) {
             if ((gCurrLevelNum != LEVEL_CASTLE) && (gCurrLevelNum != LEVEL_CASTLE_COURTYARD) && (gCurrLevelNum != LEVEL_CASTLE_GROUNDS)) {
                 if ((gCurrLevelNum != LEVEL_BOWSER_1) && (gCurrLevelNum != LEVEL_BOWSER_2) && (gCurrLevelNum != LEVEL_BOWSER_3)) {
-                    spawn_object(gMarioState->marioObj, MODEL_1UP, bhvGreenDemon);
+                    struct Object *demon = spawn_object(gMarioState->marioObj, MODEL_1UP, bhvGreenDemon);
+                    demon->oAnimState = 1;
                 }
             }
             sDemonTimer = 0;

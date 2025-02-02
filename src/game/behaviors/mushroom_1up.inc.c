@@ -308,7 +308,11 @@ void bhv_1up_hidden_in_pole_loop(void) {
                 o->oVelY = 40.0f;
                 o->oAction = MUSHROOM_ACT_LOOP_IN_AIR;
                 o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
-                play_sound(SOUND_GENERAL2_1UP_APPEAR, gGlobalSoundSource);
+                if (o->behavior == segmented_to_virtual(bhvGreenDemon)) {
+                    play_sound(SOUND_OBJ_BOWSER_LAUGH, gGlobalSoundSource);
+                } else {
+                    play_sound(SOUND_GENERAL2_1UP_APPEAR, gGlobalSoundSource);
+                }
             }
             break;
 
