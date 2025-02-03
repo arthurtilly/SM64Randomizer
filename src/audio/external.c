@@ -293,9 +293,13 @@ u8 sBackgroundMusicDefaultVolume[] = {
     85,  // SEQ_EVENT_BOSS
     85,  // SEQ_LEVEL_BOSS_KOOPA_FINAL
     65,  // SEQ_MENU_FILE_SELECT
+    65, // powerup shell
+    80, // menu title screen gameover
     85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,
     85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,
-    85,85,85,85,85,85,85,85,85,85,
+    85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,
+    85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,
+    85,85,85,85,85,85,85,85,85,85,85,
 };
 
 STATIC_ASSERT(ARRAY_COUNT(sBackgroundMusicDefaultVolume) == SEQ_COUNT,
@@ -1538,7 +1542,7 @@ static void seq_player_play_sequence(u8 player, u8 seqId, u16 arg2) {
     u8 i;
 
     if (player == SEQ_PLAYER_LEVEL) {
-        sCurrentBackgroundMusicSeqId = seqId & SEQ_BASE_ID;
+        sCurrentBackgroundMusicSeqId = seqId;
         sBackgroundMusicForDynamics = SEQUENCE_NONE;
         sCurrentMusicDynamic = 0xff;
         sMusicDynamicDelay = 2;
@@ -1549,8 +1553,8 @@ static void seq_player_play_sequence(u8 player, u8 seqId, u16 arg2) {
     }
 
 #if defined(VERSION_EU) || defined(VERSION_SH)
-    func_802ad770(0x46000000 | ((u8)(u32) player) << 16, seqId & SEQ_VARIATION);
-    func_802ad74c(0x82000000 | ((u8)(u32) player) << 16 | ((u8)(seqId & SEQ_BASE_ID)) << 8, arg2);
+    func_802ad770(0x46000000 | ((u8)(u32) player) << 16, seqId);
+    func_802ad74c(0x82000000 | ((u8)(u32) player) << 16 | ((u8)(seqId)) << 8, arg2);
 
     if (player == SEQ_PLAYER_LEVEL) {
         targetVolume = begin_background_music_fade(0);
@@ -1560,8 +1564,8 @@ static void seq_player_play_sequence(u8 player, u8 seqId, u16 arg2) {
     }
 #else
 
-    gSequencePlayers[player].seqVariation = seqId & SEQ_VARIATION;
-    load_sequence(player, seqId & SEQ_BASE_ID, 0);
+    gSequencePlayers[player].seqVariation = ((seqId == SEQ_EVENT_POWERUP_SHELL) || (seqId == SEQ_MENU_TITLE_SCREEN_GAMEOVER)) ? 0x80 : 0;
+    load_sequence(player, seqId, 0);
 
     if (player == SEQ_PLAYER_LEVEL) {
         targetVolume = begin_background_music_fade(0);

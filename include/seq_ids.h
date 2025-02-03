@@ -1,13 +1,9 @@
 #ifndef SEQ_IDS_H
 #define SEQ_IDS_H
 
-// Sometimes a sequence id is represented as one of the below ids (the base id),
-// optionally OR'd with SEQ_VARIATION.
-#define SEQ_BASE_ID 0x7f
-#define SEQ_VARIATION 0x80
 #define SEQUENCE_NONE 0xFF
 
-#define SEQ_MENU_GAME_OVER (SEQ_MENU_TITLE_SCREEN | SEQ_VARIATION)
+#define SEQ_MENU_GAME_OVER (SEQ_MENU_TITLE_SCREEN_GAMEOVER)
 
 enum SeqId {
     SEQ_SOUND_PLAYER,                 // 0x00
@@ -42,8 +38,8 @@ enum SeqId {
     SEQ_EVENT_BOSS,                   // 0x1D
     SEQ_LEVEL_BOSS_KOOPA_FINAL,       // 0x1E
     SEQ_MENU_FILE_SELECT,             // 0x1F
-    SEQ_LEVEL_20,
-    SEQ_LEVEL_21,
+    SEQ_EVENT_POWERUP_SHELL,
+    SEQ_MENU_TITLE_SCREEN_GAMEOVER,
     SEQ_LEVEL_22,
     SEQ_LEVEL_23,
     SEQ_LEVEL_24,
@@ -102,6 +98,69 @@ enum SeqId {
     SEQ_LEVEL_59,
     SEQ_LEVEL_5A,
     SEQ_LEVEL_5B,
+    SEQ_LEVEL_5C,
+    SEQ_LEVEL_5D,
+    SEQ_LEVEL_5E,
+    SEQ_LEVEL_5F,
+    SEQ_LEVEL_60,
+    SEQ_LEVEL_61,
+    SEQ_LEVEL_62,
+    SEQ_LEVEL_63,
+    SEQ_LEVEL_64,
+    SEQ_LEVEL_65,
+    SEQ_LEVEL_66,
+    SEQ_LEVEL_67,
+    SEQ_LEVEL_68,
+    SEQ_LEVEL_69,
+    SEQ_LEVEL_6A,
+    SEQ_LEVEL_6B,
+    SEQ_LEVEL_6C,
+    SEQ_LEVEL_6D,
+    SEQ_LEVEL_6E,
+    SEQ_LEVEL_6F,
+    SEQ_LEVEL_70,
+    SEQ_LEVEL_71,
+    SEQ_LEVEL_72,
+    SEQ_LEVEL_73,
+    SEQ_LEVEL_74,
+    SEQ_LEVEL_75,
+    SEQ_LEVEL_76,
+    SEQ_LEVEL_77,
+    SEQ_LEVEL_78,
+    SEQ_LEVEL_79,
+    SEQ_LEVEL_7A,
+    SEQ_LEVEL_7B,
+    SEQ_LEVEL_7C,
+    SEQ_LEVEL_7D,
+    SEQ_LEVEL_7E,
+    SEQ_LEVEL_7F,
+    SEQ_LEVEL_80,
+    SEQ_LEVEL_81,
+    SEQ_LEVEL_82,
+    SEQ_LEVEL_83,
+    SEQ_LEVEL_84,
+    SEQ_LEVEL_85,
+    SEQ_LEVEL_86,
+    SEQ_LEVEL_87,
+    SEQ_LEVEL_88,
+    SEQ_LEVEL_89,
+    SEQ_LEVEL_8A,
+    SEQ_LEVEL_8B,
+    SEQ_LEVEL_8C,
+    SEQ_LEVEL_8D,
+    SEQ_LEVEL_8E,
+    SEQ_LEVEL_8F,
+    SEQ_LEVEL_90,
+    SEQ_LEVEL_91,
+    SEQ_LEVEL_92,
+    SEQ_LEVEL_93,
+    SEQ_LEVEL_94,
+    SEQ_LEVEL_95,
+    SEQ_LEVEL_96,
+    SEQ_LEVEL_97,
+    SEQ_LEVEL_98,
+    SEQ_LEVEL_99,
+    SEQ_LEVEL_9A,
     SEQ_COUNT
 };
 
