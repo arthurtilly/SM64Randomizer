@@ -596,11 +596,11 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
         }
 
         // On Dangerous setting, some objects can spawn in midair in levels with wing cap
-        if ((gOptionsSettings.gameplay.s.safeSpawns == SPAWN_SAFETY_HARD) && 
-            ((gCurrCourseNum == COURSE_BOB) || ((gCurrCourseNum == COURSE_SSL) && (gCurrAreaIndex == 1))) && // Only in BoB and SSL
-            (randPosFlags & RAND_TYPE_HARD_HEIGHT) && ((tinymt32_generate_u32(randomState) & 2) == 0)){ // 1/4 chance
-            maxHeight = maxY;            
-        }
+        // if ((gOptionsSettings.gameplay.s.safeSpawns == SPAWN_SAFETY_HARD) && 
+        //     ((gCurrCourseNum == COURSE_BOB) || ((gCurrCourseNum == COURSE_SSL) && (gCurrAreaIndex == 1))) && // Only in BoB and SSL
+        //     (randPosFlags & RAND_TYPE_HARD_HEIGHT) && ((tinymt32_generate_u32(randomState) & 2) == 0)){ // 1/4 chance
+        //     maxHeight = maxY;            
+        // }
 
         pos[1] = get_val_in_range_uniform(minHeight, maxHeight, randomState);
 
