@@ -235,9 +235,9 @@ void print_generic_text_ascii(s16 x, s16 y, const char *src) {
 }
 
 char *presetStrings[] = {
-    "Base IronMario",
-    "Middle IronMario",
-    "Advanced IronMario",
+    "70 Star",
+    "100 Star",
+    "120 Star",
 };
 
 s32 curPreset = 0;
