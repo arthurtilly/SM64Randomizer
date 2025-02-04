@@ -67,9 +67,9 @@ void bub_act_swimming_towards_mario(void) {
 
     if (o->oPosY < o->oCheepCheepWaterLevel - 50.0f) {
         if (absf(dy) < 500.0f) {
-            bub_move_vertically(1);
+            bub_move_vertically(5);
         } else {
-            bub_move_vertically(4);
+            bub_move_vertically(10);
         }
     } else {
         o->oPosY = o->oCheepCheepWaterLevel - 50.0f;
@@ -79,7 +79,7 @@ void bub_act_swimming_towards_mario(void) {
         }
     }
 
-    if (800.0f < cur_obj_lateral_dist_from_mario_to_home()) {
+    if (1500.0f < cur_obj_lateral_dist_from_mario_to_home()) {
         o->oAngleToMario = cur_obj_angle_to_home();
     }
 
@@ -152,7 +152,7 @@ void bhv_bub_loop(void) {
     cur_obj_call_action_function(sCheepCheepActions);
     cur_obj_move_using_fvel_and_gravity();
 
-    if (o->parentObj->oAction == BUB_SPAWNER_ACT_REMOVE_BUBS) {
-        obj_mark_for_deletion(o);
-    }
+//     if (o->parentObj->oAction == BUB_SPAWNER_ACT_REMOVE_BUBS) {
+//         obj_mark_for_deletion(o);
+//     }
 }

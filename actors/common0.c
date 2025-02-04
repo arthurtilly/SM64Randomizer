@@ -79,3 +79,61 @@ UNUSED static const u64 binid_17 = 17;
 
 #include "koopa_shell/model.inc.c"
 UNUSED static const u64 binid_18 = 18;
+
+#include "thwomp/model.inc.c"
+#include "thwomp/collision.inc.c"
+
+#include "heave_ho/model.inc.c"
+#include "heave_ho/anims/data.inc.c"
+#include "heave_ho/anims/table.inc.c"
+
+#include "bully/model.inc.c"
+#include "bully/anims/data.inc.c"
+#include "bully/anims/table.inc.c"
+
+#include "spindrift/model.inc.c"
+#include "spindrift/anims/data.inc.c"
+#include "spindrift/anims/table.inc.c"
+
+#include "snowman/model.inc.c"
+#include "snowman/anims/data.inc.c"
+#include "snowman/anims/table.inc.c"
+
+#include "boo/model.inc.c"
+
+
+#include "lakitu_enemy/model.inc.c"
+#include "lakitu_enemy/anims/data.inc.c"
+#include "lakitu_enemy/anims/table.inc.c"
+
+#include "spiny_egg/model.inc.c"
+#include "spiny_egg/anims/data.inc.c"
+#include "spiny_egg/anims/table.inc.c"
+
+#include "spiny/model.inc.c"
+#include "spiny/anims/data.inc.c"
+#include "spiny/anims/table.inc.c"
+
+#include "skeeter/model.inc.c"
+#include "skeeter/anims/data.inc.c"
+#include "skeeter/anims/table.inc.c"
+
+#include "piranha_plant/model.inc.c"
+#include "piranha_plant/anims/data.inc.c"
+#include "piranha_plant/anims/table.inc.c"
+
+#include "whomp/model.inc.c"
+#include "whomp/anims/data.inc.c"
+#include "whomp/anims/table.inc.c"
+#include "whomp/collision.inc.c"
+
+#include "mr_i_eyeball/model.inc.c"
+
+#include "mr_i_iris/model.inc.c"
+
+#include "snufit/model.inc.c"
+
+#include "scuttlebug/model.inc.c"
+#include "scuttlebug/anims/data.inc.c"
+#include "scuttlebug/anims/table.inc.c"
+

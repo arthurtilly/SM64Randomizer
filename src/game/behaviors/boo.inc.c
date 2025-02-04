@@ -363,7 +363,7 @@ static void boo_act_0(void) {
     o->oMoveAngleYaw = o->oBooInitialMoveYaw;
     boo_stop();
 
-    o->oBooParentBigBoo = (gCurrActNum == 1) ? cur_obj_nearest_object_with_behavior(bhvGhostHuntBigBoo) : NULL;
+    o->oBooParentBigBoo = ((gCurrActNum == 1) && (gCurrCourseNum == COURSE_BBH)) ? cur_obj_nearest_object_with_behavior(bhvGhostHuntBigBoo) : NULL;
     o->oBooBaseScale = 1.0f;
     o->oBooTargetOpacity = 255;
 

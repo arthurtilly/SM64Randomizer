@@ -41,39 +41,6 @@ extern const Gfx seaweed_seg6_dl_0600A138[];
 extern const Gfx seaweed_seg6_dl_0600A180[];
 extern const struct Animation *const seaweed_seg6_anims_0600A4D4[];
 
-// skeeter
-extern const GeoLayout skeeter_geo[];
-extern const Gfx skeeter_seg6_dl_060009D0[];
-extern const Gfx skeeter_seg6_dl_06000A08[];
-extern const Gfx skeeter_seg6_dl_06000AB8[];
-extern const Gfx skeeter_seg6_dl_06000AF0[];
-extern const Gfx skeeter_seg6_dl_06000BA0[];
-extern const Gfx skeeter_seg6_dl_06000BD8[];
-extern const Gfx skeeter_seg6_dl_06000C78[];
-extern const Gfx skeeter_seg6_dl_06000CA8[];
-extern const Gfx skeeter_seg6_dl_06000D48[];
-extern const Gfx skeeter_seg6_dl_06000D78[];
-extern const Gfx skeeter_seg6_dl_06000E60[];
-extern const Gfx skeeter_seg6_dl_06000EC0[];
-extern const Gfx skeeter_seg6_dl_06003FF0[];
-extern const Gfx skeeter_seg6_dl_06004040[];
-extern const Gfx skeeter_seg6_dl_06004070[];
-extern const Gfx skeeter_seg6_dl_060040A0[];
-extern const Gfx skeeter_seg6_dl_060040F0[];
-extern const Gfx skeeter_seg6_dl_06004120[];
-extern const Gfx skeeter_seg6_dl_06004150[];
-extern const Gfx skeeter_seg6_dl_060041A0[];
-extern const Gfx skeeter_seg6_dl_060041D0[];
-extern const Gfx skeeter_seg6_dl_06004200[];
-extern const Gfx skeeter_seg6_dl_060045C8[];
-extern const Gfx skeeter_seg6_dl_06004618[];
-extern const Gfx skeeter_seg6_dl_06004648[];
-extern const Gfx skeeter_seg6_dl_06004678[];
-extern const Gfx skeeter_seg6_dl_06004A40[];
-extern const Gfx skeeter_seg6_dl_06005328[];
-extern const Gfx skeeter_seg6_dl_06005358[];
-extern const struct Animation *const skeeter_seg6_anims_06007DE0[];
-
 // treasure_chest
 extern const GeoLayout treasure_chest_base_geo[];
 extern const GeoLayout treasure_chest_lid_geo[];

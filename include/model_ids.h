@@ -317,12 +317,9 @@
 #define MODEL_YELLOW_SPHERE               0x55        // yellow_sphere_geo
 #define MODEL_HOOT                        0x56        // hoot_geo
 #define MODEL_YOSHI_EGG                   0x57        // yoshi_egg_geo
-#define MODEL_THWOMP                      0x58        // thwomp_geo
-#define MODEL_HEAVE_HO                    0x59        // heave_ho_geo
 
 // group 2
 #define MODEL_BLARGG                      0x54        // blargg_geo
-#define MODEL_BULLY                       0x56        // bully_geo
 #define MODEL_BULLY_BOSS                  0x57        // bully_boss_geo
 
 // group 3
@@ -352,9 +349,6 @@
 #define MODEL_FWOOSH                      0x57        // fwoosh_geo
 
 // group 7
-#define MODEL_SPINDRIFT                   0x54        // spindrift_geo
-#define MODEL_MR_BLIZZARD_HIDDEN          0x55        // mr_blizzard_hidden_geo
-#define MODEL_MR_BLIZZARD                 0x56        // mr_blizzard_geo
 #define MODEL_PENGUIN                     0x57        // penguin_geo
 
 // group 8
@@ -363,7 +357,6 @@
 #define MODEL_CAP_SWITCH_BASE             0x56        // cap_switch_base_seg5_dl_05003120
 
 // group 9
-#define MODEL_BOO                         0x54        // boo_geo
 #define MODEL_BETA_BOO_KEY                0x55        // small_key_geo
 #define MODEL_HAUNTED_CHAIR               0x56        // haunted_chair_geo
 #define MODEL_MAD_PIANO                   0x57        // mad_piano_geo
@@ -376,9 +369,6 @@
 #define MODEL_YOSHI                       0x55        // yoshi_geo
 
 // group 11
-#define MODEL_ENEMY_LAKITU                0x54        // enemy_lakitu_geo
-#define MODEL_SPINY_BALL                  0x55        // spiny_ball_geo
-#define MODEL_SPINY                       0x56        // spiny_geo
 #define MODEL_WIGGLER_HEAD                0x57        // wiggler_head_geo
 #define MODEL_WIGGLER_BODY                0x58        // wiggler_body_geo
 #define MODEL_BUBBA                       0x59        // bubba_geo
@@ -402,11 +392,8 @@
 #define MODEL_TREASURE_CHEST_LID          0x66        // treasure_chest_lid_geo
 #define MODEL_CYAN_FISH                   0x67        // cyan_fish_geo
 #define MODEL_WATER_RING                  0x68        // water_ring_geo
-#define MODEL_SKEETER                     0x69        // skeeter_geo
 
 // group 14
-#define MODEL_PIRANHA_PLANT               0x64        // piranha_plant_geo
-#define MODEL_WHOMP                       0x67        // whomp_geo
 #define MODEL_KOOPA_WITH_SHELL            0x68        // koopa_with_shell_geo
 #define MODEL_METALLIC_BALL               0x65        // metallic_ball_geo
 #define MODEL_CHAIN_CHOMP                 0x66        // chain_chomp
@@ -424,10 +411,6 @@
 
 // group 17
 #define MODEL_SWOOP                       0x64        // swoop_geo
-#define MODEL_SCUTTLEBUG                  0x65        // scuttlebug_geo
-#define MODEL_MR_I_IRIS                   0x66        // mr_i_iris_geo
-#define MODEL_MR_I_BODY                   0x67        // mr_i_geo
-#define MODEL_MR_I MODEL_MR_I_BODY // backwards compatibility
 #define MODEL_DORRIE                      0x68        // dorrie_geo
 
 // other models
@@ -542,6 +525,24 @@
 #define MODEL_CHUCKYA                     0xDF        // chuckya_geo
 #define MODEL_WHITE_PUFF                  0xE0        // white_puff_geo
 #define MODEL_TRAJECTORY_MARKER_BALL      0xE1        // bowling_ball_track_geo - duplicate used in SSL Pyramid small sized and as a track ball
+
+#define MODEL_HEAVE_HO                    0xE2
+#define MODEL_SPINDRIFT                   0xE3
+#define MODEL_MR_BLIZZARD                 0xE4
+#define MODEL_MR_BLIZZARD_HIDDEN          0xE5
+#define MODEL_PIRANHA_PLANT               0xE6
+#define MODEL_SCUTTLEBUG                  0xE7
+#define MODEL_MR_I_IRIS                   0xE8
+#define MODEL_MR_I_BODY                   0xE9
+#define MODEL_MR_I MODEL_MR_I_BODY // backwards compatibility
+#define MODEL_BULLY                       0xEA
+#define MODEL_ENEMY_LAKITU                0xEB
+#define MODEL_SKEETER                     0xEC
+#define MODEL_BOO                         0xED
+#define MODEL_WHOMP                       0xEE
+#define MODEL_THWOMP                      0xEF
+#define MODEL_SPINY_BALL                  0xF0
+#define MODEL_SPINY                       0xF1
 
 #ifdef IA8_30FPS_COINS
 #define MODEL_SILVER_COIN                 0xE2        // silver_coin_geo
