@@ -22,7 +22,6 @@ struct ExoticObject sExoticObjects[] = {
     { MODEL_SNUFIT, bhvSnufit },
     { MODEL_BOWLING_BALL, bhvFireSpitter },
     { MODEL_CHUCKYA, bhvChuckya },
-    { MODEL_CHUCKYA, bhvChuckya },
 };
 
 void bhv_exotic(void) {
