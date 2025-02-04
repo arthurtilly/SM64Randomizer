@@ -749,6 +749,12 @@ const BehaviorScript bhvChuckya[] = {
     END_LOOP(),
 };
 
+const BehaviorScript bhvExotic[] = {
+    BEGIN(OBJ_LIST_SPAWNER),
+    CALL_NATIVE(bhv_exotic),
+    DEACTIVATE(),
+};
+
 const BehaviorScript bhvChuckyaAnchorMario[] = {
     BEGIN(OBJ_LIST_GENACTOR),
     OR_INT(oFlags, (OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),

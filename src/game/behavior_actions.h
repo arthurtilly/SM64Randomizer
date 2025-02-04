@@ -53,6 +53,7 @@ void bhv_cannon_base_unused_loop(void);
 void common_anchor_mario_behavior(f32 forwardVel, f32 yVel, s32 flag);
 void bhv_chuckya_loop(void);
 void bhv_chuckya_anchor_mario_loop(void);
+void bhv_exotic(void);
 void bhv_rotating_platform_loop(void);
 void bhv_wf_breakable_wall_loop(void);
 void bhv_kickable_board_loop(void);

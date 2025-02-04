@@ -35,6 +35,7 @@ extern const BehaviorScript bhvCannonBarrel[];
 extern const BehaviorScript bhvCannonBaseUnused[];
 extern const BehaviorScript bhvChuckya[];
 extern const BehaviorScript bhvChuckyaAnchorMario[];
+extern const BehaviorScript bhvExotic[];
 extern const BehaviorScript bhvRotatingPlatform[];
 extern const BehaviorScript bhvTower[];
 extern const BehaviorScript bhvBulletBillCannon[];

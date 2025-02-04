@@ -57,6 +57,7 @@
 #include "behaviors/water_objs.inc.c"
 #include "behaviors/cannon.inc.c"
 #include "behaviors/chuckya.inc.c"
+#include "behaviors/exotic.inc.c"
 #include "behaviors/breakable_wall.inc.c"
 #include "behaviors/kickable_board.inc.c"
 #include "behaviors/tower_door.inc.c"
