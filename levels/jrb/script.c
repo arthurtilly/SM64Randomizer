@@ -152,6 +152,11 @@ static const LevelScript script_func_local_4[] = {
 };
 
 static const LevelScript script_func_local_5[] = {
+    OBJECT(MODEL_BUB, 0,0,0,0,0,0, 0x00000001, bhvBub),
+    OBJECT(MODEL_BUB, 0,0,0,0,0,0, 0x00000001, bhvBub),
+    OBJECT(MODEL_BUB, 0,0,0,0,0,0, 0x00000001, bhvBub),
+    OBJECT(MODEL_BUB, 0,0,0,0,0,0, 0x00000001, bhvBub),
+    OBJECT(MODEL_BUB, 0,0,0,0,0,0, 0x00000001, bhvBub),
     RETURN(),
 };
 
