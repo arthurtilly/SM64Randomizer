@@ -34,7 +34,7 @@ struct OptionsSettings gOptionsSettings;
 
 #include "randomizer_data.h"
 
-u8 gRandomSongs[136] = { SEQ_MENU_TITLE_SCREEN, SEQ_LEVEL_GRASS,          SEQ_LEVEL_INSIDE_CASTLE,    SEQ_LEVEL_WATER,
+u8 gRandomSongs[135] = { SEQ_MENU_TITLE_SCREEN, SEQ_LEVEL_GRASS,          SEQ_LEVEL_INSIDE_CASTLE,    SEQ_LEVEL_WATER,
                       SEQ_LEVEL_HOT,         SEQ_LEVEL_BOSS_KOOPA,     SEQ_LEVEL_SNOW,             SEQ_LEVEL_SLIDE,
                       SEQ_LEVEL_SPOOKY,      SEQ_LEVEL_UNDERGROUND, 
                       SEQ_LEVEL_KOOPA_ROAD,     SEQ_EVENT_MERRY_GO_ROUND,   SEQ_EVENT_BOSS,
@@ -159,7 +159,6 @@ u8 gRandomSongs[136] = { SEQ_MENU_TITLE_SCREEN, SEQ_LEVEL_GRASS,          SEQ_LE
     SEQ_LEVEL_97,
     SEQ_LEVEL_98,
     SEQ_LEVEL_99,
-    SEQ_LEVEL_9A,
 };
 
 struct nodeInfo gLevelWarps[] = {

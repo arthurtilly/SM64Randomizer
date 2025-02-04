@@ -37,7 +37,7 @@
     "22_BM64_Green_Garden_New": ["25"],
     "23_Bomberman_64_Blue_Resort": ["25"],
     "24_Bomberman_Hero_Redial": ["25"],
-    "25_Cascade_Kingdom_Super_Mario_Odyssey": ["11"],
+    "25_Wii_Shop_Channel": ["11"],
     "26_CT_Delightful_Spekkio_Version_2": ["25"],
     "27_CVOoE_A_Prologue": ["25"],
     "28_Diddy_Kong_Racing_Darkmoon_Caverns": ["25"],
@@ -153,6 +153,5 @@
 	"96_frappe_snowland": ["25"],
 	"97_dk64_gloomy_galleon": ["25"],
 	"98_mk64_bowsers_castle": ["19"],
-	"99_mk64_rainbow_road": ["11"],
-    "9A_Wii_Shop_Channel": ["11"]
+	"99_mk64_rainbow_road": ["11"]
 }

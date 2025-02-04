@@ -126,7 +126,7 @@ extern u8 gIsSetSeed;
 extern u8 gIgnoreCollisionDistance;
 extern u8 gWarpDestinations[];
 extern AreaParamsArray *sLevelParams[];
-extern u8 gRandomSongs[136];
+extern u8 gRandomSongs[135];
 extern u8 gSkyboxIndex;
 extern u8 gStarDoorReqLUT[];
 extern struct AvoidancePoint gDynamicAvoidancePoints[50];

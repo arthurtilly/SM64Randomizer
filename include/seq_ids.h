@@ -160,7 +160,6 @@ enum SeqId {
     SEQ_LEVEL_97,
     SEQ_LEVEL_98,
     SEQ_LEVEL_99,
-    SEQ_LEVEL_9A,
     SEQ_COUNT
 };
 
