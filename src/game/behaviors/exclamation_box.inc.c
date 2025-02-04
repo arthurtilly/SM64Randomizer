@@ -53,7 +53,7 @@ void exclamation_box_act_init(void) {
         u8 tangible = TRUE;
 #else
         u8 tangible = ((save_file_get_flags() & sCapSaveFlags[o->oBehParams2ndByte])
-                    || (GET_BPARAM1(o->oBehParams) != EXCLAMATION_BOX_BP1_NEEDS_SWITCH));
+                    || (gCurrCourseNum == COURSE_WMOTR));
 #endif
         if (tangible) {
             o->oAction = EXCLAMATION_BOX_ACT_ACTIVE;
@@ -73,7 +73,7 @@ void exclamation_box_act_outline(void) {
         cur_obj_set_model(MODEL_EXCLAMATION_BOX_OUTLINE);
     }
     if ((save_file_get_flags() & sCapSaveFlags[o->oBehParams2ndByte])
-     || (GET_BPARAM1(o->oBehParams) != EXCLAMATION_BOX_BP1_NEEDS_SWITCH)) {
+     || (gCurrCourseNum == COURSE_WMOTR)) {
         o->oAction = EXCLAMATION_BOX_ACT_ACTIVE;
         cur_obj_set_model(MODEL_EXCLAMATION_BOX);
     }

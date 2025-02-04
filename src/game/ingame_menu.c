@@ -1886,9 +1886,10 @@ s32 render_pause_courses_and_castle(void) {
             render_pause_my_score_coins();
             render_pause_red_coins();
 #ifndef DISABLE_EXIT_COURSE
-            if (gCurrCourseNum == COURSE_WMOTR) {
-                render_pause_course_options(99, 93, &gDialogLineNum, 15);
-            }
+// no pause exit
+            // if (gCurrCourseNum == COURSE_WMOTR) {
+            //     render_pause_course_options(99, 93, &gDialogLineNum, 15);
+            // }
 #endif
 
             if (gPlayer3Controller->buttonPressed & (A_BUTTON | START_BUTTON)) {
