@@ -29,4 +29,8 @@ void bhv_exotic(void) {
     int index = random_u16_seeded(o->pointerSeed) % ARRAY_COUNT(sExoticObjects);
     struct Object *obj = spawn_object(o, sExoticObjects[index].model, sExoticObjects[index].bhv);
     obj->pointerSeed = o->pointerSeed;
+
+    if (index == 10) {
+        OR_BPARAM1(obj->oBehParams, COIN_INSIDE_BOO_BP_YELLOW_COIN);
+    }
 }

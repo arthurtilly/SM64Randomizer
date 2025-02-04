@@ -427,7 +427,7 @@ static void boo_act_2(void) {
 
 static void boo_act_3(void) {
     if (boo_update_during_death()) {
-        if (o->oBehParams2ndByte != 0 || gCurrActNum != 1) {
+        if (o->oBehParams2ndByte != 0 || gCurrActNum != 1 || gCurrCourseNum != COURSE_BBH) {
             obj_mark_for_deletion(o);
         } else {
             o->oAction = 4;
