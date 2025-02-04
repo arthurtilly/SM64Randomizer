@@ -18,6 +18,56 @@
 static const LevelScript script_func_local_1[] = {
     OBJECT(/*model*/ MODEL_EXCLAMATION_BOX, /*pos*/ 0,0,0, /*angle*/ 0,0,0, /*behParam*/ (EXCLAMATION_BOX_BP_GREEN_DEMON << 16), /*beh*/ bhvExclamationBox),
     OBJECT(/*model*/ MODEL_TTM_ROLLING_LOG,    /*pos*/  4360, -1722,  4001, /*angle*/ 0,  48, 0, /*behParam*/ 0x00000000, /*beh*/ bhvTtmRollingLog),
+    
+    OBJECT(MODEL_GOOMBA, 0,0,0,0,0,0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0,0,0,0,0,0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0,0,0,0,0,0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0,0,0,0,0,0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0,0,0,0,0,0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0,0,0,0,0,0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0,0,0,0,0,0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0,0,0,0,0,0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0,0,0,0,0,0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0,0,0,0,0,0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_BLACK_BOBOMB,0,0,0,0,0,0, 0x00000001, bhvBobomb),
+    OBJECT(MODEL_BLACK_BOBOMB,0,0,0,0,0,0, 0x00000001, bhvBobomb),
+    OBJECT(MODEL_BLACK_BOBOMB,0,0,0,0,0,0, 0x00000001, bhvBobomb),
+    OBJECT(MODEL_BLACK_BOBOMB,0,0,0,0,0,0, 0x00000001, bhvBobomb),
+    OBJECT(MODEL_BLACK_BOBOMB,0,0,0,0,0,0, 0x00000001, bhvBobomb),
+    OBJECT(MODEL_CHUCKYA, 0,0,0,0,0,0, 0x00000001, bhvChuckya),
+    OBJECT(MODEL_CHUCKYA, 0,0,0,0,0,0, 0x00000001, bhvChuckya),
+    OBJECT(MODEL_CHUCKYA, 0,0,0,0,0,0, 0x00000001, bhvChuckya),
+    OBJECT(MODEL_FLYGUY, 0,0,0,0,0,0, 0x00000001, bhvFlyGuy),
+    OBJECT(MODEL_FLYGUY, 0,0,0,0,0,0, 0x00000001, bhvFlyGuy),
+    OBJECT(MODEL_FLYGUY, 0,0,0,0,0,0, 0x00000001, bhvFlyGuy),
+    OBJECT(MODEL_ENEMY_LAKITU, 0,0,0,0,0,0, 0x00000001, bhvEnemyLakitu),
+    OBJECT(MODEL_ENEMY_LAKITU, 0,0,0,0,0,0, 0x00000001, bhvEnemyLakitu),
+    OBJECT(MODEL_ENEMY_LAKITU, 0,0,0,0,0,0, 0x00000001, bhvEnemyLakitu),
+    OBJECT(MODEL_BOWLING_BALL, 0,0,0,0,0,0, 0x00000001, bhvFireSpitter),
+    OBJECT(MODEL_BOWLING_BALL, 0,0,0,0,0,0, 0x00000001, bhvFireSpitter),
+    OBJECT(MODEL_BOWLING_BALL, 0,0,0,0,0,0, 0x00000001, bhvFireSpitter),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+
+    
     RETURN(),
 };
 
@@ -57,6 +107,14 @@ static const LevelScript script_func_local_4[] = {
     OBJECT(/*model*/ MODEL_TTM_YELLOW_SMILEY, /*pos*/ -1251,  2493,  2224, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvStaticObject),
     OBJECT(/*model*/ MODEL_TTM_STAR_SMILEY,   /*pos*/ -2547,  1365,  -520, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvStaticObject),
     OBJECT(/*model*/ MODEL_TTM_MOON_SMILEY,   /*pos*/  -324,   989, -4090, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvStaticObject),
+    
+    OBJECT(MODEL_CHUCKYA, 0,0,0,0,0,0, 0x00000001, bhvChuckya),
+    OBJECT(MODEL_CHUCKYA, 0,0,0,0,0,0, 0x00000001, bhvChuckya),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    
     RETURN(),
 };
 
@@ -67,6 +125,17 @@ static const LevelScript script_func_local_5[] = {
     OBJECT(/*model*/ MODEL_TTM_STAR_SMILEY,   /*pos*/ -9095,  4262,  5348, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvStaticObject),
     OBJECT(/*model*/ MODEL_TTM_MOON_SMILEY,   /*pos*/ -8477,   730, -7122, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvStaticObject),
     OBJECT(/*model*/ MODEL_TTM_MOON_SMILEY,   /*pos*/  6160, -6076,  7861, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvStaticObject),
+    
+    OBJECT(MODEL_CHUCKYA, 0,0,0,0,0,0, 0x00000001, bhvChuckya),
+    OBJECT(MODEL_CHUCKYA, 0,0,0,0,0,0, 0x00000001, bhvChuckya),
+    OBJECT(MODEL_CHUCKYA, 0,0,0,0,0,0, 0x00000001, bhvChuckya),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    
     RETURN(),
 };
 
@@ -74,6 +143,14 @@ static const LevelScript script_func_local_6[] = {
     OBJECT(/*model*/ MODEL_TTM_YELLOW_SMILEY, /*pos*/  5157,  1974, -8292, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvStaticObject),
     OBJECT(/*model*/ MODEL_TTM_STAR_SMILEY,   /*pos*/ 11106,  2588,   381, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvStaticObject),
     OBJECT(/*model*/ MODEL_TTM_MOON_SMILEY,   /*pos*/    37,  1974, -1124, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvStaticObject),
+
+    OBJECT(MODEL_CHUCKYA, 0,0,0,0,0,0, 0x00000001, bhvChuckya),
+    OBJECT(MODEL_CHUCKYA, 0,0,0,0,0,0, 0x00000001, bhvChuckya),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    
     RETURN(),
 };
 

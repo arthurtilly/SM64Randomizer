@@ -4033,7 +4033,7 @@ const BehaviorScript bhvSmoke[] = {
 };
 
 const BehaviorScript bhvBobombExplosionBubble[] = {
-    BEGIN(OBJ_LIST_DEFAULT),
+    BEGIN(OBJ_LIST_UNIMPORTANT),
     BILLBOARD(),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     CALL_NATIVE(bhv_bobomb_explosion_bubble_init),
