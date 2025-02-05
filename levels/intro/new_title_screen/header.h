@@ -1,0 +1,15 @@
+extern u8 new_title_screen_1_rgba16_png_001_rgba16[];
+extern u8 new_title_screen_0_rgba16_png_001_rgba16[];
+extern Vtx new_title_screen_option1_mesh_vtx_0[795];
+extern Gfx new_title_screen_option1_mesh_tri_0[];
+extern Vtx new_title_screen_option1_mesh_vtx_1[818];
+extern Gfx new_title_screen_option1_mesh_tri_1[];
+extern Vtx new_title_screen_option1_mesh_vtx_2[262];
+extern Gfx new_title_screen_option1_mesh_tri_2[];
+extern Gfx mat_new_title_screen_letter_color[];
+extern Gfx mat_revert_new_title_screen_letter_color[];
+extern Gfx mat_new_title_screen_wood[];
+extern Gfx mat_revert_new_title_screen_wood[];
+extern Gfx mat_new_title_screen_background[];
+extern Gfx mat_revert_new_title_screen_background[];
+extern Gfx new_title_screen_option1_mesh[];
