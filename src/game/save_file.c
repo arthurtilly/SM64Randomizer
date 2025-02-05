@@ -257,6 +257,8 @@ static void wipe_main_menu_data(void) {
     gSaveBuffer.menuData.coinScoreAges[1] = 0x2AAAAAAA;
     gSaveBuffer.menuData.coinScoreAges[2] = 0x15555555;
 
+    gSaveBuffer.menuData.defaultPreset = gPresets[0];
+
     gMainMenuDataModified = TRUE;
     save_main_menu_data();
 }

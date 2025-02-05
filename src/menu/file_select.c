@@ -120,7 +120,7 @@ u8 gOverwriteFileSeed = FALSE;
 
 unsigned char textReturn[] = { TEXT_RETURN };
 
-unsigned char textRandomOptions[] = { TEXT_RANDOM_OPTIONS };
+unsigned char textSaveDefault[] = { TEXT_SAVE_DEFAULT };
 
 unsigned char textRandom[] = { TEXT_RANDOM };
 unsigned char textReset[] = { TEXT_RESET };
@@ -1004,6 +1004,8 @@ void randomize_options() {
     curPreset = -1;
 }
 
+extern struct SaveBuffer gSaveBuffer;
+
 static void seed_menu_options_check_clicked_buttons(UNUSED struct Object *seedButton) {
     if (check_clicked_text_width(240, 33, 0, 45)) {
         play_sound(SOUND_MENU_CLICK_FILE_SELECT, gGlobalSoundSource);
@@ -1011,9 +1013,11 @@ static void seed_menu_options_check_clicked_buttons(UNUSED struct Object *seedBu
         sSelectedButtonID = MENU_BUTTON_SELECT_SEED_RETURN;
         mark_obj_for_deletion(sMainMenuButtons[MENU_BUTTON_SELECT_SEED_OPTIONS]);
     }
-    if (check_clicked_text_width(35,33,0,60)) {
+    if (check_clicked_text_width(35,33,0,80)) {
         play_sound(SOUND_MENU_CLICK_FILE_SELECT, gGlobalSoundSource);
-        randomize_options();
+        //randomize_options();
+        gSaveBuffer.menuData.defaultPreset = gOptionsSettings;
+        save_main_menu_data();
     }
 }
 
@@ -1638,8 +1642,6 @@ void print_save_file_star_count(s8 fileIndex, s16 x, s16 y) {
 #define SEEDTEXT_X2 (submenu ? 166 : 165)
 #define SEEDTEXT_Y1 (submenu ? 52 : 56)
 #define SEEDTEXT_Y2 (submenu ? 136 : 135)
-
-extern struct SaveBuffer gSaveBuffer;
 
 void convert_from_ascii(char *buf);
 
@@ -2776,12 +2778,12 @@ static void draw_select_seed_menu_option(void) {
 
     gDPSetEnvColor(gDisplayListHead++, 0, 0, 0, sTextBaseAlpha);
     print_generic_string(240+1, 33-1, textReturn);
-    print_generic_string(35+1,33-1,textRandomOptions);
+    print_generic_string(35+1,33-1,textSaveDefault);
     sprintf(buf, "Settings ID\xE6 %d", gOptionsSettings.gameplay.w);
     print_generic_text_ascii_buf(10,9,buf);
     gDPSetEnvColor(gDisplayListHead++, bottomOptionColor, bottomOptionColor, bottomOptionColor, sTextBaseAlpha);
     print_generic_string(240, 33, textReturn);
-    print_generic_string(35, 33, textRandomOptions);
+    print_generic_string(35, 33, textSaveDefault);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha);
     sprintf(buf, "Settings ID\xE6 %d", gOptionsSettings.gameplay.w);
     print_generic_text_ascii_buf(9,10,buf);
@@ -3083,7 +3085,8 @@ s32 lvl_init_menu_values_and_cursor_pos(UNUSED s32 arg, UNUSED s32 unused) {
     gOverwriteFileOptions = FALSE;
     gOverwriteFileSeed = FALSE;
     curPreset = 0;
-    applyPreset();
+    //applyPreset();
+    gOptionsSettings = gSaveBuffer.menuData.defaultPreset;
     gCurrLevelNum = LEVEL_UNKNOWN_1;
     return 0;
 }
