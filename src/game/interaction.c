@@ -1835,10 +1835,11 @@ void check_kick_or_punch_wall(struct MarioState *m) {
 }
 
 extern u8 gFirstMarioFrame;
+extern u32 gMarioSpawnInvincTimer;
 
 void mario_process_interactions(struct MarioState *m) {
     sDelayInvincTimer = FALSE;
-    sInvulnerable = (m->action & ACT_FLAG_INVULNERABLE) || m->invincTimer != 0;
+    sInvulnerable = (m->action & ACT_FLAG_INVULNERABLE) || (m->invincTimer != 0) || (gMarioSpawnInvincTimer != 0);
 
     if (!(m->action & ACT_FLAG_INTANGIBLE) && m->collidedObjInteractTypes != 0 && !gFirstMarioFrame) {
         s32 i;
@@ -1862,6 +1863,9 @@ void mario_process_interactions(struct MarioState *m) {
 
     if (m->invincTimer > 0 && !sDelayInvincTimer) {
         m->invincTimer--;
+    }
+    if (gMarioSpawnInvincTimer > 0) {
+        gMarioSpawnInvincTimer--;
     }
 
     //! If the kick/punch flags are set and an object collision changes Mario's

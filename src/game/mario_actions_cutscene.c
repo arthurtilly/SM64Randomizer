@@ -1060,11 +1060,14 @@ s32 act_spawn_spin_airborne(struct MarioState *m) {
     return FALSE;
 }
 
+u32 gMarioSpawnInvincTimer = 0;
+
 s32 act_spawn_spin_landing(struct MarioState *m) {
     stop_and_set_height_to_floor(m);
     set_mario_animation(m, MARIO_ANIM_GENERAL_LAND);
     if (is_anim_at_end(m)) {
         load_level_init_text(0);
+        if (MIDDLE_IRONMARIO) gMarioSpawnInvincTimer = 30;
         set_mario_action(m, ACT_IDLE, 0);
     }
     return FALSE;
