@@ -89,31 +89,31 @@ Gfx *geo_intro_tm_copyright(s32 callContext, struct GraphNode *node, UNUSED void
     Gfx *dl = NULL;
     Gfx *dlIter = NULL;
 
-    if (callContext != GEO_CONTEXT_RENDER) { // reset
-        sTmCopyrightAlpha = 0;
-    } else if (callContext == GEO_CONTEXT_RENDER) { // draw
-        dl = alloc_display_list(5 * sizeof(*dl));
-        dlIter = dl;
-        gSPDisplayList(dlIter++, dl_proj_mtx_fullscreen);
-        gDPSetEnvColor(dlIter++, 255, 255, 255, sTmCopyrightAlpha);
-        if (sTmCopyrightAlpha == 255) { // opaque
-            SET_GRAPH_NODE_LAYER(graphNode->flags, LAYER_OPAQUE);
-            gDPSetRenderMode(dlIter++, G_RM_AA_OPA_SURF, G_RM_AA_OPA_SURF2);
-        } else { // blend
-            SET_GRAPH_NODE_LAYER(graphNode->flags, LAYER_TRANSPARENT);
-            gDPSetRenderMode(dlIter++, G_RM_AA_XLU_SURF, G_RM_AA_XLU_SURF2);
-        }
-        gSPDisplayList(dlIter++, &intro_seg7_dl_copyright_trademark); // draw model
-        gSPEndDisplayList(dlIter);
+    // if (callContext != GEO_CONTEXT_RENDER) { // reset
+    //     sTmCopyrightAlpha = 0;
+    // } else if (callContext == GEO_CONTEXT_RENDER) { // draw
+    //     dl = alloc_display_list(5 * sizeof(*dl));
+    //     dlIter = dl;
+    //     gSPDisplayList(dlIter++, dl_proj_mtx_fullscreen);
+    //     gDPSetEnvColor(dlIter++, 255, 255, 255, sTmCopyrightAlpha);
+    //     if (sTmCopyrightAlpha == 255) { // opaque
+    //         SET_GRAPH_NODE_LAYER(graphNode->flags, LAYER_OPAQUE);
+    //         gDPSetRenderMode(dlIter++, G_RM_AA_OPA_SURF, G_RM_AA_OPA_SURF2);
+    //     } else { // blend
+    //         SET_GRAPH_NODE_LAYER(graphNode->flags, LAYER_TRANSPARENT);
+    //         gDPSetRenderMode(dlIter++, G_RM_AA_XLU_SURF, G_RM_AA_XLU_SURF2);
+    //     }
+    //     gSPDisplayList(dlIter++, &intro_seg7_dl_copyright_trademark); // draw model
+    //     gSPEndDisplayList(dlIter);
 
-        // Once the "Super Mario 64" logo has just about zoomed fully, fade in the "TM" and copyright text
-        if (sIntroFrameCounter >= 19) {
-            sTmCopyrightAlpha += 26;
-            if (sTmCopyrightAlpha > 255) {
-                sTmCopyrightAlpha = 255;
-            }
-        }
-    }
+    //     // Once the "Super Mario 64" logo has just about zoomed fully, fade in the "TM" and copyright text
+    //     if (sIntroFrameCounter >= 19) {
+    //         sTmCopyrightAlpha += 26;
+    //         if (sTmCopyrightAlpha > 255) {
+    //             sTmCopyrightAlpha = 255;
+    //         }
+    //     }
+    // }
     return dl;
 }
 
