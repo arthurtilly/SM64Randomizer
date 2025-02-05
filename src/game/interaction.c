@@ -1564,17 +1564,20 @@ u32 interact_hoot(struct MarioState *m, UNUSED u32 interactType, struct Object *
         && actionId <  (ACT_SHOT_FROM_CANNON & ACT_ID_MASK)
         && gGlobalTimer - m->usedObj->oHootMarioReleaseTime > 30
     ) {
-        mario_stop_riding_and_holding(m);
+//         mario_stop_riding_and_holding(m);
 
-        obj->oInteractStatus = TRUE; //! Note: Not a flag, treated as a TRUE/FALSE statement
-        m->interactObj = obj;
-        m->usedObj     = obj;
+//         obj->oInteractStatus = TRUE; //! Note: Not a flag, treated as a TRUE/FALSE statement
+//         m->interactObj = obj;
+//         m->usedObj     = obj;
 
-#if ENABLE_RUMBLE
-        queue_rumble_data(5, 80);
-#endif
-        update_mario_sound_and_camera(m);
-        return set_mario_action(m, ACT_RIDING_HOOT, 0);
+// #if ENABLE_RUMBLE
+//         queue_rumble_data(5, 80);
+// #endif
+//         update_mario_sound_and_camera(m);
+//         return set_mario_action(m, ACT_RIDING_HOOT, 0);
+            struct Object *explosion = spawn_object(obj, MODEL_EXPLOSION, bhvExplosion);
+            explosion->oGraphYOffset += 100.0f;
+            obj->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
 
     return FALSE;
