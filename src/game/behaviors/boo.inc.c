@@ -331,17 +331,17 @@ static void boo_chase_mario(f32 minDY, s16 yawIncrement, f32 mul) {
             targetYaw = o->oAngleToMario;
         }
 
-        cur_obj_rotate_yaw_toward(targetYaw, yawIncrement);
+        cur_obj_rotate_yaw_toward(targetYaw, FAST(yawIncrement));
         o->oVelY = 0.0f;
 
         if (!mario_is_in_air_action()) {
             f32 dy = o->oPosY - gMarioObject->oPosY;
             if ((minDY < dy) && (dy < 500.0f)) {
-                o->oVelY = increment_velocity_toward_range(o->oPosY, gMarioObject->oPosY + 50.0f, 10.0f, 2.0f);
+                o->oVelY = increment_velocity_toward_range(o->oPosY, gMarioObject->oPosY + 50.0f, 10.0f, FAST(2.0f));
             }
         }
 
-        cur_obj_set_vel_from_mario_vel(10.0f - o->oBooNegatedAggressiveness, mul);
+        cur_obj_set_vel_from_mario_vel(10.0f - o->oBooNegatedAggressiveness, FAST(mul));
 
         if (o->oForwardVel != 0.0f) {
             boo_oscillate(FALSE);

@@ -81,7 +81,7 @@ static void homing_amp_appear_loop(void) {
 
     // Once the timer becomes greater than 90, i.e. 91 frames have passed,
     // reset the amp's size and start chasing Mario.
-    if (o->oTimer > 90) {
+    if (o->oTimer > FAST_T(90)) {
         cur_obj_scale(1.0f);
         o->oAction = HOMING_AMP_ACT_CHASE;
         o->oAmpYPhase = 0;
@@ -102,14 +102,14 @@ static void homing_amp_chase_loop(void) {
     // If the amp is locked on to Mario, start "chasing" him by moving
     // in a straight line at 15 units/second for 32 frames.
     if (o->oHomingAmpLockedOn == TRUE) {
-        o->oForwardVel = 15.0f;
+        o->oForwardVel = FAST(15.0f);
 
         // Move the amp's average Y (the Y value it oscillates around) to align with
         // Mario's head. Mario's graphics' Y + 150 is around the top of his head.
         // Note that the average Y will slowly go down to approach his head if the amp
         // is above his head, but if the amp is below it will instantly snap up.
         if (o->oHomingAmpAvgY > gMarioObject->header.gfx.pos[1] + 150.0f) {
-            o->oHomingAmpAvgY -= 10.0f;
+            o->oHomingAmpAvgY -= FAST(10.0f);
         } else {
             o->oHomingAmpAvgY = gMarioObject->header.gfx.pos[1] + 150.0f;
         }
@@ -120,15 +120,15 @@ static void homing_amp_chase_loop(void) {
     } else {
         // If the amp is not locked on to Mario, move forward at 10 units/second
         // while curving towards him.
-        o->oForwardVel = 10.0f;
+        o->oForwardVel = FAST(10.0f);
 
-        obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX, 0x400);
+        obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX, FAST(0x400));
 
         // The amp's average Y will approach Mario's graphical Y position + 250
         // at a rate of 10 units per frame. Interestingly, this is different from
         // the + 150 used while chasing him. Could this be a typo?
         if (o->oHomingAmpAvgY < gMarioObject->header.gfx.pos[1] + 250.0f) {
-            o->oHomingAmpAvgY += 10.0f;
+            o->oHomingAmpAvgY += FAST(10.0f);
         }
     }
 
@@ -149,7 +149,7 @@ static void homing_amp_chase_loop(void) {
  */
 static void homing_amp_give_up_loop(void) {
     // Move forward for 152 frames
-    o->oForwardVel = 15.0f;
+    o->oForwardVel = FAST(15.0f);
 
     if (o->oTimer > 150) {
         // Hide the amp and reset it back to its inactive state
@@ -172,11 +172,11 @@ static void amp_attack_cooldown_loop(void) {
 
     cur_obj_become_intangible();
 
-    if (o->oTimer > 30) {
+    if (o->oTimer > FAST_T(30)) {
         o->oAnimState = 0;
     }
 
-    if (o->oTimer > 90) {
+    if (o->oTimer > FAST_T(90)) {
         o->oAnimState = 1;
         cur_obj_become_tangible();
         o->oAction = HOMING_AMP_ACT_CHASE;
@@ -296,7 +296,7 @@ static void circling_amp_idle_loop(void) {
     o->oPosX = o->oHomeX + sins(o->oMoveAngleYaw) * o->oAmpRadiusOfRotation;
     o->oPosZ = o->oHomeZ + coss(o->oMoveAngleYaw) * o->oAmpRadiusOfRotation;
     o->oPosY = o->oHomeY + coss(o->oAmpYPhase * 0x8B0) * 30.0f;
-    o->oMoveAngleYaw += 0x400;
+    o->oMoveAngleYaw += FAST(0x400);
     o->oFaceAngleYaw = o->oMoveAngleYaw + 0x4000;
 
     // Handle attacks

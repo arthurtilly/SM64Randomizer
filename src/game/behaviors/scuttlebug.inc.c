@@ -60,7 +60,7 @@ void bhv_scuttlebug_loop(void) {
                         cur_obj_play_sound_2(SOUND_OBJ2_SCUTTLEBUG_ALERT);
                     }
                 } else if (o->oScuttlebugIsAtttacking == 1) {
-                    o->oForwardVel = 15.0f;
+                    o->oForwardVel = FAST(15.0f);
                     o->oScuttlebugTimer++;
                     if (o->oScuttlebugTimer > 50) {
                         o->oScuttlebugIsAtttacking = FALSE;
@@ -70,7 +70,7 @@ void bhv_scuttlebug_loop(void) {
             if (update_angle_from_move_flags(&o->oAngleToMario)) {
                 o->oSubAction = 2;
             }
-            cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x200);
+            cur_obj_rotate_yaw_toward(o->oAngleToMario, FAST(0x200));
             break;
 
         case 2:

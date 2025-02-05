@@ -361,6 +361,13 @@ static s32 bhv_cmd_randomize_object(void) {
     tinymt32_t randomState;
     tinymt32_init(&randomState, gRandomizerGameSeed + (gCurrentObject->pointerSeed/4));
 
+    f32 r = tinymt32_generate_float(&randomState);
+    // 30% chance to be fast
+    o->isFast = 0;
+    if (MIDDLE_IRONMARIO) {
+        o->isFast = r < 0.3f;
+    }
+
     // Stuff for exclamation boxes when key objects only is enabled
     if ((gOptionsSettings.gameplay.s.objectRandomization == 0) && (gCurrentObject->behavior == segmented_to_virtual(bhvExclamationBox))) {
         s32 bparam = -1;

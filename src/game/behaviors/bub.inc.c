@@ -53,13 +53,13 @@ void bub_act_init(void) {
 
 void bub_act_swimming_towards_mario(void) {
     if (o->oTimer == 0) {
-        o->oForwardVel = random_float() * 2 + 2;
+        o->oForwardVel = FAST(random_float() * 2 + 2);
     }
 
     f32 dy = o->oPosY - gMarioObject->oPosY;
 
     if (o->oPosY < o->oCheepCheepWaterLevel - 50.0f) {
-        bub_move_vertically(2);
+        bub_move_vertically(FAST(2));
     } else {
         o->oPosY = o->oCheepCheepWaterLevel - 50.0f;
     }
@@ -68,7 +68,7 @@ void bub_act_swimming_towards_mario(void) {
         o->oAngleToMario = cur_obj_angle_to_home();
     }
 
-    cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x100);
+    cur_obj_rotate_yaw_toward(o->oAngleToMario, FAST(0x100));
 
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
         o->oAction = BUB_ACT_SWIMMING_AWAY_FROM_MARIO;
@@ -89,16 +89,16 @@ void bub_act_swimming_away_from_mario(void) {
     }
 
     if (o->oForwardVel == 0.0f) {
-        o->oForwardVel = 6.0f;
+        o->oForwardVel = FAST(6.0f);
     }
 
     f32 dy = o->oPosY - gMarioObject->oPosY;
 
     if (o->oPosY < o->oCheepCheepWaterLevel - 50.0f) {
         if (absf(dy) < 500.0f) {
-            bub_move_vertically(2);
+            bub_move_vertically(FAST(2));
         } else {
-            bub_move_vertically(4);
+            bub_move_vertically(FAST(4));
         }
     } else {
         o->oPosY = o->oCheepCheepWaterLevel - 50.0f;

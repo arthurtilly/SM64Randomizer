@@ -210,12 +210,12 @@ void mr_i_body_act_looking_at_mario(void) {
         if (o->oMrIParticleTimer == o->oMrIParticleTimerTarget + 20) {
             spawn_mr_i_particle();
             o->oMrIParticleTimer = 0;
-            o->oMrIParticleTimerTarget = (s32)(random_float() * 50.0f + 50.0f);
+            o->oMrIParticleTimerTarget = FAST_T((random_float() * 50.0f + 50.0f));
         }
         o->oMrIParticleTimer++;
     } else {
         o->oMrIParticleTimer = 0;
-        o->oMrIParticleTimerTarget = (s32)(random_float() * 50.0f + 50.0f);
+        o->oMrIParticleTimerTarget = FAST_T((random_float() * 50.0f + 50.0f));
     }
 
     if (o->oDistanceToMario > 800.0f) {

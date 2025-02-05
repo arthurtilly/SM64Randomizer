@@ -53,7 +53,7 @@ static void skeeter_act_idle(void) {
                 } else if (cur_obj_check_if_near_animation_end()) {
                     cur_obj_play_sound_2(SOUND_OBJ_WALKING_WATER);
                     o->oAction = SKEETER_ACT_LUNGE;
-                    o->oForwardVel = 80.0f;
+                    o->oForwardVel = FAST(80.0f);
                     o->oSkeeterAngleVel = 0;
                 }
             }
@@ -113,9 +113,9 @@ static void skeeter_act_walk(void) {
             if (!(o->oSkeeterTurningAwayFromWall = obj_bounce_off_walls_edges_objects(&o->oSkeeterTargetAngle))) {
                 if (o->oDistanceToMario < 500.0f) {
                     o->oSkeeterTargetAngle = o->oAngleToMario;
-                    o->oSkeeterTargetForwardVel = 20.0f;
+                    o->oSkeeterTargetForwardVel = FAST(20.0f);
                 } else {
-                    o->oSkeeterTargetForwardVel = 10.0f;
+                    o->oSkeeterTargetForwardVel = FAST(10.0f);
                     if (o->oSkeeterWaitTime != 0) {
                         o->oSkeeterWaitTime--;
                     } else if (cur_obj_check_if_near_animation_end()) {

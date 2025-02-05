@@ -56,7 +56,7 @@ void moneybag_jump(s16 collisionFlags) {
         case MONEYBAG_JUMP_PREPARE:
             cur_obj_init_animation(1);
             if (animFrame == 5) {
-                o->oForwardVel = 20.0f;
+                o->oForwardVel = FAST(20.0f);
                 o->oVelY = 40.0f;
             }
 
@@ -86,7 +86,7 @@ void moneybag_jump(s16 collisionFlags) {
 
         case MONEYBAG_JUMP_WALK_AROUND:
             cur_obj_init_animation(4);
-            o->oForwardVel = 10.0f;
+            o->oForwardVel = FAST(10.0f);
 
             if (o->oTimer > 60) {
                 o->oMoneybagJumpState = MONEYBAG_JUMP_LANDING;
@@ -97,7 +97,7 @@ void moneybag_jump(s16 collisionFlags) {
 
         case MONEYBAG_JUMP_WALK_HOME:
             cur_obj_init_animation(4);
-            o->oForwardVel = 5.0f;
+            o->oForwardVel = FAST(5.0f);
             break;
     }
 }

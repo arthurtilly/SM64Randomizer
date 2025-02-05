@@ -124,11 +124,11 @@ void whomp_prepare_jump(void) {
 
 void whomp_jump(void) {
     if (o->oTimer == 0) {
-        o->oVelY = 40.0f;
+        o->oVelY = FAST_T(40.0f);
     }
 
-    if (o->oTimer >= 8) {
-        o->oAngleVelPitch += 0x100;
+    if (o->oTimer >= FAST_T(8)) {
+        o->oAngleVelPitch += FAST(FAST(0x100));
         o->oFaceAnglePitch += o->oAngleVelPitch;
         if (o->oFaceAnglePitch > 0x4000) {
             o->oAngleVelPitch = 0;
@@ -214,11 +214,11 @@ void whomp_on_ground_general(void) {
         } else {
             whomp_on_ground();
         }
-        if (o->oTimer > 100 || (gMarioState->action == ACT_SQUISHED && o->oTimer > 30)) {
+        if (o->oTimer > FAST_T(100) || (gMarioState->action == ACT_SQUISHED && o->oTimer > FAST_T(30))) {
             o->oSubAction = 10;
         }
     } else if (o->oFaceAnglePitch > 0) {
-        o->oAngleVelPitch = -0x200;
+        o->oAngleVelPitch = FAST(-0x200);
         o->oFaceAnglePitch += o->oAngleVelPitch;
     } else {
         o->oAngleVelPitch = 0;

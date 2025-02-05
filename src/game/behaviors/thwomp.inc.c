@@ -2,7 +2,7 @@
 
 void grindel_thwomp_act_on_ground(void) {
     if (o->oTimer == 0) {
-        o->oThwompRandomTimer = random_float() * 10.0f + 20.0f;
+        o->oThwompRandomTimer = FAST_T(random_float() * 10.0f + 20.0f);
     }
     if (o->oTimer > o->oThwompRandomTimer) {
         o->oAction = GRINDEL_THWOMP_ACT_RISING;
@@ -10,7 +10,7 @@ void grindel_thwomp_act_on_ground(void) {
 }
 
 void grindel_thwomp_act_falling(void) {
-    o->oVelY += -4.0f;
+    o->oVelY += FAST(-4.0f);
     o->oPosY += o->oVelY;
     if (o->oPosY < o->oHomeY) {
         o->oPosY = o->oHomeY;
@@ -31,7 +31,7 @@ void grindel_thwomp_act_land(void) {
 
 void grindel_thwomp_act_floating(void) {
     if (o->oTimer == 0) {
-        o->oThwompRandomTimer = random_float() * 30.0f + 10.0f;
+        o->oThwompRandomTimer = FAST_T(random_float() * 30.0f + 10.0f);
     }
     if (o->oTimer > o->oThwompRandomTimer) {
         o->oAction = GRINDEL_THWOMP_ACT_FALLING;
@@ -41,9 +41,9 @@ void grindel_thwomp_act_floating(void) {
 void grindel_thwomp_act_rising(void) {
     if (o->oBehParams2ndByte + 40 < o->oTimer) {
         o->oAction = GRINDEL_THWOMP_ACT_FLOATING;
-        o->oPosY += 5.0f;
+        o->oPosY += FAST(5.0f);
     } else {
-        o->oPosY += 10.0f;
+        o->oPosY += FAST(10.0f);
     }
 }
 

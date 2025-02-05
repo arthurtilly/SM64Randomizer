@@ -140,7 +140,7 @@ static void mr_blizzard_act_rotate(void) {
     // 8.4375 degrees/frame.
     if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
         s16 angleDiff;
-        cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x600);
+        cur_obj_rotate_yaw_toward(o->oAngleToMario, FAST(0x600));
 
         // Modify the ChangeInDizziness based on Mario's angle to Mr. Blizzard.
         angleDiff = o->oAngleToMario - o->oMoveAngleYaw;
@@ -186,7 +186,7 @@ static void mr_blizzard_act_rotate(void) {
             o->prevObj = o->oMrBlizzardHeldObj = NULL;
         }
         // After 60 frames, if Mario is within 11.25 degrees of Mr. Blizzard, throw snowball action.
-        else if (o->oTimer > 60 && abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < 0x800) {
+        else if (o->oTimer > FAST_T(60) && abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < 0x800) {
             o->oAction = MR_BLIZZARD_ACT_THROW_SNOWBALL;
         }
     }

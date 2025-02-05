@@ -47,7 +47,7 @@ void chuckya_act_0(void) {
         case 0:
             o->oForwardVel = 0.0f;
             if (cur_obj_lateral_dist_from_mario_to_home() < 2000.0f) {
-                cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x400);
+                cur_obj_rotate_yaw_toward(o->oAngleToMario, FAST(0x400));
                 if (o->oChuckyaSubActionTimer > 40
                     || abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario) < 0x1000) {
                     o->oSubAction = 1;
@@ -58,7 +58,7 @@ void chuckya_act_0(void) {
             break;
 
         case 1:
-            approach_f32_symmetric_bool(&o->oForwardVel, 30.0f, 4.0f);
+            approach_f32_symmetric_bool(&o->oForwardVel, FAST(30.0f), FAST(4.0f));
             if (abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario) > 0x4000) {
                 o->oSubAction = 2;
             }
@@ -68,7 +68,7 @@ void chuckya_act_0(void) {
             break;
 
         case 2:
-            approach_f32_symmetric_bool(&o->oForwardVel, 0, 4.0f);
+            approach_f32_symmetric_bool(&o->oForwardVel, 0, FAST(4.0f));
             if (o->oChuckyaSubActionTimer > 48) {
                 o->oSubAction = 0;
             }
@@ -78,9 +78,9 @@ void chuckya_act_0(void) {
             if (cur_obj_lateral_dist_to_home() < 500.0f) {
                 o->oForwardVel = 0.0f;
             } else {
-                approach_f32_symmetric_bool(&o->oForwardVel, 10.0f, 4.0f);
+                approach_f32_symmetric_bool(&o->oForwardVel, FAST(10.0f), FAST(4.0f));
                 o->oAngleToMario = cur_obj_angle_to_home();
-                cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x800);
+                cur_obj_rotate_yaw_toward(o->oAngleToMario, FAST(0x800));
             }
             if (cur_obj_lateral_dist_from_mario_to_home() < 1900.0f) {
                 o->oSubAction = 0;
@@ -108,7 +108,7 @@ void chuckya_act_1(void) {
         if (cur_obj_init_animation_and_check_if_near_end(0)) {
             o->oSubAction++;
         }
-        o->oChuckyaSubActionTimer = random_float() * 30.0f + 10.0f;
+        o->oChuckyaSubActionTimer = FAST_T(random_float() * 30.0f + 10.0f);
         o->oChuckyaNumPlayerEscapeActions = 0;
         o->oForwardVel = 0.0f;
     } else {

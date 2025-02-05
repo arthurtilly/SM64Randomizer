@@ -46,9 +46,9 @@ static void enemy_lakitu_update_vel_y(f32 offsetY) {
     }
 
     if (o->oPosY < gMarioObject->oPosY + offsetY + margin) {
-        obj_y_vel_approach(4.0f, 0.4f);
+        obj_y_vel_approach(FAST(4.0f), FAST(0.4f));
     } else {
-        obj_y_vel_approach(-4.0f, 0.4f);
+        obj_y_vel_approach(FAST(-4.0f), FAST(0.4f));
     }
 }
 
@@ -69,8 +69,8 @@ static void enemy_lakitu_update_speed_and_angle(void) {
     if ((minSpeed = 1.2f * gMarioStates[0].forwardVel) < 8.0f) {
         minSpeed = 8.0f;
     }
-    o->oForwardVel = distToMario * 0.04f;
-    clamp_f32(&o->oForwardVel, minSpeed, 40.0f);
+    o->oForwardVel = FAST(distToMario * 0.04f);
+    clamp_f32(&o->oForwardVel, minSpeed, FAST(40.0f));
 
     // Accelerate toward mario vertically
     enemy_lakitu_update_vel_y(300.0f);
@@ -79,7 +79,7 @@ static void enemy_lakitu_update_speed_and_angle(void) {
     if (o->oEnemyLakituFaceForwardCountdown != 0) {
         o->oEnemyLakituFaceForwardCountdown--;
     } else {
-        obj_face_yaw_approach(o->oAngleToMario, 0x600);
+        obj_face_yaw_approach(o->oAngleToMario, FAST(0x600));
     }
 
     // Change move angle toward mario faster when farther from mario

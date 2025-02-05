@@ -51,8 +51,8 @@ static void mad_piano_act_attack(void) {
             o->oPosZ = o->oHomeZ + dz * distToHome;
         }
 
-        cur_obj_rotate_yaw_toward(o->oAngleToMario, 400);
-        o->oForwardVel = 5.0f;
+        cur_obj_rotate_yaw_toward(o->oAngleToMario, FAST(400));
+        o->oForwardVel = FAST(5.0f);
     }
 
     obj_check_attacks(&sMadPianoHitbox, o->oAction);
