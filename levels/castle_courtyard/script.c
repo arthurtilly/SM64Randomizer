@@ -19,6 +19,25 @@ static const LevelScript script_func_local_1[] = {
     OBJECT(/*model*/ MODEL_NONE, /*pos*/     0, 200, -1652, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvAmbientSounds),
     OBJECT(/*model*/ MODEL_NONE, /*pos*/ -2700,   0, -1652, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvBirdsSoundLoop),
     OBJECT(/*model*/ MODEL_NONE, /*pos*/  2700,   0, -1652, /*angle*/ 0, 0, 0, /*behParam*/ 0x00010000, /*beh*/ bhvBirdsSoundLoop),
+    
+    OBJECT(MODEL_BOO, 0, 0, 0, 0, 0, 0, 0x01000001, bhvGhostHuntBoo),
+    OBJECT(MODEL_BOO, 0, 0, 0, 0, 0, 0, 0x01000001, bhvGhostHuntBoo),
+    OBJECT(MODEL_BOO, 0, 0, 0, 0, 0, 0, 0x01000001, bhvGhostHuntBoo),
+    OBJECT(MODEL_BOO, 0, 0, 0, 0, 0, 0, 0x01000001, bhvGhostHuntBoo),
+    OBJECT(MODEL_BOO, 0, 0, 0, 0, 0, 0, 0x01000001, bhvGhostHuntBoo),
+    OBJECT(MODEL_BOO, 0, 0, 0, 0, 0, 0, 0x01000001, bhvGhostHuntBoo),
+    OBJECT(MODEL_BOO, 0, 0, 0, 0, 0, 0, 0x01000001, bhvGhostHuntBoo),
+    OBJECT(MODEL_BOO, 0, 0, 0, 0, 0, 0, 0x01000001, bhvGhostHuntBoo),
+    OBJECT(MODEL_BOO, 0, 0, 0, 0, 0, 0, 0x01000001, bhvGhostHuntBoo),
+    OBJECT(MODEL_BOO, 0, 0, 0, 0, 0, 0, 0x01000001, bhvGhostHuntBoo),
+    OBJECT(MODEL_SCUTTLEBUG, 0, 0, 0, 0, 0, 0, 0x00000001, bhvScuttlebug),
+    OBJECT(MODEL_SCUTTLEBUG, 0, 0, 0, 0, 0, 0, 0x00000001, bhvScuttlebug),
+    OBJECT(MODEL_SCUTTLEBUG, 0, 0, 0, 0, 0, 0, 0x00000001, bhvScuttlebug),
+    OBJECT(MODEL_MR_I_BODY, 0, 0, 0, 0, 0, 0, 0x00000001, bhvMrI),
+    OBJECT(MODEL_NONE, 0, 0, 0, 0, 0, 0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0, 0, 0, 0, 0, 0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0, 0, 0, 0, 0, 0, 0x00000001, bhvExotic),
+    
     RETURN(),
 };
 

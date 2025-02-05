@@ -37,6 +37,28 @@ static const LevelScript script_func_local_1[] = {
     WARP_NODE(/*id*/ 0x14, /*destLevel*/ LEVEL_CASTLE_GROUNDS, /*destArea*/ 0x01, /*destNode*/ 0x14, /*flags*/ WARP_NO_CHECKPOINT),
     OBJECT(/*model*/ MODEL_NONE, /*pos*/  4997, -1250,  2258, /*angle*/ 0, 210, 0, /*behParam*/ 0x001E0000, /*beh*/ bhvSwimmingWarp),
     WARP_NODE(/*id*/ 0x1E, /*destLevel*/ LEVEL_CASTLE_GROUNDS, /*destArea*/ 0x01, /*destNode*/ 0x1E, /*flags*/ WARP_NO_CHECKPOINT),
+    
+    OBJECT(MODEL_GOOMBA, 0, 0, 0, 0, 0, 0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0, 0, 0, 0, 0, 0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0, 0, 0, 0, 0, 0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0, 0, 0, 0, 0, 0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0, 0, 0, 0, 0, 0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0, 0, 0, 0, 0, 0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0, 0, 0, 0, 0, 0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0, 0, 0, 0, 0, 0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0, 0, 0, 0, 0, 0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0, 0, 0, 0, 0, 0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0, 0, 0, 0, 0, 0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0, 0, 0, 0, 0, 0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0, 0, 0, 0, 0, 0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0, 0, 0, 0, 0, 0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_GOOMBA, 0, 0, 0, 0, 0, 0, 0x00000001, bhvGoomba),
+    OBJECT(MODEL_NONE, 0, 0, 0, 0, 0, 0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0, 0, 0, 0, 0, 0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0, 0, 0, 0, 0, 0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0, 0, 0, 0, 0, 0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0, 0, 0, 0, 0, 0, 0x00000001, bhvExotic),
+    
     RETURN(),
 };
 

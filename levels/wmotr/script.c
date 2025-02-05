@@ -27,6 +27,26 @@ static const LevelScript script_func_local_1[] = {
 
 static const LevelScript script_func_local_2[] = {
     OBJECT(/*model*/ MODEL_NONE, /*pos*/ -160, 1950, -470, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvHiddenRedCoinStar),
+    
+    OBJECT(MODEL_FLYGUY, 0,0,0,0,0,0, 0x00000001, bhvFlyGuy),
+    OBJECT(MODEL_FLYGUY, 0,0,0,0,0,0, 0x00000001, bhvFlyGuy),
+    OBJECT(MODEL_FLYGUY, 0,0,0,0,0,0, 0x00000001, bhvFlyGuy),
+    OBJECT(MODEL_FLYGUY, 0,0,0,0,0,0, 0x00000001, bhvFlyGuy),
+    OBJECT(MODEL_FLYGUY, 0,0,0,0,0,0, 0x00000001, bhvFlyGuy),
+    OBJECT(MODEL_ENEMY_LAKITU, 0,0,0,0,0,0, 0x00000001, bhvEnemyLakitu),
+    OBJECT(MODEL_ENEMY_LAKITU, 0,0,0,0,0,0, 0x00000001, bhvEnemyLakitu),
+    OBJECT(MODEL_ENEMY_LAKITU, 0,0,0,0,0,0, 0x00000001, bhvEnemyLakitu),
+    OBJECT(MODEL_ENEMY_LAKITU, 0,0,0,0,0,0, 0x00000001, bhvEnemyLakitu),
+    OBJECT(MODEL_ENEMY_LAKITU, 0,0,0,0,0,0, 0x00000001, bhvEnemyLakitu),
+    OBJECT(MODEL_CHUCKYA, 0,0,0,0,0,0, 0x00000001, bhvChuckya),
+    OBJECT(MODEL_CHUCKYA, 0,0,0,0,0,0, 0x00000001, bhvChuckya),
+    OBJECT(MODEL_CHUCKYA, 0,0,0,0,0,0, 0x00000001, bhvChuckya),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    
     RETURN(),
 };
 
