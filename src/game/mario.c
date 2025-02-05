@@ -1419,9 +1419,11 @@ void ironmario_decrement_health(struct MarioState *m, int hp) {
     s32 newHealthWedges = m->health >> 8;
     if (newHealthWedges != oldHealthWedges) {
         m->health = 0xFF;
+        save_file_erase(gCurrSaveFileNum - 1);
     }
     if (m->health < 0x100) {
         m->health = 0xFF;
+        save_file_erase(gCurrSaveFileNum - 1);
     }
 }
 
@@ -1463,6 +1465,7 @@ void update_mario_health(struct MarioState *m) {
         }
         if (m->hurtCounter > 0) {
             m->health = 0xFF;
+            save_file_erase(gCurrSaveFileNum - 1);
             m->hurtCounter--;
         }
 

@@ -780,6 +780,7 @@ s32 act_eaten_by_bubba(struct MarioState *m) {
     m->breath = 0xFF;
 #endif
     m->health = 0xFF;
+    save_file_erase(gCurrSaveFileNum - 1);
     if (m->actionTimer++ == 60) {
         level_trigger_warp(m, WARP_OP_DEATH);
     }

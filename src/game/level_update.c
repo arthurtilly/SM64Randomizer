@@ -738,6 +738,7 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
 
             case WARP_OP_DEATH:
 #ifndef DISABLE_LIVES
+                save_file_erase(gCurrSaveFileNum - 1);
                 // if (m->numLives == 0) {
                     sDelayedWarpOp = WARP_OP_GAME_OVER;
                 // }
@@ -759,6 +760,7 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                     // We only want this in either the default situation or if we are using randomization in these levels.
 #ifndef DISABLE_LIVES
                     // if (m->numLives == 0) {
+                    save_file_erase(gCurrSaveFileNum - 1);
                         sDelayedWarpOp = WARP_OP_GAME_OVER;
                     // } else {
                         // sSourceWarpNodeId = WARP_NODE_DEATH;
