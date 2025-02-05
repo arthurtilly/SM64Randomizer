@@ -306,6 +306,11 @@
 #define TEXT_EXIT_LOBBY _("EXIT TO LOBBY")
 #ifndef VERSION_EU // "R" text is different in EU
 #define TEXT_CAMERA_ANGLE_R _("SET CAMERA ANGLE WITH R")
+
+#define TEXT_REROLL_MARIO _("REROLL MARIO COLORS")
+#define TEXT_REROLL_COINS _("REROLL COIN COLORS")
+#define TEXT_REROLL_STARS _("REROLL STAR COLORS")
+
 #endif
 
 // Camera Options

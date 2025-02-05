@@ -22,6 +22,9 @@
 #include "segment2.h"
 
 u32 gRandomizerGameSeed;
+u32 gRandomizerMarioSeed;
+u32 gRandomizerCoinSeed;
+u32 gRandomizerStarSeed;
 
 u8 gIsSetSeed = FALSE;
 
@@ -1115,7 +1118,7 @@ void init_star_color(struct Object *star, s32 courseID, s32 starID) {
             break;
     }
     tinymt32_t randomState;
-    tinymt32_init(&randomState, index * 0x20000 + gRandomizerGameSeed);
+    tinymt32_init(&randomState, index * 0x20000 + gRandomizerStarSeed);
 
     u8 RGB[3];
     get_random_color(RGB, &randomState);
@@ -1185,14 +1188,15 @@ f32 RMSE(u8 r1, u8 r2, u8 g1, u8 g2, u8 b1, u8 b2) {
 }
 
 #define MINDIFF 140.f //might be infinite loop idk how this works
-void set_mario_rando_colors(void) {
+
+void set_mario_colors(void) {
     tinymt32_t randomState;
 
     if (gOptionsSettings.cosmetic.s.marioColors) {
-        if (gRandomizerGameSeed == 2401) {
+        if (gRandomizerMarioSeed == 2401) {
             set_mario_light(segmented_to_virtual(&mario_red_lights_group), 0, 255, 0);
         } else {
-            tinymt32_init(&randomState, gRandomizerGameSeed);
+            tinymt32_init(&randomState, gRandomizerMarioSeed);
 
             set_mario_light_random(segmented_to_virtual(&mario_blue_lights_group), &randomState);
             set_mario_light_random(segmented_to_virtual(&mario_red_lights_group), &randomState);
@@ -1204,12 +1208,16 @@ void set_mario_rando_colors(void) {
             }
         }
     }
+}
+
+void set_coin_colors(void) {
+    tinymt32_t randomState;
 
     if (gOptionsSettings.cosmetic.s.coinsOn) {
         u8 yellows[3];
         u8 reds[3];
         u8 blues[3];
-        tinymt32_init(&randomState, gRandomizerGameSeed + 1);
+        tinymt32_init(&randomState, gRandomizerCoinSeed + 1);
 
         get_random_color(yellows, &randomState);
         set_coin_color(yellows[0], yellows[1], yellows[2], coin_seg3_vertex_yellow);
@@ -1228,4 +1236,9 @@ void set_mario_rando_colors(void) {
         }
         set_coin_color(blues[0], blues[1], blues[2], coin_seg3_vertex_blue);
     }
+}
+
+void set_rando_colors(void) {
+    set_mario_colors();
+    set_coin_colors();
 }

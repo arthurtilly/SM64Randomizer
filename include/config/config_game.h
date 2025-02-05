@@ -82,3 +82,5 @@
 #define ADVANCED_IRONMARIO (gOptionsSettings.gameplay.s.starDoorRequirement == 12)
 
 #define CAP_SWITCH_THRESHOLD 100
+
+// #define SIMPLEFLIPS_VER

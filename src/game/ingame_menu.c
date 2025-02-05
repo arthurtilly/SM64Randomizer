@@ -1669,11 +1669,11 @@ void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
 
 void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
     u8 textContinue[] = { TEXT_CONTINUE };
-    u8 textExitCourse[] = { TEXT_EXIT_COURSE };
-    u8 textExitLobby[] = { TEXT_EXIT_LOBBY };
-    u8 textCameraAngleR[] = { TEXT_CAMERA_ANGLE_R };
+    u8 textRerollMario[] = { TEXT_REROLL_MARIO };
+    u8 textRerollCoins[] = { TEXT_REROLL_COINS };
+    u8 textRerollStars[] = { TEXT_REROLL_STARS };
 
-    handle_menu_scrolling(MENU_SCROLL_VERTICAL, index, 1, (gOptionsSettings.gameplay.s.nonstopMode ? 4 : 3));
+    handle_menu_scrolling(MENU_SCROLL_VERTICAL, index, 1, 3);
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 
@@ -1681,12 +1681,14 @@ void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
 
     print_generic_string(x + 10, y - 2, LANGUAGE_ARRAY(textContinue));
-    print_generic_string(x + 10, y - 17, textExitLobby);
+    print_generic_string(x + 10, y - 17, textRerollMario);
+    print_generic_string(x + 10, y - 32, textRerollCoins);
+    // print_generic_string(x + 10, y - 47, textRerollStars);
 
-    if (gOptionsSettings.gameplay.s.nonstopMode) print_generic_string(x + 10, y - 32, textExitCourse);
+    // if (gOptionsSettings.gameplay.s.nonstopMode) print_generic_string(x + 10, y - 32, textExitCourse);
 
-    if (*index != (gOptionsSettings.gameplay.s.nonstopMode ? 4 : 3)) {
-        print_generic_string(x + 10, y - (gOptionsSettings.gameplay.s.nonstopMode ? 47 : 32), textCameraAngleR);
+    // if (*index != (gOptionsSettings.gameplay.s.nonstopMode ? 4 : 3)) {
+        // print_generic_string(x + 10, y - (gOptionsSettings.gameplay.s.nonstopMode ? 47 : 32), textCameraAngleR);
         gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
 
         create_dl_translation_matrix(MENU_MTX_PUSH, x - X_VAL8, (y - ((*index - 1) * yIndex)) - Y_VAL8, 0);
@@ -1694,11 +1696,11 @@ void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
         gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
         gSPDisplayList(gDisplayListHead++, dl_draw_triangle);
         gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
-    }
+    // }
 
-    if (*index == (gOptionsSettings.gameplay.s.nonstopMode ? 4 : 3)){
-        render_pause_camera_options(x - 42, y - 42, &gDialogCameraAngleIndex, 110);
-    }
+    // if (*index == (gOptionsSettings.gameplay.s.nonstopMode ? 4 : 3)){
+    //     render_pause_camera_options(x - 42, y - 42, &gDialogCameraAngleIndex, 110);
+    // }
 }
 
 void render_pause_castle_menu_box(s16 x, s16 y) {
@@ -1885,11 +1887,8 @@ s32 render_pause_courses_and_castle(void) {
             shade_screen();
             render_pause_my_score_coins();
             render_pause_red_coins();
-#ifndef DISABLE_EXIT_COURSE
-// no pause exit
-            // if (gCurrCourseNum == COURSE_WMOTR) {
-            //     render_pause_course_options(99, 93, &gDialogLineNum, 15);
-            // }
+#ifdef SIMPLEFLIPS_VER
+            render_pause_course_options(99, 93, &gDialogLineNum, 15);
 #endif
 
             if (gPlayer3Controller->buttonPressed & (A_BUTTON | START_BUTTON)) {
@@ -1898,15 +1897,14 @@ s32 render_pause_courses_and_castle(void) {
                 gDialogBoxState = DIALOG_STATE_OPENING;
                 gMenuMode = MENU_MODE_NONE;
 
-                if (gDialogLineNum == MENU_OPT_EXIT_COURSE) {
-                    index = gDialogLineNum;
-                } else if (gOptionsSettings.gameplay.s.nonstopMode && gDialogLineNum == 3) {
-                    index = gDialogLineNum;
-                } else { // MENU_OPT_CONTINUE or MENU_OPT_CAMERA_ANGLE_R
-                    index = MENU_OPT_DEFAULT;
+                if (gDialogLineNum == 2) {
+                    gRandomizerMarioSeed = random_u16();
+                    set_mario_colors();
+                } else if (gDialogLineNum == 3) {
+                    gRandomizerCoinSeed = random_u16();
+                    set_coin_colors();
                 }
-
-                return index;
+                return MENU_OPT_DEFAULT;
             }
             break;
 

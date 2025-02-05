@@ -672,6 +672,9 @@ void save_file_set_seed_and_options(s32 fileNum) {
         gRandomizerGameSeed = saveFile->seed;
         gIsSetSeed = (saveFile->flags & SAVE_FLAG_IS_SET_SEED) != 0;
     }
+    gRandomizerCoinSeed = gRandomizerGameSeed;
+    gRandomizerStarSeed = gRandomizerGameSeed;
+    gRandomizerMarioSeed = gRandomizerGameSeed;
 }
 
 void save_file_set_cap_pos(s16 x, s16 y, s16 z) {

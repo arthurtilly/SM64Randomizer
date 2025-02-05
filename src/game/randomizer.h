@@ -122,6 +122,9 @@ extern struct OptionsSettings gPresets[];
 extern struct nodeInfo gLevelWarps[];
 extern u8 gRequiredStars[];
 extern u32 gRandomizerGameSeed;
+extern u32 gRandomizerMarioSeed;
+extern u32 gRandomizerCoinSeed;
+extern u32 gRandomizerStarSeed;
 extern u8 gIsSetSeed;
 extern u8 gIgnoreCollisionDistance;
 extern u8 gWarpDestinations[];
@@ -141,7 +144,7 @@ extern f32 get_val_in_range_uniform(f32, f32, tinymt32_t *);
 extern void init_randomizer(s32 fileNum);
 extern u8 get_nonrandom_level();
 extern void print_seed_and_options_data(void);
-extern void set_mario_rando_colors(void);
+extern void set_rando_colors(void);
 extern void init_star_color(struct Object *star, s32 courseID, s32 starID);
 
 #endif

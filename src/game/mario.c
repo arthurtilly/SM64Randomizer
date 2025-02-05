@@ -1908,7 +1908,7 @@ void init_mario(void) {
                 break;
         }
     }
-    set_mario_rando_colors();
+    set_rando_colors();
     if (gOptionsSettings.gameplay.s.demonOn && (cur_obj_nearest_object_with_behavior(bhvGreenDemon) == NULL)) {
         sDemonStart = 1;
     }
