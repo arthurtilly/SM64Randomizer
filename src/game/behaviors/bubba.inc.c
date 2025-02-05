@@ -59,15 +59,15 @@ void bubba_act_attack(void) {
             s16 targetPitch = 10000 - (s16)(20.0f * (find_water_level(o->oPosX, o->oPosZ) - o->oPosY));
             o->oBubbaTargetPitch -= targetPitch;
             o->oMoveAnglePitch = o->oBubbaTargetPitch;
-            o->oBubbaMovePitch = 40.0f;
+            o->oBubbaMovePitch = FAST(40.0f);
             obj_compute_vel_from_move_pitch(o->oBubbaMovePitch);
             o->oAnimState = 0;
         } else {
             o->oBubbaTargetYaw = o->oAngleToMario;
             o->oBubbaTargetPitch = o->oBubbaNextTargetPitchTowardMario;
 
-            cur_obj_rotate_yaw_toward(o->oBubbaTargetYaw, 400);
-            obj_move_pitch_approach(o->oBubbaTargetPitch, 400);
+            cur_obj_rotate_yaw_toward(o->oBubbaTargetYaw, FAST(400));
+            obj_move_pitch_approach(o->oBubbaTargetPitch, FAST(400));
         }
     } else {
         if (abs_angle_diff(gMarioObject->oFaceAngleYaw, o->oAngleToMario) < 0x3000) {

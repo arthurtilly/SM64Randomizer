@@ -44,3 +44,4 @@
 #include "mr_i_iris/geo.inc.c"
 #include "snufit/geo.inc.c"
 #include "scuttlebug/geo.inc.c"
+#include "bubba/geo.inc.c"

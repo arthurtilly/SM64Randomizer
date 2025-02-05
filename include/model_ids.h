@@ -371,7 +371,6 @@
 // group 11
 #define MODEL_WIGGLER_HEAD                0x57        // wiggler_head_geo
 #define MODEL_WIGGLER_BODY                0x58        // wiggler_body_geo
-#define MODEL_BUBBA                       0x59        // bubba_geo
 
 // referenced in macro presets. Unknown usage.
 #define MODEL_UNKNOWN_54                  0x54
@@ -543,6 +542,7 @@
 #define MODEL_THWOMP                      0xEF
 #define MODEL_SPINY_BALL                  0xF0
 #define MODEL_SPINY                       0xF1
+#define MODEL_BUBBA                       0xF2
 
 #ifdef IA8_30FPS_COINS
 #define MODEL_SILVER_COIN                 0xE2        // silver_coin_geo

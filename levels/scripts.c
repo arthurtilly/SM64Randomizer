@@ -214,6 +214,7 @@ const LevelScript script_func_global_1[] = {
     LOAD_MODEL_FROM_GEO(MODEL_MR_I_IRIS,               mr_i_iris_geo),
     LOAD_MODEL_FROM_GEO(MODEL_MR_I_BODY,               mr_i_geo),
     LOAD_MODEL_FROM_GEO(MODEL_SNUFIT,                  snufit_geo),
+    LOAD_MODEL_FROM_GEO(MODEL_BUBBA,                   bubba_geo),
     RETURN(),
 };
 
@@ -297,7 +298,6 @@ const LevelScript script_func_global_11[] = {
 const LevelScript script_func_global_12[] = {
     LOAD_MODEL_FROM_GEO(MODEL_WIGGLER_HEAD,            wiggler_head_geo),
     LOAD_MODEL_FROM_GEO(MODEL_WIGGLER_BODY,            wiggler_body_geo),
-    LOAD_MODEL_FROM_GEO(MODEL_BUBBA,                   bubba_geo),
     RETURN(),
 };
 

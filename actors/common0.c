@@ -137,3 +137,5 @@ UNUSED static const u64 binid_18 = 18;
 #include "scuttlebug/anims/data.inc.c"
 #include "scuttlebug/anims/table.inc.c"
 
+#include "bubba/model.inc.c"
+

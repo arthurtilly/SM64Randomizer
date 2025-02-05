@@ -3,21 +3,6 @@
 
 #include "types.h"
 
-// bubba
-extern const GeoLayout bubba_geo[];
-extern const Gfx bubba_seg5_dl_05004A40[];
-extern const Gfx bubba_seg5_dl_05004AA8[];
-extern const Gfx bubba_seg5_dl_05004BE8[];
-extern const Gfx bubba_seg5_dl_05004C40[];
-extern const Gfx bubba_seg5_dl_05004D48[];
-extern const Gfx bubba_seg5_dl_05004E80[];
-extern const Gfx bubba_seg5_dl_05005538[];
-extern const Gfx bubba_seg5_dl_050055A0[];
-extern const Gfx bubba_seg5_dl_050056E0[];
-extern const Gfx bubba_seg5_dl_05005738[];
-extern const Gfx bubba_seg5_dl_05005840[];
-extern const Gfx bubba_seg5_dl_05005978[];
-
 // wiggler_body
 extern const Gfx wiggler_seg5_dl_0500BCB8[];
 extern const Gfx wiggler_seg5_dl_0500BE10[];

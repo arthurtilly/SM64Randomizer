@@ -469,5 +469,20 @@ extern const Gfx snufit_seg6_dl_06009A10[];
 extern const Gfx snufit_seg6_dl_06009B18[];
 extern const Gfx snufit_seg6_dl_06009B68[];
 
+// bubba
+extern const GeoLayout bubba_geo[];
+extern const Gfx bubba_seg5_dl_05004A40[];
+extern const Gfx bubba_seg5_dl_05004AA8[];
+extern const Gfx bubba_seg5_dl_05004BE8[];
+extern const Gfx bubba_seg5_dl_05004C40[];
+extern const Gfx bubba_seg5_dl_05004D48[];
+extern const Gfx bubba_seg5_dl_05004E80[];
+extern const Gfx bubba_seg5_dl_05005538[];
+extern const Gfx bubba_seg5_dl_050055A0[];
+extern const Gfx bubba_seg5_dl_050056E0[];
+extern const Gfx bubba_seg5_dl_05005738[];
+extern const Gfx bubba_seg5_dl_05005840[];
+extern const Gfx bubba_seg5_dl_05005978[];
+
 
 #endif

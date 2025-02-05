@@ -480,8 +480,16 @@ void spawn_objects_from_info(UNUSED s32 unused, struct SpawnInfo *spawnInfo) {
         script = segmented_to_virtual(spawnInfo->behaviorScript);
 
         // If the object was previously killed/collected, don't respawn it
-        if (((spawnInfo->behaviorArg & (RESPAWN_INFO_DONT_RESPAWN << 8))
-            != (RESPAWN_INFO_DONT_RESPAWN << 8)) && ((spawnInfo->behaviorArg & 0xFF) != 1) || MIDDLE_IRONMARIO) {
+        if ((spawnInfo->behaviorArg & (RESPAWN_INFO_DONT_RESPAWN << 8))
+            != (RESPAWN_INFO_DONT_RESPAWN << 8)) {
+            
+            if ((spawnInfo->behaviorArg & 0xFF) == 1) {
+                if ((!MIDDLE_IRONMARIO) || (gOptionsSettings.gameplay.s.objectRandomization == 0)) {
+                    spawnInfo = spawnInfo->next;
+                    continue;
+                }
+            }
+            
             object = create_object(script);
 
             // Behavior parameters are often treated as four separate bytes, but
