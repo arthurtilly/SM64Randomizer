@@ -18,6 +18,16 @@
 
 static const LevelScript script_func_local_1[] = {
     //OBJECT(/*model*/ MODEL_CAP_SWITCH, /*pos*/   0, -2047, 10, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvCapSwitch),
+    
+    OBJECT(MODEL_FLYGUY, 0,0,0,0,0,0, 0x00000001, bhvFlyGuy),
+    OBJECT(MODEL_FLYGUY, 0,0,0,0,0,0, 0x00000001, bhvFlyGuy),
+    OBJECT(MODEL_FLYGUY, 0,0,0,0,0,0, 0x00000001, bhvFlyGuy),
+    OBJECT(MODEL_ENEMY_LAKITU, 0,0,0,0,0,0, 0x00000001, bhvEnemyLakitu),
+    OBJECT(MODEL_ENEMY_LAKITU, 0,0,0,0,0,0, 0x00000001, bhvEnemyLakitu),
+    OBJECT(MODEL_ENEMY_LAKITU, 0,0,0,0,0,0, 0x00000001, bhvEnemyLakitu),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    OBJECT(MODEL_NONE, 0,0,0,0,0,0, 0x00000001, bhvExotic),
+    
     RETURN(),
 };
 
