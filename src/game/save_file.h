@@ -143,6 +143,7 @@ enum SaveProgressFlags {
     SAVE_FLAG_COLLECTED_TOAD_STAR_3  = (1 << 26), /* 0x04000000 */
     SAVE_FLAG_COLLECTED_MIPS_STAR_1  = (1 << 27), /* 0x08000000 */
     SAVE_FLAG_COLLECTED_MIPS_STAR_2  = (1 << 28), /* 0x10000000 */
+    SAVE_FLAG_HAVE_KOOPA_SHELL       = (1 << 29), /* 0x20000000 */
 };
 
 enum StarFlags {

@@ -260,8 +260,13 @@ void handle_save_menu(struct MarioState *m) {
     // disable_time_stop();
     m->faceAngle[1] += 0x8000;
     // Add 100 star dialog here later
-    set_mario_action(m, ACT_IDLE, 0);
     save_file_do_save(gCurrSaveFileNum - 1);
+
+    if (ADVANCED_IRONMARIO && (m->prevNumStarsForDialog < CAP_SWITCH_THRESHOLD) && (m->numStars >= CAP_SWITCH_THRESHOLD)) {
+        set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, DIALOG_146);
+    } else {
+        set_mario_action(m, ACT_IDLE, 0);
+    }
 }
 
 /**
@@ -644,10 +649,9 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
     } else if (m->actionState == ACT_STATE_STAR_DANCE_RETURN && is_anim_at_end(m)) {
         //disable_time_stop();
         enable_background_sound();
-        s32 dialogID = get_star_collection_dialog(m);
-        if (dialogID) {
+        if (ADVANCED_IRONMARIO && (m->prevNumStarsForDialog < CAP_SWITCH_THRESHOLD) && (m->numStars >= CAP_SWITCH_THRESHOLD)) {
             // look up for dialog
-            set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, dialogID);
+            set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, DIALOG_146);
         } else {
             set_mario_action(m, isInWater ? ACT_WATER_IDLE : ACT_IDLE, 0);
         }

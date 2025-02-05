@@ -352,9 +352,6 @@
 #define MODEL_PENGUIN                     0x57        // penguin_geo
 
 // group 8
-#define MODEL_CAP_SWITCH_EXCLAMATION      0x54        // cap_switch_exclamation_seg5_dl_05002E00
-#define MODEL_CAP_SWITCH                  0x55        // cap_switch_geo
-#define MODEL_CAP_SWITCH_BASE             0x56        // cap_switch_base_seg5_dl_05003120
 
 // group 9
 #define MODEL_BETA_BOO_KEY                0x55        // small_key_geo
@@ -367,6 +364,9 @@
 // group 10
 #define MODEL_BIRDS                       0x54        // birds_geo
 #define MODEL_YOSHI                       0x55        // yoshi_geo
+#define MODEL_CAP_SWITCH_EXCLAMATION      0x56        // cap_switch_exclamation_seg5_dl_05002E00
+#define MODEL_CAP_SWITCH                  0x57        // cap_switch_geo
+#define MODEL_CAP_SWITCH_BASE             0x58        // cap_switch_base_seg5_dl_05003120
 
 // group 11
 #define MODEL_WIGGLER_HEAD                0x57        // wiggler_head_geo

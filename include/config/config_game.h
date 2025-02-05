@@ -75,5 +75,10 @@
 
 #define MIDDLE_IRONMARIO (gOptionsSettings.gameplay.s.starDoorRequirement >= 10)
 
-#define FAST(x) (o->isFast ? (x * 2) : x) // Multiply by 1.5
-#define FAST_T(x) (o->isFast ? (x / 2) : x) // Divide by 1.5
+#define FAST(x) (o->isFast ? (x * 2) : x) // Multiply by 2
+#define FAST_T(x) (o->isFast ? (x / 2) : x) // Divide by 2
+
+
+#define ADVANCED_IRONMARIO (gOptionsSettings.gameplay.s.starDoorRequirement == 12)
+
+#define CAP_SWITCH_THRESHOLD 100

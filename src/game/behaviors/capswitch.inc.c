@@ -3,15 +3,38 @@
 static s32 sCapSaveFlags[] = {
     SAVE_FLAG_HAVE_WING_CAP,
     SAVE_FLAG_HAVE_METAL_CAP,
-    SAVE_FLAG_HAVE_VANISH_CAP
+    SAVE_FLAG_HAVE_VANISH_CAP,
+    SAVE_FLAG_HAVE_KOOPA_SHELL,
 };
+
+int count_pressed_switches(void) {
+    s32 count = 0;
+
+    for (int i = 0; i < 4; i++) {
+        if (save_file_get_flags() & sCapSaveFlags[i]) {
+            count++;
+        }
+    }
+
+    return count;
+}
 
 void cap_switch_act_init(void) {
     o->oAnimState = o->oBehParams2ndByte;
     cur_obj_scale(0.5f);
     o->oPosY += 71.0f;
 
-    spawn_object_relative_with_scale(0, 0, -71, 0, 0.5f, o, MODEL_CAP_SWITCH_BASE, bhvCapSwitchBase);
+    if (!ADVANCED_IRONMARIO || (gMarioState->numStars < CAP_SWITCH_THRESHOLD)) {
+        mark_obj_for_deletion(o);
+        return;
+    }
+
+    if (count_pressed_switches() >= 2 && !(save_file_get_flags() & sCapSaveFlags[o->oBehParams2ndByte])) {
+        mark_obj_for_deletion(o);
+        return;
+    }
+
+    o->prevObj = spawn_object_relative_with_scale(0, 0, -71, 0, 0.5f, o, MODEL_CAP_SWITCH_BASE, bhvCapSwitchBase);
 #ifdef ENABLE_VANILLA_LEVEL_SPECIFIC_CHECKS
     if (gCurrLevelNum != LEVEL_UNKNOWN_32) {
         if (save_file_get_flags() & sCapSaveFlags[o->oBehParams2ndByte]) {
@@ -34,6 +57,12 @@ void cap_switch_act_init(void) {
 }
 
 void cap_switch_act_idle_unpressed(void) {
+    if (count_pressed_switches() >= 2) {
+        spawn_mist_particles();
+        mark_obj_for_deletion(o);
+        mark_obj_for_deletion(o->prevObj);
+        return;
+    }
     if (cur_obj_is_mario_on_platform()) {
         save_file_set_flags(sCapSaveFlags[o->oBehParams2ndByte]);
         o->oAction = CAP_SWITCH_ACT_BEING_PRESSED;
@@ -56,11 +85,11 @@ void cap_switch_act_being_pressed(void) {
         //! Neither of these flags are defined in this function so they do nothing.
         //  On an extra note, there's a specific check for this cutscene and 
         //  there's no dialog defined since the cutscene itself calls the dialog.
-        s32 dialogResponse = cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_FRONT, 
-            (DIALOG_FLAG_TEXT_RESPONSE | DIALOG_FLAG_UNK_CAPSWITCH), CUTSCENE_CAP_SWITCH_PRESS, 0);
-        if (dialogResponse) {
-            o->oAction = CAP_SWITCH_ACT_IDLE_PRESSED;
-        }
+        // s32 dialogResponse = cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_FRONT, 
+        //     (DIALOG_FLAG_TEXT_RESPONSE | DIALOG_FLAG_UNK_CAPSWITCH), CUTSCENE_CAP_SWITCH_PRESS, 0);
+        // if (dialogResponse) {
+        save_file_do_save(gCurrSaveFileNum - 1);
+        o->oAction = CAP_SWITCH_ACT_IDLE_PRESSED;
     }
 }
 

@@ -1775,13 +1775,15 @@ helpful.\n\
 Hurry along, now. The\n\
 third floor is just ahead."))
 
-DEFINE_DIALOG(DIALOG_146, 1, 6, 150, 200, _("\
-You've found 70 Power\n\
-Stars! The mystery of the\n\
-endless stairs is solved,\n\
-thanks to you--and is\n\
-Bowser ever upset! Now,\n\
-on to the final bout!"))
+DEFINE_DIALOG(DIALOG_146, 1, 4, 150, 200, _("\
+The energy of the Power\n\
+Stars has forged a gift!\n\
+\n\
+Four switches have\n\
+appeared outside the\n\
+castle, but you may\n\
+only press two. Choose\n\
+wisely and Good Luck!"))
 
 DEFINE_DIALOG(DIALOG_147, 1, 5, 30, 200, _("\
 Are you using the Cap\n\

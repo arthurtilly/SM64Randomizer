@@ -508,6 +508,7 @@ const BehaviorScript bhvCapSwitchBase[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     LOAD_COLLISION_DATA(capswitch_collision_05003448),
+    SET_FLOAT(oDrawingDistance, 20000),
     DELAY(2), // Prevent reordering by delaying how long the base takes to load in.
     BEGIN_LOOP(),
         CALL_NATIVE(load_object_collision_model),
@@ -517,8 +518,8 @@ const BehaviorScript bhvCapSwitchBase[] = {
 const BehaviorScript bhvCapSwitch[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
-    RANDOMIZE_OBJ(RAND_TYPE_GROUNDED | RAND_TYPE_SAFE | RAND_TYPE_IMPORTANT | RAND_TYPE_CREATE_AVOIDANCE_POINT),
     LOAD_COLLISION_DATA(capswitch_collision_050033D0),
+    SET_FLOAT(oDrawingDistance, 20000),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_cap_switch_loop),
         CALL_NATIVE(load_object_collision_model),

@@ -86,6 +86,12 @@ static const LevelScript script_func_local_2[] = {
     OBJECT(/*model*/ MODEL_NONE,                        /*pos*/ -1328,  260,  4664, /*angle*/ 0, 180, 0, /*behParam*/ 0x00280000, /*beh*/ bhvIntroScene),
     OBJECT(/*model*/ MODEL_CASTLE_GROUNDS_CANNON_GRILL, /*pos*/     0,    0,     0, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvHiddenAt120Stars),
     OBJECT(/*model*/ MODEL_LAKITU,                      /*pos*/    11,  803, -3015, /*angle*/ 0,   0, 0, /*behParam*/ 0x00010000, /*beh*/ bhvCameraLakitu),
+    
+    OBJECT(/*model*/ MODEL_CAP_SWITCH, /*pos*/   -1328+500, 260, 4664+500, /*angle*/ 0, 45, 0, /*behParam*/ 0x00000000, /*beh*/ bhvCapSwitch),
+    OBJECT(/*model*/ MODEL_CAP_SWITCH, /*pos*/   -1328+500, 260, 4664-500, /*angle*/ 0, 135, 0, /*behParam*/ 0x00010000, /*beh*/ bhvCapSwitch),
+    OBJECT(/*model*/ MODEL_CAP_SWITCH, /*pos*/   -1328-500, 260, 4664+500, /*angle*/ 0, 135, 0, /*behParam*/ 0x00020000, /*beh*/ bhvCapSwitch),
+    OBJECT(/*model*/ MODEL_CAP_SWITCH, /*pos*/   -1328-500, 260, 4664-500, /*angle*/ 0, 45, 0, /*behParam*/ 0x00030000, /*beh*/ bhvCapSwitch),
+    
     RETURN(),
 };
 

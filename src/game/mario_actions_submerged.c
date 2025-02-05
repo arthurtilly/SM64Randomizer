@@ -853,12 +853,15 @@ static s32 act_water_punch(struct MarioState *m) {
             set_mario_animation(m, MARIO_ANIM_WATER_PICK_UP_OBJ);
             if (is_anim_at_end(m)) {
                 if (m->heldObj->behavior == segmented_to_virtual(bhvKoopaShellUnderwater)) {
-                    struct Object *explosion = spawn_object(m->heldObj, MODEL_EXPLOSION, bhvExplosion);
-                    explosion->oGraphYOffset += 100.0f;
-                    m->heldObj->activeFlags = ACTIVE_FLAG_DEACTIVATED;
-                    m->heldObj = NULL;
-                    // play_shell_music();
-                    // set_mario_action(m, ACT_WATER_SHELL_SWIMMING, 0);
+                    if (save_file_get_flags() & SAVE_FLAG_HAVE_KOOPA_SHELL) {
+                        play_shell_music();
+                        set_mario_action(m, ACT_WATER_SHELL_SWIMMING, 0);
+                    } else {
+                        struct Object *explosion = spawn_object(m->heldObj, MODEL_EXPLOSION, bhvExplosion);
+                        explosion->oGraphYOffset += 100.0f;
+                        m->heldObj->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+                        m->heldObj = NULL;
+                    }
                 } else {
                     set_mario_action(m, ACT_HOLD_WATER_ACTION_END, 1);
                 }
