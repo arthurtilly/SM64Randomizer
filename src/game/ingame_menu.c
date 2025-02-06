@@ -1887,9 +1887,8 @@ s32 render_pause_courses_and_castle(void) {
             shade_screen();
             render_pause_my_score_coins();
             render_pause_red_coins();
-#ifdef SIMPLEFLIPS_VER
             render_pause_course_options(99, 93, &gDialogLineNum, 15);
-#endif
+
 
             if (gPlayer3Controller->buttonPressed & (A_BUTTON | START_BUTTON)) {
                 level_set_transition(0, NULL);

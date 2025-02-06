@@ -84,3 +84,8 @@
 #define CAP_SWITCH_THRESHOLD 100
 
 // #define SIMPLEFLIPS_VER
+
+#ifdef SIMPLEFLIPS_VER
+    #undef MIDDLE_IRONMARIO
+    #define MIDDLE_IRONMARIO 1
+#endif
