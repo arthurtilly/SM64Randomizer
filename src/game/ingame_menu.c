@@ -1671,7 +1671,7 @@ void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
     u8 textContinue[] = { TEXT_CONTINUE };
     u8 textRerollMario[] = { TEXT_REROLL_MARIO };
     u8 textRerollCoins[] = { TEXT_REROLL_COINS };
-    u8 textRerollStars[] = { TEXT_REROLL_STARS };
+    // u8 textRerollStars[] = { TEXT_REROLL_STARS };
 
     handle_menu_scrolling(MENU_SCROLL_VERTICAL, index, 1, 3);
 
@@ -1860,7 +1860,7 @@ s32 gCourseCompleteCoins = 0;
 s8 gHudFlash = HUD_FLASH_NONE;
 
 s32 render_pause_courses_and_castle(void) {
-    s16 index;
+    // s16 index;
 
 #ifdef PUPPYCAM
     puppycam_check_pause_buttons();

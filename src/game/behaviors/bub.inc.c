@@ -56,7 +56,7 @@ void bub_act_swimming_towards_mario(void) {
         o->oForwardVel = FAST(random_float() * 2 + 2);
     }
 
-    f32 dy = o->oPosY - gMarioObject->oPosY;
+    // f32 dy = o->oPosY - gMarioObject->oPosY;
 
     if (o->oPosY < o->oCheepCheepWaterLevel - 50.0f) {
         bub_move_vertically(FAST(2));
