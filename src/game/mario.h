@@ -52,5 +52,6 @@ s32 set_water_plunge_action(struct MarioState *m);
 s32 execute_mario_action(UNUSED struct Object *obj);
 void init_mario(void);
 void init_mario_from_save_file(void);
+void ironmario_decrement_health(struct MarioState *m, int hp);
 
 #endif // MARIO_H

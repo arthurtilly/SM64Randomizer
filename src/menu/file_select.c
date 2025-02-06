@@ -973,6 +973,15 @@ s32 randomize_weighted_3(s32 weight1, s32 weight2, s32 weight3) {
     }
 }
 
+void update_cur_preset() {
+    curPreset = -1;
+    for (int i = 0; i < ARRAY_COUNT(gPresets); i++) {
+        if (gOptionsSettings.gameplay.w == gPresets[i].gameplay.w && gOptionsSettings.cosmetic.w == gPresets[i].cosmetic.w) {
+            curPreset = i;
+        }
+    }
+}
+
 void randomize_options() {
     gOptionsSettings.gameplay.s.keepStructure = random_u16() % 2;
 
@@ -1001,7 +1010,7 @@ void randomize_options() {
     }
 
     gOverwriteFileOptions = TRUE;
-    curPreset = -1;
+    update_cur_preset();
 }
 
 extern struct SaveBuffer gSaveBuffer;
@@ -2755,7 +2764,7 @@ static void draw_select_seed_menu_option(void) {
     if ((oldSettings.gameplay.w != gOptionsSettings.gameplay.w) || (oldSettings.cosmetic.w != gOptionsSettings.cosmetic.w)) {
         gOverwriteFileOptions = TRUE;
         if (OptionPage != 3) {
-            curPreset = -1;
+            update_cur_preset();
         }
     }
     if (gPlayer3Controller->buttonPressed & R_TRIG) {
@@ -3084,9 +3093,9 @@ s32 lvl_init_menu_values_and_cursor_pos(UNUSED s32 arg, UNUSED s32 unused) {
     sSoundMode = save_file_get_sound_mode();
     gOverwriteFileOptions = FALSE;
     gOverwriteFileSeed = FALSE;
-    curPreset = 0;
     //applyPreset();
     gOptionsSettings = gSaveBuffer.menuData.defaultPreset;
+    update_cur_preset();
     gCurrLevelNum = LEVEL_UNKNOWN_1;
     return 0;
 }

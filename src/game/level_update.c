@@ -236,7 +236,7 @@ void fade_into_special_warp(u32 arg, u32 color) {
     warp_special(arg);
 }
 
-void load_level_init_text(u32 arg) {
+void load_level_init_text(UNUSED u32 arg) {
     s32 gotAchievement;
     u32 dialogID = gCurrentArea->dialog[arg];
 
@@ -720,7 +720,7 @@ void initiate_warp(s16 destLevel, s16 destArea, s16 destWarpNode, s32 warpFlags)
 extern u32 gCurrentIntendedLevel;
 void initiate_warp_check_lock(s16 destLevel, s16 destArea, s16 destWarpNode, s32 warpFlags) {
     if (isLevelLocked(destLevel)) {
-        u8 intendedLevel = get_intended_level(destLevel);
+        u8 intendedLevel = gOptionsSettings.gameplay.s.randomLevelWarp ? get_intended_level(destLevel) : destLevel;
         if (intendedLevel == 0) {
             intendedLevel = destLevel;
         }
@@ -1007,6 +1007,10 @@ void initiate_delayed_warp(void) {
                     check_if_should_set_warp_checkpoint(&warpNode->node);
                     if (sWarpDest.type != WARP_TYPE_CHANGE_LEVEL) {
                         level_set_transition(2, NULL);
+
+                        if (sWarpDest.type == WARP_TYPE_SAME_AREA && gLakituState.mode == CAMERA_MODE_C_UP) {
+                            gLakituState.mode = CAMERA_MODE_FIXED;
+                        }
                     }
                     break;
             }

@@ -117,7 +117,7 @@ enum StarColors {
 
 extern s32 curPreset;
 extern struct OptionsSettings gOptionsSettings;
-extern struct OptionsSettings gPresets[];
+extern struct OptionsSettings gPresets[3];
 
 extern struct nodeInfo gLevelWarps[];
 extern u8 gRequiredStars[];
@@ -146,5 +146,7 @@ extern u8 get_intended_level(s16 level);
 extern void print_seed_and_options_data(void);
 extern void set_rando_colors(void);
 extern void init_star_color(struct Object *star, s32 courseID, s32 starID);
+void set_coin_colors(void);
+void set_mario_colors(void);
 
 #endif

@@ -34,7 +34,7 @@ struct GraphNodeMore {
 static s32 sGameOverFrameCounter;
 static s32 sGameOverTableIndex;
 static s16 sIntroFrameCounter;
-static s32 sTmCopyrightAlpha;
+// static s32 sTmCopyrightAlpha;
 
 /**
  * Geo callback to render the "Super Mario 64" logo on the title screen
@@ -84,10 +84,10 @@ Gfx *geo_intro_super_mario_64_logo(s32 callContext, struct GraphNode *node, UNUS
 /**
  * Geo callback to render TM and Copyright on the title screen
  */
-Gfx *geo_intro_tm_copyright(s32 callContext, struct GraphNode *node, UNUSED void *context) {
-    struct GraphNode *graphNode = node;
+Gfx *geo_intro_tm_copyright(UNUSED s32 callContext, UNUSED struct GraphNode *node, UNUSED void *context) {
+    // struct GraphNode *graphNode = node;
     Gfx *dl = NULL;
-    Gfx *dlIter = NULL;
+    // Gfx *dlIter = NULL;
 
     // if (callContext != GEO_CONTEXT_RENDER) { // reset
     //     sTmCopyrightAlpha = 0;
