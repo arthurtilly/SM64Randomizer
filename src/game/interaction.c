@@ -829,7 +829,7 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
 #else
         starIndex = (obj->oBehParams >> 24) & 0x1F;
 #endif
-        save_file_collect_star_or_key(m->numCoins, starIndex);
+        u32 isNew = save_file_collect_star_or_key(m->numCoins, starIndex);
 
         m->numStars =
             save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1);
@@ -837,6 +837,19 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
         if (!noExit) {
             drop_queued_background_music();
             fadeout_level_music(126);
+        
+            if (!isNew) {
+                s16 levelToLock = gCurrLevelNum;
+                switch (levelToLock) {
+                    case LEVEL_BOWSER_1:
+                        levelToLock = LEVEL_BITDW;
+                        break;
+                    case LEVEL_BOWSER_2:
+                        levelToLock = LEVEL_BITFS;
+                        break;
+                }
+                lockLevel(levelToLock, DIALOG_143);
+            }
         }
 
         play_sound(SOUND_MENU_STAR_SOUND, m->marioObj->header.gfx.cameraToObject);

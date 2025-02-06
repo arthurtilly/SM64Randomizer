@@ -3194,7 +3194,7 @@ void init_camera(struct Camera *c) {
     } else {
         gPrevLevel = gCurrLevelArea / 16;
     }
-    gCurrentIntendedLevel = get_nonrandom_level();
+    gCurrentIntendedLevel = get_intended_level(gCurrLevelNum);
     gCurrLevelArea = gCurrLevelNum * 16 + gCurrentArea->index;
     sSelectionFlags &= CAM_MODE_MARIO_SELECTED;
     sFramesPaused = 0;

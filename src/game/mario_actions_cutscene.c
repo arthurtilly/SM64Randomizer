@@ -1135,10 +1135,11 @@ s32 act_death_exit(struct MarioState *m) {
         queue_rumble_data(5, 80);
 #endif
         // restore 7.75 units of health
-        m->healCounter = 31;
+        // m->healCounter = 31;
     }
+    m->marioObj->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
     // one unit of health
-    m->health = 0x0100;
+    // m->health = 0x0100;
 #ifdef BREATH_METER
     m->breath = 0x880;
 #endif
@@ -1149,10 +1150,11 @@ s32 act_unused_death_exit(struct MarioState *m) {
     if (launch_mario_until_land(m, ACT_FREEFALL_LAND_STOP, MARIO_ANIM_GENERAL_FALL, 0.0f)) {
         play_sound(SOUND_MARIO_OOOF2, m->marioObj->header.gfx.cameraToObject);
         // restore 7.75 units of health
-        m->healCounter = 31;
+        //m->healCounter = 31;
     }
+    m->marioObj->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
     // one unit of health
-    m->health = 0x0100;
+    //m->health = 0x0100;
 #ifdef BREATH_METER
     m->breath = 0x880;
 #endif
@@ -1166,10 +1168,11 @@ s32 act_falling_death_exit(struct MarioState *m) {
         queue_rumble_data(5, 80);
 #endif
         // restore 7.75 units of health
-        m->healCounter = 31;
+        //m->healCounter = 31;
     }
+    m->marioObj->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
     // one unit of health
-    m->health = 0x0100;
+    //m->health = 0x0100;
 #ifdef BREATH_METER
     m->breath = 0x880;
 #endif
@@ -1217,12 +1220,12 @@ s32 act_special_death_exit(struct MarioState *m) {
 #if ENABLE_RUMBLE
         queue_rumble_data(5, 80);
 #endif
-        m->healCounter = 31;
+        //m->healCounter = 31;
     }
     // show Mario
     marioObj->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
     // one unit of health
-    m->health = 0x0100;
+    //m->health = 0x0100;
 #ifdef BREATH_METER
     m->breath = 0x880;
 #endif

@@ -533,17 +533,16 @@ static void level_cmd_place_obj_not_ns(void) {
 
 u8 gPreviousCastleArea;
 
-u8 get_nonrandom_level() {
+u8 get_intended_level(s16 level) {
     u8 i;
-    u32 currLevel = gCurrLevelNum;
-    if (currLevel == LEVEL_BOWSER_1) {
-        currLevel = LEVEL_BITDW;
-    } else if (currLevel == LEVEL_BOWSER_2) {
-        currLevel = LEVEL_BITFS;
+    if (level == LEVEL_BOWSER_1) {
+        level = LEVEL_BITDW;
+    } else if (level == LEVEL_BOWSER_2) {
+        level = LEVEL_BITFS;
     }
 
     for (i = 0; i < LEVEL_MAX; i++) {
-        if (gWarpDestinations[i] == currLevel) {
+        if (gWarpDestinations[i] == level) {
             return i;
         }
     }
@@ -569,7 +568,7 @@ static void level_cmd_create_warp_node(void) {
             warpNode->node.destLevel = destLevel;
         }
 
-        intendedLevel = get_nonrandom_level(); // We have to find what the level is supposed to be, rather than where we are.
+        intendedLevel = get_intended_level(gCurrLevelNum); // We have to find what the level is supposed to be, rather than where we are.
 
         warpNode->node.id = id = CMD_GET(u8, 2);
         if (!gOptionsSettings.gameplay.s.adjustedExits // We want to use the warp as intended in the script if we have random warps

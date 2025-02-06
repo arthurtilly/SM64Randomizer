@@ -31,6 +31,7 @@ struct SaveFile {
     // cap can always be found in a fixed spot within the course
     u8 capLevel;
     u8 capArea;
+    u16 lastVisitedLevel;
 
     // Note: the coordinates get set, but are never actually used, since the
     // cap can always be found in a fixed spot within the course
@@ -40,6 +41,7 @@ struct SaveFile {
 
 
     u32 flags;
+    u64 lockedLevels;
 
     // Star flags for each course.
     // The most significant bit of the byte *following* each course is set if the
@@ -185,7 +187,7 @@ void save_file_do_save(s32 fileIndex);
 void save_file_erase(s32 fileIndex);
 void save_file_copy(s32 srcFileIndex, s32 destFileIndex);
 void save_file_load_all(void);
-void save_file_collect_star_or_key(s16 coinScore, s16 starIndex);
+u32 save_file_collect_star_or_key(s16 coinScore, s16 starIndex);
 s32 save_file_exists(s32 fileIndex);
 u32 save_file_get_max_coin_score(s32 courseIndex);
 s32 save_file_get_course_star_count(s32 fileIndex, s32 courseIndex);

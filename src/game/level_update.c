@@ -147,6 +147,36 @@ s8 gNeverEnteredCastle;
 struct MarioState *gMarioState = &gMarioStates[0];
 s8 sWarpCheckpointActive = FALSE;
 
+#include "buffers/buffers.h"
+#define curFile gSaveBuffer.files[gCurrSaveFileNum - 1]
+
+static u8 sLevelLockDialog = 0;
+Bool32 isLevelLocked(s16 level) {
+    if (level < 0) {
+        return FALSE;
+    }
+    if (ADVANCED_IRONMARIO && gMarioState->numStars >= CAP_SWITCH_THRESHOLD) {
+        return FALSE;
+    }
+    if (curFile.lockedLevels & (1 << level)) {
+        return TRUE;
+    }
+    return FALSE;
+}
+void lockLevel(s16 level, UNUSED u8 dialog) {
+    if (level < 0) {
+        return;
+    }
+    if (ADVANCED_IRONMARIO && gMarioState->numStars >= CAP_SWITCH_THRESHOLD) {
+        return;
+    }
+    u64 flag = 1 << (level & 0x3F);
+    if (!(curFile.lockedLevels & flag)) {
+        curFile.lockedLevels |= flag;
+        save_file_do_save(gCurrSaveFileNum - 1);
+    }
+}
+
 u16 level_control_timer(s32 timerOp) {
     switch (timerOp) {
         case TIMER_CONTROL_SHOW:
@@ -442,8 +472,62 @@ void warp_area(void) {
     }
 }
 
+void level_check_lock(s16 prevLevel, s16 currLevel) {
+    switch (prevLevel) {
+        case LEVEL_CASTLE:
+        case LEVEL_CASTLE_GROUNDS:
+        case LEVEL_CASTLE_COURTYARD:
+            switch (currLevel) {
+                case LEVEL_BBH:
+                case LEVEL_CCM:
+                // case LEVEL_CASTLE:
+                case LEVEL_HMC:
+                case LEVEL_SSL:
+                case LEVEL_BOB:
+                case LEVEL_SL:
+                case LEVEL_WDW:
+                case LEVEL_JRB:
+                case LEVEL_THI:
+                case LEVEL_TTC:
+                case LEVEL_RR:
+                // case LEVEL_CASTLE_GROUNDS:
+                case LEVEL_BITDW:
+                case LEVEL_VCUTM:
+                case LEVEL_BITFS:
+                case LEVEL_SA:
+                case LEVEL_BITS:
+                case LEVEL_LLL:
+                case LEVEL_DDD:
+                case LEVEL_WF:
+                // case LEVEL_ENDING:
+                // case LEVEL_CASTLE_COURTYARD:
+                case LEVEL_PSS:
+                case LEVEL_COTMC:
+                case LEVEL_TOTWC:
+                // case LEVEL_BOWSER_1:
+                case LEVEL_WMOTR:
+                // case LEVEL_UNKNOWN_32:
+                // case LEVEL_BOWSER_2:
+                // case LEVEL_BOWSER_3:
+                // case LEVEL_UNKNOWN_35:
+                case LEVEL_TTM:
+                // case LEVEL_UNKNOWN_37:
+                // case LEVEL_UNKNOWN_38:
+                    if (currLevel != curFile.lastVisitedLevel) {
+                        lockLevel(curFile.lastVisitedLevel, DIALOG_142);
+                    }
+                    curFile.lastVisitedLevel = currLevel & 0x3F;
+                    save_file_do_save(gCurrSaveFileNum - 1);
+                    break;
+            }
+            break;
+    }
+}
+
 // used for warps between levels
 void warp_level(void) {
+    level_check_lock(gCurrLevelNum, sWarpDest.levelNum);
+
     gCurrLevelNum = sWarpDest.levelNum;
 
     level_control_timer(TIMER_CONTROL_HIDE);
@@ -633,6 +717,22 @@ void initiate_warp(s16 destLevel, s16 destArea, s16 destWarpNode, s32 warpFlags)
 #endif
 }
 
+extern u32 gCurrentIntendedLevel;
+void initiate_warp_check_lock(s16 destLevel, s16 destArea, s16 destWarpNode, s32 warpFlags) {
+    if (isLevelLocked(destLevel)) {
+        u8 intendedLevel = get_intended_level(destLevel);
+        if (intendedLevel == 0) {
+            intendedLevel = destLevel;
+        }
+        destLevel = gLevelWarps[intendedLevel].level;
+        destArea = gLevelWarps[intendedLevel].area;
+        destWarpNode = gLevelWarps[intendedLevel].f1;
+        gCurrentIntendedLevel = intendedLevel;
+    }
+    initiate_warp(destLevel & 0x7F, destArea, destWarpNode, warpFlags);
+}
+
+
 // From Surface 0xD3 to 0xFC
 #define PAINTING_WARP_INDEX_START 0x00 // Value greater than or equal to Surface 0xD3
 #define PAINTING_WARP_INDEX_FA 0x2A    // THI Huge Painting index left
@@ -674,7 +774,7 @@ void initiate_painting_warp(void) {
                     sWarpCheckpointActive = check_warp_checkpoint(&warpNode);
                 }
 
-                initiate_warp(warpNode.destLevel & 0x7F, warpNode.destArea, warpNode.destNode, WARP_FLAGS_NONE);
+                initiate_warp_check_lock(warpNode.destLevel & 0x7F, warpNode.destArea, warpNode.destNode, WARP_FLAGS_NONE);
                 check_if_should_set_warp_checkpoint(&warpNode);
 
                 play_transition_after_delay(WARP_TRANSITION_FADE_INTO_COLOR, 30, 255, 255, 255, 45);
@@ -901,12 +1001,16 @@ void initiate_delayed_warp(void) {
                 default:
                     warpNode = area_get_warp_node(sSourceWarpNodeId);
 
-                    initiate_warp(warpNode->node.destLevel & 0x7F, warpNode->node.destArea,
+                    initiate_warp_check_lock(warpNode->node.destLevel & 0x7F, warpNode->node.destArea,
                                   warpNode->node.destNode, sDelayedWarpArg);
 
                     check_if_should_set_warp_checkpoint(&warpNode->node);
                     if (sWarpDest.type != WARP_TYPE_CHANGE_LEVEL) {
                         level_set_transition(2, NULL);
+
+                        if (sWarpDest.type == WARP_TYPE_SAME_AREA) {
+                            gLakituState.mode = CAMERA_MODE_FIXED;
+                        }
                     }
                     break;
             }
@@ -1336,6 +1440,8 @@ s32 lvl_set_current_level(UNUSED s16 initOrUpdate, s32 levelNum) {
     sWarpCheckpointActive = FALSE;
     gCurrLevelNum = levelNum;
     gCurrCourseNum = gLevelToCourseNumTable[levelNum - 1];
+
+    level_check_lock(oldLvl, gCurrLevelNum);
 
     if (gCurrDemoInput != NULL || gCurrCreditsEntry != NULL || gCurrCourseNum == COURSE_NONE) {
         return FALSE;

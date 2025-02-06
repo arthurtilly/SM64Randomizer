@@ -185,4 +185,6 @@ s32 lvl_set_current_level(        UNUSED s16 initOrUpdate,        s32 levelNum);
 s32 lvl_play_the_end_screen_sound(UNUSED s16 initOrUpdate, UNUSED s32 levelNum);
 void basic_update(void);
 
+void lockLevel(s16 level, u8 dialog);
+
 #endif // LEVEL_UPDATE_H

@@ -402,7 +402,7 @@ void puppycam_check_save(void) {
  * Update the current save file after collecting a star or a key.
  * If coin score is greater than the current high score, update it.
  */
-void save_file_collect_star_or_key(s16 coinScore, s16 starIndex) {
+u32 save_file_collect_star_or_key(s16 coinScore, s16 starIndex) {
     s32 fileIndex = gCurrSaveFileNum - 1;
     s32 courseIndex = COURSE_NUM_TO_INDEX(gCurrCourseNum);
 #ifdef GLOBAL_STAR_IDS
@@ -413,7 +413,7 @@ void save_file_collect_star_or_key(s16 coinScore, s16 starIndex) {
 #endif
 
     if (gCurrDemoInput != NULL) {
-        return;
+        return FALSE;
     }
 
     gLastCompletedCourseNum = courseIndex + 1;
@@ -443,17 +443,19 @@ void save_file_collect_star_or_key(s16 coinScore, s16 starIndex) {
         case LEVEL_BOWSER_1:
             if (!(save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_1 | SAVE_FLAG_UNLOCKED_BASEMENT_DOOR))) {
                 save_file_set_flags(SAVE_FLAG_HAVE_KEY_1);
+                return TRUE;
             }
             break;
 
         case LEVEL_BOWSER_2:
             if (!(save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR))) {
                 save_file_set_flags(SAVE_FLAG_HAVE_KEY_2);
+                return TRUE;
             }
             break;
 
         case LEVEL_BOWSER_3:
-            break;
+            return TRUE;
 
         default:
 #ifdef GLOBAL_STAR_IDS
@@ -463,10 +465,12 @@ void save_file_collect_star_or_key(s16 coinScore, s16 starIndex) {
 #else
             if (!(save_file_get_star_flags(fileIndex, courseIndex) & starFlag)) {
                 save_file_set_star_flags(fileIndex, courseIndex, starFlag);
+                return TRUE;
             }
 #endif
             break;
     }
+    return FALSE;
 }
 
 s32 save_file_exists(s32 fileIndex) {
