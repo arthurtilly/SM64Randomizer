@@ -626,6 +626,7 @@ s32 save_file_is_cannon_unlocked(void) {
 #ifdef UNLOCK_ALL
     return TRUE;
 #else
+    if (gCurrCourseNum == COURSE_WMOTR) return TRUE;
     return (gSaveBuffer.files[gCurrSaveFileNum - 1].courseStars[gCurrCourseNum] & COURSE_FLAG_CANNON_UNLOCKED) != 0;
 #endif
 }

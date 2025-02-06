@@ -133,19 +133,21 @@ static void toad_message_talking(void) {
         DIALOG_FLAG_TURN_TO_MARIO, CUTSCENE_DIALOG, o->oToadMessageDialogId)) {
         o->oToadMessageRecentlyTalked = TRUE;
         o->oToadMessageState = TOAD_MESSAGE_FADING;
-        switch (o->oToadMessageDialogId) {
-            case TOAD_STAR_1_DIALOG:
-                o->oToadMessageDialogId = TOAD_STAR_1_DIALOG_AFTER;
-                bhv_spawn_star_no_level_exit(STAR_BP_ACT_1);
-                break;
-            case TOAD_STAR_2_DIALOG:
-                o->oToadMessageDialogId = TOAD_STAR_2_DIALOG_AFTER;
-                bhv_spawn_star_no_level_exit(STAR_BP_ACT_2);
-                break;
-            case TOAD_STAR_3_DIALOG:
-                o->oToadMessageDialogId = TOAD_STAR_3_DIALOG_AFTER;
-                bhv_spawn_star_no_level_exit(STAR_BP_ACT_3);
-                break;
+        if (!MIDDLE_IRONMARIO) {
+            switch (o->oToadMessageDialogId) {
+                case TOAD_STAR_1_DIALOG:
+                    o->oToadMessageDialogId = TOAD_STAR_1_DIALOG_AFTER;
+                    bhv_spawn_star_no_level_exit(STAR_BP_ACT_1);
+                    break;
+                case TOAD_STAR_2_DIALOG:
+                    o->oToadMessageDialogId = TOAD_STAR_2_DIALOG_AFTER;
+                    bhv_spawn_star_no_level_exit(STAR_BP_ACT_2);
+                    break;
+                case TOAD_STAR_3_DIALOG:
+                    o->oToadMessageDialogId = TOAD_STAR_3_DIALOG_AFTER;
+                    bhv_spawn_star_no_level_exit(STAR_BP_ACT_3);
+                    break;
+            }
         }
     }
 }
