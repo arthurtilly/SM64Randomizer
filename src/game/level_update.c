@@ -1007,10 +1007,6 @@ void initiate_delayed_warp(void) {
                     check_if_should_set_warp_checkpoint(&warpNode->node);
                     if (sWarpDest.type != WARP_TYPE_CHANGE_LEVEL) {
                         level_set_transition(2, NULL);
-
-                        if (sWarpDest.type == WARP_TYPE_SAME_AREA) {
-                            gLakituState.mode = CAMERA_MODE_FIXED;
-                        }
                     }
                     break;
             }
