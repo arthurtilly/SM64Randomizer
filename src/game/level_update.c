@@ -720,7 +720,7 @@ void initiate_warp(s16 destLevel, s16 destArea, s16 destWarpNode, s32 warpFlags)
 extern u32 gCurrentIntendedLevel;
 void initiate_warp_check_lock(s16 destLevel, s16 destArea, s16 destWarpNode, s32 warpFlags) {
     if (isLevelLocked(destLevel)) {
-        u8 intendedLevel = get_intended_level(destLevel);
+        u8 intendedLevel = gOptionsSettings.gameplay.s.randomLevelWarp ? get_intended_level(destLevel) : destLevel;
         if (intendedLevel == 0) {
             intendedLevel = destLevel;
         }
