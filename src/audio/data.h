@@ -118,7 +118,7 @@ extern u32 gAudioRandom;
 #define EXT_AUDIO_INIT_POOL_SIZE 0x0
 #endif
 #else
-#define EXT_AUDIO_HEAP_SIZE      0x0
+#define EXT_AUDIO_HEAP_SIZE      0x8000
 #define EXT_AUDIO_INIT_POOL_SIZE 0x1000
 #endif
 

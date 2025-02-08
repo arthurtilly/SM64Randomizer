@@ -87,7 +87,7 @@ struct AudioSessionSettings gAudioSessionPresets[1] = {
 };
 #else
 struct AudioSessionSettings gAudioSessionPresets[1] = {
-    { 32000, 20, 1, 0x1000, 0x2FFF, 0x7FFF, 0x4100, 0x6E00, 0x7400, 0x2A80 },
+    { 32000, 20, 1, 0x1000, 0x2FFF, 0x7FFF, 0x4100, 0x6E00, 0x7400, 0x3A80 },
 };
 #endif
 #endif
