@@ -10,7 +10,6 @@ struct ExoticObject sExoticObjects[] = {
     { MODEL_SPINDRIFT, bhvSpindrift },
     { MODEL_MR_BLIZZARD_HIDDEN, bhvMrBlizzard },
     { MODEL_PIRANHA_PLANT, bhvFirePiranhaPlant },
-    { MODEL_AMP, bhvHomingAmp },
     { MODEL_SCUTTLEBUG, bhvScuttlebug },
     { MODEL_MR_I_BODY, bhvMrI },
     { MODEL_BULLY, bhvSmallBully },

@@ -69,11 +69,6 @@ static const LevelScript script_func_local_2[] = {
     OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvCirclingAmp),
     OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvCirclingAmp),
     OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvCirclingAmp),
-    OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvHomingAmp),
-    OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvHomingAmp),
-    OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvHomingAmp),
-    OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvHomingAmp),
-    OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvHomingAmp),
     
     RETURN(),
 };

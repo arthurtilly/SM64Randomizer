@@ -40,11 +40,6 @@ static const LevelScript script_func_local_1[] = {
     OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvCirclingAmp),
     OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvCirclingAmp),
     OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvCirclingAmp),
-    OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvHomingAmp),
-    OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvHomingAmp),
-    OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvHomingAmp),
-    OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvHomingAmp),
-    OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvHomingAmp),
     
     RETURN(),
 };
@@ -97,11 +92,6 @@ static const LevelScript script_func_local_3[] = {
     OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvCirclingAmp),
     OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvCirclingAmp),
     OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvCirclingAmp),
-    OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvHomingAmp),
-    OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvHomingAmp),
-    OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvHomingAmp),
-    OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvHomingAmp),
-    OBJECT(MODEL_AMP, 0,0,0,0,0,0, 0x00000001, bhvHomingAmp),
     OBJECT(MODEL_GOOMBA, 0,0,0,0,0,0, 0x00000001, bhvGoomba),
     OBJECT(MODEL_GOOMBA, 0,0,0,0,0,0, 0x00000001, bhvGoomba),
     OBJECT(MODEL_GOOMBA, 0,0,0,0,0,0, 0x00000001, bhvGoomba),
