@@ -586,6 +586,7 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
 
         // For the start warp, always spawn above the water
         if ((obj->behavior == segmented_to_virtual(bhvSpinAirborneWarp)) && (waterLevel > pos[1])) {
+            if (gCurrCourseNum == COURSE_SL) continue; // no SL water spawns
             minHeight = waterLevel + minHeightRange;
             maxHeight = waterLevel + maxHeightRange;
         }
