@@ -366,7 +366,7 @@ static u8 is_floor_safe(struct Surface *floor, u8 floorSafeLevel,
         return TRUE;
     }
 
-    if ((gOptionsSettings.gameplay.s.safeSpawns == SPAWN_SAFETY_HARD) && (floorSafeLevel == FLOOR_SAFETY_LOW) && !(randPosFlags & RAND_TYPE_SAFE)) {
+    if ((gOptionsSettings.gameplay.s.safeSpawns == SPAWN_SAFETY_HARD) && (floorSafeLevel == FLOOR_SAFETY_LOW) && !(randPosFlags & RAND_TYPE_SAFE) && (gCurrCourseNum != COURSE_BITFS)) {
         if (floor->type < SURFACE_SAFE_FLOORS_HARD) {
             return TRUE;
         }
