@@ -6284,4 +6284,14 @@ const BehaviorScript bhvIntroScene[] = {
     END_LOOP(),
 };
 
+const BehaviorScript bhvSealedPaintingInCastle[] = {
+    BEGIN(OBJ_LIST_SURFACE),
+    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    LOAD_COLLISION_DATA(inside_castle_seg7_collision_sealed_painting),
+    CALL_NATIVE(bhv_castle_sealed_painting_init),
+    CALL_NATIVE(load_object_collision_model),
+    BEGIN_LOOP(),
+        CALL_NATIVE(load_object_collision_model),
+    END_LOOP(),
+};
 

@@ -18,6 +18,7 @@
 
 #include "src/game/randomizer.h"
 #define DOOR_PARAM(req) (((req) + 1) << 24)
+#define SEALED_PAINTING_PARAM(level, scaleN, scaleD) (((level & 0xFF) << 24) | ((scaleN & 0xFF) << 16) | ((scaleD & 0xFF) << 8))
 
 static const LevelScript script_func_local_1[] = {
     WARP_NODE(/*id*/ 0x00, /*destLevel*/ LEVEL_CASTLE_GROUNDS, /*destArea*/ 0x01, /*destNode*/ 0x00, /*flags*/ WARP_NO_CHECKPOINT),
@@ -268,6 +269,10 @@ const LevelScript level_castle_inside_entry[] = {
         OBJECT(/*model*/ MODEL_CASTLE_DOOR_3_STARS, /*pos*/ 1075,  205,  -229, /*angle*/ 0, 270, 0, /*behParam*/ DOOR_PARAM(STAR_REQ_JRB),              /*beh*/ bhvDoor),
         OBJECT(/*model*/ MODEL_CASTLE_DOOR_3_STARS, /*pos*/-2303,    0, -1074, /*angle*/ 0,   0, 0, /*behParam*/ DOOR_PARAM(STAR_REQ_CCM),              /*beh*/ bhvDoor),
         OBJECT(/*model*/ MODEL_CASTLE_WOODEN_DOOR,  /*pos*/-1023, -101, -5170, /*angle*/ 0,   0, 0, /*behParam*/ DOOR_PARAM(STAR_REQ_BBH) + 0x00020000, /*beh*/ bhvDoorWarp),
+        OBJECT(/*model*/ MODEL_NONE,       /*pos*/ -5221,  717,  -461, /*angle*/ 0,  90, 0, /*behParam*/ SEALED_PAINTING_PARAM(LEVEL_BOB, 12, 5), /*beh*/ bhvSealedPaintingInCastle),
+        OBJECT(/*model*/ MODEL_NONE,       /*pos*/ -2303,    0, -4351, /*angle*/ 0,   0, 0, /*behParam*/ SEALED_PAINTING_PARAM(LEVEL_CCM, 12, 5), /*beh*/ bhvSealedPaintingInCastle),
+        OBJECT(/*model*/ MODEL_NONE,       /*pos*/   256,  102, -4505, /*angle*/ 0,   0, 0, /*behParam*/  SEALED_PAINTING_PARAM(LEVEL_WF, 12, 5), /*beh*/ bhvSealedPaintingInCastle),
+        OBJECT(/*model*/ MODEL_NONE,       /*pos*/  4301,  717,  -230, /*angle*/ 0, -90, 0, /*behParam*/ SEALED_PAINTING_PARAM(LEVEL_JRB, 12, 5), /*beh*/ bhvSealedPaintingInCastle),
         JUMP_LINK(script_func_local_1),
         WARP_NODE(/*id*/ 0xF1, /*destLevel*/ LEVEL_CASTLE_GROUNDS, /*destArea*/ 0x01, /*destNode*/ 0x03, /*flags*/ WARP_NO_CHECKPOINT),
         TERRAIN(/*terrainData*/ inside_castle_seg7_area_1_collision),
@@ -288,6 +293,12 @@ const LevelScript level_castle_inside_entry[] = {
         OBJECT(/*model*/ MODEL_CASTLE_DOOR_0_STARS,      /*pos*/ -2695, 1203, 1828, /*angle*/ 0,  90, 0, /*behParam*/ DOOR_PARAM(STAR_REQ_THI),      /*beh*/ bhvDoor),
         OBJECT(/*model*/ MODEL_CASTLE_DOOR_0_STARS,      /*pos*/  1670, 1203, 1828, /*angle*/ 0, 270, 0, /*behParam*/ DOOR_PARAM(STAR_REQ_SL),       /*beh*/ bhvDoor),
         OBJECT(/*model*/ MODEL_CASTLE_WOODEN_DOOR,       /*pos*/  -997, 1203, 1178, /*angle*/ 0,   0, 0, /*behParam*/ DOOR_PARAM(STAR_REQ_UPSTAIRS), /*beh*/ bhvDoor),
+        OBJECT(/*model*/ MODEL_NONE,       /*pos*/  -659, 1613,  -142, /*angle*/ 0,   0, 0, /*behParam*/ SEALED_PAINTING_PARAM(LEVEL_WDW,  12,  5), /*beh*/ bhvSealedPaintingInCastle),
+        OBJECT(/*model*/ MODEL_NONE,       /*pos*/ -4794, 1551,  3005, /*angle*/ 0, 180, 0, /*behParam*/ SEALED_PAINTING_PARAM(LEVEL_THI,  77, 50), /*beh*/ bhvSealedPaintingInCastle),
+        OBJECT(/*model*/ MODEL_NONE,       /*pos*/  -674, 1613,  3813, /*angle*/ 0, 180, 0, /*behParam*/ SEALED_PAINTING_PARAM(LEVEL_TTM,   1,  1), /*beh*/ bhvSealedPaintingInCastle),
+        OBJECT(/*model*/ MODEL_NONE,       /*pos*/ -4795, 2329, -3291, /*angle*/ 0,   0, 0, /*behParam*/ SEALED_PAINTING_PARAM(LEVEL_THI,  32,  5), /*beh*/ bhvSealedPaintingInCastle),
+        OBJECT(/*model*/ MODEL_NONE,       /*pos*/  3538, 1818,  -271, /*angle*/ 0,   0, 0, /*behParam*/  SEALED_PAINTING_PARAM(LEVEL_SL, 115, 64), /*beh*/ bhvSealedPaintingInCastle),
+        OBJECT(/*model*/ MODEL_NONE,       /*pos*/  -205, 2918,  7232, /*angle*/ 0, 180, 0, /*behParam*/ SEALED_PAINTING_PARAM(LEVEL_TTC,   8,  5), /*beh*/ bhvSealedPaintingInCastle),
         JUMP_LINK(script_func_local_2),
         WARP_NODE(/*id*/ 0xF1, /*destLevel*/ LEVEL_CASTLE_GROUNDS, /*destArea*/ 0x01, /*destNode*/ 0x03, /*flags*/ WARP_NO_CHECKPOINT),
         TERRAIN(/*terrainData*/ inside_castle_seg7_area_2_collision),
@@ -308,6 +319,8 @@ const LevelScript level_castle_inside_entry[] = {
         OBJECT(/*model*/ MODEL_CASTLE_WOODEN_DOOR,        /*pos*/ -3097, -1279,  1434, /*angle*/ 0,   0, 0, /*behParam*/ DOOR_PARAM(STAR_REQ_BASEMENT), /*beh*/ bhvDoor),
         OBJECT(/*model*/ MODEL_CASTLE_DOOR_0_STARS,       /*pos*/  1126, -1074, -2661, /*angle*/ 0, 270, 0, /*behParam*/ DOOR_PARAM(STAR_REQ_HMC),      /*beh*/ bhvDoor),
         OBJECT(/*model*/ MODEL_CASTLE_WOODEN_DOOR,        /*pos*/   717, -1177,  -869, /*angle*/ 0, 270, 0, /*behParam*/ DOOR_PARAM(STAR_REQ_BASEMENT), /*beh*/ bhvDoor),
+        OBJECT(/*model*/ MODEL_NONE,       /*pos*/ -1382, -818, -3941, /*angle*/ 0,   0, 0, /*behParam*/ SEALED_PAINTING_PARAM(LEVEL_LLL, 12, 5), /*beh*/ bhvSealedPaintingInCastle),
+        OBJECT(/*model*/ MODEL_NONE,       /*pos*/ -2917, -869, -1074, /*angle*/ 0, 180, 0, /*behParam*/ SEALED_PAINTING_PARAM(LEVEL_SSL, 12, 5), /*beh*/ bhvSealedPaintingInCastle),
         JUMP_LINK(script_func_local_3),
         JUMP_LINK(script_func_local_4),
         WARP_NODE(/*id*/ 0xF1, /*destLevel*/ LEVEL_CASTLE_GROUNDS, /*destArea*/ 0x01, /*destNode*/ 0x03, /*flags*/ WARP_NO_CHECKPOINT),

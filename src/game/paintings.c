@@ -318,6 +318,24 @@ f32 painting_ripple_x(struct Painting *painting, s8 xSource) {
     return 0.0f;
 }
 
+static s16 sPaintingLevels[] = {
+    LEVEL_BOB,
+    LEVEL_CCM,
+    LEVEL_WF,
+    LEVEL_JRB,
+    LEVEL_LLL,
+    LEVEL_SSL,
+    0,
+    LEVEL_DDD,
+    LEVEL_WDW,
+    LEVEL_THI,
+    LEVEL_TTM,
+    LEVEL_TTC,
+    LEVEL_SL,
+    LEVEL_THI,
+    LEVEL_HMC,
+};
+
 /**
  * Set the painting's state, causing it to start a passive ripple or a ripple from Mario entering.
  *
@@ -328,6 +346,18 @@ f32 painting_ripple_x(struct Painting *painting, s8 xSource) {
  */
 void painting_state(s8 state, struct Painting *painting, struct Painting *paintingGroup[],
                     s8 xSource, s8 ySource, s8 resetTimer) {
+    if (gCurrLevelNum == LEVEL_CASTLE && state != PAINTING_IDLE && !(gMarioState->action & ACT_FLAG_INTANGIBLE)) {
+        if (painting->id >= 0 && painting->id < ARRAY_COUNT(sPaintingLevels)) {
+            s16 intendedLevel = sPaintingLevels[painting->id];
+            s16 targetLevel = gOptionsSettings.gameplay.s.randomLevelWarp ? gWarpDestinations[intendedLevel] : intendedLevel;
+            if (targetLevel == 0) {
+                targetLevel = intendedLevel;
+            }
+            if (get_level_is_locked(targetLevel)) {
+                return;
+            }
+        }
+    }
     // make sure no other paintings are rippling
     stop_other_paintings(&painting->id, paintingGroup);
 
@@ -1229,6 +1259,14 @@ Gfx *geo_painting_draw(s32 callContext, struct GraphNode *node, UNUSED void *con
 
         // Update the ddd painting before drawing
         if (group == 1 && id == PAINTING_ID_DDD) {
+            s16 intendedLevel = LEVEL_DDD;
+            s16 targetLevel = gOptionsSettings.gameplay.s.randomLevelWarp ? gWarpDestinations[intendedLevel] : intendedLevel;
+            if (targetLevel == 0) {
+                targetLevel = intendedLevel;
+            }
+            if (get_level_is_locked(targetLevel)) {
+                return NULL;
+            }
             move_ddd_painting(painting, 3456.0f, 5529.6f, 20.0f);
         }
 

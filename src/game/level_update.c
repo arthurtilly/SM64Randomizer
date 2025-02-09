@@ -151,8 +151,9 @@ s8 sWarpCheckpointActive = FALSE;
 #define curFile gSaveBuffer.files[gCurrSaveFileNum - 1]
 
 static u8 sLevelLockDialog = 0;
+
 u32 get_course_is_locked(s8 course) {
-    if (course == 0) {
+    if (course == COURSE_NONE) {
         return FALSE;
     }
     if (ADVANCED_IRONMARIO && gMarioState->numStars >= CAP_SWITCH_THRESHOLD) {
@@ -163,8 +164,14 @@ u32 get_course_is_locked(s8 course) {
     }
     return FALSE;
 }
+
+u32 get_level_is_locked(s16 level) {
+    s8 course = gLevelToCourseNumTable[level - 1];
+    return get_course_is_locked(course);
+}
+
 void set_course_is_locked(s8 course, UNUSED u8 dialog) {
-    if (course == 0) {
+    if (course == COURSE_NONE) {
         return;
     }
     if (ADVANCED_IRONMARIO && gMarioState->numStars >= CAP_SWITCH_THRESHOLD) {
@@ -675,8 +682,7 @@ void initiate_warp(s16 destLevel, s16 destArea, s16 destWarpNode, s32 warpFlags)
 
 extern u32 gCurrentIntendedLevel;
 void initiate_warp_check_lock(s16 destLevel, s16 destArea, s16 destWarpNode, s32 warpFlags) {
-    s8 destCourse = gLevelToCourseNumTable[destLevel - 1];
-    if (get_course_is_locked(destCourse)) {
+    if (get_level_is_locked(destLevel)) {
         u8 intendedLevel = gOptionsSettings.gameplay.s.randomLevelWarp ? get_intended_level(destLevel) : destLevel;
         if (intendedLevel == 0) {
             intendedLevel = destLevel;
