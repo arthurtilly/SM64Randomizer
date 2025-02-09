@@ -1783,9 +1783,9 @@ void print_main_menu_strings(void) {
 
     print_generic_string(241, 39, textSeed);
     gDPSetEnvColor(gDisplayListHead++, 0, 0, 0, sTextBaseAlpha);
-    print_generic_string(29, 12, textArthur);
+    print_generic_string(64, 12, textArthur);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha);
-    print_generic_string(28, 13, textArthur);
+    print_generic_string(63, 13, textArthur);
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
 
     print_file_names_and_seeds(FALSE);
