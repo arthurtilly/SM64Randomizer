@@ -563,9 +563,9 @@ void render_hud(void) {
         }
 
 #ifndef DISABLE_LIVES
-        if (hudDisplayFlags & HUD_DISPLAY_FLAG_LIVES) {
-            render_hud_mario_lives();
-        }
+        // if (hudDisplayFlags & HUD_DISPLAY_FLAG_LIVES) {
+        //     render_hud_mario_lives();
+        // }
 #endif
 
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_COIN_COUNT) {
