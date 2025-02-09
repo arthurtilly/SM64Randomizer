@@ -31,7 +31,7 @@ struct SaveFile {
     // cap can always be found in a fixed spot within the course
     u8 capLevel;
     u8 capArea;
-    u16 lastVisitedLevel;
+    s8 lastVisitedCourse;
 
     // Note: the coordinates get set, but are never actually used, since the
     // cap can always be found in a fixed spot within the course
@@ -41,7 +41,9 @@ struct SaveFile {
 
 
     u32 flags;
-    u64 lockedLevels;
+    u32 lockedCourses;
+
+    u32 padding;
 
     // Star flags for each course.
     // The most significant bit of the byte *following* each course is set if the

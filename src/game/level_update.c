@@ -151,28 +151,28 @@ s8 sWarpCheckpointActive = FALSE;
 #define curFile gSaveBuffer.files[gCurrSaveFileNum - 1]
 
 static u8 sLevelLockDialog = 0;
-Bool32 isLevelLocked(s16 level) {
-    if (level < 0) {
+u32 get_course_is_locked(s8 course) {
+    if (course == 0) {
         return FALSE;
     }
     if (ADVANCED_IRONMARIO && gMarioState->numStars >= CAP_SWITCH_THRESHOLD) {
         return FALSE;
     }
-    if (curFile.lockedLevels & (1 << level)) {
+    if (curFile.lockedCourses & (1 << course)) {
         return TRUE;
     }
     return FALSE;
 }
-void lockLevel(s16 level, UNUSED u8 dialog) {
-    if (level < 0) {
+void set_course_is_locked(s8 course, UNUSED u8 dialog) {
+    if (course == 0) {
         return;
     }
     if (ADVANCED_IRONMARIO && gMarioState->numStars >= CAP_SWITCH_THRESHOLD) {
         return;
     }
-    u64 flag = 1 << (level & 0x3F);
-    if (!(curFile.lockedLevels & flag)) {
-        curFile.lockedLevels |= flag;
+    u32 flag = 1 << course;
+    if (!(curFile.lockedCourses & flag)) {
+        curFile.lockedCourses |= flag;
         save_file_do_save(gCurrSaveFileNum - 1);
     }
 }
@@ -472,62 +472,18 @@ void warp_area(void) {
     }
 }
 
-void level_check_lock(s16 prevLevel, s16 currLevel) {
-    switch (prevLevel) {
-        case LEVEL_CASTLE:
-        case LEVEL_CASTLE_GROUNDS:
-        case LEVEL_CASTLE_COURTYARD:
-            switch (currLevel) {
-                case LEVEL_BBH:
-                case LEVEL_CCM:
-                // case LEVEL_CASTLE:
-                case LEVEL_HMC:
-                case LEVEL_SSL:
-                case LEVEL_BOB:
-                case LEVEL_SL:
-                case LEVEL_WDW:
-                case LEVEL_JRB:
-                case LEVEL_THI:
-                case LEVEL_TTC:
-                case LEVEL_RR:
-                // case LEVEL_CASTLE_GROUNDS:
-                case LEVEL_BITDW:
-                case LEVEL_VCUTM:
-                case LEVEL_BITFS:
-                case LEVEL_SA:
-                case LEVEL_BITS:
-                case LEVEL_LLL:
-                case LEVEL_DDD:
-                case LEVEL_WF:
-                // case LEVEL_ENDING:
-                // case LEVEL_CASTLE_COURTYARD:
-                case LEVEL_PSS:
-                case LEVEL_COTMC:
-                case LEVEL_TOTWC:
-                // case LEVEL_BOWSER_1:
-                case LEVEL_WMOTR:
-                // case LEVEL_UNKNOWN_32:
-                // case LEVEL_BOWSER_2:
-                // case LEVEL_BOWSER_3:
-                // case LEVEL_UNKNOWN_35:
-                case LEVEL_TTM:
-                // case LEVEL_UNKNOWN_37:
-                // case LEVEL_UNKNOWN_38:
-                    if (currLevel != curFile.lastVisitedLevel) {
-                        lockLevel(curFile.lastVisitedLevel, DIALOG_142);
-                    }
-                    curFile.lastVisitedLevel = currLevel & 0x3F;
-                    save_file_do_save(gCurrSaveFileNum - 1);
-                    break;
-            }
-            break;
+void course_check_lock(s8 prevCourse, s8 currCourse) {
+    if (prevCourse == COURSE_NONE && currCourse != COURSE_NONE) {
+        if (currCourse != curFile.lastVisitedCourse) {
+            set_course_is_locked(curFile.lastVisitedCourse, DIALOG_142);
+        }
+        curFile.lastVisitedCourse = currCourse;
+        save_file_do_save(gCurrSaveFileNum - 1);
     }
 }
 
 // used for warps between levels
 void warp_level(void) {
-    level_check_lock(gCurrLevelNum, sWarpDest.levelNum);
-
     gCurrLevelNum = sWarpDest.levelNum;
 
     level_control_timer(TIMER_CONTROL_HIDE);
@@ -719,7 +675,8 @@ void initiate_warp(s16 destLevel, s16 destArea, s16 destWarpNode, s32 warpFlags)
 
 extern u32 gCurrentIntendedLevel;
 void initiate_warp_check_lock(s16 destLevel, s16 destArea, s16 destWarpNode, s32 warpFlags) {
-    if (isLevelLocked(destLevel)) {
+    s8 destCourse = gLevelToCourseNumTable[destLevel - 1];
+    if (get_course_is_locked(destCourse)) {
         u8 intendedLevel = gOptionsSettings.gameplay.s.randomLevelWarp ? get_intended_level(destLevel) : destLevel;
         if (intendedLevel == 0) {
             intendedLevel = destLevel;
@@ -1435,13 +1392,14 @@ s32 lvl_init_from_save_file(UNUSED s16 initOrUpdate, s32 levelNum) {
 
 s32 lvl_set_current_level(UNUSED s16 initOrUpdate, s32 levelNum) {
     s32 oldLvl = gCurrLevelNum;
+    s8 oldCourseNum = gCurrCourseNum;
     s32 warpCheckpointActive = sWarpCheckpointActive;
 
     sWarpCheckpointActive = FALSE;
     gCurrLevelNum = levelNum;
     gCurrCourseNum = gLevelToCourseNumTable[levelNum - 1];
 
-    level_check_lock(oldLvl, gCurrLevelNum);
+    course_check_lock(oldCourseNum, gCurrCourseNum);
 
     if (gCurrDemoInput != NULL || gCurrCreditsEntry != NULL || gCurrCourseNum == COURSE_NONE) {
         return FALSE;
