@@ -701,7 +701,9 @@ static void boo_with_cage_act_3(void) {
 }
 
 void bhv_boo_with_cage_init(void) {
-    {
+    if (get_intended_level_is_locked(LEVEL_BBH)) {
+        obj_mark_for_deletion(o);
+    } else {
         struct Object *cage = spawn_object(o, MODEL_HAUNTED_CAGE, bhvBooCage);
         cage->oBehParams = o->oBehParams;
     }
