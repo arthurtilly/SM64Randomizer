@@ -1,6 +1,10 @@
 // warp.inc.c
 
 void bhv_warp_init(void) {
+    if (gCurrLevelNum == LEVEL_CASTLE && BPARAM2 == 0xC && get_intended_level_is_locked(LEVEL_SA)) {
+        obj_mark_for_deletion(o);
+    }
+
     create_dynamic_avoidance_point(&o->oPosVec, 120.f, 300.f, 20.f);
 }
 

@@ -53,6 +53,8 @@ extern const GeoLayout castle_geo_001AF8[];
 extern const GeoLayout castle_geo_001B48[];
 extern const GeoLayout castle_geo_001BB0[];
 extern const GeoLayout castle_geo_001C10[];
+extern const GeoLayout castle_geo_level_grill[];
+extern const GeoLayout castle_geo_level_grill_large[];
 
 // leveldata
 extern const Gfx inside_castle_seg7_dl_070225D8[];
@@ -133,6 +135,8 @@ extern const Gfx inside_castle_seg7_dl_07066E90[];
 extern const Gfx inside_castle_seg7_dl_07066FA0[];
 extern const Gfx inside_castle_seg7_dl_07068850[];
 extern const Gfx inside_castle_seg7_dl_07068B10[];
+extern const Gfx inside_castle_seg7_dl_level_grill[];
+extern const Gfx inside_castle_seg7_dl_level_grill_large[];
 extern const Collision inside_castle_seg7_area_1_collision[];
 extern const Collision inside_castle_seg7_area_2_collision[];
 extern const Collision inside_castle_seg7_area_3_collision[];
@@ -149,6 +153,7 @@ extern const Collision inside_castle_seg7_collision_floor_trap[];
 extern const Collision inside_castle_seg7_collision_star_door[];
 extern const Collision inside_castle_seg7_collision_water_level_pillar[];
 extern const Collision inside_castle_seg7_collision_sealed_painting[];
+extern const Collision inside_castle_seg7_collision_level_grill[];
 extern const Trajectory *const inside_castle_seg7_trajectory_mips[];
 extern const struct MovtexQuadCollection inside_castle_movtex_green_room_water[];
 extern const struct MovtexQuadCollection inside_castle_movtex_moat_water[];

@@ -170,6 +170,14 @@ u32 get_level_is_locked(s16 level) {
     return get_course_is_locked(course);
 }
 
+u32 get_intended_level_is_locked(s16 intendedLevel) {
+    s16 targetLevel = gOptionsSettings.gameplay.s.randomLevelWarp ? gWarpDestinations[intendedLevel] : intendedLevel;
+    if (targetLevel == 0) {
+        targetLevel = intendedLevel;
+    }
+    return get_level_is_locked(targetLevel);
+}
+
 void set_course_is_locked(s8 course, UNUSED u8 dialog) {
     if (course == COURSE_NONE) {
         return;

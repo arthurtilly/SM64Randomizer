@@ -780,11 +780,20 @@ void bhv_boo_in_castle_loop(void) {
 
     if (o->oAction == 0) {
         cur_obj_hide();
-#ifndef UNLOCK_ALL
-        if (gHudDisplay.stars < gRequiredStars[STAR_REQ_BBH]) {
+#ifdef UNLOCK_ALL
+        u32 unlocked = TRUE;
+#else
+        u32 unlocked = gHudDisplay.stars >= gRequiredStars[STAR_REQ_BBH];
+#endif
+
+        if (get_intended_level_is_locked(LEVEL_BBH)) {
+            unlocked = FALSE;
+        }
+
+        if (!unlocked) {
             obj_mark_for_deletion(o);
         }
-#endif
+
         if (gMarioCurrentRoom == 1) {
             o->oAction++;
         }

@@ -90,6 +90,8 @@
 #define MODEL_CASTLE_CLOCK_MINUTE_HAND         0x37        // castle_geo_001530
 #define MODEL_CASTLE_CLOCK_HOUR_HAND           0x38        // castle_geo_001548
 #define MODEL_CASTLE_CLOCK_PENDULUM            0x39        // castle_geo_001518
+#define MODEL_CASTLE_LEVEL_GRILL               0x3A        // castle_geo_level_grill
+#define MODEL_CASTLE_LEVEL_GRILL_LARGE         0x3B        // castle_geo_level_grill_large
 
 // hmc
 #define MODEL_HMC_METAL_PLATFORM               0x36        // hmc_geo_0005A0

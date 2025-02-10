@@ -229,6 +229,7 @@ void set_obj_anim_with_accel_and_sound(s16 frame1, s16 frame2, s32 sound) {
 #include "behaviors/music_touch.inc.c"
 #include "behaviors/castle_floor_trap.inc.c"
 #include "behaviors/castle_sealed_painting.inc.c"
+#include "behaviors/level_grill.inc.c"
 #include "behaviors/pole_base.inc.c"
 #include "behaviors/sparkle_spawn.inc.c"
 #include "behaviors/scuttlebug.inc.c" // :scuttleeyes:

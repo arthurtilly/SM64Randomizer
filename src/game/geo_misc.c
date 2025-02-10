@@ -74,7 +74,10 @@ Gfx *geo_exec_inside_castle_light(s32 callContext, struct GraphNode *node, UNUSE
 
     if (callContext == GEO_CONTEXT_RENDER) {
         s32 flags = save_file_get_flags();
-        if (gHudDisplay.stars >= gRequiredStars[STAR_REQ_TOTWC] && !(flags & SAVE_FLAG_HAVE_WING_CAP)) {
+        u32 unlocked = gHudDisplay.stars >= gRequiredStars[STAR_REQ_TOTWC] && !get_intended_level_is_locked(LEVEL_TOTWC);
+        u32 showLight = !(flags & SAVE_FLAG_HAVE_WING_CAP) || gOptionsSettings.gameplay.s.randomLevelWarp;
+
+        if (unlocked && showLight) {
             displayList = alloc_display_list(2 * sizeof(*displayList));
 
             if (displayList == NULL) {

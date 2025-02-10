@@ -117,6 +117,7 @@ extern const Texture inside_09009000[];
 extern const Texture inside_0900A000[];
 extern const Texture inside_0900B000[];
 extern const Texture inside_0900B800[];
+extern const Texture inside_level_grill[];
 
 // machine
 extern const Texture machine_09000000[];

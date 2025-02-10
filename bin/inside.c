@@ -87,3 +87,7 @@ ALIGNED8 const Texture inside_0900B000[] = {
 ALIGNED8 const Texture inside_0900B800[] = {
 #include "textures/inside/inside_castle_textures.0B800.rgba16.inc.c"
 };
+
+ALIGNED8 const Texture inside_level_grill[] = {
+#include "textures/outside/castle_grounds_textures.05800.rgba16.inc.c"
+};

@@ -19,6 +19,7 @@
 #include "src/game/randomizer.h"
 #define DOOR_PARAM(req) (((req) + 1) << 24)
 #define SEALED_PAINTING_PARAM(level, scaleN, scaleD) (((level & 0xFF) << 24) | ((scaleN & 0xFF) << 16) | ((scaleD & 0xFF) << 8))
+#define LEVEL_GRILL_PARAM(level, large) (((level & 0xFF) << 24) | ((large & 0xFF) << 18))
 
 static const LevelScript script_func_local_1[] = {
     WARP_NODE(/*id*/ 0x00, /*destLevel*/ LEVEL_CASTLE_GROUNDS, /*destArea*/ 0x01, /*destNode*/ 0x00, /*flags*/ WARP_NO_CHECKPOINT),
@@ -246,6 +247,8 @@ const LevelScript level_castle_inside_entry[] = {
     LOAD_MODEL_FROM_GEO(MODEL_CASTLE_DOOR_1_STAR,        castle_door_1_star_geo),
     LOAD_MODEL_FROM_GEO(MODEL_CASTLE_DOOR_3_STARS,       castle_door_3_stars_geo),
     LOAD_MODEL_FROM_GEO(MODEL_CASTLE_KEY_DOOR,           key_door_geo),
+    LOAD_MODEL_FROM_GEO(MODEL_CASTLE_LEVEL_GRILL,        castle_geo_level_grill),
+    LOAD_MODEL_FROM_GEO(MODEL_CASTLE_LEVEL_GRILL_LARGE,  castle_geo_level_grill_large),
     // The different sets of star doors all use different model IDs, despite them all loading the same geo layout.
     // It is possible that star doors were originally going to have numbers on them, similar to the other locked doors.
     LOAD_MODEL_FROM_GEO(MODEL_CASTLE_STAR_DOOR_30_STARS, castle_geo_000F00),
@@ -269,10 +272,11 @@ const LevelScript level_castle_inside_entry[] = {
         OBJECT(/*model*/ MODEL_CASTLE_DOOR_3_STARS, /*pos*/ 1075,  205,  -229, /*angle*/ 0, 270, 0, /*behParam*/ DOOR_PARAM(STAR_REQ_JRB),              /*beh*/ bhvDoor),
         OBJECT(/*model*/ MODEL_CASTLE_DOOR_3_STARS, /*pos*/-2303,    0, -1074, /*angle*/ 0,   0, 0, /*behParam*/ DOOR_PARAM(STAR_REQ_CCM),              /*beh*/ bhvDoor),
         OBJECT(/*model*/ MODEL_CASTLE_WOODEN_DOOR,  /*pos*/-1023, -101, -5170, /*angle*/ 0,   0, 0, /*behParam*/ DOOR_PARAM(STAR_REQ_BBH) + 0x00020000, /*beh*/ bhvDoorWarp),
-        OBJECT(/*model*/ MODEL_NONE,       /*pos*/ -5221,  717,  -461, /*angle*/ 0,  90, 0, /*behParam*/ SEALED_PAINTING_PARAM(LEVEL_BOB, 12, 5), /*beh*/ bhvSealedPaintingInCastle),
-        OBJECT(/*model*/ MODEL_NONE,       /*pos*/ -2303,    0, -4351, /*angle*/ 0,   0, 0, /*behParam*/ SEALED_PAINTING_PARAM(LEVEL_CCM, 12, 5), /*beh*/ bhvSealedPaintingInCastle),
-        OBJECT(/*model*/ MODEL_NONE,       /*pos*/   256,  102, -4505, /*angle*/ 0,   0, 0, /*behParam*/  SEALED_PAINTING_PARAM(LEVEL_WF, 12, 5), /*beh*/ bhvSealedPaintingInCastle),
-        OBJECT(/*model*/ MODEL_NONE,       /*pos*/  4301,  717,  -230, /*angle*/ 0, -90, 0, /*behParam*/ SEALED_PAINTING_PARAM(LEVEL_JRB, 12, 5), /*beh*/ bhvSealedPaintingInCastle),
+        OBJECT(/*model*/ MODEL_NONE,       /*pos*/ -5221,  717,  -461, /*angle*/ 0,   90, 0, /*behParam*/ SEALED_PAINTING_PARAM(LEVEL_BOB, 12, 5), /*beh*/ bhvSealedPaintingInCastle),
+        OBJECT(/*model*/ MODEL_NONE,       /*pos*/ -2303,    0, -4351, /*angle*/ 0,    0, 0, /*behParam*/ SEALED_PAINTING_PARAM(LEVEL_CCM, 12, 5), /*beh*/ bhvSealedPaintingInCastle),
+        OBJECT(/*model*/ MODEL_NONE,       /*pos*/   256,  102, -4505, /*angle*/ 0,    0, 0, /*behParam*/  SEALED_PAINTING_PARAM(LEVEL_WF, 12, 5), /*beh*/ bhvSealedPaintingInCastle),
+        OBJECT(/*model*/ MODEL_NONE,       /*pos*/  4301,  717,  -230, /*angle*/ 0,  -90, 0, /*behParam*/ SEALED_PAINTING_PARAM(LEVEL_JRB, 12, 5), /*beh*/ bhvSealedPaintingInCastle),
+        OBJECT(/*model*/ MODEL_NONE,       /*pos*/  1924,  896, -2104, /*angle*/ 0, -135, 0, /*behParam*/ SEALED_PAINTING_PARAM(LEVEL_PSS,  1, 1), /*beh*/ bhvSealedPaintingInCastle),
         JUMP_LINK(script_func_local_1),
         WARP_NODE(/*id*/ 0xF1, /*destLevel*/ LEVEL_CASTLE_GROUNDS, /*destArea*/ 0x01, /*destNode*/ 0x03, /*flags*/ WARP_NO_CHECKPOINT),
         TERRAIN(/*terrainData*/ inside_castle_seg7_area_1_collision),
@@ -299,6 +303,8 @@ const LevelScript level_castle_inside_entry[] = {
         OBJECT(/*model*/ MODEL_NONE,       /*pos*/ -4795, 2329, -3291, /*angle*/ 0,   0, 0, /*behParam*/ SEALED_PAINTING_PARAM(LEVEL_THI,  32,  5), /*beh*/ bhvSealedPaintingInCastle),
         OBJECT(/*model*/ MODEL_NONE,       /*pos*/  3538, 1818,  -271, /*angle*/ 0,   0, 0, /*behParam*/  SEALED_PAINTING_PARAM(LEVEL_SL, 115, 64), /*beh*/ bhvSealedPaintingInCastle),
         OBJECT(/*model*/ MODEL_NONE,       /*pos*/  -205, 2918,  7232, /*angle*/ 0, 180, 0, /*behParam*/ SEALED_PAINTING_PARAM(LEVEL_TTC,   8,  5), /*beh*/ bhvSealedPaintingInCastle),
+        OBJECT(/*model*/ MODEL_CASTLE_LEVEL_GRILL,  /*pos*/ -3412, 3000, 5886, /*angle*/ 0,   0, 0, /*behParam*/ LEVEL_GRILL_PARAM(LEVEL_RR, 0), /*beh*/ bhvLevelGrill),
+        OBJECT(/*model*/ MODEL_CASTLE_LEVEL_GRILL,  /*pos*/ 3002, 3000, 5886, /*angle*/ 0,   0, 0, /*behParam*/ LEVEL_GRILL_PARAM(LEVEL_WMOTR, 0), /*beh*/ bhvLevelGrill),
         JUMP_LINK(script_func_local_2),
         WARP_NODE(/*id*/ 0xF1, /*destLevel*/ LEVEL_CASTLE_GROUNDS, /*destArea*/ 0x01, /*destNode*/ 0x03, /*flags*/ WARP_NO_CHECKPOINT),
         TERRAIN(/*terrainData*/ inside_castle_seg7_area_2_collision),
@@ -321,6 +327,8 @@ const LevelScript level_castle_inside_entry[] = {
         OBJECT(/*model*/ MODEL_CASTLE_WOODEN_DOOR,        /*pos*/   717, -1177,  -869, /*angle*/ 0, 270, 0, /*behParam*/ DOOR_PARAM(STAR_REQ_BASEMENT), /*beh*/ bhvDoor),
         OBJECT(/*model*/ MODEL_NONE,       /*pos*/ -1382, -818, -3941, /*angle*/ 0,   0, 0, /*behParam*/ SEALED_PAINTING_PARAM(LEVEL_LLL, 12, 5), /*beh*/ bhvSealedPaintingInCastle),
         OBJECT(/*model*/ MODEL_NONE,       /*pos*/ -2917, -869, -1074, /*angle*/ 0, 180, 0, /*behParam*/ SEALED_PAINTING_PARAM(LEVEL_SSL, 12, 5), /*beh*/ bhvSealedPaintingInCastle),
+        OBJECT(/*model*/ MODEL_CASTLE_LEVEL_GRILL,        /*pos*/ 4147, -1025,  1997, /*angle*/ 0,   0, 0, /*behParam*/ LEVEL_GRILL_PARAM(LEVEL_BITFS, 0), /*beh*/ bhvLevelGrill),
+        OBJECT(/*model*/ MODEL_CASTLE_LEVEL_GRILL_LARGE,  /*pos*/ 2483, -1400, -2662, /*angle*/ 0,   0, 0, /*behParam*/ LEVEL_GRILL_PARAM(LEVEL_HMC, 1), /*beh*/ bhvLevelGrill),
         JUMP_LINK(script_func_local_3),
         JUMP_LINK(script_func_local_4),
         WARP_NODE(/*id*/ 0xF1, /*destLevel*/ LEVEL_CASTLE_GROUNDS, /*destArea*/ 0x01, /*destNode*/ 0x03, /*flags*/ WARP_NO_CHECKPOINT),

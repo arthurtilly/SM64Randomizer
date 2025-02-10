@@ -349,11 +349,7 @@ void painting_state(s8 state, struct Painting *painting, struct Painting *painti
     if (gCurrLevelNum == LEVEL_CASTLE && state != PAINTING_IDLE && !(gMarioState->action & ACT_FLAG_INTANGIBLE)) {
         if (painting->id >= 0 && painting->id < ARRAY_COUNT(sPaintingLevels)) {
             s16 intendedLevel = sPaintingLevels[painting->id];
-            s16 targetLevel = gOptionsSettings.gameplay.s.randomLevelWarp ? gWarpDestinations[intendedLevel] : intendedLevel;
-            if (targetLevel == 0) {
-                targetLevel = intendedLevel;
-            }
-            if (get_level_is_locked(targetLevel)) {
+            if (get_intended_level_is_locked(intendedLevel)) {
                 return;
             }
         }
@@ -1259,12 +1255,7 @@ Gfx *geo_painting_draw(s32 callContext, struct GraphNode *node, UNUSED void *con
 
         // Update the ddd painting before drawing
         if (group == 1 && id == PAINTING_ID_DDD) {
-            s16 intendedLevel = LEVEL_DDD;
-            s16 targetLevel = gOptionsSettings.gameplay.s.randomLevelWarp ? gWarpDestinations[intendedLevel] : intendedLevel;
-            if (targetLevel == 0) {
-                targetLevel = intendedLevel;
-            }
-            if (get_level_is_locked(targetLevel)) {
+            if (get_intended_level_is_locked(LEVEL_DDD)) {
                 return NULL;
             }
             move_ddd_painting(painting, 3456.0f, 5529.6f, 20.0f);

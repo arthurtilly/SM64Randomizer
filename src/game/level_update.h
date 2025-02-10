@@ -188,5 +188,6 @@ void basic_update(void);
 void set_course_is_locked(s8 course, u8 dialog);
 u32 get_course_is_locked(s8 course);
 u32 get_level_is_locked(s16 level);
+u32 get_intended_level_is_locked(s16 intendedLevel);
 
 #endif // LEVEL_UPDATE_H

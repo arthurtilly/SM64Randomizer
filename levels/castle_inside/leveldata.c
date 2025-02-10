@@ -69,6 +69,7 @@
 #include "levels/castle_inside/areas/3/10/model.inc.c"
 #include "levels/castle_inside/areas/3/11/model.inc.c"
 #include "levels/castle_inside/water_level_pillar/model.inc.c"
+#include "levels/castle_inside/level_grill/model.inc.c"
 #include "levels/castle_inside/areas/1/collision.inc.c"
 #include "levels/castle_inside/areas/2/collision.inc.c"
 #include "levels/castle_inside/areas/3/collision.inc.c"
@@ -86,3 +87,4 @@
 #include "levels/castle_inside/areas/3/trajectory.inc.c"
 #include "levels/castle_inside/areas/3/movtext.inc.c"
 #include "levels/castle_inside/sealed_painting/collision.inc.c"
+#include "levels/castle_inside/level_grill/collision.inc.c"

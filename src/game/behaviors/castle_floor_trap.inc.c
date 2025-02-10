@@ -17,10 +17,11 @@ void bhv_castle_floor_trap_init(void) {
 void bhv_castle_floor_trap_open_detect(void) {
     if (gMarioStates[0].action == ACT_SPECIAL_EXIT_AIRBORNE
         || gMarioStates[0].action == ACT_SPECIAL_DEATH_EXIT) {
+        o->oFaceAngleRoll = -0x3C00;
         o->oAction = 4; // rotates trapdoor so it looks always open
     } else {
         o->oAngleVelRoll = 0x400;
-        if (o->oInteractStatus & INT_STATUS_TRAP_TURN) {
+        if ((o->oInteractStatus & INT_STATUS_TRAP_TURN) && !get_intended_level_is_locked(LEVEL_BITDW)) {
             o->oAction = 1; // detects interact then opens the trapdoor
         }
     }
@@ -57,7 +58,12 @@ void bhv_castle_floor_trap_close(void) {
 }
 
 void bhv_castle_floor_trap_rotate(void) {
-    o->oFaceAngleRoll = -0x3C00;
+    if (get_intended_level_is_locked(LEVEL_BITDW)) {
+        if (gMarioStates[0].action != ACT_SPECIAL_EXIT_AIRBORNE
+            && gMarioStates[0].action != ACT_SPECIAL_DEATH_EXIT) {
+            o->oAction = 3; // close trapdoor
+        }
+    }
 }
 
 void bhv_castle_floor_trap_loop(void) {
