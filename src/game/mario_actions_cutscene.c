@@ -228,6 +228,29 @@ s32 get_star_collection_dialog(UNUSED struct MarioState *m) {
 **/
 }
 
+s32 handle_star_collection(struct MarioState *m) {
+    s32 numStarsRequired;
+    s32 i;
+
+    if (IS_120_STAR && (m->prevNumStarsForDialog < CAP_SWITCH_THRESHOLD) && (m->numStars >= CAP_SWITCH_THRESHOLD)) {
+        m->prevNumStarsForDialog = m->numStars;
+        play_puzzle_jingle();
+        set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, DIALOG_146);
+        return TRUE;
+    }
+
+    for (i = 0; i < STAR_REQ_MAX; i++) {
+        numStarsRequired = gRequiredStars[i];
+        if (numStarsRequired > 0 && m->prevNumStarsForDialog < numStarsRequired && m->numStars >= numStarsRequired) {
+            m->prevNumStarsForDialog = m->numStars;
+            play_puzzle_jingle();
+            return FALSE;
+        }
+    }
+
+    return FALSE;
+}
+
 // save menu handler
 void handle_save_menu(struct MarioState *m) {
     // s32 dialogID;
@@ -262,9 +285,7 @@ void handle_save_menu(struct MarioState *m) {
     // Add 100 star dialog here later
     save_file_do_save(gCurrSaveFileNum - 1);
 
-    if (IS_120_STAR && (m->prevNumStarsForDialog < CAP_SWITCH_THRESHOLD) && (m->numStars >= CAP_SWITCH_THRESHOLD)) {
-        set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, DIALOG_146);
-    } else {
+    if (!handle_star_collection(m)) {
         set_mario_action(m, ACT_IDLE, 0);
     }
 }
