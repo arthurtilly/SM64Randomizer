@@ -1,17 +1,37 @@
+#define BODY1(fast) \
+   GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, moneybag_seg6_dl_06005750##fast), \
+   GEO_OPEN_NODE(), \
+      GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, -120, NULL), \
+      GEO_OPEN_NODE(), \
+         GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, moneybag_seg6_dl_06005980), \
+      GEO_CLOSE_NODE(), \
+      GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 120, NULL), \
+      GEO_OPEN_NODE(), \
+         GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, moneybag_seg6_dl_060059F0), \
+      GEO_CLOSE_NODE(), \
+   GEO_CLOSE_NODE()
+
+#define BODY2(fast) \
+   GEO_ANIMATED_PART(LAYER_TRANSPARENT, 0, 0, 0, moneybag_seg6_dl_06005750##fast), \
+   GEO_OPEN_NODE(), \
+      GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, -120, NULL), \
+      GEO_OPEN_NODE(), \
+         GEO_ANIMATED_PART(LAYER_TRANSPARENT, 0, 0, 0, moneybag_seg6_dl_06005980), \
+      GEO_CLOSE_NODE(), \
+      GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 120, NULL), \
+      GEO_OPEN_NODE(), \
+         GEO_ANIMATED_PART(LAYER_TRANSPARENT, 0, 0, 0, moneybag_seg6_dl_060059F0), \
+      GEO_CLOSE_NODE(), \
+   GEO_CLOSE_NODE()
+
 // 0x0D000000
 const GeoLayout moneybag_geo_000000[] = {
    GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, NULL),
    GEO_OPEN_NODE(),
-      GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, moneybag_seg6_dl_06005750),
+      GEO_SWITCH_CASE(2, geo_switch_fast),
       GEO_OPEN_NODE(),
-         GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, -120, NULL),
-         GEO_OPEN_NODE(),
-            GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, moneybag_seg6_dl_06005980),
-         GEO_CLOSE_NODE(),
-         GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 120, NULL),
-         GEO_OPEN_NODE(),
-            GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, moneybag_seg6_dl_060059F0),
-         GEO_CLOSE_NODE(),
+         BODY1(),
+         BODY1(_fast),
       GEO_CLOSE_NODE(),
       GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, moneybag_seg6_dl_06005688),
    GEO_CLOSE_NODE(),
@@ -22,16 +42,10 @@ const GeoLayout moneybag_geo_000000[] = {
 const GeoLayout moneybag_geo_000078[] = {
    GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, NULL),
    GEO_OPEN_NODE(),
-      GEO_ANIMATED_PART(LAYER_TRANSPARENT, 0, 0, 0, moneybag_seg6_dl_06005750),
+      GEO_SWITCH_CASE(2, geo_switch_fast),
       GEO_OPEN_NODE(),
-         GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, -120, NULL),
-         GEO_OPEN_NODE(),
-            GEO_ANIMATED_PART(LAYER_TRANSPARENT, 0, 0, 0, moneybag_seg6_dl_06005980),
-         GEO_CLOSE_NODE(),
-         GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 120, NULL),
-         GEO_OPEN_NODE(),
-            GEO_ANIMATED_PART(LAYER_TRANSPARENT, 0, 0, 0, moneybag_seg6_dl_060059F0),
-         GEO_CLOSE_NODE(),
+         BODY2(),
+         BODY2(_fast),
       GEO_CLOSE_NODE(),
       GEO_ANIMATED_PART(LAYER_TRANSPARENT, 0, 0, 0, moneybag_seg6_dl_06005688),
    GEO_CLOSE_NODE(),

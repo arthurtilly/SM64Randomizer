@@ -146,7 +146,13 @@ void moneybag_act_return_home(void) {
     moneybag_check_mario_collision();
 
     if (is_point_close_to_object(o, o->oHomeX, o->oHomeY, o->oHomeZ, 100)) {
-        spawn_object(o, MODEL_YELLOW_COIN, bhvMoneybagHidden);
+        ModelID32 model = o->oBehParams2ndByte;
+        if (model != MODEL_YELLOW_COIN && model != MODEL_RED_COIN && model != MODEL_BLUE_COIN) {
+            model = MODEL_YELLOW_COIN;
+        }
+        struct Object* hidden = spawn_object(o, model, bhvMoneybagHidden);
+        hidden->oBehParams2ndByte = o->oBehParams2ndByte;
+        hidden->isFast = o->isFast;
         cur_obj_play_sound_2(SOUND_GENERAL_VANISH_SFX);
         cur_obj_init_animation(0);
         o->oAction = MONEYBAG_ACT_DISAPPEAR;
@@ -215,7 +221,9 @@ void bhv_moneybag_hidden_loop(void) {
     switch (o->oAction) {
         case FAKE_MONEYBAG_COIN_ACT_IDLE:
             if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 400)) {
-                spawn_object(o, MODEL_MONEYBAG, bhvMoneybag);
+                struct Object* moneybag = spawn_object(o, MODEL_MONEYBAG, bhvMoneybag);
+                moneybag->oBehParams2ndByte = o->oBehParams2ndByte;
+                moneybag->isFast = o->isFast;
                 cur_obj_play_sound_2(SOUND_GENERAL_VANISH_SFX);
                 o->oAction = FAKE_MONEYBAG_COIN_ACT_TRANSFORM;
             }

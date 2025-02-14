@@ -13,6 +13,11 @@ ALIGNED8 static const Texture flyguy_seg8_texture_0800F088[] = {
 #include "actors/flyguy/flyguy_face.custom.rgba16.inc.c"
 };
 
+// 0x0800F088
+ALIGNED8 static const Texture flyguy_seg8_texture_0800F088_fast[] = {
+#include "actors/flyguy/flyguy_fast_face.custom.rgba16.inc.c"
+};
+
 // 0x0800F888
 ALIGNED8 static const Texture flyguy_seg8_texture_0800F888[] = {
 #include "actors/flyguy/flyguy_propeller.ia16.inc.c"
@@ -510,6 +515,21 @@ const Gfx flyguy_seg8_dl_080113A8[] = {
     gsSPEndDisplayList(),
 };
 
+// 0x080113A8 - 0x08011420
+const Gfx flyguy_seg8_dl_080113A8_fast[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, flyguy_seg8_texture_0800F088_fast),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPLight(&flyguy_seg8_lights_08010BF0.l, 1),
+    gsSPLight(&flyguy_seg8_lights_08010BF0.a, 2),
+    gsSPVertex(flyguy_seg8_vertex_08010C38, 9, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  1,  3,  2, 0x0),
+    gsSP2Triangles( 4,  1,  0, 0x0,  2,  5,  0, 0x0),
+    gsSP2Triangles( 0,  6,  4, 0x0,  6,  0,  7, 0x0),
+    gsSP2Triangles( 7,  8,  6, 0x0,  0,  5,  7, 0x0),
+    gsSPEndDisplayList(),
+};
+
 // 0x08011420 - 0x080116D0
 const Gfx flyguy_seg8_dl_08011420[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, flyguy_seg8_texture_0800E088),
@@ -587,6 +607,27 @@ const Gfx flyguy_seg8_dl_08011710[] = {
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
     gsSPDisplayList(flyguy_seg8_dl_080113A8),
+    gsDPTileSync(),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 6, G_TX_NOLOD),
+    gsDPSetTileSize(0, 0, 0, (64 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
+    gsSPDisplayList(flyguy_seg8_dl_08011420),
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+    gsDPPipeSync(),
+    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
+    gsSPDisplayList(flyguy_seg8_dl_080116D0),
+    gsSPEndDisplayList(),
+};
+
+// 0x08011710 - 0x08011798
+const Gfx flyguy_seg8_dl_08011710_fast[] = {
+    gsDPPipeSync(),
+    gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+    gsDPTileSync(),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
+    gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
+    gsSPDisplayList(flyguy_seg8_dl_080113A8_fast),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 6, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (64 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),

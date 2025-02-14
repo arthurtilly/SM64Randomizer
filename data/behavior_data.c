@@ -433,6 +433,7 @@ const BehaviorScript bhvMrIIris[] = {
     BEGIN(OBJ_LIST_DEFAULT),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     CALL_NATIVE(bhv_init_room),
+    CALL_NATIVE(bhv_mr_i_iris_init),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_mr_i_iris_loop),
     END_LOOP(),

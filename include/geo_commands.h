@@ -330,6 +330,22 @@ enum GeoLayoutCommands {
     CMD_PTR(displayList)
 
 /**
+ * 0x13: Create a scene graph node that is rotated by the object's animation and uses a different display list if the object is fast.
+ * Do NOT use if the animated part is followed by a GEO_OPEN_NODE
+ *   0x01: u8 drawingLayer
+ *   0x02: s16 xTranslation
+ *   0x04: s16 yTranslation
+ *   0x06: s16 zTranslation
+ *   0x08: u32 displayList: dislay list segmented address
+ */
+#define GEO_ANIMATED_PART_FAST(layer, x, y, z, displayList) \
+   GEO_SWITCH_CASE(2, geo_switch_fast), \
+   GEO_OPEN_NODE(), \
+      GEO_ANIMATED_PART(layer, x, y, z, displayList), \
+      GEO_ANIMATED_PART(layer, x, y, z, displayList##_fast), \
+   GEO_CLOSE_NODE()
+
+/**
  * 0x14: Create billboarding node with optional display list
  *   0x01: u8 params
  *      0b1000_0000: if set, enable displayList field and drawingLayer
@@ -358,6 +374,19 @@ enum GeoLayoutCommands {
 #define GEO_DISPLAY_LIST(layer, displayList) \
     CMD_BBH(GEO_CMD_NODE_DISPLAY_LIST, layer, 0x0000), \
     CMD_PTR(displayList)
+
+/**
+ * 0x15: Create plain display list scene graph node that checks for isFast
+ *   0x01: u8 drawingLayer
+ *   0x02-0x03: unused
+ *   0x04: u32 displayList: display list segmented address
+ */
+#define GEO_DISPLAY_LIST_FAST(layer, displayList) \
+   GEO_SWITCH_CASE(2, geo_switch_fast), \
+   GEO_OPEN_NODE(), \
+      GEO_DISPLAY_LIST(layer, displayList), \
+      GEO_DISPLAY_LIST(layer, displayList##_fast), \
+   GEO_CLOSE_NODE()
 
 /**
  * 0x16: Create shadow scene graph node

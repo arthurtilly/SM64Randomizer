@@ -47,6 +47,11 @@ ALIGNED8 static const Texture chuckya_seg8_texture_08006778[] = {
 #include "actors/chuckya/chuckya_eyes.rgba16.inc.c"
 };
 
+// 0x08006778
+ALIGNED8 static const Texture chuckya_seg8_texture_08006778_fast[] = {
+#include "actors/chuckya/chuckya_fast_eyes.rgba16.inc.c"
+};
+
 // 0x08007778
 ALIGNED8 static const Texture chuckya_seg8_texture_08007778[] = {
 #include "actors/chuckya/chuckya_hand_antenna.rgba16.inc.c"
@@ -366,6 +371,19 @@ const Gfx chuckya_seg8_dl_0800A700[] = {
     gsSPEndDisplayList(),
 };
 
+// 0x0800A700 - 0x0800A758
+const Gfx chuckya_seg8_dl_0800A700_fast[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chuckya_seg8_texture_08006778_fast),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPLight(&chuckya_seg8_lights_0800A668.l, 1),
+    gsSPLight(&chuckya_seg8_lights_0800A668.a, 2),
+    gsSPVertex(chuckya_seg8_vertex_0800A680, 8, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  1,  3,  2, 0x0),
+    gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
+    gsSPEndDisplayList(),
+};
+
 // 0x0800A758 - 0x0800A7C8
 const Gfx chuckya_seg8_dl_0800A758[] = {
     gsDPPipeSync(),
@@ -377,6 +395,24 @@ const Gfx chuckya_seg8_dl_0800A758[] = {
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
     gsSPDisplayList(chuckya_seg8_dl_0800A700),
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+    gsDPPipeSync(),
+    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
+    gsSPSetGeometryMode(G_SHADING_SMOOTH),
+    gsSPEndDisplayList(),
+};
+
+// 0x0800A758 - 0x0800A7C8
+const Gfx chuckya_seg8_dl_0800A758_fast[] = {
+    gsDPPipeSync(),
+    gsDPSetCombineMode(G_CC_MODULATERGBA, G_CC_MODULATERGBA),
+    gsSPClearGeometryMode(G_SHADING_SMOOTH),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+    gsDPTileSync(),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
+    gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
+    gsSPDisplayList(chuckya_seg8_dl_0800A700_fast),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

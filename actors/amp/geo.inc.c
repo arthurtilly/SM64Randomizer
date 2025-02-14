@@ -1,3 +1,40 @@
+#define BODY(fast) \
+   GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_ALPHA, 0, 0, 0, dAmpEyeDl##fast), \
+   GEO_OPEN_NODE(), \
+      GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, 0, 0, 0, NULL), \
+      GEO_OPEN_NODE(), \
+         GEO_SWITCH_CASE(2, geo_switch_anim_state), \
+         GEO_OPEN_NODE(), \
+            GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, 0, 0, 0, NULL), \
+            GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_ALPHA, 0, 0, 0, dAmpElectricityDl##fast), \
+         GEO_CLOSE_NODE(), \
+      GEO_CLOSE_NODE(), \
+      GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, 0, 0, 0, NULL), \
+      GEO_OPEN_NODE(), \
+         GEO_SWITCH_CASE(2, geo_switch_anim_state), \
+         GEO_OPEN_NODE(), \
+            GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, 0, 0, 0, NULL), \
+            GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_ALPHA, 0, 0, 0, dAmpElectricityDl##fast), \
+         GEO_CLOSE_NODE(), \
+      GEO_CLOSE_NODE(), \
+      GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, 0, 0, 0, NULL), \
+      GEO_OPEN_NODE(), \
+         GEO_SWITCH_CASE(2, geo_switch_anim_state), \
+         GEO_OPEN_NODE(), \
+            GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, 0, 0, 0, NULL), \
+            GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_ALPHA, 0, 0, 0, dAmpElectricityDl##fast), \
+         GEO_CLOSE_NODE(), \
+      GEO_CLOSE_NODE(), \
+      GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, 0, 0, 0, NULL), \
+      GEO_OPEN_NODE(), \
+         GEO_SWITCH_CASE(2, geo_switch_anim_state), \
+         GEO_OPEN_NODE(), \
+            GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, 0, 0, 0, NULL), \
+            GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_ALPHA, 0, 0, 0, dAmpElectricityDl##fast), \
+         GEO_CLOSE_NODE(), \
+      GEO_CLOSE_NODE(), \
+   GEO_CLOSE_NODE()
+
 const GeoLayout dAmpGeo[] = {
    GEO_SHADOW(SHADOW_CIRCLE_4_VERTS, 0xC8, 100),
    GEO_OPEN_NODE(),
@@ -5,40 +42,10 @@ const GeoLayout dAmpGeo[] = {
       GEO_OPEN_NODE(),
          GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, 0, 0, 0, NULL),
          GEO_OPEN_NODE(),
-            GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_ALPHA, 0, 0, 0, dAmpEyeDl),
+            GEO_SWITCH_CASE(2, geo_switch_fast),
             GEO_OPEN_NODE(),
-               GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, 0, 0, 0, NULL),
-               GEO_OPEN_NODE(),
-                  GEO_SWITCH_CASE(2, geo_switch_anim_state),
-                  GEO_OPEN_NODE(),
-                     GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, 0, 0, 0, NULL),
-                     GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_ALPHA, 0, 0, 0, dAmpElectricityDl),
-                  GEO_CLOSE_NODE(),
-               GEO_CLOSE_NODE(),
-               GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, 0, 0, 0, NULL),
-               GEO_OPEN_NODE(),
-                  GEO_SWITCH_CASE(2, geo_switch_anim_state),
-                  GEO_OPEN_NODE(),
-                     GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, 0, 0, 0, NULL),
-                     GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_ALPHA, 0, 0, 0, dAmpElectricityDl),
-                  GEO_CLOSE_NODE(),
-               GEO_CLOSE_NODE(),
-               GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, 0, 0, 0, NULL),
-               GEO_OPEN_NODE(),
-                  GEO_SWITCH_CASE(2, geo_switch_anim_state),
-                  GEO_OPEN_NODE(),
-                     GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, 0, 0, 0, NULL),
-                     GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_ALPHA, 0, 0, 0, dAmpElectricityDl),
-                  GEO_CLOSE_NODE(),
-               GEO_CLOSE_NODE(),
-               GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, 0, 0, 0, NULL),
-               GEO_OPEN_NODE(),
-                  GEO_SWITCH_CASE(2, geo_switch_anim_state),
-                  GEO_OPEN_NODE(),
-                     GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, 0, 0, 0, NULL),
-                     GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_ALPHA, 0, 0, 0, dAmpElectricityDl),
-                  GEO_CLOSE_NODE(),
-               GEO_CLOSE_NODE(),
+               BODY(),
+               BODY(_fast),
             GEO_CLOSE_NODE(),
             GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_ALPHA, 0, 0, 0, dAmpMouthDl),
             GEO_ANIMATED_PART(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, 0, 0, 0, NULL),

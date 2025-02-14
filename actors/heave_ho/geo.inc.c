@@ -1,3 +1,13 @@
+#define BODY(fast) \
+   GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, heave_ho_seg5_dl_05011EC0##fast), \
+   GEO_OPEN_NODE(), \
+      GEO_ANIMATED_PART(LAYER_OPAQUE, 150, 50, 0, NULL), \
+      GEO_OPEN_NODE(), \
+         GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, heave_ho_seg5_dl_05014560), \
+         GEO_ANIMATED_PART(LAYER_ALPHA, 0, 0, 0, heave_ho_seg5_dl_050127F8), \
+      GEO_CLOSE_NODE(), \
+   GEO_CLOSE_NODE()
+
 // 0x0C00028C
 const GeoLayout heave_ho_geo[] = {
    GEO_SHADOW(SHADOW_CIRCLE_4_VERTS, 0xC8, 100),
@@ -10,13 +20,10 @@ const GeoLayout heave_ho_geo[] = {
             GEO_OPEN_NODE(),
                GEO_ANIMATED_PART(LAYER_OPAQUE, 140, -11, 0, NULL),
                GEO_OPEN_NODE(),
-                  GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, heave_ho_seg5_dl_05011EC0),
+                  GEO_SWITCH_CASE(2, geo_switch_fast),
                   GEO_OPEN_NODE(),
-                     GEO_ANIMATED_PART(LAYER_OPAQUE, 150, 50, 0, NULL),
-                     GEO_OPEN_NODE(),
-                        GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, heave_ho_seg5_dl_05014560),
-                        GEO_ANIMATED_PART(LAYER_ALPHA, 0, 0, 0, heave_ho_seg5_dl_050127F8),
-                     GEO_CLOSE_NODE(),
+                     BODY(),
+                     BODY(_fast),
                   GEO_CLOSE_NODE(),
                GEO_CLOSE_NODE(),
                GEO_ANIMATED_PART(LAYER_OPAQUE, 135, 0, -84, NULL),
