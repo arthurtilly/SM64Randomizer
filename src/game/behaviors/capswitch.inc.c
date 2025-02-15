@@ -24,7 +24,7 @@ void cap_switch_act_init(void) {
     cur_obj_scale(0.5f);
     o->oPosY += 71.0f;
 
-    if (!ADVANCED_IRONMARIO || (gMarioState->numStars < CAP_SWITCH_THRESHOLD)) {
+    if (!IS_120_STAR || (gMarioState->numStars < CAP_SWITCH_THRESHOLD)) {
         mark_obj_for_deletion(o);
         return;
     }

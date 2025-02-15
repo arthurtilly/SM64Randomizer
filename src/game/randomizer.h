@@ -80,8 +80,9 @@ struct nodeInfo {
 struct OptionsSettings {
     union {
         struct {
-            u32 padding:14; // to make sure settings ids are small
+            u32 padding:13; // to make sure settings ids are small
 
+            u32 hardcoreIronmario:1;
             u32 keepStructure:1;
             u32 randomLevelWarp:1;
             u32 adjustedExits:2;
@@ -103,6 +104,9 @@ struct OptionsSettings {
             u32 skyboxOn:1;
             u32 coinsOn:1;
             u32 starColors:2;
+
+            u32 doorIndicators:1;
+            u32 iframes:1;
         } s;
         u32 w;
     } cosmetic;
@@ -117,7 +121,7 @@ enum StarColors {
 
 extern s32 curPreset;
 extern struct OptionsSettings gOptionsSettings;
-extern struct OptionsSettings gPresets[3];
+extern struct OptionsSettings gPresets[6];
 
 extern struct nodeInfo gLevelWarps[];
 extern u8 gRequiredStars[];

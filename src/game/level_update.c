@@ -156,7 +156,7 @@ u32 get_course_is_locked(s8 course) {
     if (course == COURSE_NONE) {
         return FALSE;
     }
-    if (ADVANCED_IRONMARIO && gMarioState->numStars >= CAP_SWITCH_THRESHOLD) {
+    if (IS_120_STAR && gMarioState->numStars >= CAP_SWITCH_THRESHOLD) {
         return FALSE;
     }
     if (curFile.lockedCourses & (1 << course)) {
@@ -182,7 +182,7 @@ void set_course_is_locked(s8 course, UNUSED u8 dialog) {
     if (course == COURSE_NONE) {
         return;
     }
-    if (ADVANCED_IRONMARIO && gMarioState->numStars >= CAP_SWITCH_THRESHOLD) {
+    if (IS_120_STAR && gMarioState->numStars >= CAP_SWITCH_THRESHOLD) {
         return;
     }
     u32 flag = 1 << course;

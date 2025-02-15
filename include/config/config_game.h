@@ -73,19 +73,12 @@
 #define START_LEVEL LEVEL_CASTLE_GROUNDS
 
 
-#define MIDDLE_IRONMARIO (gOptionsSettings.gameplay.s.starDoorRequirement >= 10)
+#define HARDCORE_IRONMARIO (gOptionsSettings.gameplay.s.hardcoreIronmario)
 
 #define FAST(x) (o->isFast ? (x * 2) : x) // Multiply by 2
 #define FAST_T(x) (o->isFast ? (x / 2) : x) // Divide by 2
 
 
-#define ADVANCED_IRONMARIO (gOptionsSettings.gameplay.s.starDoorRequirement == 12)
+#define IS_120_STAR (gOptionsSettings.gameplay.s.starDoorRequirement == 12)
 
 #define CAP_SWITCH_THRESHOLD 100
-
-// #define SIMPLEFLIPS_VER
-
-#ifdef SIMPLEFLIPS_VER
-    #undef MIDDLE_IRONMARIO
-    #define MIDDLE_IRONMARIO 1
-#endif

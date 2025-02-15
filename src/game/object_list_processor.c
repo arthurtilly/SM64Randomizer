@@ -484,7 +484,7 @@ void spawn_objects_from_info(UNUSED s32 unused, struct SpawnInfo *spawnInfo) {
             != (RESPAWN_INFO_DONT_RESPAWN << 8)) {
             
             if ((spawnInfo->behaviorArg & 0xFF) == 1) {
-                if ((!MIDDLE_IRONMARIO) || (gOptionsSettings.gameplay.s.objectRandomization == 0)) {
+                if ((!HARDCORE_IRONMARIO) || (gOptionsSettings.gameplay.s.objectRandomization == 0)) {
                     spawnInfo = spawnInfo->next;
                     continue;
                 }

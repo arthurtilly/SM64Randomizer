@@ -262,7 +262,7 @@ void handle_save_menu(struct MarioState *m) {
     // Add 100 star dialog here later
     save_file_do_save(gCurrSaveFileNum - 1);
 
-    if (ADVANCED_IRONMARIO && (m->prevNumStarsForDialog < CAP_SWITCH_THRESHOLD) && (m->numStars >= CAP_SWITCH_THRESHOLD)) {
+    if (IS_120_STAR && (m->prevNumStarsForDialog < CAP_SWITCH_THRESHOLD) && (m->numStars >= CAP_SWITCH_THRESHOLD)) {
         set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, DIALOG_146);
     } else {
         set_mario_action(m, ACT_IDLE, 0);
@@ -649,7 +649,7 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
     } else if (m->actionState == ACT_STATE_STAR_DANCE_RETURN && is_anim_at_end(m)) {
         //disable_time_stop();
         enable_background_sound();
-        if (ADVANCED_IRONMARIO && (m->prevNumStarsForDialog < CAP_SWITCH_THRESHOLD) && (m->numStars >= CAP_SWITCH_THRESHOLD)) {
+        if (IS_120_STAR && (m->prevNumStarsForDialog < CAP_SWITCH_THRESHOLD) && (m->numStars >= CAP_SWITCH_THRESHOLD)) {
             // look up for dialog
             set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, DIALOG_146);
         } else {
@@ -1068,7 +1068,7 @@ s32 act_spawn_spin_landing(struct MarioState *m) {
     set_mario_animation(m, MARIO_ANIM_GENERAL_LAND);
     if (is_anim_at_end(m)) {
         load_level_init_text(0);
-        if (MIDDLE_IRONMARIO) gMarioSpawnInvincTimer = 30;
+        gMarioSpawnInvincTimer = 30;
         set_mario_action(m, ACT_IDLE, 0);
     }
     return FALSE;
