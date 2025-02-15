@@ -1068,7 +1068,9 @@ s32 act_spawn_spin_landing(struct MarioState *m) {
     set_mario_animation(m, MARIO_ANIM_GENERAL_LAND);
     if (is_anim_at_end(m)) {
         load_level_init_text(0);
-        gMarioSpawnInvincTimer = 30;
+        if (gOptionsSettings.cosmetic.s.iframes) {
+            gMarioSpawnInvincTimer = 30;
+        }
         set_mario_action(m, ACT_IDLE, 0);
     }
     return FALSE;

@@ -161,6 +161,7 @@ unsigned char textWarpOptions[] = { TEXT_WARP_OPTIONS };
 unsigned char textAestheticOptions[] = { TEXT_AESTHETIC_OPTIONS };
 unsigned char testPresets[] = { TEXT_PRESETS };
 unsigned char textGPMOptions[] = { TEXT_GMP_OPTIONS };
+unsigned char textIronmarioOptions[] = { TEXT_IRONMARIO_OPTIONS };
 
 unsigned char textPreset1[] = { TEXT_PRESET1 };
 unsigned char textPreset2[] = { TEXT_PRESET2 };
@@ -221,7 +222,7 @@ u8 OptionPage = 3;
 u8 gStarDoorReqLUT[] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 119};
 
 unsigned char *pages[] = { textAestheticOptions, textObjOptions, textWarpOptions, testPresets,
-                           textGPMOptions };
+                           textGPMOptions, textIronmarioOptions };
 u32 pageCount = sizeof(pages) / 4;
 
 #define COSMETIC_VARS_SET(i, val) \
@@ -258,9 +259,14 @@ u32 pageCount = sizeof(pages) / 4;
     } \
 }
 
-#define OBJECT_VARS_GET(i) \
-((i) == 1 ? gOptionsSettings.gameplay.s.objectRandomization : \
-(gOptionsSettings.gameplay.s.randomizeStarSpawns))
+#define IRONMARIO_VARS_SET(i, val) \
+{ \
+    switch(i) { \
+        case 0: gOptionsSettings.gameplay.s.hardcoreIronmario = val; break; \
+        case 1: gOptionsSettings.cosmetic.s.doorIndicators = val; break; \
+        case 2: gOptionsSettings.cosmetic.s.iframes = val; \
+    } \
+}
 
 /**
  * Yellow Background Menu Initial Action
@@ -2402,6 +2408,24 @@ static void page_modes() {
     }
 }
 
+char *textsIronmario[] = {
+    "HARDCORE IRONMARIO",
+    "DOOR INDICATORS",
+    "INVINCIBILITY FRAMES",
+};
+
+#define textCountIronmario (sizeof(textsModes) / 4)
+
+static void page_ironmario() {
+    for (int i = 0; i < textCountIronmario; i++) {
+        if (check_clicked_text(180, OPTIONS_Y(i), i)) {
+            IRONMARIO_VARS_SET(i, 0)
+        } else if (check_clicked_text(222, OPTIONS_Y(i), i)) {
+            IRONMARIO_VARS_SET(i, 1)
+        }
+    }
+}
+
 static void page_presets() {
     if (check_clicked_text(280, OPTIONS_Y(1) + 10, 0)) {
         curPreset++;
@@ -2605,7 +2629,7 @@ void page_objects_print() {
     options_page_print_two(gOptionsSettings.gameplay.s.objectRandomization, OPTIONS_Y(1),
         190, 222, "KEY", "ALL");
 
-    options_page_print_on_off(OBJECT_VARS_GET(2), OPTIONS_Y(2), 190, 222);
+    options_page_print_on_off(gOptionsSettings.gameplay.s.randomizeStarSpawns, OPTIONS_Y(2), 190, 222);
 
     handle_info_display(objectInfo, textCountObjects);
     
@@ -2645,6 +2669,40 @@ void page_modes_print() {
         166, 197, 231, "OFF", "SAVE", "NOSAVE");
 
     handle_info_display(modeInfo, textCountModes);
+
+    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha);
+}
+
+struct InfoDisplay ironmarioInfo[] = {
+    {"\
+In Hardcore IronMario, extra enemies\n\
+will spawn in each course, some enemies\n\
+will move at double speed, all main\n\
+courses will have two green demon\n\
+boxes, and Mario\x3Es health will drain\n\
+twice as fast underwater\x3F", 205, 6},
+
+    {"\
+Display an X indicator on doors if\n\
+they are locked, and an O indicator\n\
+if they are unlocked\x3F", 190, 3},
+
+    {"\
+Gives Mario one second of invincibility\n\
+frames upon spawning into a level\x3F\n\
+Despite affecting gameplay, this option\n\
+does not affect the validity of the\n\
+IronMario challenge\x3F", 205, 5},
+};
+
+void page_ironmario_print() {
+    options_page_print_options(textCountIronmario, textsIronmario);
+
+    options_page_print_on_off(gOptionsSettings.gameplay.s.hardcoreIronmario, OPTIONS_Y(0), 190, 222);
+    options_page_print_on_off(gOptionsSettings.cosmetic.s.doorIndicators, OPTIONS_Y(1), 190, 222);
+    options_page_print_on_off(gOptionsSettings.cosmetic.s.iframes, OPTIONS_Y(2), 190, 222);
+
+    handle_info_display(ironmarioInfo, textCountIronmario);
 
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha);
 }
@@ -2757,6 +2815,9 @@ static void draw_select_seed_menu_option(void) {
         case 4:
             page_modes();
             break;
+        case 5:
+            page_ironmario();
+            break;
     }
     // Check if options have been modified
     if ((oldSettings.gameplay.w != gOptionsSettings.gameplay.w) || (oldSettings.cosmetic.w != gOptionsSettings.cosmetic.w)) {
@@ -2810,6 +2871,9 @@ static void draw_select_seed_menu_option(void) {
             break;
         case 4:
             page_modes_print();
+            break;
+        case 5:
+            page_ironmario_print();
             break;
     }
 
