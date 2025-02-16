@@ -205,45 +205,13 @@ struct nodeInfo gLevelWarps[] = {
     { LEVEL_CASTLE, 0x02, 0x34, 0x66, }, // TTM
 };
 
-void convert_from_ascii(char *buf) {
-    int i = 0;
-    char c;
-    while (buf[i] != 0) {
-        c = buf[i];
-        buf[i] = (((c) >= '0' && (c) <= '9') ? ((c) - '0') :
-            ((c) >= 'A' && (c) <= 'Z') ? ((c) - 'A' + 0x0A) :
-            ((c) >= 'a' && (c) <= 'z') ? ((c) - 'a' + 0x24) : 
-            ((c) == ' ') ? 0x9E : ((c) == '\n' ? 0xFE : ((c) == ',' ? 0x6F : c)));
-        i++;
-    }
-    buf[i] = 0xFF;
-}
-
-// Print ascii string as a dialog string by converting it to charmap
-// (only supports letters numbers and spaces)
-void print_generic_text_ascii_buf(s16 x, s16 y, char *buf) {
-    convert_from_ascii(buf);
-    print_generic_string(x, y, (u8 *)buf);
-}
-
-// Print const string directly by strcpying into buffer (max length 30)
-void print_generic_text_ascii(s16 x, s16 y, const char *src) {
-    char buf[250];
-    char *dest = buf;
-    while (*src != 0) {
-        *dest++ = *src++;
-    }
-    *dest=0;
-    print_generic_text_ascii_buf(x, y, buf);
-}
-
 char *presetStrings[] = {
-    "Base - 70",
-    "Base - 100",
-    "Base - 120",
-    "Hardcore - 70",
-    "Hardcore - 100",
-    "Hardcore - 120",
+    "Base (70)",
+    "Base (100)",
+    "Base (120)",
+    "Hardcore (70)",
+    "Hardcore (100)",
+    "Hardcore (120)",
 };
 
 s32 curPreset = 0;
@@ -278,20 +246,20 @@ void print_seed_and_options_data(void) {
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
     
     sprintf(buf, "%s Seed", (gIsSetSeed ? "Set" : "Random"));
-    print_generic_text_ascii_buf(8, ypos + 28, buf);
-    sprintf(buf, "Seed\xE6 %05d", gRandomizerGameSeed);
-    print_generic_text_ascii_buf(8, ypos + 14, buf);
+    print_generic_string_ascii(8, ypos + 28, buf);
+    sprintf(buf, "Seed: %05d", gRandomizerGameSeed);
+    print_generic_string_ascii(8, ypos + 14, buf);
     
     for (i = 0; i < ARRAY_COUNT(gPresets); i++) {
         if (gOptionsSettings.gameplay.w == gPresets[i].gameplay.w) {
-            sprintf(buf, "Preset\xE6 %s", presetStrings[i]);
-            print_generic_text_ascii_buf(8,ypos,buf);
+            sprintf(buf, "Preset: %s", presetStrings[i]);
+            print_generic_string_ascii(8,ypos,buf);
             goto presetFound; // don't kill me please
         }
     }
     
-    sprintf(buf, "Settings ID\xE6 %d", gOptionsSettings.gameplay.w);
-    print_generic_text_ascii_buf(8,ypos,buf);
+    sprintf(buf, "Settings ID: %d", gOptionsSettings.gameplay.w);
+    print_generic_string_ascii(8,ypos,buf);
 
 presetFound:
     verXPos = 310 - 2*(310 - get_str_x_pos_from_center(310,textVersion2,0));

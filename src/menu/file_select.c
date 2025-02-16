@@ -1656,8 +1656,6 @@ void print_save_file_star_count(s8 fileIndex, s16 x, s16 y) {
 #define SEEDTEXT_Y1 (submenu ? 52 : 56)
 #define SEEDTEXT_Y2 (submenu ? 136 : 135)
 
-void convert_from_ascii(char *buf);
-
 void print_file_names_and_seeds(u32 submenu) {
     u32 i, xpos, ypos;
     // Print file names
@@ -1672,7 +1670,10 @@ void print_file_names_and_seeds(u32 submenu) {
         if (save_file_exists(i)) {
             char seed[6];
             sprintf(seed, "%05d", gSaveBuffer.files[i].seed);
-            convert_from_ascii(seed);
+            for (int i = 0; i < 5; i++) {
+                seed[i] -= '0';
+            }
+            seed[5] = DIALOG_CHAR_TERMINATOR;
             xpos = i % 2 ? SEEDTEXT_X2 : SEEDTEXT_X1;
             ypos = i < 2 ? SEEDTEXT_Y1 : SEEDTEXT_Y2;
             print_menu_generic_string(xpos, ypos, (unsigned char *)seed);
@@ -2257,22 +2258,22 @@ void options_page_print_options(u32 textCount, char *textList[]) {
     
     gDPSetEnvColor(gDisplayListHead++, 0, 0, 0, sTextBaseAlpha);
     for (i = 0; i < textCount; i++) {
-        print_generic_text_ascii(23 + 1, OPTIONS_Y(i) - 1, textList[i]);
+        print_generic_string_ascii(23 + 1, OPTIONS_Y(i) - 1, textList[i]);
     }
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha);
     for (i = 0; i < textCount; i++) {
-        print_generic_text_ascii(23, OPTIONS_Y(i), textList[i]);
+        print_generic_string_ascii(23, OPTIONS_Y(i), textList[i]);
     }
 }
 
 void options_page_print_two(u32 currentSelected, s16 y, s16 x1, s16 x2, const char *str1, const char *str2) {
     u8 rgbVal = (currentSelected ? 40 : 255);
     gDPSetEnvColor(gDisplayListHead++, rgbVal, rgbVal, rgbVal, sTextBaseAlpha);
-    print_generic_text_ascii(x1, y, str1);
+    print_generic_string_ascii(x1, y, str1);
     
     rgbVal = (255+40) - rgbVal;
     gDPSetEnvColor(gDisplayListHead++, rgbVal, rgbVal, rgbVal, sTextBaseAlpha);
-    print_generic_text_ascii(x2, y, str2);
+    print_generic_string_ascii(x2, y, str2);
 }
 
 void options_page_print_on_off(u32 isOn, s16 y, s16 x1, s16 x2) {
@@ -2284,15 +2285,15 @@ void options_page_print_three(u32 currentSelected, s16 y,
 
     u8 rgbVal = (currentSelected == 0 ? 255 : 40);
     gDPSetEnvColor(gDisplayListHead++, rgbVal, rgbVal, rgbVal, sTextBaseAlpha);
-    print_generic_text_ascii(x1, y, str1);
+    print_generic_string_ascii(x1, y, str1);
     
     rgbVal = (currentSelected == 1 ? 255 : 40);
     gDPSetEnvColor(gDisplayListHead++, rgbVal, rgbVal, rgbVal, sTextBaseAlpha);
-    print_generic_text_ascii(x2, y, str2);
+    print_generic_string_ascii(x2, y, str2);
     
     rgbVal = (currentSelected == 2 ? 255 : 40);
     gDPSetEnvColor(gDisplayListHead++, rgbVal, rgbVal, rgbVal, sTextBaseAlpha);
-    print_generic_text_ascii(x3, y, str3);
+    print_generic_string_ascii(x3, y, str3);
 }
 
 char *textsCosmetic[] = {
@@ -2523,7 +2524,7 @@ void handle_info_display(struct InfoDisplay displays[], s32 count) {
             display_box(cursorX + 20.f, SCREEN_HEIGHT - (cursorY + 18.f), displays[i].width, displays[i].height * 16 + 5);\
             gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
             gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, infoAlpha);
-            print_generic_text_ascii(cursorX + 25.f, cursorY, displays[i].text);
+            print_generic_string_ascii(cursorX + 25.f, cursorY, displays[i].text);
             displaying = TRUE;
         }
     }
@@ -2536,32 +2537,32 @@ void handle_info_display(struct InfoDisplay displays[], s32 count) {
 
 struct InfoDisplay aestheticInfo[] = {
     {"\
-Randomize the colors of Mario\x3Es\n\
-model\x3F Selecting CLOTHES will\n\
+Randomize the colors of Mario's\n\
+model. Selecting CLOTHES will\n\
 keep his hair and skin their\n\
-regular color\x3F", 170, 4},
+regular color.", 170, 4},
 
     {"\
-Randomize the color of stars\x3F\n\
+Randomize the color of stars.\n\
 Star colors can be unique for\n\
 every star, tied to the level,\n\
-or fixed for the whole game\x3F", 157, 4},
+or fixed for the whole game.", 157, 4},
 
     {"\
 Randomize the color of yellow,\n\
-red and blue coins\x3F Coin colors\n\
+red and blue coins. Coin colors\n\
 will always be relatively\n\
-distinct from each other\x3F", 162, 4},
+distinct from each other.", 162, 4},
 
     {"\
 Randomize the skybox displayed\n\
-in the background of each level\x3F", 168, 2},
+in the background of each level.", 168, 2},
 
     {"\
 Randomize the music that plays\n\
 within each level, or during\n\
-events\x3F Selecting MUTED will\n\
-play no music at all\x3F", 168, 4},
+events. Selecting MUTED will\n\
+play no music at all.", 168, 4},
 };
 
 char *textsStarSettings[] = {
@@ -2591,7 +2592,7 @@ void page_cosmetics_print() {
 
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha);
     print_generic_string(174, OPTIONS_Y(1), textPlus);
-    print_generic_text_ascii(textsStarSettingsX[gOptionsSettings.cosmetic.s.starColors], OPTIONS_Y(1),
+    print_generic_string_ascii(textsStarSettingsX[gOptionsSettings.cosmetic.s.starColors], OPTIONS_Y(1),
                              textsStarSettings[gOptionsSettings.cosmetic.s.starColors]);
     print_generic_string(244, OPTIONS_Y(1), textMinus);
 
@@ -2608,16 +2609,16 @@ struct InfoDisplay objectInfo[] = {
     {"\
 Controls the average difficulty of\n\
 object placements, including factors\n\
-like height and ground steepness\x3F", 188, 3},
+like height and ground steepness.", 188, 3},
     {"\
 Controls which kinds of objects are\n\
-randomized\x3F If set to KEY, only\n\
+randomized. If set to KEY, only\n\
 objects that are directly required\n\
-to obtain stars are randomized\x3F", 184, 4},
+to obtain stars are randomized.", 184, 4},
     {"\
 Whether stars that are spawned\n\
 by other objects have their\n\
-positions randomized or not\x3F", 170, 3},
+positions randomized or not.", 170, 3},
 };
 
 void page_objects_print() {
@@ -2639,24 +2640,24 @@ void page_objects_print() {
 struct InfoDisplay modeInfo[] = {
     {"\
 Determines the main gameplay structure\n\
-of the playthrough\x3F If set to ON, keys\n\
+of the playthrough. If set to ON, keys\n\
 will be required to progress and levels\n\
 will be separated into the three main\n\
-areas\x3F Otherwise, key doors will be\n\
-disabled and levels will be fully random\x3F", 212, 6},
+areas. Otherwise, key doors will be\n\
+disabled and levels will be fully random.", 212, 6},
 
     {"\
 With Nonstop mode, collecting a\n\
-star won\x3Et take you out of the level\x3F\n\
+star won't take you out of the level.\n\
 If SAVE is chosen, stars will bring\n\
 up a save prompt when collected,\n\
 otherwise they will be collected\n\
-instantly\x3F", 190, 6},
+instantly.", 190, 6},
 
     {"\
 Enables Green Demon mode, where a\n\
-1\x9Fup will chase you through all\n\
-levels and will kill you on contact\x3F", 182, 3},
+1-up will chase you through all\n\
+levels and will kill you on contact.", 182, 3},
 };
 
 void page_modes_print() {
@@ -2679,20 +2680,20 @@ In Hardcore IronMario, extra enemies\n\
 will spawn in each course, some enemies\n\
 will move at double speed, all main\n\
 courses will have two green demon\n\
-boxes, and Mario\x3Es health will drain\n\
-twice as fast underwater\x3F", 205, 6},
+boxes, and Mario's health will drain\n\
+twice as fast underwater.", 205, 6},
 
     {"\
 Display an X indicator on doors if\n\
 they are locked, and an O indicator\n\
-if they are unlocked\x3F", 190, 3},
+if they are unlocked.", 190, 3},
 
     {"\
 Gives Mario one second of invincibility\n\
-frames upon spawning into a level\x3F\n\
+frames upon spawning into a level.\n\
 Despite affecting gameplay, this option\n\
 does not affect the validity of the\n\
-IronMario challenge\x3F", 205, 5},
+IronMario challenge.", 205, 5},
 };
 
 void page_ironmario_print() {
@@ -2733,29 +2734,29 @@ struct InfoDisplay warpInfo[] = {
     {"\
 Sets the number of stars\n\
 required to enter Bowser\n\
-in the Sky\x3F", 137, 3},
+in the Sky.", 137, 3},
 
     {"\
-Determines if Mario\x3Es starting\n\
+Determines if Mario's starting\n\
 position is randomized whenever\n\
-he enters a level\x3F", 166, 3},
+he enters a level.", 166, 3},
 
     {"\
 Determines if the level entrances\n\
 lead to random levels, or if they\n\
-lead to their original level\x3F", 173, 3},
+lead to their original level.", 173, 3},
 
     {"\
 Adjusted exits will return Mario\n\
 outside of the painting he just\n\
 entered, rather than the painting\n\
-of the level he was just in\x3F", 175, 4},
+of the level he was just in.", 175, 4},
 
     {"\
 Whether to randomize the star\n\
 requirements for accessing new\n\
-levels\x3F Setting to NONE will\n\
-remove all star requirements\x3F", 166, 4},
+levels. Setting to NONE will\n\
+remove all star requirements.", 166, 4},
 };
 
 void page_warps_print() {
@@ -2783,9 +2784,9 @@ void page_warps_print() {
         // If level warps are off, adjusted exits is greyed out
         if ((i == 3) && (!gOptionsSettings.gameplay.s.randomLevelWarp)) {
                 gDPSetEnvColor(gDisplayListHead++, 96, 96, 96, sTextBaseAlpha);
-                print_generic_text_ascii(190, OPTIONS_Y(i), "OFF");
+                print_generic_string_ascii(190, OPTIONS_Y(i), "OFF");
                 gDPSetEnvColor(gDisplayListHead++, 96, 96, 96, sTextBaseAlpha);
-                print_generic_text_ascii(222, OPTIONS_Y(i), "ON");
+                print_generic_string_ascii(222, OPTIONS_Y(i), "ON");
         } else {
             options_page_print_on_off(WARPS_VARS_GET(i), OPTIONS_Y(i), 190, 222);
         }
@@ -2847,14 +2848,14 @@ static void draw_select_seed_menu_option(void) {
     gDPSetEnvColor(gDisplayListHead++, 0, 0, 0, sTextBaseAlpha);
     print_generic_string(240+1, 33-1, textReturn);
     print_generic_string(35+1,33-1,textSaveDefault);
-    sprintf(buf, "Settings ID\xE6 %d", gOptionsSettings.gameplay.w);
-    print_generic_text_ascii_buf(10,9,buf);
+    sprintf(buf, "Settings ID: %d", gOptionsSettings.gameplay.w);
+    print_generic_string_ascii(10,9,buf);
     gDPSetEnvColor(gDisplayListHead++, bottomOptionColor, bottomOptionColor, bottomOptionColor, sTextBaseAlpha);
     print_generic_string(240, 33, textReturn);
     print_generic_string(35, 33, textSaveDefault);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha);
-    sprintf(buf, "Settings ID\xE6 %d", gOptionsSettings.gameplay.w);
-    print_generic_text_ascii_buf(9,10,buf);
+    sprintf(buf, "Settings ID: %d", gOptionsSettings.gameplay.w);
+    print_generic_string_ascii(9,10,buf);
 
     switch (OptionPage) {
         case 0:
