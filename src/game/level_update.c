@@ -294,20 +294,21 @@ void init_door_warp(struct SpawnInfo *spawnInfo, u32 warpDestFlags) {
 }
 
 void set_mario_initial_cap_powerup(struct MarioState *m) {
-    u32 capCourseIndex = gCurrCourseNum - COURSE_CAP_COURSES;
+    u32 capCourseIndex = gCurrCourseNum;
 
     switch (capCourseIndex) {
-        case COURSE_COTMC - COURSE_CAP_COURSES:
+        case COURSE_COTMC:
             m->flags |= MARIO_METAL_CAP | MARIO_CAP_ON_HEAD;
             m->capTimer = 600;
             break;
 
-        case COURSE_TOTWC - COURSE_CAP_COURSES:
+        case COURSE_TOTWC:
+        case COURSE_WMOTR:
             m->flags |= MARIO_WING_CAP | MARIO_CAP_ON_HEAD;
             m->capTimer = 1800;
             break;
 
-        case COURSE_VCUTM - COURSE_CAP_COURSES:
+        case COURSE_VCUTM:
             m->flags |= MARIO_VANISH_CAP | MARIO_CAP_ON_HEAD;
             m->capTimer = 600;
             break;
@@ -1280,6 +1281,7 @@ s32 init_level(void) {
     }
 
     sTimerRunning = FALSE;
+    gTTCSpeedSetting = random_u16() & 3;
 
     if (sWarpDest.type != WARP_TYPE_NOT_WARPING) {
         if (sWarpDest.nodeId >= WARP_NODE_CREDITS_MIN) {

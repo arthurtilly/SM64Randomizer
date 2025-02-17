@@ -206,12 +206,12 @@ struct nodeInfo gLevelWarps[] = {
 };
 
 char *presetStrings[] = {
-    "Base (70)",
-    "Base (100)",
-    "Base (120)",
-    "Hardcore (70)",
-    "Hardcore (100)",
-    "Hardcore (120)",
+    "Base (70 Star)",
+    "Base (100 Star)",
+    "Base (120 Star)",
+    "Hardcore (70 Star)",
+    "Hardcore (100 Star)",
+    "Hardcore (120 Star)",
 };
 
 s32 curPreset = 0;
@@ -245,15 +245,15 @@ void print_seed_and_options_data(void) {
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
     
-    sprintf(buf, "%s Seed", (gIsSetSeed ? "Set" : "Random"));
-    print_generic_string_ascii(8, ypos + 28, buf);
+    if (gIsSetSeed) {
+        print_generic_string_ascii(8, ypos + 28, "Set Seed");
+    }
     sprintf(buf, "Seed: %05d", gRandomizerGameSeed);
     print_generic_string_ascii(8, ypos + 14, buf);
     
     for (i = 0; i < ARRAY_COUNT(gPresets); i++) {
         if (gOptionsSettings.gameplay.w == gPresets[i].gameplay.w) {
-            sprintf(buf, "Preset: %s", presetStrings[i]);
-            print_generic_string_ascii(8,ypos,buf);
+            print_generic_string_ascii(8,ypos,presetStrings[i]);
             goto presetFound; // don't kill me please
         }
     }
@@ -560,7 +560,7 @@ void get_safe_position(struct Object *obj, Vec3s pos, f32 minHeightRange, f32 ma
 
         // For the start warp, always spawn above the water
         if ((obj->behavior == segmented_to_virtual(bhvSpinAirborneWarp)) && (waterLevel > pos[1])) {
-            if (gCurrCourseNum == COURSE_SL) continue; // no SL water spawns
+            if (gOptionsSettings.cosmetic.s.iframes && (gCurrCourseNum == COURSE_SL)) continue; // no SL water spawns
             minHeight = waterLevel + minHeightRange;
             maxHeight = waterLevel + maxHeightRange;
         }

@@ -1452,7 +1452,7 @@ void update_mario_health(struct MarioState *m) {
                         if (terrainIsSnow) {
                             ironmario_decrement_health(m, 3);
                         } else {
-                            m->health -= 1; // NOT ironmario
+                            m->health -= HARDCORE_IRONMARIO ? 2 : 1; // NOT ironmario
                         }
                     }
                 }
