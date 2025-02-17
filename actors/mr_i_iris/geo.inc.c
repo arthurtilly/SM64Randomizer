@@ -35,3 +35,5 @@ const GeoLayout mr_i_iris_geo[] = {
    GEO_CLOSE_NODE(),
    GEO_END(),
 };
+
+#undef BODY

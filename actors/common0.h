@@ -208,6 +208,7 @@ extern const GeoLayout thwomp_geo[];
 extern const Gfx thwomp_seg5_dl_0500B570[];
 extern const Gfx thwomp_seg5_dl_0500B718[];
 extern const Gfx thwomp_seg5_dl_0500B750[];
+extern const Gfx thwomp_seg5_dl_0500B750_fast[];
 extern const Collision thwomp_seg5_collision_0500B7D0[];
 extern const Collision thwomp_seg5_collision_0500B92C[];
 
@@ -421,6 +422,7 @@ extern const Gfx whomp_seg6_dl_0601F4F8[];
 extern const Gfx whomp_seg6_dl_0601F570[];
 extern const Gfx whomp_seg6_dl_0601F5A8[];
 extern const Gfx whomp_seg6_dl_0601F5E0[];
+extern const Gfx whomp_seg6_dl_0601F5E0_fast[];
 extern const Gfx whomp_seg6_dl_0601F7F0[];
 extern const Gfx whomp_seg6_dl_0601F880[];
 extern const Gfx whomp_seg6_dl_0601FA58[];
