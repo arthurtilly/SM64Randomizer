@@ -840,7 +840,7 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
             fadeout_level_music(126);
         
             if (!isNew) {
-                set_course_is_locked(gCurrCourseNum, DIALOG_143);
+                set_course_is_locked(gCurrCourseNum);
             }
         }
 
