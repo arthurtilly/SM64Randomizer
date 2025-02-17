@@ -125,11 +125,18 @@ void bhv_door_init(void) {
         o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_CASTLE_CASTLE_DOOR];
     }
 
-    if ((gOptionsSettings.gameplay.s.randomStarDoorCounts != 0) &&
-        ((o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_CASTLE_DOOR_1_STAR]) || (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_CASTLE_DOOR_3_STARS]))) {
+    if ((o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_CASTLE_DOOR_1_STAR])
+        || (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_CASTLE_DOOR_3_STARS])
+        || (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_CASTLE_DOOR_0_STARS])) {
         o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_CASTLE_DOOR_0_STARS];
         if (starReqIndex >= 0 && starReqIndex < STAR_REQ_MAX && gOptionsSettings.cosmetic.s.doorIndicators) {
-            o->header.gfx.sharedChild = gLoadedGraphNodes[gMarioState->numStars >= gRequiredStars[starReqIndex] ? MODEL_CASTLE_DOOR_1_STAR : MODEL_CASTLE_DOOR_3_STARS];
+            o->header.gfx.sharedChild = gLoadedGraphNodes[
+                gRequiredStars[starReqIndex] == 0
+                    ? MODEL_CASTLE_DOOR_0_STARS
+                    : gMarioState->numStars >= gRequiredStars[starReqIndex]
+                    ? MODEL_CASTLE_DOOR_1_STAR
+                    : MODEL_CASTLE_DOOR_3_STARS
+            ];
         }
     }
 }
