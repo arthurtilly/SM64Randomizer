@@ -998,6 +998,7 @@ enum oBehParam1stByteStarAct { // BPARAM1
     STAR_BP_ACT_5,
     STAR_BP_ACT_6,
     STAR_BP_ACT_100_COINS,
+    STAR_BP_FLAG_COURSE_NONE = 0x80,
 };
 
 /* Hidden Star */

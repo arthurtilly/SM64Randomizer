@@ -45,3 +45,5 @@
 #include "snufit/geo.inc.c"
 #include "scuttlebug/geo.inc.c"
 #include "bubba/geo.inc.c"
+
+#include "toad/geo.inc.c"

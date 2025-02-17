@@ -402,9 +402,9 @@ void puppycam_check_save(void) {
  * Update the current save file after collecting a star or a key.
  * If coin score is greater than the current high score, update it.
  */
-u32 save_file_collect_star_or_key(s16 coinScore, s16 starIndex) {
+u32 save_file_collect_star_or_key(s16 courseNum, s16 coinScore, s16 starIndex) {
     s32 fileIndex = gCurrSaveFileNum - 1;
-    s32 courseIndex = COURSE_NUM_TO_INDEX(gCurrCourseNum);
+    s32 courseIndex = COURSE_NUM_TO_INDEX(courseNum);
 #ifdef GLOBAL_STAR_IDS
     s32 starByte = COURSE_NUM_TO_INDEX(starIndex / 7);
     s32 starFlag = 1 << (starIndex % 7);

@@ -29,14 +29,6 @@
 
 #include "config.h"
 
-#define TOAD_STAR_1_REQUIREMENT 12
-#define TOAD_STAR_2_REQUIREMENT 25
-#define TOAD_STAR_3_REQUIREMENT 35
-
-#define TOAD_STAR_1_DIALOG DIALOG_082
-#define TOAD_STAR_2_DIALOG DIALOG_076
-#define TOAD_STAR_3_DIALOG DIALOG_083
-
 #define TOAD_STAR_1_DIALOG_AFTER DIALOG_154
 #define TOAD_STAR_2_DIALOG_AFTER DIALOG_155
 #define TOAD_STAR_3_DIALOG_AFTER DIALOG_156
@@ -133,21 +125,19 @@ static void toad_message_talking(void) {
         DIALOG_FLAG_TURN_TO_MARIO, CUTSCENE_DIALOG, o->oToadMessageDialogId)) {
         o->oToadMessageRecentlyTalked = TRUE;
         o->oToadMessageState = TOAD_MESSAGE_FADING;
-        if (HARDCORE_IRONMARIO) {
-            switch (o->oToadMessageDialogId) {
-                case TOAD_STAR_1_DIALOG:
-                    o->oToadMessageDialogId = TOAD_STAR_1_DIALOG_AFTER;
-                    bhv_spawn_star_no_level_exit(STAR_BP_ACT_1);
-                    break;
-                case TOAD_STAR_2_DIALOG:
-                    o->oToadMessageDialogId = TOAD_STAR_2_DIALOG_AFTER;
-                    bhv_spawn_star_no_level_exit(STAR_BP_ACT_2);
-                    break;
-                case TOAD_STAR_3_DIALOG:
-                    o->oToadMessageDialogId = TOAD_STAR_3_DIALOG_AFTER;
-                    bhv_spawn_star_no_level_exit(STAR_BP_ACT_3);
-                    break;
-            }
+        switch (o->oToadMessageDialogId) {
+            case TOAD_STAR_1_DIALOG:
+                o->oToadMessageDialogId = TOAD_STAR_1_DIALOG_AFTER;
+                bhv_spawn_star_no_level_exit(STAR_BP_ACT_1 | STAR_BP_FLAG_COURSE_NONE);
+                break;
+            case TOAD_STAR_2_DIALOG:
+                o->oToadMessageDialogId = TOAD_STAR_2_DIALOG_AFTER;
+                bhv_spawn_star_no_level_exit(STAR_BP_ACT_2 | STAR_BP_FLAG_COURSE_NONE);
+                break;
+            case TOAD_STAR_3_DIALOG:
+                o->oToadMessageDialogId = TOAD_STAR_3_DIALOG_AFTER;
+                bhv_spawn_star_no_level_exit(STAR_BP_ACT_3 | STAR_BP_FLAG_COURSE_NONE);
+                break;
         }
     }
 }
@@ -195,36 +185,29 @@ void bhv_toad_message_init(void) {
     s32 starCount = save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1);
 #endif
     s32 dialogId = GET_BPARAM1(o->oBehParams);
-    s32 enoughStars = TRUE;
 
     switch (dialogId) {
         case TOAD_STAR_1_DIALOG:
-            enoughStars = (starCount >= TOAD_STAR_1_REQUIREMENT);
             if (saveFlags & SAVE_FLAG_COLLECTED_TOAD_STAR_1) {
                 dialogId = TOAD_STAR_1_DIALOG_AFTER;
             }
             break;
         case TOAD_STAR_2_DIALOG:
-            enoughStars = (starCount >= TOAD_STAR_2_REQUIREMENT);
             if (saveFlags & SAVE_FLAG_COLLECTED_TOAD_STAR_2) {
                 dialogId = TOAD_STAR_2_DIALOG_AFTER;
             }
             break;
         case TOAD_STAR_3_DIALOG:
-            enoughStars = (starCount >= TOAD_STAR_3_REQUIREMENT);
             if (saveFlags & SAVE_FLAG_COLLECTED_TOAD_STAR_3) {
                 dialogId = TOAD_STAR_3_DIALOG_AFTER;
             }
             break;
     }
-    if (enoughStars) {
-        o->oToadMessageDialogId = dialogId;
-        o->oToadMessageRecentlyTalked = FALSE;
-        o->oToadMessageState = TOAD_MESSAGE_FADED;
-        o->oOpacity = 81;
-    } else {
-        obj_mark_for_deletion(o);
-    }
+    
+    o->oToadMessageDialogId = dialogId;
+    o->oToadMessageRecentlyTalked = FALSE;
+    o->oToadMessageState = TOAD_MESSAGE_FADED;
+    o->oOpacity = 81;
 }
 
 static void star_door_unlock_spawn_particles(s16 angleOffset) {
