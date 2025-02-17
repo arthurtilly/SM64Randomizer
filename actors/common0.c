@@ -139,3 +139,7 @@ UNUSED static const u64 binid_18 = 18;
 
 #include "bubba/model.inc.c"
 
+#include "toad/model.inc.c"
+#include "toad/anims/data.inc.c"
+#include "toad/anims/table.inc.c"
+

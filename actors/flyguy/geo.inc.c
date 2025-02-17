@@ -1,3 +1,21 @@
+#define BODY(fast) \
+   GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, flyguy_seg8_dl_08011710##fast), \
+   GEO_OPEN_NODE(), \
+      GEO_ANIMATED_PART(LAYER_OPAQUE, -45, -20, -55, NULL), \
+      GEO_OPEN_NODE(), \
+         GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, flyguy_seg8_dl_08010840), \
+      GEO_CLOSE_NODE(), \
+      GEO_ANIMATED_PART(LAYER_OPAQUE, -45, -20, 55, NULL), \
+      GEO_OPEN_NODE(), \
+         GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, flyguy_seg8_dl_08010968), \
+      GEO_CLOSE_NODE(), \
+      GEO_ANIMATED_PART(LAYER_OPAQUE, 250, 0, 0, NULL), \
+      GEO_OPEN_NODE(), \
+         GEO_ANIMATED_PART(LAYER_TRANSPARENT, 0, 0, 0, flyguy_seg8_dl_08010B80), \
+         GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, NULL), \
+      GEO_CLOSE_NODE(), \
+   GEO_CLOSE_NODE()
+
 // 0x0F000518
 const GeoLayout flyguy_geo[] = {
    GEO_SHADOW(SHADOW_CIRCLE_4_VERTS, 0x96, 100),
@@ -6,24 +24,15 @@ const GeoLayout flyguy_geo[] = {
       GEO_OPEN_NODE(),
          GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, NULL),
          GEO_OPEN_NODE(),
-            GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, flyguy_seg8_dl_08011710),
+            GEO_SWITCH_CASE(2, geo_switch_fast),
             GEO_OPEN_NODE(),
-               GEO_ANIMATED_PART(LAYER_OPAQUE, -45, -20, -55, NULL),
-               GEO_OPEN_NODE(),
-                  GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, flyguy_seg8_dl_08010840),
-               GEO_CLOSE_NODE(),
-               GEO_ANIMATED_PART(LAYER_OPAQUE, -45, -20, 55, NULL),
-               GEO_OPEN_NODE(),
-                  GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, flyguy_seg8_dl_08010968),
-               GEO_CLOSE_NODE(),
-               GEO_ANIMATED_PART(LAYER_OPAQUE, 250, 0, 0, NULL),
-               GEO_OPEN_NODE(),
-                  GEO_ANIMATED_PART(LAYER_TRANSPARENT, 0, 0, 0, flyguy_seg8_dl_08010B80),
-                  GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, NULL),
-               GEO_CLOSE_NODE(),
+               BODY(),
+               BODY(_fast),
             GEO_CLOSE_NODE(),
          GEO_CLOSE_NODE(),
       GEO_CLOSE_NODE(),
    GEO_CLOSE_NODE(),
    GEO_END(),
 };
+
+#undef BODY

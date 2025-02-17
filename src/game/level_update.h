@@ -185,7 +185,7 @@ s32 lvl_set_current_level(        UNUSED s16 initOrUpdate,        s32 levelNum);
 s32 lvl_play_the_end_screen_sound(UNUSED s16 initOrUpdate, UNUSED s32 levelNum);
 void basic_update(void);
 
-void set_course_is_locked(s8 course, u8 dialog);
+void set_course_is_locked(s8 course);
 u32 get_course_is_locked(s8 course);
 u32 get_level_is_locked(s16 level);
 u32 get_intended_level_is_locked(s16 intendedLevel);

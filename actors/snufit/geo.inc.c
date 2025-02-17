@@ -9,7 +9,7 @@ const GeoLayout snufit_geo[] = {
          GEO_OPEN_NODE(),
             GEO_DISPLAY_LIST(LAYER_OPAQUE, snufit_seg6_dl_06009748),
          GEO_CLOSE_NODE(),
-         GEO_DISPLAY_LIST(LAYER_OPAQUE, snufit_seg6_dl_06009498),
+         GEO_DISPLAY_LIST_FAST(LAYER_OPAQUE, snufit_seg6_dl_06009498),
          GEO_DISPLAY_LIST(LAYER_OPAQUE, snufit_seg6_dl_06009938),
          GEO_DISPLAY_LIST(LAYER_OPAQUE, snufit_seg6_dl_06009B68),
          GEO_BILLBOARD(),

@@ -11,6 +11,11 @@ ALIGNED8 static const Texture boo_seg5_texture_05009B40[] = {
 #include "actors/boo/boo_eyes.rgba16.inc.c"
 };
 
+// 0x05009B40
+ALIGNED8 static const Texture boo_seg5_texture_05009B40_fast[] = {
+#include "actors/boo/boo_fast_eyes.rgba16.inc.c"
+};
+
 // 0x0500AB40
 ALIGNED8 static const Texture boo_seg5_texture_0500AB40[] = {
 #include "actors/boo/boo_mouth.rgba16.inc.c"
@@ -282,6 +287,19 @@ const Gfx boo_seg5_dl_0500BF48[] = {
     gsSPEndDisplayList(),
 };
 
+// 0x0500BF48 - 0x0500BFA0
+const Gfx boo_seg5_dl_0500BF48_fast[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, boo_seg5_texture_05009B40_fast),
+    gsDPTileSync(),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
+    gsSPVertex(boo_seg5_vertex_0500B400, 12, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
+    gsSP2Triangles( 6,  7,  8, 0x0,  9, 10, 11, 0x0),
+    gsSPEndDisplayList(),
+};
+
 // 0x0500BFA0 - 0x0500C1B0
 const Gfx boo_seg5_dl_0500BFA0[] = {
     gsSPVertex(boo_seg5_vertex_0500B4C0, 15, 0),
@@ -344,6 +362,30 @@ const Gfx boo_seg5_dl_0500C1B0[] = {
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 6, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (64 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
     gsSPDisplayList(boo_seg5_dl_0500BF48),
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+    gsDPPipeSync(),
+    gsDPSetCombineMode(G_CC_SHADEFADEA, G_CC_SHADEFADEA),
+    gsSPDisplayList(boo_seg5_dl_0500BFA0),
+    gsDPPipeSync(),
+    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
+    gsDPSetEnvColor(255, 255, 255, 255),
+    gsSPEndDisplayList(),
+};
+
+// 0x0500C1B0 - 0x0500C250
+const Gfx boo_seg5_dl_0500C1B0_fast[] = {
+    gsDPPipeSync(),
+    gsDPSetCombineMode(G_CC_BLENDRGBFADEA, G_CC_BLENDRGBFADEA),
+    gsSPNumLights(NUMLIGHTS_1),
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+    gsDPTileSync(),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
+    gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
+    gsSPDisplayList(boo_seg5_dl_0500BEE0),
+    gsDPTileSync(),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 6, G_TX_NOLOD),
+    gsDPSetTileSize(0, 0, 0, (64 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
+    gsSPDisplayList(boo_seg5_dl_0500BF48_fast),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADEFADEA, G_CC_SHADEFADEA),

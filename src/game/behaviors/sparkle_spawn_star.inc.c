@@ -17,19 +17,21 @@ void bhv_spawned_star_init(void) {
         o->oBehParams = o->parentObj->oBehParams;
     }
     s32 param = GET_BPARAM1(o->oBehParams);
+    u32 starIndex = param & 0x1F;
+    s16 courseNum = (param & STAR_BP_FLAG_COURSE_NONE) ? COURSE_NONE : gCurrCourseNum;
 
-    if (gCurrCourseNum <= COURSE_RR && gCurrCourseNum >= COURSE_BOB) {
-        struct Object *num = spawn_orange_number(param + 1, 0, 0, 0);
+    if (courseNum <= COURSE_RR && courseNum >= COURSE_BOB) {
+        struct Object *num = spawn_orange_number(starIndex + 1, 0, 0, 0);
         num->oOrangeNumType = 1;
         num->oOrangeNumPointer = o;
         o->oStarOrangeNumPointer = num;
     }
 
-    if ((1 << param) & save_file_get_star_flags((gCurrSaveFileNum - 1), COURSE_NUM_TO_INDEX(gCurrCourseNum))) {
+    if ((1 << starIndex) & save_file_get_star_flags((gCurrSaveFileNum - 1), COURSE_NUM_TO_INDEX(courseNum))) {
         cur_obj_set_model(MODEL_TRANSPARENT_STAR);
     }
 
-    init_star_color(o, gCurrCourseNum, param);
+    init_star_color(o, courseNum, starIndex);
 
     cur_obj_play_sound_2(SOUND_GENERAL2_STAR_APPEARS);
 }

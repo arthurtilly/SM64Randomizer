@@ -67,6 +67,10 @@ void spawn_mr_i_particle(void) {
     cur_obj_play_sound_2(SOUND_OBJ_MRI_SHOOT);
 }
 
+void bhv_mr_i_iris_init(void) {
+    o->isFast = o->parentObj->isFast;
+}
+
 void bhv_mr_i_iris_loop(void) {
     obj_copy_pos_and_angle(o, o->parentObj);
 

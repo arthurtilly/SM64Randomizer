@@ -150,8 +150,6 @@ s8 sWarpCheckpointActive = FALSE;
 #include "buffers/buffers.h"
 #define curFile gSaveBuffer.files[gCurrSaveFileNum - 1]
 
-static u8 sLevelLockDialog = 0;
-
 u32 get_course_is_locked(s8 course) {
     if (course == COURSE_NONE) {
         return FALSE;
@@ -178,7 +176,7 @@ u32 get_intended_level_is_locked(s16 intendedLevel) {
     return get_level_is_locked(targetLevel);
 }
 
-void set_course_is_locked(s8 course, UNUSED u8 dialog) {
+void set_course_is_locked(s8 course) {
     if (course == COURSE_NONE) {
         return;
     }
@@ -491,7 +489,7 @@ void warp_area(void) {
 void course_check_lock(s8 prevCourse, s8 currCourse) {
     if (prevCourse == COURSE_NONE && currCourse != COURSE_NONE) {
         if (currCourse != curFile.lastVisitedCourse) {
-            set_course_is_locked(curFile.lastVisitedCourse, DIALOG_142);
+            set_course_is_locked(curFile.lastVisitedCourse);
         }
         curFile.lastVisitedCourse = currCourse;
         save_file_do_save(gCurrSaveFileNum - 1);

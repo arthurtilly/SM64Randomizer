@@ -6,9 +6,14 @@
 #include "macros.h"
 #include "types.h"
 #include "config.h"
+#include "dialog_ids.h"
 
 extern struct GraphNodeObject gMirrorMario;
 extern struct MarioBodyState gBodyStates[2];
+
+#define TOAD_STAR_1_DIALOG DIALOG_082
+#define TOAD_STAR_2_DIALOG DIALOG_076
+#define TOAD_STAR_3_DIALOG DIALOG_083
 
 #ifdef KEEP_MARIO_HEAD
 Gfx *geo_draw_mario_head_goddard(s32 callContext, struct GraphNode *node, Mat4 *mtx);

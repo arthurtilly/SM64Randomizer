@@ -15,6 +15,7 @@ extern const Gfx chilly_chief_seg6_dl_06002EB8[];
 extern const Gfx chilly_chief_seg6_dl_06002EF0[];
 extern const Gfx chilly_chief_seg6_dl_06002FC8[];
 extern const Gfx chilly_chief_seg6_dl_06003010[];
+extern const Gfx chilly_chief_seg6_dl_06003010_fast[];
 extern const GeoLayout chilly_chief_geo[];
 extern const GeoLayout chilly_chief_big_geo[];
 extern const struct Animation *const chilly_chief_seg6_anims_06003994[];

@@ -94,6 +94,7 @@ void bhv_door_init(void) {
     f32 y = o->oPosY;
     f32 z = o->oPosZ;
     struct Surface *floor;
+    s32 starReqIndex = ((o->oBehParams >> 24) & 0xFF) - 1;
 
     find_room_floor(x, y, z, &floor);
     if (floor != NULL) o->oDoorSelfRoom = floor->room;
@@ -115,8 +116,8 @@ void bhv_door_init(void) {
         gDoorAdjacentRooms[o->oDoorSelfRoom][1] = o->oDoorBackwardRoom;
     }
 
-    if ((((o->oBehParams >> 24) & 0xFF) != 0) && (((o->oBehParams >> 24) & 0xFF) < 0xFE)) {
-        o->oBehParams = (gRequiredStars[((o->oBehParams >> 24) & 0xFF) - 1] << 24) + (o->oBehParams & 0x00FFFFFF);
+    if (starReqIndex >= 0 && starReqIndex < STAR_REQ_MAX) {
+        o->oBehParams = (gRequiredStars[starReqIndex] << 24) + (o->oBehParams & 0x00FFFFFF);
     }
 
     // Check model id
@@ -124,9 +125,19 @@ void bhv_door_init(void) {
         o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_CASTLE_CASTLE_DOOR];
     }
 
-    if ((gOptionsSettings.gameplay.s.randomStarDoorCounts != 0) &&
-        ((o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_CASTLE_DOOR_1_STAR]) || (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_CASTLE_DOOR_3_STARS]))) {
+    if ((o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_CASTLE_DOOR_1_STAR])
+        || (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_CASTLE_DOOR_3_STARS])
+        || (o->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_CASTLE_DOOR_0_STARS])) {
         o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_CASTLE_DOOR_0_STARS];
+        if (starReqIndex >= 0 && starReqIndex < STAR_REQ_MAX && gOptionsSettings.cosmetic.s.doorIndicators) {
+            o->header.gfx.sharedChild = gLoadedGraphNodes[
+                gRequiredStars[starReqIndex] == 0
+                    ? MODEL_CASTLE_DOOR_0_STARS
+                    : gMarioState->numStars >= gRequiredStars[starReqIndex]
+                    ? MODEL_CASTLE_DOOR_1_STAR
+                    : MODEL_CASTLE_DOOR_3_STARS
+            ];
+        }
     }
 }
 

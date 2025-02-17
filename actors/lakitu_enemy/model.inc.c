@@ -29,9 +29,19 @@ ALIGNED8 static const Texture lakitu_enemy_seg5_texture_0500F4E0[] = {
 #include "actors/lakitu_enemy/lakitu_enemy_eyes_open.rgba16.inc.c"
 };
 
+// 0x0500F4E0
+ALIGNED8 static const Texture lakitu_enemy_seg5_texture_0500F4E0_fast[] = {
+#include "actors/lakitu_enemy/lakitu_enemy_fast_eyes_open.rgba16.inc.c"
+};
+
 // 0x050104E0
 ALIGNED8 static const Texture lakitu_enemy_seg5_texture_050104E0[] = {
 #include "actors/lakitu_enemy/lakitu_enemy_eyes_closed.rgba16.inc.c"
+};
+
+// 0x050104E0
+ALIGNED8 static const Texture lakitu_enemy_seg5_texture_050104E0_fast[] = {
+#include "actors/lakitu_enemy/lakitu_enemy_fast_eyes_closed.rgba16.inc.c"
 };
 
 // 0x050114E0
@@ -410,10 +420,28 @@ const Gfx lakitu_enemy_seg5_dl_05013350[] = {
     gsSPBranchList(lakitu_enemy_seg5_dl_05013320),
 };
 
+// 0x05013350 - 0x05013378
+const Gfx lakitu_enemy_seg5_dl_05013350_fast[] = {
+    gsSPDisplayList(lakitu_enemy_seg5_dl_050132D8),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, lakitu_enemy_seg5_texture_0500F4E0_fast),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
+    gsSPBranchList(lakitu_enemy_seg5_dl_05013320),
+};
+
 // 0x05013378 - 0x050133A0
 const Gfx lakitu_enemy_seg5_dl_05013378[] = {
     gsSPDisplayList(lakitu_enemy_seg5_dl_050132D8),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, lakitu_enemy_seg5_texture_050104E0),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
+    gsSPBranchList(lakitu_enemy_seg5_dl_05013320),
+};
+
+// 0x05013378 - 0x050133A0
+const Gfx lakitu_enemy_seg5_dl_05013378_fast[] = {
+    gsSPDisplayList(lakitu_enemy_seg5_dl_050132D8),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, lakitu_enemy_seg5_texture_050104E0_fast),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPBranchList(lakitu_enemy_seg5_dl_05013320),

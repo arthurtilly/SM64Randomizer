@@ -39,6 +39,11 @@ ALIGNED8 static const Texture chilly_chief_seg6_texture_06002060[] = {
 #include "actors/chillychief/chill_bully_eye.rgba16.inc.c"
 };
 
+// 0x06002060
+ALIGNED8 static const Texture chilly_chief_seg6_texture_06002060_fast[] = {
+#include "actors/chillychief/chill_bully_fast_eye.rgba16.inc.c"
+};
+
 // 0x06002860
 static const Vtx chilly_chief_seg6_vertex_06002860[] = {
     {{{    27,    -35,      0}, 0, {     0,      0}, {0x0c, 0x82, 0x04, 0x00}}},
@@ -277,6 +282,17 @@ const Gfx chilly_chief_seg6_dl_06002FC8[] = {
     gsSPEndDisplayList(),
 };
 
+// 0x06002FC8 - 0x06003010
+const Gfx chilly_chief_seg6_dl_06002FC8_fast[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chilly_chief_seg6_texture_06002060_fast),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPVertex(chilly_chief_seg6_vertex_06002F68, 6, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
+    gsSP2Triangles( 3,  4,  5, 0x0,  3,  5,  0, 0x0),
+    gsSPEndDisplayList(),
+};
+
 // 0x06003010 - 0x06003080
 const Gfx chilly_chief_seg6_dl_06003010[] = {
     gsDPPipeSync(),
@@ -288,6 +304,24 @@ const Gfx chilly_chief_seg6_dl_06003010[] = {
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
     gsSPDisplayList(chilly_chief_seg6_dl_06002FC8),
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+    gsDPPipeSync(),
+    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
+    gsSPSetGeometryMode(G_LIGHTING),
+    gsSPEndDisplayList(),
+};
+
+// 0x06003010 - 0x06003080
+const Gfx chilly_chief_seg6_dl_06003010_fast[] = {
+    gsDPPipeSync(),
+    gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
+    gsSPClearGeometryMode(G_LIGHTING),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+    gsDPTileSync(),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
+    gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
+    gsSPDisplayList(chilly_chief_seg6_dl_06002FC8_fast),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

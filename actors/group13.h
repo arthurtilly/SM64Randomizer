@@ -11,6 +11,7 @@ extern const Gfx bub_seg6_dl_06011918[];
 extern const Gfx bub_seg6_dl_06011968[];
 extern const Gfx bub_seg6_dl_06011A50[];
 extern const Gfx bub_seg6_dl_06011B28[];
+extern const Gfx bub_seg6_dl_06011B28_fast[];
 extern const Gfx bub_seg6_dl_06011C58[];
 extern const Gfx bub_seg6_dl_06011CF0[];
 extern const Gfx bub_seg6_dl_06011DC0[];

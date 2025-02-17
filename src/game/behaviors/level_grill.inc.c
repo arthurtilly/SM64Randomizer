@@ -7,7 +7,7 @@ void bhv_level_grill_init(void) {
         obj_scale_xyz(o, 2.5f, 2.5f, 2.5f);
     }
     u32 locked = get_intended_level_is_locked(intendedLevel);
-    if (intendedLevel == LEVEL_BITFS && !(gDddPaintingStatus & DDD_FLAG_BOWSERS_SUB_BEATEN)) {
+    if (intendedLevel == LEVEL_BITFS && !(save_file_get_star_flags(gCurrSaveFileNum - 1, COURSE_NUM_TO_INDEX(COURSE_DDD)) & BOARD_BOWSERS_SUB)) {
         locked = TRUE;
     }
     if (!locked) {
