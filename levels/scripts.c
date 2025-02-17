@@ -215,6 +215,8 @@ const LevelScript script_func_global_1[] = {
     LOAD_MODEL_FROM_GEO(MODEL_MR_I_BODY,               mr_i_geo),
     LOAD_MODEL_FROM_GEO(MODEL_SNUFIT,                  snufit_geo),
     LOAD_MODEL_FROM_GEO(MODEL_BUBBA,                   bubba_geo),
+
+    LOAD_MODEL_FROM_GEO(MODEL_TOAD,                    toad_geo),
     RETURN(),
 };
 
@@ -337,7 +339,6 @@ const LevelScript script_func_global_16[] = {
     LOAD_MODEL_FROM_GEO(MODEL_MIPS,                    mips_geo),
     LOAD_MODEL_FROM_GEO(MODEL_BOO_CASTLE,              boo_castle_geo),
     LOAD_MODEL_FROM_GEO(MODEL_LAKITU,                  lakitu_geo),
-    LOAD_MODEL_FROM_GEO(MODEL_TOAD,                    toad_geo),
     RETURN(),
 };
 

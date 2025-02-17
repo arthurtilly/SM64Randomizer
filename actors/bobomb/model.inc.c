@@ -30,6 +30,14 @@ ALIGNED8 static const Texture bobomb_seg8_texture_08022260[] = {
 #include "actors/bobomb/bob-omb_eyes_blink.rgba16.inc.c"
 };
 
+ALIGNED8 static const Texture bobomb_seg8_texture_08021A60_fast[] = {
+#include "actors/bobomb/bob-omb_fast_eyes.rgba16.inc.c"
+};
+
+ALIGNED8 static const Texture bobomb_seg8_texture_08022260_fast[] = {
+#include "actors/bobomb/bob-omb_fast_eyes_blink.rgba16.inc.c"
+};
+
 // 0x08022A60
 static const Vtx bobomb_seg8_vertex_08022A60[] = {
     {{{   133,    -47,      0}, 0, {   480,      0}, {0xff, 0xff, 0xff, 0xff}}},
@@ -79,6 +87,24 @@ const Gfx bobomb_seg8_dl_08022B58[] = {
 const Gfx bobomb_seg8_dl_08022B88[] = {
     gsSPDisplayList(bobomb_seg8_dl_08022AC0),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bobomb_seg8_texture_08022260),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPDisplayList(bobomb_seg8_dl_08022B08),
+    gsSPEndDisplayList(),
+};
+
+const Gfx bobomb_seg8_dl_08022B58_fast[] = {
+    gsSPDisplayList(bobomb_seg8_dl_08022AC0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bobomb_seg8_texture_08021A60_fast),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPDisplayList(bobomb_seg8_dl_08022B08),
+    gsSPEndDisplayList(),
+};
+
+const Gfx bobomb_seg8_dl_08022B88_fast[] = {
+    gsSPDisplayList(bobomb_seg8_dl_08022AC0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bobomb_seg8_texture_08022260_fast),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(bobomb_seg8_dl_08022B08),

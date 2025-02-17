@@ -33,7 +33,7 @@ const GeoLayout chuckya_geo[] = {
                            GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, chuckya_seg8_dl_0800A998),
                         GEO_CLOSE_NODE(),
                      GEO_CLOSE_NODE(),
-                     GEO_ANIMATED_PART(LAYER_ALPHA, 0, 0, 0, chuckya_seg8_dl_0800A758),
+                     GEO_ANIMATED_PART_FAST(LAYER_ALPHA, 0, 0, 0, chuckya_seg8_dl_0800A758),
                      GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, NULL),
                      GEO_OPEN_NODE(),
                         GEO_BILLBOARD(),

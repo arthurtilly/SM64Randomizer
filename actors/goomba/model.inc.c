@@ -46,9 +46,19 @@ ALIGNED8 static const Texture goomba_seg8_texture_08019D30[] = {
 #include "actors/goomba/goomba_face.rgba16.inc.c"
 };
 
+// 0x08019D30
+ALIGNED8 static const Texture goomba_seg8_texture_08019D30_fast[] = {
+#include "actors/goomba/goomba_fast_face.rgba16.inc.c"
+};
+
 // 0x0801A530
 ALIGNED8 static const Texture goomba_seg8_texture_0801A530[] = {
 #include "actors/goomba/goomba_face_blink.rgba16.inc.c"
+};
+
+// 0x0801A530
+ALIGNED8 static const Texture goomba_seg8_texture_0801A530_fast[] = {
+#include "actors/goomba/goomba_fast_face_blink.rgba16.inc.c"
 };
 
 #ifdef FLOOMBAS
@@ -261,10 +271,28 @@ const Gfx goomba_seg8_dl_0801B5C8[] = {
     gsSPBranchList(goomba_seg8_dl_0801B5A0),
 };
 
+// 0x0801B5C8 - 0x0801B5F0
+const Gfx goomba_seg8_dl_0801B5C8_fast[] = {
+    gsSPDisplayList(goomba_seg8_dl_0801B560),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, goomba_seg8_texture_08019D30_fast),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPBranchList(goomba_seg8_dl_0801B5A0),
+};
+
 // 0x0801B5F0 - 0x0801B618
 const Gfx goomba_seg8_dl_0801B5F0[] = {
     gsSPDisplayList(goomba_seg8_dl_0801B560),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, goomba_seg8_texture_0801A530),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPBranchList(goomba_seg8_dl_0801B5A0),
+};
+
+// 0x0801B5F0 - 0x0801B618
+const Gfx goomba_seg8_dl_0801B5F0_fast[] = {
+    gsSPDisplayList(goomba_seg8_dl_0801B560),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, goomba_seg8_texture_0801A530_fast),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPBranchList(goomba_seg8_dl_0801B5A0),

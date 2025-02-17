@@ -10,6 +10,11 @@ ALIGNED8 static const Texture moneybag_seg6_texture_060049B0[] = {
 #include "actors/moneybag/moneybag_eyes.rgba16.inc.c"
 };
 
+// 0x060049B0
+ALIGNED8 static const Texture moneybag_seg6_texture_060049B0_fast[] = {
+#include "actors/moneybag/moneybag_fast_eyes.rgba16.inc.c"
+};
+
 // 0x060051B0
 static const Lights1 moneybag_seg6_lights_060051B0 = gdSPDefLights1(
     0x7f, 0x7f, 0x7f,
@@ -190,6 +195,17 @@ const Gfx moneybag_seg6_dl_06005708[] = {
     gsSPEndDisplayList(),
 };
 
+// 0x06005708 - 0x06005750
+const Gfx moneybag_seg6_dl_06005708_fast[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, moneybag_seg6_texture_060049B0_fast),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPVertex(moneybag_seg6_vertex_060056A8, 6, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSP2Triangles( 1,  3,  4, 0x0,  5,  0,  2, 0x0),
+    gsSPEndDisplayList(),
+};
+
 // 0x06005750 - 0x060057C0
 const Gfx moneybag_seg6_dl_06005750[] = {
     gsDPPipeSync(),
@@ -201,6 +217,24 @@ const Gfx moneybag_seg6_dl_06005750[] = {
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
     gsSPDisplayList(moneybag_seg6_dl_06005708),
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+    gsDPPipeSync(),
+    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
+    gsSPSetGeometryMode(G_LIGHTING),
+    gsSPEndDisplayList(),
+};
+
+// 0x06005750 - 0x060057C0
+const Gfx moneybag_seg6_dl_06005750_fast[] = {
+    gsDPPipeSync(),
+    gsDPSetCombineMode(G_CC_DECALFADE, G_CC_DECALFADE),
+    gsSPClearGeometryMode(G_LIGHTING),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+    gsDPTileSync(),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
+    gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
+    gsSPDisplayList(moneybag_seg6_dl_06005708_fast),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

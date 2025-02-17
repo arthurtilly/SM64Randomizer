@@ -20,7 +20,7 @@ const GeoLayout mr_blizzard_hidden_geo[] = {
                GEO_CLOSE_NODE(),
             GEO_CLOSE_NODE(),
             GEO_ANIMATED_PART(LAYER_ALPHA, 356, 0, 0, snowman_seg5_dl_0500CCE8),
-            GEO_ANIMATED_PART(LAYER_ALPHA, 356, 0, 0, snowman_seg5_dl_0500C760),
+            GEO_ANIMATED_PART_FAST(LAYER_ALPHA, 356, 0, 0, snowman_seg5_dl_0500C760),
             GEO_SWITCH_CASE(2, geo_switch_anim_state),
             GEO_OPEN_NODE(),
                GEO_NODE_START(),

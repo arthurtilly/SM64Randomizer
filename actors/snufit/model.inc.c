@@ -10,6 +10,11 @@ ALIGNED8 static const Texture snufit_seg6_texture_060078E0[] = {
 #include "actors/snufit/snufit_eye.rgba16.inc.c"
 };
 
+// 0x060078E0
+ALIGNED8 static const Texture snufit_seg6_texture_060078E0_fast[] = {
+#include "actors/snufit/snufit_fast_eye.rgba16.inc.c"
+};
+
 // 0x060080E0
 ALIGNED8 static const Texture snufit_seg6_texture_060080E0[] = {
 #include "actors/snufit/snufit_mask_strap.rgba16.inc.c"
@@ -165,6 +170,21 @@ const Gfx snufit_seg6_dl_06009278[] = {
     gsSPEndDisplayList(),
 };
 
+// 0x06009278 - 0x060092F0
+const Gfx snufit_seg6_dl_06009278_fast[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snufit_seg6_texture_060078E0_fast),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPLight(&snufit_seg6_lights_06008CF8.l, 1),
+    gsSPLight(&snufit_seg6_lights_06008CF8.a, 2),
+    gsSPVertex(snufit_seg6_vertex_06008DF0, 12, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  2,  1,  3, 0x0),
+    gsSP2Triangles( 2,  3,  4, 0x0,  4,  3,  5, 0x0),
+    gsSP2Triangles( 6,  7,  8, 0x0,  8,  7,  9, 0x0),
+    gsSP2Triangles( 8,  9, 10, 0x0, 10,  9, 11, 0x0),
+    gsSPEndDisplayList(),
+};
+
 // 0x060092F0 - 0x06009498
 const Gfx snufit_seg6_dl_060092F0[] = {
     gsSPVertex(snufit_seg6_vertex_06008EB0, 14, 0),
@@ -214,6 +234,29 @@ const Gfx snufit_seg6_dl_06009498[] = {
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
     gsSPDisplayList(snufit_seg6_dl_06009278),
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+    gsDPPipeSync(),
+    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
+    gsSPDisplayList(snufit_seg6_dl_060092F0),
+    gsSPSetGeometryMode(G_CULL_BACK),
+    gsSPEndDisplayList(),
+};
+
+// 0x06009498 - 0x06009530
+const Gfx snufit_seg6_dl_06009498_fast[] = {
+    gsDPPipeSync(),
+    gsDPSetCombineMode(G_CC_BLENDRGBA, G_CC_BLENDRGBA),
+    gsSPClearGeometryMode(G_CULL_BACK),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+    gsDPTileSync(),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 4, G_TX_NOLOD),
+    gsDPSetTileSize(0, 0, 0, (16 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
+    gsSPDisplayList(snufit_seg6_dl_060091E0),
+    gsDPTileSync(),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
+    gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
+    gsSPDisplayList(snufit_seg6_dl_06009278_fast),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

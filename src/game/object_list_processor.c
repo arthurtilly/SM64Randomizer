@@ -26,6 +26,7 @@
 #include "randomizer.h"
 #include "main.h"
 #include "course_table.h"
+#include "mario_misc.h"
 
 
 /**
@@ -457,6 +458,43 @@ void unload_objects_from_area(UNUSED s32 unused, s32 areaIndex) {
     }
 }
 
+typedef struct ToadAllowedAreas {
+    s16 courseNum;
+    s16 numAreas;
+    s16 areas[4];
+} ToadAllowedAreas;
+
+static ToadAllowedAreas sToadAllowedAreas[] = {
+    { COURSE_BOB, 1, { 1 } },
+    { COURSE_WF, 1, { 1 } },
+    { COURSE_JRB, 1, { 1 } },
+    { COURSE_CCM, 2, { 1, 2 } },
+    { COURSE_BBH, 1, { 1 } },
+    { COURSE_HMC, 1, { 1 } },
+    { COURSE_LLL, 2, { 1, 2 } },
+    { COURSE_SSL, 3, { 1, 2, 3 } },
+    { COURSE_DDD, 1, { 2 } },
+    { COURSE_SL, 2, { 1, 2 } },
+    { COURSE_WDW, 2, { 1, 2 } },
+    { COURSE_TTM, 1, { 1 } },
+    { COURSE_THI, 3, { 1, 2, 3 } },
+    { COURSE_TTC, 1, { 1 } },
+    { COURSE_RR, 1, { 1 } },
+    { COURSE_BITDW, 1, { 1 } },
+    { COURSE_BITFS, 1, { 1 } },
+    { COURSE_PSS, 1, { 1 } },
+    { COURSE_COTMC, 1, { 1 } },
+    { COURSE_TOTWC, 1, { 1 } },
+    { COURSE_VCUTM, 1, { 1 } },
+    { COURSE_WMOTR, 1, { 1 } },
+};
+
+static u8 sToadDialogs[] = {
+    TOAD_STAR_1_DIALOG,
+    TOAD_STAR_2_DIALOG,
+    TOAD_STAR_3_DIALOG,
+};
+
 /**
  * Spawn objects given a list of SpawnInfos. Called when loading an area.
  */
@@ -530,6 +568,27 @@ void spawn_objects_from_info(UNUSED s32 unused, struct SpawnInfo *spawnInfo) {
         }
 
         spawnInfo = spawnInfo->next;
+    }
+
+    if (gMarioObject) {
+        for (int i = 0; i < 3; i++) {
+            tinymt32_t randomState;
+            u8 toadCourseIndex;
+            u8 toadAreaIndex;
+            struct Object *object;
+
+            tinymt32_init(&randomState, gRandomizerGameSeed + i);
+            toadCourseIndex = (u8) get_val_in_range_uniform(0, ARRAY_COUNT(sToadAllowedAreas), &randomState);
+            if (gCurrCourseNum == sToadAllowedAreas[toadCourseIndex].courseNum) {
+                toadAreaIndex = 1 + (u8) get_val_in_range_uniform(0, sToadAllowedAreas[toadCourseIndex].numAreas, &randomState);
+
+                if (gCurrAreaIndex == toadAreaIndex) {
+                    object = spawn_object(gMarioObject, MODEL_TOAD, bhvToadMessage);
+                    object->oBehParams = sToadDialogs[i] << 24;
+                    object->pointerSeed = i;
+                }
+            }
+        }
     }
 }
 

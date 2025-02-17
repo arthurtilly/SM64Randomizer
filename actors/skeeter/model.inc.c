@@ -41,6 +41,11 @@ ALIGNED8 static const Texture skeeter_seg6_texture_06000090[] = {
 #include "actors/skeeter/skeeter_eye.rgba16.inc.c"
 };
 
+// 0x06000090
+ALIGNED8 static const Texture skeeter_seg6_texture_06000090_fast[] = {
+#include "actors/skeeter/skeeter_fast_eye.rgba16.inc.c"
+};
+
 // 0x06000890
 ALIGNED8 static const Texture skeeter_seg6_texture_06000890[] = {
 #include "actors/skeeter/skeeter_iris.rgba16.inc.c"
@@ -57,6 +62,16 @@ static const Vtx skeeter_seg6_vertex_06000990[] = {
 // 0x060009D0 - 0x06000A08
 const Gfx skeeter_seg6_dl_060009D0[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, skeeter_seg6_texture_06000090),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPVertex(skeeter_seg6_vertex_06000990, 4, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
+    gsSPEndDisplayList(),
+};
+
+// 0x060009D0 - 0x06000A08
+const Gfx skeeter_seg6_dl_060009D0_fast[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, skeeter_seg6_texture_06000090_fast),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(skeeter_seg6_vertex_06000990, 4, 0),
@@ -82,6 +97,24 @@ const Gfx skeeter_seg6_dl_06000A08[] = {
     gsSPEndDisplayList(),
 };
 
+// 0x06000A08 - 0x06000A78
+const Gfx skeeter_seg6_dl_06000A08_fast[] = {
+    gsDPPipeSync(),
+    gsDPSetCombineMode(G_CC_MODULATERGBA, G_CC_MODULATERGBA),
+    gsSPClearGeometryMode(G_LIGHTING),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+    gsDPTileSync(),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
+    gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
+    gsSPDisplayList(skeeter_seg6_dl_060009D0_fast),
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+    gsDPPipeSync(),
+    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
+    gsSPSetGeometryMode(G_LIGHTING),
+    gsSPEndDisplayList(),
+};
+
 // 0x06000A78
 static const Vtx skeeter_seg6_vertex_06000A78[] = {
     {{{   -14,     15,      0}, 0, {     0,      0}, {0xff, 0x55, 0x00, 0xff}}},
@@ -93,6 +126,16 @@ static const Vtx skeeter_seg6_vertex_06000A78[] = {
 // 0x06000AB8 - 0x06000AF0
 const Gfx skeeter_seg6_dl_06000AB8[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, skeeter_seg6_texture_06000090),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPVertex(skeeter_seg6_vertex_06000A78, 4, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
+    gsSPEndDisplayList(),
+};
+
+// 0x06000AB8 - 0x06000AF0
+const Gfx skeeter_seg6_dl_06000AB8_fast[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, skeeter_seg6_texture_06000090_fast),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(skeeter_seg6_vertex_06000A78, 4, 0),
@@ -118,6 +161,24 @@ const Gfx skeeter_seg6_dl_06000AF0[] = {
     gsSPEndDisplayList(),
 };
 
+// 0x06000AF0 - 0x06000B60
+const Gfx skeeter_seg6_dl_06000AF0_fast[] = {
+    gsDPPipeSync(),
+    gsDPSetCombineMode(G_CC_MODULATERGBA, G_CC_MODULATERGBA),
+    gsSPClearGeometryMode(G_LIGHTING),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+    gsDPTileSync(),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
+    gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
+    gsSPDisplayList(skeeter_seg6_dl_06000AB8_fast),
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+    gsDPPipeSync(),
+    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
+    gsSPSetGeometryMode(G_LIGHTING),
+    gsSPEndDisplayList(),
+};
+
 // 0x06000B60
 static const Vtx skeeter_seg6_vertex_06000B60[] = {
     {{{   -17,     18,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
@@ -136,6 +197,16 @@ const Gfx skeeter_seg6_dl_06000BA0[] = {
     gsSPEndDisplayList(),
 };
 
+// 0x06000BA0 - 0x06000BD8
+const Gfx skeeter_seg6_dl_06000BA0_fast[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, skeeter_seg6_texture_06000090_fast),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPVertex(skeeter_seg6_vertex_06000B60, 4, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
+    gsSPEndDisplayList(),
+};
+
 // 0x06000BD8 - 0x06000C48
 const Gfx skeeter_seg6_dl_06000BD8[] = {
     gsDPPipeSync(),
@@ -147,6 +218,24 @@ const Gfx skeeter_seg6_dl_06000BD8[] = {
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
     gsSPDisplayList(skeeter_seg6_dl_06000BA0),
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+    gsDPPipeSync(),
+    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
+    gsSPSetGeometryMode(G_LIGHTING),
+    gsSPEndDisplayList(),
+};
+
+// 0x06000BD8 - 0x06000C48
+const Gfx skeeter_seg6_dl_06000BD8_fast[] = {
+    gsDPPipeSync(),
+    gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
+    gsSPClearGeometryMode(G_LIGHTING),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+    gsDPTileSync(),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
+    gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
+    gsSPDisplayList(skeeter_seg6_dl_06000BA0_fast),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

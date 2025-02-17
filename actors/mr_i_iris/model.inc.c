@@ -28,6 +28,26 @@ ALIGNED8 static const Texture mr_i_iris_seg6_texture_06003970[] = {
 #include "actors/mr_i_iris/mr_i_iris_closed.rgba16.inc.c"
 };
 
+// 0x06002170
+ALIGNED8 static const Texture mr_i_iris_seg6_texture_06002170_fast[] = {
+#include "actors/mr_i_iris/mr_i_iris_fast_open.rgba16.inc.c"
+};
+
+// 0x06002970
+ALIGNED8 static const Texture mr_i_iris_seg6_texture_06002970_fast[] = {
+#include "actors/mr_i_iris/mr_i_iris_fast_mostly_open.rgba16.inc.c"
+};
+
+// 0x06003170
+ALIGNED8 static const Texture mr_i_iris_seg6_texture_06003170_fast[] = {
+#include "actors/mr_i_iris/mr_i_iris_fast_mostly_closed.rgba16.inc.c"
+};
+
+// 0x06003970
+ALIGNED8 static const Texture mr_i_iris_seg6_texture_06003970_fast[] = {
+#include "actors/mr_i_iris/mr_i_iris_fast_closed.rgba16.inc.c"
+};
+
 // 0x06004170 - 0x060041D8
 const Gfx mr_i_iris_seg6_dl_06004170[] = {
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
@@ -51,10 +71,24 @@ const Gfx mr_i_iris_seg6_dl_060041D8[] = {
     gsSPBranchList(mr_i_iris_seg6_dl_06004170),
 };
 
+// 0x060041D8 - 0x060041F0
+const Gfx mr_i_iris_seg6_dl_060041D8_fast[] = {
+    gsDPPipeSync(),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mr_i_iris_seg6_texture_06002170_fast),
+    gsSPBranchList(mr_i_iris_seg6_dl_06004170),
+};
+
 // 0x060041F0 - 0x06004208
 const Gfx mr_i_iris_seg6_dl_060041F0[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mr_i_iris_seg6_texture_06002970),
+    gsSPBranchList(mr_i_iris_seg6_dl_06004170),
+};
+
+// 0x060041F0 - 0x06004208
+const Gfx mr_i_iris_seg6_dl_060041F0_fast[] = {
+    gsDPPipeSync(),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mr_i_iris_seg6_texture_06002970_fast),
     gsSPBranchList(mr_i_iris_seg6_dl_06004170),
 };
 
@@ -65,9 +99,23 @@ const Gfx mr_i_iris_seg6_dl_06004208[] = {
     gsSPBranchList(mr_i_iris_seg6_dl_06004170),
 };
 
+// 0x06004208 - 0x06004220
+const Gfx mr_i_iris_seg6_dl_06004208_fast[] = {
+    gsDPPipeSync(),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mr_i_iris_seg6_texture_06003170_fast),
+    gsSPBranchList(mr_i_iris_seg6_dl_06004170),
+};
+
 // 0x06004220 - 0x06004238
 const Gfx mr_i_iris_seg6_dl_06004220[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mr_i_iris_seg6_texture_06003970),
+    gsSPBranchList(mr_i_iris_seg6_dl_06004170),
+};
+
+// 0x06004220 - 0x06004238
+const Gfx mr_i_iris_seg6_dl_06004220_fast[] = {
+    gsDPPipeSync(),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mr_i_iris_seg6_texture_06003970_fast),
     gsSPBranchList(mr_i_iris_seg6_dl_06004170),
 };
