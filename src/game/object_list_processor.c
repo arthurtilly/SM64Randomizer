@@ -480,8 +480,6 @@ static ToadAllowedAreas sToadAllowedAreas[] = {
     { LEVEL_THI, 3, { 1, 2, 3 } },
     { LEVEL_TTC, 1, { 1 } },
     { LEVEL_RR, 1, { 1 } },
-    // { LEVEL_BITDW, 1, { 1 } },
-    // { LEVEL_BITFS, 1, { 1 } },
     { LEVEL_PSS, 1, { 1 } },
     { LEVEL_COTMC, 1, { 1 } },
     { LEVEL_TOTWC, 1, { 1 } },

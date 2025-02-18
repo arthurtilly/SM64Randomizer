@@ -622,7 +622,7 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
         switch (++m->actionTimer) {
             case 1:
                 celebStar = spawn_object(m->marioObj, MODEL_STAR, bhvCelebrationStar);
-                init_star_color(celebStar, gCurrCourseNum, gLastCompletedStarNum - 1);
+                init_star_color(celebStar, gLastCompletedCourseNum, gLastCompletedStarNum - 1);
 #ifdef STAR_DANCE_USES_STARS_MODEL
                 celebStar->header.gfx.sharedChild = m->interactObj->header.gfx.sharedChild;
 #else
