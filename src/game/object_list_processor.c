@@ -579,9 +579,9 @@ void spawn_toads() {
         tinymt32_init(&randomState, gRandomizerGameSeed + i);
         toadCourseIndex = (u8) get_val_in_range_uniform(0, ARRAY_COUNT(sToadAllowedAreas), &randomState);
         if (gCurrLevelNum == sToadAllowedAreas[toadCourseIndex].levelNum) {
-            toadAreaIndex = 1 + (u8) get_val_in_range_uniform(0, sToadAllowedAreas[toadCourseIndex].numAreas, &randomState);
+            toadAreaIndex = (u8) get_val_in_range_uniform(0, sToadAllowedAreas[toadCourseIndex].numAreas, &randomState);
 
-            if (gCurrAreaIndex == toadAreaIndex) {
+            if (gCurrAreaIndex == sToadAllowedAreas[toadCourseIndex].areas[toadAreaIndex]) {
                 object = spawn_object_in_area(MODEL_TOAD, bhvToadMessage, gCurrAreaIndex, gCurrAreaIndex);
                 object->oBehParams = sToadDialogs[i] << 24;
                 object->pointerSeed = i;
