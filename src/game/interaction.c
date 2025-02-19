@@ -830,7 +830,7 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
         starIndex = (obj->oBehParams >> 24) & 0x1F;
 #endif
         s16 courseNum = ((obj->oBehParams >> 24) & STAR_BP_FLAG_COURSE_NONE) ? COURSE_NONE : gCurrCourseNum;
-        u32 isNew = save_file_collect_star_or_key(gCurrCourseNum, m->numCoins, starIndex);
+        u32 isNew = save_file_collect_star_or_key(courseNum, m->numCoins, starIndex);
 
         m->numStars =
             save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1);

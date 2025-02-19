@@ -325,14 +325,19 @@ static u8 is_floor_safe(struct Surface *floor, u8 floorSafeLevel,
         return FALSE;
     }
 
-    slipperiness = find_floor_slipperiness(floor);
-    if ((randPosFlags & RAND_TYPE_SAFE) && (floorSafeLevel == FLOOR_SAFETY_HIGH)
-        && ((slipperiness == SURFACE_CLASS_SLIPPERY) || (slipperiness == SURFACE_CLASS_VERY_SLIPPERY))) {
+    if ((randPosFlags & RAND_TYPE_SAFE) && (floorSafeLevel == FLOOR_SAFETY_HIGH)) {
+        if ((gCurrentArea->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE && floor->normal.y <= COS1) {
+            return FALSE;
+        }
 
-        // This code kills some spawns, assuming the most slippery case. This code would
-        // probably be better to refactor based off slipperiness in general.
-        if (floor->normal.y <= 0.99f) {
-            return FALSE; // Don't spawn on slippery surfaces if you are a warp or safe object
+        slipperiness = find_floor_slipperiness(floor);
+        if ((slipperiness == SURFACE_CLASS_SLIPPERY) || (slipperiness == SURFACE_CLASS_VERY_SLIPPERY)) {
+            
+            // This code kills some spawns, assuming the most slippery case. This code would
+            // probably be better to refactor based off slipperiness in general.
+            if (floor->normal.y <= 0.99f) {
+                return FALSE; // Don't spawn on slippery surfaces if you are a warp or safe object
+            }
         }
     }
 

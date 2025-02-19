@@ -85,6 +85,7 @@ struct Object *spawn_object_rel_with_rot(struct Object *parent, ModelID32 model,
 struct Object *spawn_obj_with_transform_flags(struct Object *parent, ModelID32 model, const BehaviorScript *behavior);
 struct Object *spawn_water_droplet(struct Object *parent, struct WaterDropletParams *params);
 struct Object *spawn_object_at_origin(struct Object *parent, UNUSED s32 unusedArg, ModelID32 model, const BehaviorScript *behavior);
+struct Object *spawn_object_in_area(ModelID32 model, const BehaviorScript *behavior, s8 areaIndex, s8 activeAreaIndex);
 struct Object *spawn_object(struct Object *parent, ModelID32 model, const BehaviorScript *behavior);
 struct Object *try_to_spawn_object(s16 offsetY, f32 scale, struct Object *parent, ModelID32 model, const BehaviorScript *behavior);
 struct Object *spawn_object_with_scale(struct Object *parent, ModelID32 model, const BehaviorScript *behavior, f32 scale);

@@ -413,6 +413,18 @@ struct Object *spawn_object_at_origin(struct Object *parent, UNUSED s32 unusedAr
     return obj;
 }
 
+struct Object *spawn_object_in_area(ModelID32 model, const BehaviorScript *behavior, s8 areaIndex, s8 activeAreaIndex) {
+    const BehaviorScript *behaviorAddr = segmented_to_virtual(behavior);
+    struct Object *obj = create_object(behaviorAddr);
+
+    obj->header.gfx.areaIndex = areaIndex;
+    obj->header.gfx.activeAreaIndex = areaIndex;
+
+    geo_obj_init((struct GraphNodeObject *) &obj->header.gfx, gLoadedGraphNodes[model], gVec3fZero, gVec3sZero);
+
+    return obj;
+}
+
 struct Object *spawn_object(struct Object *parent, ModelID32 model, const BehaviorScript *behavior) {
     struct Object *obj = spawn_object_at_origin(parent, 0, model, behavior);
 

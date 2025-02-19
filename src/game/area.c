@@ -249,6 +249,9 @@ void load_area(s32 index) {
 
         if (gCurrentArea->objectSpawnInfos != NULL) {
             spawn_objects_from_info(0, gCurrentArea->objectSpawnInfos);
+            if (gCurrentArea->objectSpawnInfos[0].behaviorScript != bhvActSelector) {
+                spawn_toads();
+            }
         }
 
         load_obj_warp_nodes();

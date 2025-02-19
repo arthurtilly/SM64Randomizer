@@ -459,34 +459,32 @@ void unload_objects_from_area(UNUSED s32 unused, s32 areaIndex) {
 }
 
 typedef struct ToadAllowedAreas {
-    s16 courseNum;
+    s16 levelNum;
     s16 numAreas;
     s16 areas[4];
 } ToadAllowedAreas;
 
 static ToadAllowedAreas sToadAllowedAreas[] = {
-    { COURSE_BOB, 1, { 1 } },
-    { COURSE_WF, 1, { 1 } },
-    { COURSE_JRB, 1, { 1 } },
-    { COURSE_CCM, 2, { 1, 2 } },
-    { COURSE_BBH, 1, { 1 } },
-    { COURSE_HMC, 1, { 1 } },
-    { COURSE_LLL, 2, { 1, 2 } },
-    { COURSE_SSL, 3, { 1, 2, 3 } },
-    { COURSE_DDD, 1, { 2 } },
-    { COURSE_SL, 2, { 1, 2 } },
-    { COURSE_WDW, 2, { 1, 2 } },
-    { COURSE_TTM, 1, { 1 } },
-    { COURSE_THI, 3, { 1, 2, 3 } },
-    { COURSE_TTC, 1, { 1 } },
-    { COURSE_RR, 1, { 1 } },
-    { COURSE_BITDW, 1, { 1 } },
-    { COURSE_BITFS, 1, { 1 } },
-    { COURSE_PSS, 1, { 1 } },
-    { COURSE_COTMC, 1, { 1 } },
-    { COURSE_TOTWC, 1, { 1 } },
-    { COURSE_VCUTM, 1, { 1 } },
-    { COURSE_WMOTR, 1, { 1 } },
+    { LEVEL_BOB, 1, { 1 } },
+    { LEVEL_WF, 1, { 1 } },
+    { LEVEL_JRB, 1, { 1 } },
+    { LEVEL_CCM, 2, { 1, 2 } },
+    { LEVEL_BBH, 1, { 1 } },
+    { LEVEL_HMC, 1, { 1 } },
+    { LEVEL_LLL, 2, { 1, 2 } },
+    { LEVEL_SSL, 3, { 1, 2, 3 } },
+    { LEVEL_DDD, 1, { 2 } },
+    { LEVEL_SL, 2, { 1, 2 } },
+    { LEVEL_WDW, 2, { 1, 2 } },
+    { LEVEL_TTM, 1, { 1 } },
+    { LEVEL_THI, 3, { 1, 2, 3 } },
+    { LEVEL_TTC, 1, { 1 } },
+    { LEVEL_RR, 1, { 1 } },
+    { LEVEL_PSS, 1, { 1 } },
+    { LEVEL_COTMC, 1, { 1 } },
+    { LEVEL_TOTWC, 1, { 1 } },
+    { LEVEL_VCUTM, 1, { 1 } },
+    { LEVEL_WMOTR, 1, { 1 } },
 };
 
 static u8 sToadDialogs[] = {
@@ -569,24 +567,24 @@ void spawn_objects_from_info(UNUSED s32 unused, struct SpawnInfo *spawnInfo) {
 
         spawnInfo = spawnInfo->next;
     }
+}
 
-    if (gMarioObject) {
-        for (int i = 0; i < 3; i++) {
-            tinymt32_t randomState;
-            u8 toadCourseIndex;
-            u8 toadAreaIndex;
-            struct Object *object;
+void spawn_toads() {
+    for (int i = 0; i < 3; i++) {
+        tinymt32_t randomState;
+        u8 toadCourseIndex;
+        u8 toadAreaIndex;
+        struct Object *object;
 
-            tinymt32_init(&randomState, gRandomizerGameSeed + i);
-            toadCourseIndex = (u8) get_val_in_range_uniform(0, ARRAY_COUNT(sToadAllowedAreas), &randomState);
-            if (gCurrCourseNum == sToadAllowedAreas[toadCourseIndex].courseNum) {
-                toadAreaIndex = 1 + (u8) get_val_in_range_uniform(0, sToadAllowedAreas[toadCourseIndex].numAreas, &randomState);
+        tinymt32_init(&randomState, gRandomizerGameSeed + i);
+        toadCourseIndex = (u8) get_val_in_range_uniform(0, ARRAY_COUNT(sToadAllowedAreas), &randomState);
+        if (gCurrLevelNum == sToadAllowedAreas[toadCourseIndex].levelNum) {
+            toadAreaIndex = (u8) get_val_in_range_uniform(0, sToadAllowedAreas[toadCourseIndex].numAreas, &randomState);
 
-                if (gCurrAreaIndex == toadAreaIndex) {
-                    object = spawn_object(gMarioObject, MODEL_TOAD, bhvToadMessage);
-                    object->oBehParams = sToadDialogs[i] << 24;
-                    object->pointerSeed = i;
-                }
+            if (gCurrAreaIndex == sToadAllowedAreas[toadCourseIndex].areas[toadAreaIndex]) {
+                object = spawn_object_in_area(MODEL_TOAD, bhvToadMessage, gCurrAreaIndex, gCurrAreaIndex);
+                object->oBehParams = sToadDialogs[i] << 24;
+                object->pointerSeed = i;
             }
         }
     }
