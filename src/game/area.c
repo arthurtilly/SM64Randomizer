@@ -249,7 +249,7 @@ void load_area(s32 index) {
 
         if (gCurrentArea->objectSpawnInfos != NULL) {
             spawn_objects_from_info(0, gCurrentArea->objectSpawnInfos);
-            if (gCurrentArea->objectSpawnInfos[0].behaviorScript != bhvActSelector) {
+            if (gCurrentArea->objectSpawnInfos[0].behaviorScript != bhvActSelector && gCurrentArea->objectSpawnInfos[0].behaviorScript != bhvYellowBackgroundInMenu) {
                 spawn_toads();
             }
         }
