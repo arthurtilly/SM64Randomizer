@@ -412,7 +412,7 @@ static s32 bhv_cmd_randomize_object(void) {
                 gCurBhvCommand++;
                 return BHV_PROC_CONTINUE;
             }
-        } else if (gCurrentObject->behavior == segmented_to_virtual(bhvRedCoin)) {
+        } else if (gCurrentObject->behavior == segmented_to_virtual(bhvRedCoin) && gCurrLevelNum != LEVEL_SA) {
             f32 rand = tinymt32_generate_float(&randomState);
             f32 chance = gOptionsSettings.gameplay.s.safeSpawns == SPAWN_SAFETY_HARD ? (1 / 50.f) : (1 / 200.f);
             if (HARDCORE_IRONMARIO) chance = (1/25.f); // double chance
