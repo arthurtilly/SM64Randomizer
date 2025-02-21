@@ -465,6 +465,15 @@ ALIGNED8 const Texture texture_menu_hud_badge_100[] = {
 ALIGNED8 const Texture texture_menu_hud_badge_120[] = {
     #include "levels/menu/badge_120.rgba16.inc.c"
 };
+ALIGNED8 const Texture texture_menu_hud_badge_h70[] = {
+    #include "levels/menu/badge_h70.rgba16.inc.c"
+};
+ALIGNED8 const Texture texture_menu_hud_badge_h100[] = {
+    #include "levels/menu/badge_h100.rgba16.inc.c"
+};
+ALIGNED8 const Texture texture_menu_hud_badge_h120[] = {
+    #include "levels/menu/badge_h120.rgba16.inc.c"
+};
 
 // 0x070073D0
 ALIGNED8 static const Texture texture_menu_hud_char_katakana_hu[] = {

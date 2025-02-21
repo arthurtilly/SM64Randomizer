@@ -1705,9 +1705,9 @@ const Texture *badge_textures[] = {
     texture_menu_hud_badge_70,
     texture_menu_hud_badge_100,
     texture_menu_hud_badge_120,
-    texture_menu_hud_badge_70,
-    texture_menu_hud_badge_100,
-    texture_menu_hud_badge_120
+    texture_menu_hud_badge_h70,
+    texture_menu_hud_badge_h100,
+    texture_menu_hud_badge_h120
 };
 
 /**

@@ -32,6 +32,9 @@ extern f32 intro_seg7_table_scale_2[];
 extern const Texture texture_menu_hud_badge_70[];
 extern const Texture texture_menu_hud_badge_100[];
 extern const Texture texture_menu_hud_badge_120[];
+extern const Texture texture_menu_hud_badge_h70[];
+extern const Texture texture_menu_hud_badge_h100[];
+extern const Texture texture_menu_hud_badge_h120[];
 
 #include "levels/intro/new_title_screen/header.h"
 
