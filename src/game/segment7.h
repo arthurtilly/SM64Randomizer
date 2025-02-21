@@ -29,6 +29,10 @@ extern Gfx *intro_seg7_dl_copyright_trademark;
 extern f32 intro_seg7_table_scale_1[];
 extern f32 intro_seg7_table_scale_2[];
 
+extern const Texture texture_menu_hud_badge_70[];
+extern const Texture texture_menu_hud_badge_100[];
+extern const Texture texture_menu_hud_badge_120[];
+
 #include "levels/intro/new_title_screen/header.h"
 
 #endif // SEGMENT7_H

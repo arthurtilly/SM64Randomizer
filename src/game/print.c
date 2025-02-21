@@ -412,6 +412,13 @@ void render_textrect(s32 x, s32 y, s32 pos) {
                         (rectY + 15) << 2, G_TX_RENDERTILE, 0, 0, 4 << 10, 1 << 10);
 }
 
+void render_textrect_24(s32 x, s32 y) {
+    y = 224 - y;
+
+    gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x + 23) << 2,
+                        (y + 23) << 2, G_TX_RENDERTILE, 0, 0, 4 << 10, 1 << 10);
+}
+
 /**
  * Renders the text in sTextLabels on screen at the proper locations by iterating
  * a for loop.

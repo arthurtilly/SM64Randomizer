@@ -39,11 +39,8 @@ struct SaveFile {
     struct OptionsSettings options;
     // Vec3s capPos;
 
-
     u32 flags;
     u32 lockedCourses;
-
-    u32 padding;
 
     // Star flags for each course.
     // The most significant bit of the byte *following* each course is set if the
@@ -51,6 +48,8 @@ struct SaveFile {
     u8 courseStars[COURSE_COUNT]; // 200 bits
 
     u8 courseCoinScores[COURSE_STAGES_COUNT]; // 120 bits
+
+    u32 pad;
 
     struct SaveBlockSignature signature; // 32 bits
 };
@@ -71,30 +70,21 @@ struct MainMenuSaveData {
 
     // To increase randomization between loads.
     u32 randomNum;
+
     struct OptionsSettings defaultPreset;
-    u8 soundMode: 2;
-#ifdef WIDE
-    u8 wideMode: 1;
-#endif
+    u8 clearedModes;
+    u8 soundMode:2;
 
-#if MULTILANG
-    u8 language: 2;
-#endif
-    u8 firstBoot;
+    u32 pad;
 
-    #ifdef PUPPYCAM
-    struct gPuppyOptions saveOptions;
-    #endif
-
-    u32 padding;
     struct SaveBlockSignature signature;
 };
 
 struct SaveBuffer {
-    // Each of the four save files has two copies. If one is bad, the other is used as a backup.
-    struct SaveFile files[NUM_SAVE_FILES];
     // Main menu data, storing config options.
     struct MainMenuSaveData menuData;
+    // Save files
+    struct SaveFile files[NUM_SAVE_FILES];
 };
 
 #ifdef PUPPYCAM

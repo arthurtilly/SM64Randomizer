@@ -2172,6 +2172,16 @@ const Gfx dl_hud_img_load_tex_block[] = {
     gsSPEndDisplayList(),
 };
 
+// 0x0200EC98 - 0x0200ECC8
+const Gfx dl_hud_img_load_tex_block_24[] = {
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, 0, 0, 0, 0, 0, 0),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, ((24 * 24) - 1), CALC_DXT(24, G_IM_SIZ_16b_BYTES)),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 6, 0, G_TX_RENDERTILE, 0, 0, 0, 0, 0, 0, 0),
+    gsDPSetTileSize(0, 0, 0, ((24-1) << G_TEXTURE_IMAGE_FRAC),((24-1) << G_TEXTURE_IMAGE_FRAC)),
+    gsSPEndDisplayList(),
+};
+
 // 0x0200ECC8 - 0x0200ED00
 const Gfx dl_hud_img_end[] = {
     gsDPPipeSync(),

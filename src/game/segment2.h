@@ -46,6 +46,7 @@ extern s16 seg2_painting_triangle_mesh[];
 extern s16 seg2_painting_mesh_neighbor_tris[];
 extern Texture *main_hud_lut[58];
 extern Gfx dl_hud_img_load_tex_block[];
+extern Gfx dl_hud_img_load_tex_block_24[];
 extern Gfx dl_hud_img_begin[];
 extern Gfx dl_hud_img_end[];
 extern void *main_font_lut[];

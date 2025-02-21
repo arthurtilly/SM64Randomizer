@@ -455,6 +455,17 @@ const Gfx dl_menu_grabbing_hand[] = {
     gsSPBranchList(dl_menu_hand),
 };
 
+
+ALIGNED8 const Texture texture_menu_hud_badge_70[] = {
+    #include "levels/menu/badge_70.rgba16.inc.c"
+};
+ALIGNED8 const Texture texture_menu_hud_badge_100[] = {
+    #include "levels/menu/badge_100.rgba16.inc.c"
+};
+ALIGNED8 const Texture texture_menu_hud_badge_120[] = {
+    #include "levels/menu/badge_120.rgba16.inc.c"
+};
+
 // 0x070073D0
 ALIGNED8 static const Texture texture_menu_hud_char_katakana_hu[] = {
 #include "levels/menu/main_menu_seg7.073D0.rgba16.inc.c"
