@@ -1106,7 +1106,7 @@ s32 play_mode_normal(void) {
         } else if (sTransitionTimer != 0) {
             set_play_mode(PLAY_MODE_CHANGE_AREA);
         } else if (pressed_pause()) {
-            lower_background_noise(1);
+            lower_background_noise(2);
 #if ENABLE_RUMBLE
             cancel_rumble();
 #endif

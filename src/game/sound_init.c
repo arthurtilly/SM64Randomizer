@@ -90,7 +90,7 @@ void reset_volume(void) {
 void lower_background_noise(s32 a) {
     switch (a) {
         case 1:
-            set_audio_muted(TRUE);
+            //set_audio_muted(TRUE);
             break;
         case 2:
             seq_player_lower_volume(SEQ_PLAYER_LEVEL, 60, 40);

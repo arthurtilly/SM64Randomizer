@@ -1998,6 +1998,7 @@ s32 render_pause_courses_and_castle(void) {
 #endif
 
     print_seed_and_options_data();
+    print_music();
 
     if (gDialogTextAlpha < 250) {
         gDialogTextAlpha += 25;
@@ -2219,6 +2220,7 @@ s32 render_course_complete_screen(void) {
         case DIALOG_STATE_VERTICAL:
             shade_screen();
             print_seed_and_options_data();
+            print_music();
             render_course_complete_lvl_info_and_hud_str();
             render_save_confirmation(100, 86, &gDialogLineNum, 20);
 
