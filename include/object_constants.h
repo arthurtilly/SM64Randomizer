@@ -2546,10 +2546,12 @@ enum animIDsFirePiranhaPlant {
     #define MIPS_BP_STAR_2                                  0x1
     /* oAction */
     #define MIPS_ACT_WAIT_FOR_NEARBY_MARIO                  0x0
-    #define MIPS_ACT_FOLLOW_PATH                            0x1
+    #define MIPS_ACT_RUN                                    0x1
     #define MIPS_ACT_WAIT_FOR_ANIMATION_DONE                0x2
     #define MIPS_ACT_FALL_DOWN                              0x3
     #define MIPS_ACT_IDLE                                   0x4
+    #define MIPS_ACT_RETURN_TO_SAFE_GROUND                  0x5
+    #define MIPS_ACT_WAIT_TO_RESPAWN                        0x6
     /* oMipsStarStatus */
     #define MIPS_STAR_STATUS_HAVENT_SPAWNED_STAR            0x0
     #define MIPS_STAR_STATUS_SHOULD_SPAWN_STAR              0x1

@@ -143,3 +143,7 @@ UNUSED static const u64 binid_18 = 18;
 #include "toad/anims/data.inc.c"
 #include "toad/anims/table.inc.c"
 
+#include "mips/model.inc.c"
+#include "mips/anims/data.inc.c"
+#include "mips/anims/table.inc.c"
+

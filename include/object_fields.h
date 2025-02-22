@@ -759,7 +759,10 @@
 /* Mips */
 #define /*0x0F4*/ oMipsStarStatus         OBJECT_FIELD_S32(0x1B)
 #define /*0x0F8*/ oMipsStartWaypointIndex OBJECT_FIELD_S32(0x1C)
- // 0x1D-0x21 reserved for pathing
+#define /*0x0FC*/ oMipsSafeFloorVec       OBJECT_FIELD_F32(0x1D)
+#define /*0x0FC*/ oMipsSafeFloorX         OBJECT_FIELD_F32(0x1D)
+#define /*0x100*/ oMipsSafeFloorY         OBJECT_FIELD_F32(0x1E)
+#define /*0x104*/ oMipsSafeFloorZ         OBJECT_FIELD_F32(0x1F)
 #define /*0x1AC*/ oMipsForwardVelocity    OBJECT_FIELD_F32(0x49)
 
 /* Moneybag */
