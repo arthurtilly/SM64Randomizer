@@ -3256,7 +3256,9 @@ void init_camera(struct Camera *c) {
             start_cutscene(c, CUTSCENE_ENTER_BOWSER_ARENA);
             break;
         case LEVEL_BOWSER_3:
+#ifndef BOWSER_3_TEST
             start_cutscene(c, CUTSCENE_ENTER_BOWSER_ARENA);
+#endif
             break;
 
 #ifdef ENABLE_VANILLA_CAM_PROCESSING

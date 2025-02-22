@@ -1815,9 +1815,11 @@ void print_main_menu_strings(void) {
 #define BADGE_Y (SCREEN_HEIGHT - 23)
 
     for (int i = 0; i < 6; i++) {
-        gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, badge_textures[i]);
-        gSPDisplayList(gDisplayListHead++, dl_hud_img_load_tex_block_24);
-        render_textrect_24(BADGE_START_X + i*BADGE_XOFF,BADGE_Y);
+        if (gSaveBuffer.menuData.clearedModes & (1 << i)) {
+            gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, badge_textures[i]);
+            gSPDisplayList(gDisplayListHead++, dl_hud_img_load_tex_block_24);
+            render_textrect_24(BADGE_START_X + i*BADGE_XOFF,BADGE_Y);
+        }
     }
 
     gSPDisplayList(gDisplayListHead++, dl_hud_img_end);

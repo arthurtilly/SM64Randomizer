@@ -119,6 +119,14 @@ enum StarColors {
     STAR_COLOR_GLOBAL
 };
 
+enum RunState {
+    RUN_COMPLETE,
+    RUN_IS_SET_SEED,
+    RUN_NOT_PRESET,
+    RUN_INVALID,
+    RUN_119,
+};
+
 extern s32 curPreset;
 extern struct OptionsSettings gOptionsSettings;
 extern struct OptionsSettings gPresets[6];

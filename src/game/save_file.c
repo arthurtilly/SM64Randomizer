@@ -727,6 +727,20 @@ void save_file_set_sound_mode(u16 mode) {
     save_main_menu_data();
 }
 
+u32 save_file_is_invalid() {
+    return gSaveBuffer.files[gCurrSaveFileNum - 1].runInvalid;
+}
+
+void save_file_ironmario_run_completed(s32 id) {
+    // awesome code, sets 70/100 if 120 was completed etc.
+    do {
+        gSaveBuffer.menuData.clearedModes |= 1 << id;
+    } while ((id--) % 3 != 0);
+
+    gMainMenuDataModified = TRUE;
+    save_main_menu_data();
+}
+
 #ifdef WIDE
 u32 save_file_get_widescreen_mode(void) {
     return gSaveBuffer.menuData.wideMode;

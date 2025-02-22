@@ -520,6 +520,17 @@ void print_generic_string_ascii(s16 x, s16 y, const char *str) {
     gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
 }
 
+s32 get_string_width_ascii(char *str) {
+    s16 strPos = 0;
+    s16 width = 0;
+
+    while (str[strPos] != 0) {
+        width += gDialogCharWidths[rando_ascii_lut[(u8)str[strPos]]];
+        strPos++;
+    }
+    return width;
+}
+
 
 /**
  * Prints a hud string depending of the hud table list defined.
@@ -2243,6 +2254,7 @@ s32 render_menus_and_dialogs(void) {
     if (gMarioState->action == ACT_JUMBO_STAR_CUTSCENE) {
         gDialogTextAlpha = 255;
         print_seed_and_options_data();
+        ironmario_display_end_of_run();
     } else if (gMenuMode != MENU_MODE_NONE) {
         switch (gMenuMode) {
             case MENU_MODE_UNUSED_0:

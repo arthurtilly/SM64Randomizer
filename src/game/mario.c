@@ -1716,6 +1716,12 @@ u8 sDemonTimer = 0;
 s32 execute_mario_action(UNUSED struct Object *obj) {
     s32 inLoop = TRUE;
 
+#ifdef BOWSER_3_TEST
+    if (gPlayer1Controller->buttonPressed & L_TRIG) {
+        initiate_warp(LEVEL_BOWSER_3, 1, 0x0A, 0);
+    }
+#endif
+
 #ifdef ENABLE_DEBUG_FREE_MOVE
     Vec3s posR;
     vec3f_to_vec3s(posR, gMarioState->pos);

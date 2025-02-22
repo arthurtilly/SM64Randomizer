@@ -20,6 +20,7 @@
 #include "save_file.h"
 #include "buffers/buffers.h"
 #include "segment2.h"
+#include "level_update.h"
 
 u32 gRandomizerGameSeed;
 u32 gRandomizerMarioSeed;
@@ -1221,4 +1222,71 @@ void set_coin_colors(void) {
 void set_rando_colors(void) {
     set_mario_colors();
     set_coin_colors();
+}
+
+u8 gIronmarioRunEnd;
+u8 gIronmarioPreset;
+
+void generic_text_shadow_center(u8 x, u8 y, char *str) {
+    x -= get_string_width_ascii(str) / 2;
+    gDPSetEnvColor(gDisplayListHead++, 0, 0, 0, gDialogTextAlpha);
+    print_generic_string_ascii(x + 1, y - 1, str);
+    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
+    print_generic_string_ascii(x, y, str);
+}
+
+void ironmario_display_end_of_run(void) {
+    gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
+
+    switch (gIronmarioRunEnd) {
+        case RUN_COMPLETE:
+            generic_text_shadow_center(160,190, "CONGRATULATIONS!");
+            char buf[64];
+            sprintf(buf, "%s complete", presetStrings[gIronmarioPreset]);
+            generic_text_shadow_center(160,175, buf);
+            break;
+        case RUN_IS_SET_SEED:
+            generic_text_shadow_center(160,190, "RUN INVALID!");
+            generic_text_shadow_center(160,175, "You must play on a random seed!");
+            break;
+        case RUN_NOT_PRESET:
+            generic_text_shadow_center(160,190, "RUN INVALID!");
+            generic_text_shadow_center(160,175, "Not a valid IronMario preset!");
+            break;
+        case RUN_INVALID:
+            generic_text_shadow_center(160,190, "RUN INVALID!");
+            generic_text_shadow_center(160,175, "Resetting or savestating is not allowed!");
+            break;
+        case RUN_119:
+            generic_text_shadow_center(160,190, "Nice try idiot.");
+            generic_text_shadow_center(160,175, "Did you really think you could just skip BitS reds.");
+            generic_text_shadow_center(160,160, "What a joker");
+            break;
+    }
+
+    gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
+}
+
+void ironmario_check_run_complete(void) {
+    if (gIsSetSeed) {
+        gIronmarioRunEnd = RUN_IS_SET_SEED; return;
+    }
+
+    if (save_file_is_invalid()) {
+        gIronmarioRunEnd = RUN_INVALID; return;
+    }
+
+    for (int i = 0; i < ARRAY_COUNT(gPresets); i++) {
+        if (gOptionsSettings.gameplay.w == gPresets[i].gameplay.w) {
+            if (IS_120_STAR && gMarioState->numStars < 120) {
+                gIronmarioRunEnd = RUN_119; return;
+            }
+            gIronmarioPreset = i;
+            gIronmarioRunEnd = RUN_COMPLETE;
+            save_file_ironmario_run_completed(i);
+            return;
+        }
+    }
+
+    gIronmarioRunEnd = RUN_NOT_PRESET;
 }

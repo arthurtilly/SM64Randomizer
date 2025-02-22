@@ -32,6 +32,8 @@ struct SaveFile {
     u8 capLevel;
     u8 capArea;
     s8 lastVisitedCourse;
+    u8 runInvalid:1; // Reset or savestate detected
+    u8 isInOverworld:1; // Reset detection
 
     // Note: the coordinates get set, but are never actually used, since the
     // cap can always be found in a fixed spot within the course
@@ -75,7 +77,7 @@ struct MainMenuSaveData {
     u8 clearedModes;
     u8 soundMode:2;
 
-    u32 pad;
+    u32 savestateTimer;
 
     struct SaveBlockSignature signature;
 };

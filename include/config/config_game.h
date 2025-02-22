@@ -82,3 +82,7 @@
 #define IS_120_STAR (gOptionsSettings.gameplay.s.starDoorRequirement == 12)
 
 #define CAP_SWITCH_THRESHOLD 100
+
+// This define allows to instantly warp to B3 and skip the bowser fight on pressing L trigger
+// MAKE SURE IT STAYS DISABLED
+// #define BOWSER_3_TEST
