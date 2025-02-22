@@ -104,7 +104,7 @@ void bhv_mips_act_wait_for_nearby_mario(void) {
     if (o->oDistanceToMario < 500.0f) {
         cur_obj_init_animation(1);
         o->oAction = MIPS_ACT_RUN;
-        o->oForwardVel = o->oMipsForwardVelocity;
+        o->oForwardVel = 10.0f;
         o->oMoveAngleYaw = o->oAngleToMario + 0x8000;
     } else if (o->oDistanceToMario > 1000.0f && !mips_is_safe_floor()) {
         f32 homeDistX = o->oMipsSafeFloorX - o->oPosX;
@@ -120,19 +120,28 @@ void bhv_mips_act_wait_for_nearby_mario(void) {
     }
 }
 
+static void mips_hard_turn(void) {
+    o->oForwardVel -= 20.0f;
+    if (o->oForwardVel < 10.0f) {
+        o->oForwardVel = 10.0f;
+    }
+}
+
 static u32 mips_avoid_walls_and_edges(void) {
     if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
         s16 angleDiff = abs_angle_diff(o->oMoveAngleYaw, o->oWallAngle);
         if (angleDiff > 0x4000) {
             if (angleDiff > 0x6000) {
                 o->oMoveAngleYaw = approach_angle(o->oWallAngle, o->oMoveAngleYaw, 0x8000 - angleDiff);
+                mips_hard_turn();
             } else {
                 o->oMoveAngleYaw = approach_angle(o->oWallAngle, o->oMoveAngleYaw, 0x4000);
             }
         }
         return TRUE;
     } else if (o->oMoveFlags & OBJ_MOVE_HIT_EDGE) {
-        for (s16 angle = 0x400; angle <= 0x4000; angle += 0x400) {
+        s16 angle;
+        for (angle = 0x400; angle <= 0x4000; angle += 0x400) {
             f32 dx, dz;
             f32 leftTurnFloorHeight, rightTurnFloorHeight;
 
@@ -150,11 +159,17 @@ static u32 mips_avoid_walls_and_edges(void) {
 
             if (leftTurnFloorHeight >= heightCheck && rightTurnFloorHeight >= heightCheck) {
                 o->oMoveAngleYaw += leftTurnFloorHeight > rightTurnFloorHeight ? angle : -angle;
+                break;
             } else if (leftTurnFloorHeight >= heightCheck) {
                 o->oMoveAngleYaw += angle;
+                break;
             } else if (rightTurnFloorHeight >= heightCheck) {
                 o->oMoveAngleYaw -= angle;
+                break;
             }
+        }
+        if (angle > 0x2000) {
+            mips_hard_turn();
         }
         return TRUE;
     }
@@ -173,6 +188,8 @@ static void mips_run_sound(void) {
 }
 
 void bhv_mips_act_run(void) {
+    cur_obj_forward_vel_approach_upward(o->oMipsForwardVelocity, 2.0f);
+
     if (mips_is_safe_floor()) {
         vec3f_copy(&o->oMipsSafeFloorVec, &o->oPosVec);
     }
