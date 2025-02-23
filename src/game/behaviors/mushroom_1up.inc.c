@@ -9,6 +9,7 @@ void bhv_1up_interact(void) {
             if (gMarioState->action & ACT_FLAG_INTANGIBLE) {
                 return;
             } else {
+                save_file_erase(gCurrSaveFileNum - 1);
                 gMarioState->health = 0xFF;
             }
         } else {

@@ -1562,6 +1562,7 @@ s32 act_squished(struct MarioState *m) {
     if (m->actionArg++ > 300) {
         // 0 units of health
         m->health = 0x00FF;
+        save_file_erase(gCurrSaveFileNum - 1);
         m->hurtCounter = 0;
         level_trigger_warp(m, WARP_OP_DEATH);
         // woosh, he's gone!
