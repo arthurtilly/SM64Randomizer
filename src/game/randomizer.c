@@ -38,7 +38,7 @@ struct OptionsSettings gOptionsSettings;
 
 #include "randomizer_data.h"
 
-u8 gRandomSongs[135] = { SEQ_MENU_TITLE_SCREEN, SEQ_LEVEL_GRASS,          SEQ_LEVEL_INSIDE_CASTLE,    SEQ_LEVEL_WATER,
+u8 gRandomSongs[148] = { SEQ_MENU_TITLE_SCREEN, SEQ_LEVEL_GRASS,          SEQ_LEVEL_INSIDE_CASTLE,    SEQ_LEVEL_WATER,
                       SEQ_LEVEL_HOT,         SEQ_LEVEL_BOSS_KOOPA,     SEQ_LEVEL_SNOW,             SEQ_LEVEL_SLIDE,
                       SEQ_LEVEL_SPOOKY,      SEQ_LEVEL_UNDERGROUND, 
                       SEQ_LEVEL_KOOPA_ROAD,     SEQ_EVENT_MERRY_GO_ROUND,   SEQ_EVENT_BOSS,
@@ -163,6 +163,19 @@ u8 gRandomSongs[135] = { SEQ_MENU_TITLE_SCREEN, SEQ_LEVEL_GRASS,          SEQ_LE
     SEQ_LEVEL_97,
     SEQ_LEVEL_98,
     SEQ_LEVEL_99,
+    SEQ_LEVEL_9A,
+    SEQ_LEVEL_9B,
+    SEQ_LEVEL_9C,
+    SEQ_LEVEL_9D,
+    SEQ_LEVEL_9E,
+    SEQ_LEVEL_9F,
+    SEQ_LEVEL_A0,
+    SEQ_LEVEL_A1,
+    SEQ_LEVEL_A2,
+    SEQ_LEVEL_A3,
+    SEQ_LEVEL_A4,
+    SEQ_LEVEL_A5,
+    SEQ_LEVEL_A6,
 };
 
 struct nodeInfo gLevelWarps[] = {
@@ -1339,7 +1352,7 @@ char *songlist[] = {
     "Earthbound - Onett",
     "TLoZ: Ocarina of Time - Gerudo Valley",
     "Pokemon Shuffle - Stage (Hard)",
-    "Inside the Castle Walls Remix",
+    "Banjo-Kazooie - Gruntilda's Lair",
     "Kirby: Nightmare in Dream Land - Butter Building",
     "Kirby 64: The Crystal Shards - Shiver Star",
     "Kirby's Adventure - Yogurt Yard",
@@ -1428,7 +1441,7 @@ char *songlist[] = {
     "Paper Mario: The Thousand-Year Door - Riddle Tower",
     "Paper Mario: The Thousand-Year Door - Rogueport Sewers",
     "Super Mario Galaxy 2 - Honeybloom Galaxy",
-    "Pokémon Mystery Dungeon - Sky Tower",
+    "Pokemon Mystery Dungeon - Sky Tower",
     "Super Mario Bros. 3 - Overworld",
     "Super Mario RPG - Mario's Pad",
     "Super Mario RPG - Sunken Ship",
@@ -1441,7 +1454,21 @@ char *songlist[] = {
     "Donkey Kong 64 - Gloomy Galleon",
     "Mario Kart 64 - Bowser's Castle",
     "Mario Kart 64 - Rainbow Road",
+    "Banjo-Kazooie - Mumbo's Mountain",
+    "Donkey Kong Country 2 - Jib Jig",
+    "Donkey Kong Country 2 - Welcome to Crocodile Isle",
+    "TLoZ: The Wind Waker - Dragon Roost Island",
+    "Pokemon Black and White - Accumula Town",
+    "Pokemon HeartGold and SoulSilver - Vermilion City",
+    "Undertale - Snowdin Town",
+    "Undertale - Bonetrousle",
+    "Undertale - Death by Glamour",
+    "Undertale - Home",
+    "Undertale - Ruins",
+    "Undertale - Spider Dance",
+    "Undertale - Waterfall"
 };
+
 
 extern u8 sCurrentBackgroundMusicSeqId;
 void print_music(void) {

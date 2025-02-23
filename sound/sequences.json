@@ -52,7 +52,7 @@
     "31_Earthbound_Onett": ["22"],
     "32_Gerudo_Valley_OoT": ["11"],
     "33_HardPuzzle": ["25"],
-    "34_Inside_the_Castle_Walls_remix": ["25"],
+    "34_bk_gruntildas_lair": ["1A"],
     "35_Kirby_Nightmare_in_Dreamland_Butter_Building": ["25"],
     "36_Kirby_64_The_Crystal_Shards_Shiver_Star": ["25"],
     "37_Kirbys_Adventure_Yogurt_Yard": ["25"],
@@ -153,5 +153,18 @@
 	"96_frappe_snowland": ["25"],
 	"97_dk64_gloomy_galleon": ["25"],
 	"98_mk64_bowsers_castle": ["19"],
-	"99_mk64_rainbow_road": ["11"]
+	"99_mk64_rainbow_road": ["11"],
+    "9A_bk_mumbos_mountain": ["25"],
+    "9B_dkc2_jib_jig":["25"],
+    "9C_dkc2_welcome_to_crocodile_island":["25"],
+    "9D_ww_dragon_roost_island":["25"],
+    "9E_pokemon_b_w_accumula_town":["25"],
+    "9F_pokemon_hgss_vermillion_city":["25"],
+    "A0_undertale_snowdin_town":["25"],
+    "A1_undertale_bonetrousle":["25"],
+    "A2_undertale_death_by_glamour":["25"],
+    "A3_undertale_home":["0C"],
+    "A4_undertale_ruins":["25"],
+    "A5_undertale_spider_dance":["11"],
+    "A6_undertale_waterfall":["13"]
 }

@@ -86,3 +86,5 @@
 // This define allows to instantly warp to B3 and skip the bowser fight on pressing L trigger
 // MAKE SURE IT STAYS DISABLED
 // #define BOWSER_3_TEST
+
+// #define JUKEBOX_TEST
