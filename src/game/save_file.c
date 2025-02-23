@@ -649,8 +649,8 @@ extern u8 gOverwriteFileSeed;
 
 void save_file_set_seed_and_options(s32 fileNum) {
     struct SaveFile *saveFile = &gSaveBuffer.files[fileNum - 1];
-    u8 overwriteOptions = gOverwriteFileOptions;
-    u8 overwriteSeed = gOverwriteFileSeed;
+    u8 overwriteOptions = FALSE; //gOverwriteFileOptions;
+    u8 overwriteSeed = FALSE; //gOverwriteFileSeed;
 
     // New file, set the file's seed to the one picked.
     if (!(saveFile->flags & SAVE_FLAG_FILE_EXISTS)){
