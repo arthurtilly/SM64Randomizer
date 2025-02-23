@@ -47,3 +47,4 @@
 #include "bubba/geo.inc.c"
 
 #include "toad/geo.inc.c"
+#include "mips/geo.inc.c"

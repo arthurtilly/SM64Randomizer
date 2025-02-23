@@ -313,7 +313,7 @@ const LevelScript level_castle_inside_entry[] = {
         OBJECT(/*model*/ MODEL_CASTLE_WATER_LEVEL_PILLAR, /*pos*/  7066, -1178,  -819, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvWaterLevelPillar),
         OBJECT(/*model*/ MODEL_CASTLE_WATER_LEVEL_PILLAR, /*pos*/  7066, -1178,  -205, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvWaterLevelPillar),
         OBJECT(/*model*/ MODEL_NONE,                      /*pos*/     0,     0,     0, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvDddWarp),
-        OBJECT(/*model*/ MODEL_MIPS,                      /*pos*/ -1509, -1177, -1564, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvMips),
+        // OBJECT(/*model*/ MODEL_MIPS,                      /*pos*/ -1509, -1177, -1564, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvMips),
         OBJECT(/*model*/ MODEL_CASTLE_WOODEN_DOOR,        /*pos*/ -3097, -1279,  1434, /*angle*/ 0,   0, 0, /*behParam*/ DOOR_PARAM(STAR_REQ_BASEMENT), /*beh*/ bhvDoor),
         OBJECT(/*model*/ MODEL_CASTLE_DOOR_0_STARS,       /*pos*/  1126, -1074, -2661, /*angle*/ 0, 270, 0, /*behParam*/ DOOR_PARAM(STAR_REQ_HMC),      /*beh*/ bhvDoor),
         OBJECT(/*model*/ MODEL_CASTLE_WOODEN_DOOR,        /*pos*/   717, -1177,  -869, /*angle*/ 0, 270, 0, /*behParam*/ DOOR_PARAM(STAR_REQ_BASEMENT), /*beh*/ bhvDoor),

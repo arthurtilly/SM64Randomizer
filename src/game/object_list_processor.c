@@ -458,41 +458,6 @@ void unload_objects_from_area(UNUSED s32 unused, s32 areaIndex) {
     }
 }
 
-typedef struct ToadAllowedAreas {
-    s16 levelNum;
-    s16 numAreas;
-    s16 areas[4];
-} ToadAllowedAreas;
-
-static ToadAllowedAreas sToadAllowedAreas[] = {
-    { LEVEL_BOB, 1, { 1 } },
-    { LEVEL_WF, 1, { 1 } },
-    { LEVEL_JRB, 1, { 1 } },
-    { LEVEL_CCM, 2, { 1, 2 } },
-    { LEVEL_BBH, 1, { 1 } },
-    { LEVEL_HMC, 1, { 1 } },
-    { LEVEL_LLL, 2, { 1, 2 } },
-    { LEVEL_SSL, 3, { 1, 2, 3 } },
-    { LEVEL_DDD, 1, { 2 } },
-    { LEVEL_SL, 2, { 1, 2 } },
-    { LEVEL_WDW, 2, { 1, 2 } },
-    { LEVEL_TTM, 1, { 1 } },
-    { LEVEL_THI, 3, { 1, 2, 3 } },
-    { LEVEL_TTC, 1, { 1 } },
-    { LEVEL_RR, 1, { 1 } },
-    { LEVEL_PSS, 1, { 1 } },
-    { LEVEL_COTMC, 1, { 1 } },
-    { LEVEL_TOTWC, 1, { 1 } },
-    { LEVEL_VCUTM, 1, { 1 } },
-    { LEVEL_WMOTR, 1, { 1 } },
-};
-
-static u8 sToadDialogs[] = {
-    TOAD_STAR_1_DIALOG,
-    TOAD_STAR_2_DIALOG,
-    TOAD_STAR_3_DIALOG,
-};
-
 /**
  * Spawn objects given a list of SpawnInfos. Called when loading an area.
  */
@@ -569,21 +534,69 @@ void spawn_objects_from_info(UNUSED s32 unused, struct SpawnInfo *spawnInfo) {
     }
 }
 
+typedef struct ExtraSpawnAllowedAreas {
+    s16 levelNum;
+    s16 numAreas;
+    s16 areas[4];
+} ExtraSpawnAllowedAreas;
+
+static ExtraSpawnAllowedAreas sExtraSpawnAllowedAreas[] = {
+    { LEVEL_BOB, 1, { 1 } },
+    { LEVEL_WF, 1, { 1 } },
+    { LEVEL_JRB, 1, { 1 } },
+    { LEVEL_CCM, 2, { 1, 2 } },
+    { LEVEL_BBH, 1, { 1 } },
+    { LEVEL_HMC, 1, { 1 } },
+    { LEVEL_LLL, 2, { 1, 2 } },
+    { LEVEL_SSL, 3, { 1, 2, 3 } },
+    { LEVEL_DDD, 1, { 2 } },
+    { LEVEL_SL, 2, { 1, 2 } },
+    { LEVEL_WDW, 2, { 1, 2 } },
+    { LEVEL_TTM, 1, { 1 } },
+    { LEVEL_THI, 3, { 1, 2, 3 } },
+    { LEVEL_TTC, 1, { 1 } },
+    { LEVEL_RR, 1, { 1 } },
+    { LEVEL_PSS, 1, { 1 } },
+    { LEVEL_COTMC, 1, { 1 } },
+    { LEVEL_TOTWC, 1, { 1 } },
+    { LEVEL_VCUTM, 1, { 1 } },
+    { LEVEL_WMOTR, 1, { 1 } },
+};
+
+typedef struct ExtraSpawns {
+    const ModelID32 model;
+    const BehaviorScript *bhvScript;
+    const s32 behParams;
+} ExtraSpawns;
+
+static ExtraSpawns sExtraSpawns[] = {
+    { MODEL_TOAD, bhvToadMessage, TOAD_STAR_1_DIALOG << 24 },
+    { MODEL_TOAD, bhvToadMessage, TOAD_STAR_2_DIALOG << 24 },
+    { MODEL_TOAD, bhvToadMessage, TOAD_STAR_3_DIALOG << 24 },
+    { MODEL_MIPS, bhvMips, MIPS_BP_STAR_1 << 24 },
+    { MODEL_MIPS, bhvMips, MIPS_BP_STAR_2 << 24 },
+};
+
 void spawn_toads() {
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < ARRAY_COUNT(sExtraSpawns); i++) {
         tinymt32_t randomState;
-        u8 toadCourseIndex;
-        u8 toadAreaIndex;
+        u8 spawnCourseIndex;
+        u8 spawnAreaIndex;
         struct Object *object;
 
         tinymt32_init(&randomState, gRandomizerGameSeed + i);
-        toadCourseIndex = (u8) get_val_in_range_uniform(0, ARRAY_COUNT(sToadAllowedAreas), &randomState);
-        if (gCurrLevelNum == sToadAllowedAreas[toadCourseIndex].levelNum) {
-            toadAreaIndex = (u8) get_val_in_range_uniform(0, sToadAllowedAreas[toadCourseIndex].numAreas, &randomState);
+        spawnCourseIndex = (u8) get_val_in_range_uniform(0, ARRAY_COUNT(sExtraSpawnAllowedAreas), &randomState);
+        if (gCurrLevelNum == sExtraSpawnAllowedAreas[spawnCourseIndex].levelNum) {
+            spawnAreaIndex = (u8) get_val_in_range_uniform(0, sExtraSpawnAllowedAreas[spawnCourseIndex].numAreas, &randomState);
 
-            if (gCurrAreaIndex == sToadAllowedAreas[toadCourseIndex].areas[toadAreaIndex]) {
-                object = spawn_object_in_area(MODEL_TOAD, bhvToadMessage, gCurrAreaIndex, gCurrAreaIndex);
-                object->oBehParams = sToadDialogs[i] << 24;
+            if (gCurrAreaIndex == sExtraSpawnAllowedAreas[spawnCourseIndex].areas[spawnAreaIndex]) {
+                object = spawn_object_in_area(
+                    sExtraSpawns[i].model,
+                    sExtraSpawns[i].bhvScript,
+                    gCurrAreaIndex,
+                    gCurrAreaIndex
+                );
+                object->oBehParams = sExtraSpawns[i].behParams;
                 object->pointerSeed = i;
             }
         }

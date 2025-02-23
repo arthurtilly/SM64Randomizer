@@ -402,7 +402,6 @@
 #define MODEL_WOODEN_POST                 0x6B        // wooden_post_geo
 
 // group 15
-#define MODEL_MIPS                        0x64        // mips_geo
 #define MODEL_BOO_CASTLE                  0x65        // boo_castle_geo
 #define MODEL_LAKITU                      0x66        // lakitu_geo
 
@@ -545,6 +544,7 @@
 #define MODEL_SPINY_BALL                  0xF0
 #define MODEL_SPINY                       0xF1
 #define MODEL_BUBBA                       0xF2
+#define MODEL_MIPS                        0xF3        // mips_geo
 
 #ifdef IA8_30FPS_COINS
 #define MODEL_SILVER_COIN                 0xE2        // silver_coin_geo

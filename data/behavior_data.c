@@ -5129,15 +5129,21 @@ const BehaviorScript bhvTreasureChestTop[] = {
 
 const BehaviorScript bhvMips[] = {
     BEGIN(OBJ_LIST_GENACTOR),
-    OR_INT(oFlags, (OBJ_FLAG_HOLDABLE | OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    OR_INT(oFlags, (OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO | OBJ_FLAG_HOLDABLE | OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    RANDOMIZE_OBJ(RAND_TYPE_GROUNDED | RAND_TYPE_IMPORTANT | RAND_TYPE_CREATE_AVOIDANCE_POINT | RAND_TYPE_SAFE),
     LOAD_ANIMATIONS(oAnimations, mips_seg6_anims_06015634),
+    ANIMATE(MIPS_ANIM_IDLE),
     SET_INT(oInteractType, INTERACT_GRABBABLE),
+    SET_INT(oInteractionSubtype, INT_SUBTYPE_HOLDABLE_NPC),
     DROP_TO_FLOOR(),
     SET_HITBOX(/*Radius*/ 50, /*Height*/ 75),
+    SET_OBJ_PHYSICS(/*Wall hitbox radius*/ 30, /*Gravity*/ -400, /*Bounciness*/ 0, /*Drag strength*/ 0, /*Friction*/ 0, /*Buoyancy*/ 200, /*Unused*/ 0, 0),
     SET_INT(oIntangibleTimer, 0),
+    SET_HOME(),
     CALL_NATIVE(bhv_mips_init),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_mips_loop),
+        SET_INT(oInteractStatus, INT_STATUS_NONE),
     END_LOOP(),
 };
 
