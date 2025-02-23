@@ -1231,6 +1231,7 @@ UNUSED static s32 play_mode_unused(void) {
     return FALSE;
 }
 
+extern s32 gSavestateMessageTimer;
 s32 update_level(void) {
     s32 changeLevel = FALSE;
 
@@ -1255,6 +1256,12 @@ s32 update_level(void) {
     if (changeLevel) {
         reset_volume();
         enable_background_sound();
+    }
+
+    if (!gIsConsole && ((gGlobalTimer % 30) == 0)) { // Check for savestate every second
+        if (save_file_update_timer()) {
+            gSavestateMessageTimer = 120;
+        }
     }
 
     return changeLevel;

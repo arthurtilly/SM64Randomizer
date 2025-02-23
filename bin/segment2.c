@@ -2226,6 +2226,15 @@ const Gfx dl_rgba16_text_end[] = {
     gsSPEndDisplayList(),
 };
 
+const Gfx dl_shade_screen_begin[] = {
+    gsDPPipeSync(),
+    gsDPSetRenderMode(G_RM_CLD_SURF, G_RM_CLD_SURF2),
+    gsDPSetCycleType(G_CYC_1CYCLE),
+    gsDPSetPrimColor(0, 0, 0, 0, 0, 127),
+    gsDPSetCombineMode(G_CC_PRIMITIVE, G_CC_PRIMITIVE),
+    gsSPEndDisplayList(),
+};
+
 // 0x0200EDA8 - 0x0200EDE8
 static const Vtx vertex_text_bg_box[] = {
     {{{     0,    -80,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},

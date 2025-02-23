@@ -84,6 +84,7 @@ struct MainMenuSaveData {
 
 struct SaveBuffer {
     // Main menu data, storing config options.
+    // MUST BE FIRST
     struct MainMenuSaveData menuData;
     // Save files
     struct SaveFile files[NUM_SAVE_FILES];

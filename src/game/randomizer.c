@@ -244,7 +244,7 @@ void print_seed_and_options_data(void) {
     u32 i;
     u32 verXPos;
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
-    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
+    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
     
     if (gIsSetSeed) {
         print_generic_string_ascii(8, ypos + 28, "Set Seed");
@@ -1031,6 +1031,8 @@ static void init_warp_scramble() {
 }
 
 void init_randomizer(s32 fileNum) {
+    gSaveBuffer.menuData.savestateTimer = 0;
+    gMainMenuDataModified = TRUE;
     save_main_menu_data();
     save_file_set_seed_and_options(fileNum);
     init_warp_scramble();
@@ -1229,9 +1231,9 @@ u8 gIronmarioPreset;
 
 void generic_text_shadow_center(u8 x, u8 y, char *str) {
     x -= get_string_width_ascii(str) / 2;
-    gDPSetEnvColor(gDisplayListHead++, 0, 0, 0, gDialogTextAlpha);
+    gDPSetEnvColor(gDisplayListHead++, 0, 0, 0, 255);
     print_generic_string_ascii(x + 1, y - 1, str);
-    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
+    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
     print_generic_string_ascii(x, y, str);
 }
 
@@ -1440,9 +1442,28 @@ char *songlist[] = {
 extern u8 sCurrentBackgroundMusicSeqId;
 void print_music(void) {
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
-    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
+    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
     print_generic_string_ascii(10, 220, "Now Playing:");
     print_generic_string_ascii(10, 204, songlist[sCurrentBackgroundMusicSeqId - BASE_ID]);
 
+    gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
+}
+
+#define BOX_X 160
+#define BOX_Y 200
+
+#define BOX_WIDTH 130
+#define BOX_HEIGHT 40
+
+void display_bg_box(void) {
+    gSPDisplayList(gDisplayListHead++, dl_shade_screen_begin);
+    gDPFillRectangle(gDisplayListHead++, BOX_X - BOX_WIDTH / 2, BOX_Y - BOX_HEIGHT / 2, BOX_X + BOX_WIDTH / 2, BOX_Y + BOX_HEIGHT / 2);
+}
+
+void print_savestate_message(void) {
+    display_bg_box();
+    gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
+    generic_text_shadow_center(160, 40, "Savestating detected.");
+    generic_text_shadow_center(160, 24, "This run is now invalid.");
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
 }

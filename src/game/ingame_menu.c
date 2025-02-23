@@ -133,6 +133,7 @@ s8 gLastDialogResponse = 0;
 u8 gMenuHoldKeyIndex = 0;
 u8 gMenuHoldKeyTimer = 0;
 s32 gDialogResponse = DIALOG_RESPONSE_NONE;
+s32 gSavestateMessageTimer = 0;
 
 
 void create_dl_identity_matrix(void) {
@@ -821,6 +822,7 @@ void reset_dialog_render_state(void) {
     gLastDialogResponse = 0;
     gLastDialogPageStrPos = 0;
     gDialogResponse = DIALOG_RESPONSE_NONE;
+    gSavestateMessageTimer = 0;
 }
 
 void render_dialog_box_type(struct DialogEntry *dialog, s8 linesPerBox) {
@@ -2283,6 +2285,9 @@ s32 render_menus_and_dialogs(void) {
 
         render_dialog_entries();
         gDialogColorFadeTimer = (s16) gDialogColorFadeTimer + 0x1000;
+    } else if (gSavestateMessageTimer != 0) {
+        gSavestateMessageTimer--;
+        print_savestate_message();
     }
 
     return mode;

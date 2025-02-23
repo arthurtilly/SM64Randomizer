@@ -338,6 +338,13 @@ void save_file_copy(s32 srcFileIndex, s32 destFileIndex) {
     save_file_do_save(destFileIndex);
 }
 
+void save_file_verify_menudata(void) {
+    // Verify the main menu data and wipe it if invalid.
+    s32 validSlots = verify_save_block_signature(&gSaveBuffer.menuData, sizeof(gSaveBuffer.menuData), MENU_DATA_MAGIC);
+    if (!validSlots)
+        wipe_main_menu_data();
+}
+
 void save_file_load_all(void) {
     s32 file;
     s32 validSlots;
@@ -347,11 +354,7 @@ void save_file_load_all(void) {
 
     bzero(&gSaveBuffer, sizeof(gSaveBuffer));
     read_eeprom_data(&gSaveBuffer, sizeof(gSaveBuffer));
-
-    // Verify the main menu data and wipe it if invalid.
-    validSlots = verify_save_block_signature(&gSaveBuffer.menuData, sizeof(gSaveBuffer.menuData), MENU_DATA_MAGIC);
-    if (!validSlots)
-        wipe_main_menu_data();
+    save_file_verify_menudata();
 
     for (file = 0; file < NUM_SAVE_FILES; file++) {
         // Verify the save file and wipe it if invalid.
@@ -739,6 +742,31 @@ void save_file_ironmario_run_completed(s32 id) {
 
     gMainMenuDataModified = TRUE;
     save_main_menu_data();
+}
+
+void save_file_mark_run_invalid() {
+    gSaveBuffer.files[gCurrSaveFileNum - 1].runInvalid = TRUE;
+    gSaveBuffer.files[gCurrSaveFileNum - 1].flags |= SAVE_FLAG_FILE_EXISTS;
+    gSaveFileModified = TRUE;
+    save_file_do_save(gCurrSaveFileNum - 1);
+}
+
+u32 save_file_update_timer(void) {
+    u32 savestateTimer = gSaveBuffer.menuData.savestateTimer;
+    // This assumes menu data is placed first in EEPROM
+    read_eeprom_data(&gSaveBuffer, sizeof(struct MainMenuSaveData));
+    save_file_verify_menudata();
+    u32 newSavestateTimer = gSaveBuffer.menuData.savestateTimer;
+
+    if (newSavestateTimer != savestateTimer) {
+        save_file_mark_run_invalid();
+        return TRUE;
+    }
+
+    gSaveBuffer.menuData.savestateTimer++;
+    gMainMenuDataModified = TRUE;
+    save_main_menu_data();
+    return FALSE;
 }
 
 #ifdef WIDE
