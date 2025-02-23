@@ -1030,7 +1030,10 @@ static void init_warp_scramble() {
     }
 }
 
+u8 gTheFunny = FALSE;
+
 void init_randomizer(s32 fileNum) {
+    gTheFunny = (random_u16() % 1000) == 0;
     gSaveBuffer.menuData.savestateTimer = 0;
     gMainMenuDataModified = TRUE;
     save_main_menu_data();
@@ -1293,8 +1296,9 @@ void ironmario_check_run_complete(void) {
     gIronmarioRunEnd = RUN_NOT_PRESET;
 }
 
-#define BASE_ID SEQ_EVENT_MERRY_GO_ROUND
+#define BASE_ID SEQ_EVENT_ENDLESS_STAIRS
 char *songlist[] = {
+    "Super Mario 64 - Endless Staircase",
     "Super Mario 64 - Merry-Go-Round",
     "Super Mario 64 - Title Theme",
     "Super Mario 64 - Bob-omb Battlefield",

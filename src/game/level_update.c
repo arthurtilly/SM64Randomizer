@@ -933,9 +933,10 @@ void initiate_delayed_warp(void) {
             switch (sDelayedWarpOp) {
                 case WARP_OP_GAME_OVER:
                     // If nosave nonstop mode, save the game
-                    if (gOptionsSettings.gameplay.s.nonstopMode == 2) {
-                        save_file_do_save(gCurrSaveFileNum - 1);
-                    }
+                    // if (gOptionsSettings.gameplay.s.nonstopMode == 2) {
+                    //     save_file_do_save(gCurrSaveFileNum - 1);
+                    // }
+                    gTheFunny = FALSE;
                     warp_special(WARP_SPECIAL_MARIO_HEAD_DIZZY);
                     break;
 

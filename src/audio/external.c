@@ -2172,6 +2172,8 @@ void play_music(u8 player, u16 seqArgs, u16 fadeTimer) {
     u8 i;
     u8 foundIndex = 0;
 
+    if (gTheFunny && player == SEQ_PLAYER_LEVEL) seqId = SEQ_EVENT_ENDLESS_STAIRS;
+
     // Except for the background music player, we don't support queued
     // sequences. Just play them immediately, stopping any old sequence.
     if (player != SEQ_PLAYER_LEVEL) {

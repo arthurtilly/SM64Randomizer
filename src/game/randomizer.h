@@ -146,6 +146,7 @@ extern u8 gSkyboxIndex;
 extern u8 gStarDoorReqLUT[];
 extern struct AvoidancePoint gDynamicAvoidancePoints[50];
 extern u8 gNumDynamicAvoidancePoints;
+extern u8 gTheFunny;
 
 extern void create_dynamic_avoidance_point(Vec3f pos, f32 radius, f32 height, f32 downOffset);
 extern u32 raycast_wall_check(Vec3s pos);
