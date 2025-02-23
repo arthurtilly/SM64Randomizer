@@ -141,7 +141,7 @@ static u32 mips_avoid_walls_and_edges(void) {
         return TRUE;
     } else if (o->oMoveFlags & OBJ_MOVE_HIT_EDGE) {
         s16 angle;
-        for (angle = 0x400; angle <= 0x4000; angle += 0x400) {
+        for (angle = 0x400; angle <= 0x8000; angle += 0x400) {
             f32 dx, dz;
             f32 leftTurnFloorHeight, rightTurnFloorHeight;
 
