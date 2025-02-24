@@ -400,6 +400,11 @@ void render_hud_mario_lives(void) {
     print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(54), HUD_TOP_Y, "%d", gHudDisplay.lives);
 }
 
+void render_hud_course_timer(void) {
+    print_text(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(22), HUD_TOP_Y, "="); // 'Clock' glyph
+    print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(39), HUD_TOP_Y, "%d", gHudDisplay.courseTimer);
+}
+
 #ifdef VANILLA_STYLE_CUSTOM_DEBUG
 void render_debug_mode(void) {
     print_text(180, 40, "DEBUG MODE");
@@ -567,6 +572,10 @@ void render_hud(void) {
         //     render_hud_mario_lives();
         // }
 #endif
+
+        if (hudDisplayFlags & HUD_DISPLAY_COURSE_TIMER && gHudDisplay.courseTimer >= 0 && gOptionsSettings.gameplay.s.courseTimer) {
+            render_hud_course_timer();
+        }
 
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_COIN_COUNT) {
             render_hud_coins();

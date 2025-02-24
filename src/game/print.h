@@ -28,6 +28,7 @@ enum PrintfGlyphs {
     GLYPH_APOSTROPHE      = 56,
     GLYPH_DOUBLE_QUOTE    = 57,
     GLYPH_UMLAUT          = 58,
+    GLYPH_CLOCK           = 59,
 };
 
 void print_text_fmt_int(s32 x, s32 y, const char *str, s32 n);

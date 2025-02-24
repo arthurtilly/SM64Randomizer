@@ -20,6 +20,8 @@
 
 #define NUM_SAVE_FILES 4
 
+#define COURSE_TIMER_FACTOR 20
+
 struct SaveBlockSignature {
     u16 magic;
     u16 chksum;
@@ -51,7 +53,8 @@ struct SaveFile {
 
     u8 courseCoinScores[COURSE_STAGES_COUNT]; // 120 bits
 
-    u32 pad;
+    u16 curCourseTimer;
+    u16 hmcStoredCourseTimer;
 
     struct SaveBlockSignature signature; // 32 bits
 };

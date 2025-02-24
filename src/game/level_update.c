@@ -486,13 +486,37 @@ void warp_area(void) {
     }
 }
 
+static u16 sBonusCourseTimers[] = {0, 100, 200, 400};
+static u16 sCourseTimers[]      = {0, 300, 500, 999};
+
 void course_check_lock(s8 prevCourse, s8 currCourse) {
+    u16 seconds = currCourse > COURSE_STAGES_MAX 
+        ? sBonusCourseTimers[gOptionsSettings.gameplay.s.courseTimer] 
+        : sCourseTimers[gOptionsSettings.gameplay.s.courseTimer];
     if (prevCourse == COURSE_NONE && currCourse != COURSE_NONE) {
         if (currCourse != curFile.lastVisitedCourse) {
+            curFile.curCourseTimer = seconds * COURSE_TIMER_FACTOR;
             set_course_is_locked(curFile.lastVisitedCourse);
         }
         curFile.lastVisitedCourse = currCourse;
         save_file_do_save(gCurrSaveFileNum - 1);
+    }
+
+    // Going into the HMC sub-level
+    if (prevCourse == COURSE_HMC && currCourse != COURSE_HMC && currCourse != COURSE_NONE) {
+        u16 temp = curFile.hmcStoredCourseTimer;
+        curFile.hmcStoredCourseTimer = curFile.curCourseTimer;
+        curFile.curCourseTimer = temp;
+        if (curFile.curCourseTimer == 0) {
+            curFile.curCourseTimer = seconds * COURSE_TIMER_FACTOR;
+        }
+    }
+
+    // Leaving the HMC sub-level
+    if (currCourse == COURSE_HMC && prevCourse != COURSE_HMC && prevCourse != COURSE_NONE) {
+        u16 temp = curFile.hmcStoredCourseTimer;
+        curFile.hmcStoredCourseTimer = curFile.curCourseTimer;
+        curFile.curCourseTimer = temp;
     }
 }
 
@@ -1034,6 +1058,13 @@ void update_hud_values(void) {
         gHudDisplay.stars = gMarioState->numStars;
         gHudDisplay.lives = gMarioState->numLives;
         gHudDisplay.keys = gMarioState->numKeys;
+        if (numHealthWedges) {
+            if (gCurrCourseNum != COURSE_NONE && !(IS_120_STAR && gMarioState->numStars >= CAP_SWITCH_THRESHOLD)) {
+                gHudDisplay.courseTimer = (curFile.curCourseTimer + COURSE_TIMER_FACTOR - 1) / COURSE_TIMER_FACTOR;
+            } else {
+                gHudDisplay.courseTimer = -1;
+            }
+        }
 
         if (numHealthWedges > gHudDisplay.wedges) {
             play_sound(SOUND_MENU_POWER_METER, gGlobalSoundSource);

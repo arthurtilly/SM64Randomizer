@@ -220,6 +220,7 @@ u8 OptionPage = 3;
 #define textCountPresets (sizeof(textsPresets) / 4)
 
 u8 gStarDoorReqLUT[] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 119};
+u16 gCourseTimerLUT[] = {0, 300, 500, 999};
 
 unsigned char *pages[] = { textAestheticOptions, textObjOptions, textWarpOptions, testPresets,
                            textGPMOptions, textIronmarioOptions };
@@ -2442,18 +2443,31 @@ char *textsIronmario[] = {
     "HARDCORE IRONMARIO",
     "DOOR INDICATORS",
     "INVINCIBILITY FRAMES",
+    "COURSE TIMER",
 };
 
-#define textCountIronmario (sizeof(textsModes) / 4)
+#define textCountIronmario (sizeof(textsIronmario) / 4)
 
 static void page_ironmario() {
-    for (int i = 0; i < textCountIronmario; i++) {
+    int i = 0;
+    for (i = 0; i < 3; i++) {
         if (check_clicked_text(180, OPTIONS_Y(i), i)) {
             IRONMARIO_VARS_SET(i, 0)
         } else if (check_clicked_text(222, OPTIONS_Y(i), i)) {
             IRONMARIO_VARS_SET(i, 1)
         }
     }
+
+    s32 temp = gOptionsSettings.gameplay.s.courseTimer;
+    if (check_clicked_text(222, OPTIONS_Y(i), 0)) {
+        temp++;
+    } else if (check_clicked_text(176, OPTIONS_Y(i), 0)) {
+        temp--;
+    }
+    temp = (temp + 4) % 4;
+    gOptionsSettings.gameplay.s.courseTimer = temp;
+
+    i++;
 }
 
 static void page_presets() {
@@ -2723,6 +2737,14 @@ frames upon spawning into a level.\n\
 Despite affecting gameplay, this option\n\
 does not affect the validity of the\n\
 IronMario challenge.", 205, 5},
+
+    {"\
+Adds a timer for each course that\n\
+persists between stars. When the timer\n\
+expires, Mario will die. Bonus courses\n\
+have a shorter timer. If doing the 120\n\
+star challenge, the timer will be removed\n\
+once you reach 100 stars.", 205, 6},
 };
 
 void page_ironmario_print() {
@@ -2731,6 +2753,18 @@ void page_ironmario_print() {
     options_page_print_on_off(gOptionsSettings.gameplay.s.hardcoreIronmario, OPTIONS_Y(0), 190, 222);
     options_page_print_on_off(gOptionsSettings.cosmetic.s.doorIndicators, OPTIONS_Y(1), 190, 222);
     options_page_print_on_off(gOptionsSettings.cosmetic.s.iframes, OPTIONS_Y(2), 190, 222);
+
+    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha);
+    
+    print_generic_string(190, OPTIONS_Y(3), textPlus);
+    if (gOptionsSettings.gameplay.s.courseTimer) {
+        u8 strCourseTimer[4];
+        int_to_str(gCourseTimerLUT[gOptionsSettings.gameplay.s.courseTimer], strCourseTimer);
+        print_generic_string(203, OPTIONS_Y(3), strCourseTimer);
+    } else {
+        print_generic_string_ascii(205, OPTIONS_Y(3), "OFF");
+    }
+    print_generic_string(230, OPTIONS_Y(3), textMinus);
 
     handle_info_display(ironmarioInfo, textCountIronmario);
 
