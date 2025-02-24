@@ -1714,11 +1714,24 @@ u8 sDemonTimer = 0;
 u8 testSeq = SEQ_EVENT_MERRY_GO_ROUND;
 #endif
 
+#include "buffers/buffers.h"
+#define curFile gSaveBuffer.files[gCurrSaveFileNum - 1]
+
 /**
  * Main function for executing Mario's behavior. Returns particleFlags.
  */
 s32 execute_mario_action(UNUSED struct Object *obj) {
     s32 inLoop = TRUE;
+
+    if (!(gMarioState->action & ACT_FLAG_INTANGIBLE) && curFile.curCourseTimer > 0 && gCurrCourseNum != COURSE_NONE && !(IS_120_STAR && gMarioState->numStars >= CAP_SWITCH_THRESHOLD)) {
+        curFile.curCourseTimer--;
+
+        if (curFile.curCourseTimer == 0 && gMarioState->health > 0x100) {
+            gHudDisplay.courseTimer = 0;
+            gMarioState->health = 0xFF;
+            save_file_erase(gCurrSaveFileNum - 1);
+        }
+    }
 
 #ifdef BOWSER_3_TEST
     if (gPlayer1Controller->buttonPressed & L_TRIG) {

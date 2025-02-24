@@ -80,8 +80,9 @@ struct nodeInfo {
 struct OptionsSettings {
     union {
         struct {
-            u32 padding:13; // to make sure settings ids are small
+            u32 padding:11; // to make sure settings ids are small
 
+            u32 courseTimer:2;
             u32 hardcoreIronmario:1;
             u32 keepStructure:1;
             u32 randomLevelWarp:1;
