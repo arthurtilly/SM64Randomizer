@@ -363,7 +363,8 @@ static s32 bhv_cmd_randomize_object(void) {
 
     f32 r = tinymt32_generate_float(&randomState);
     s32 isEnemy = gCurrentObject->behavior != segmented_to_virtual(bhvBobombBuddy)
-        && gCurrentObject->behavior != segmented_to_virtual(bhvBobombBuddyOpensCannon);
+        && gCurrentObject->behavior != segmented_to_virtual(bhvBobombBuddyOpensCannon)
+        && gCurrentObject->behavior != segmented_to_virtual(bhvPitBowlingBall);
     // 30% chance to be fast
     o->isFast = 0;
     if (HARDCORE_IRONMARIO && isEnemy) {
