@@ -209,7 +209,6 @@ void bhv_mips_act_run(void) {
 void bhv_mips_act_return_to_safe_ground(void) {
     if (o->oDistanceToMario < 500.0f) {
         o->oAction = MIPS_ACT_RUN;
-        o->oForwardVel = o->oMipsForwardVelocity;
         o->oMoveAngleYaw = o->oAngleToMario + 0x8000;
     }
 
