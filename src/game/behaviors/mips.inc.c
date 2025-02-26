@@ -114,15 +114,15 @@ void bhv_mips_act_wait_for_nearby_mario(void) {
         o->oForwardVel = 10.0f;
         o->oMoveAngleYaw = o->oAngleToMario + 0x8000;
     } else if (o->oDistanceToMario > 1000.0f && !mips_is_current_floor_safe()) {
-        f32 homeDistX = o->oMipsSafeFloorX - o->oPosX;
-        f32 homeDistZ = o->oMipsSafeFloorZ - o->oPosZ;
-        s16 angleTowardsHome = atan2s(homeDistZ, homeDistX);
+        f32 safetyDistX = o->oMipsSafeFloorX - o->oPosX;
+        f32 safetyDistZ = o->oMipsSafeFloorZ - o->oPosZ;
+        s16 angleTowardsSafety = atan2s(safetyDistZ, safetyDistX);
 
         if (!is_point_within_radius_of_mario(o->oMipsSafeFloorX, o->oMipsSafeFloorY, o->oMipsSafeFloorZ, 500)) {
             cur_obj_init_animation(1);
             o->oAction = MIPS_ACT_RETURN_TO_SAFE_GROUND;
             o->oForwardVel = 10.0f;
-            o->oMoveAngleYaw = angleTowardsHome;
+            o->oMoveAngleYaw = angleTowardsSafety;
         }
     }
 }
@@ -149,6 +149,7 @@ static void mips_avoid_wall(s16 wallAngle) {
 
 static void mips_avoid_edge() {
     u16 angle;
+    s16 foundAngle = 0;
     for (angle = 0x400; angle <= 0x8000; angle += 0x400) {
         f32 dx, dz;
         f32 leftTurnFloorHeight, rightTurnFloorHeight;
@@ -171,18 +172,26 @@ static void mips_avoid_edge() {
         f32 heightCheck = o->oFloorHeight - 50.0f;
 
         if (leftTurnFloorHeight >= heightCheck && rightTurnFloorHeight >= heightCheck && leftTurnSafe && rightTurnSafe) {
-            o->oMoveAngleYaw += leftTurnFloorHeight > rightTurnFloorHeight ? angle : -angle;
+            foundAngle = leftTurnFloorHeight > rightTurnFloorHeight ? angle : -angle;
             break;
         } else if (leftTurnFloorHeight >= heightCheck && leftTurnSafe) {
-            o->oMoveAngleYaw += angle;
+            foundAngle = angle;
             break;
         } else if (rightTurnFloorHeight >= heightCheck && rightTurnSafe) {
-            o->oMoveAngleYaw -= angle;
+            foundAngle = -angle;
             break;
         }
     }
     o->oMipsWallTimer = 15;
-    if (angle > 0x2000) {
+    if (!foundAngle) {
+        f32 safetyDistX = o->oMipsSafeFloorX - o->oPosX;
+        f32 safetyDistZ = o->oMipsSafeFloorZ - o->oPosZ;
+        s16 angleTowardsSafety = atan2s(safetyDistZ, safetyDistX);
+        foundAngle = angleTowardsSafety - o->oMoveAngleYaw;
+    }
+    
+    o->oMoveAngleYaw += foundAngle;
+    if (foundAngle > 0x2000) {
         mips_hard_turn();
     }
 }
@@ -366,8 +375,9 @@ static void mips_update_floor(void) {
 void bhv_mips_free(void) {
     f32 prevVec[3];
     vec3f_copy(&prevVec, &o->oPosVec);
+    u32 wasInAir = o->oMoveFlags & OBJ_MOVE_IN_AIR;
     cur_obj_update_floor_and_walls();
-    if (o->oMoveFlags & OBJ_MOVE_IN_AIR) {
+    if (!wasInAir && (o->oMoveFlags & OBJ_MOVE_IN_AIR)) {
         vec3f_copy(&o->oPosVec, &prevVec);
         mips_update_floor();
         o->oMoveFlags &= ~OBJ_MOVE_IN_AIR;

@@ -5137,7 +5137,7 @@ const BehaviorScript bhvMips[] = {
     SET_INT(oInteractionSubtype, INT_SUBTYPE_HOLDABLE_NPC),
     DROP_TO_FLOOR(),
     SET_HITBOX(/*Radius*/ 50, /*Height*/ 75),
-    SET_OBJ_PHYSICS(/*Wall hitbox radius*/ 30, /*Gravity*/ -400, /*Bounciness*/ 0, /*Drag strength*/ 0, /*Friction*/ 0, /*Buoyancy*/ 200, /*Unused*/ 0, 0),
+    SET_OBJ_PHYSICS(/*Wall hitbox radius*/ 30, /*Gravity*/ -400, /*Bounciness*/ 0, /*Drag strength*/ 0, /*Friction*/ 0, /*Buoyancy*/ 400, /*Unused*/ 0, 0),
     SET_INT(oIntangibleTimer, 0),
     SET_HOME(),
     CALL_NATIVE(bhv_mips_init),
