@@ -1279,6 +1279,8 @@ static const Vec3s sSaveFileButtonInitPositions[] = {
                               sSaveFileButtonInitPositions[saveFile][2],                                                                        \
                               0x0, 0x0, 0x0)
 
+extern u32 gDoResetCheck;
+
 /**
  * Menu Buttons Menu Manager Initial Action
  * Creates models of the buttons in the menu. For the Mario buttons it
@@ -1327,6 +1329,7 @@ void bhv_menu_button_manager_init(void) {
     sMainMenuButtons[MENU_BUTTON_SELECT_SEED]->oMenuButtonScale = 1.0f;
 
     sTextBaseAlpha = 0;
+    gDoResetCheck = TRUE;
 }
 
 #define SAVE_FILE_SOUND SOUND_MENU_STAR_SOUND_OKEY_DOKEY

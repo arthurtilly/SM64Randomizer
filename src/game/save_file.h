@@ -33,7 +33,7 @@ struct SaveFile {
     u8 capArea;
     s8 lastVisitedCourse;
     u8 runInvalid:1; // Reset or savestate detected
-    u8 isInOverworld:1; // Reset detection
+    u8 wasInCourse:1; // Reset detection, FALSE if in an overworld level
 
     // Note: the coordinates get set, but are never actually used, since the
     // cap can always be found in a fixed spot within the course

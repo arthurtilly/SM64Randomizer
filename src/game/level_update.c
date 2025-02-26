@@ -492,8 +492,12 @@ void course_check_lock(s8 prevCourse, s8 currCourse) {
             set_course_is_locked(curFile.lastVisitedCourse);
         }
         curFile.lastVisitedCourse = currCourse;
-        save_file_do_save(gCurrSaveFileNum - 1);
+        curFile.wasInCourse = TRUE;
+    } else if (currCourse == COURSE_NONE) {
+        curFile.wasInCourse = FALSE;
     }
+    gSaveFileModified = TRUE;
+    save_file_do_save(gCurrSaveFileNum - 1);
 }
 
 // used for warps between levels
@@ -1232,7 +1236,7 @@ UNUSED static s32 play_mode_unused(void) {
     return FALSE;
 }
 
-extern s32 gSavestateMessageTimer;
+extern u8 gSavestateMessageTimer;
 s32 update_level(void) {
     s32 changeLevel = FALSE;
 
@@ -1268,6 +1272,10 @@ s32 update_level(void) {
     return changeLevel;
 }
 
+// i hate this so much
+u32 gDoResetCheck = FALSE;
+
+extern u8 gResetMessageTimer;
 s32 init_level(void) {
     s32 fadeFromColor = FALSE;
 #if PUPPYPRINT_DEBUG
@@ -1420,6 +1428,14 @@ s32 lvl_set_current_level(UNUSED s16 initOrUpdate, s32 levelNum) {
     sWarpCheckpointActive = FALSE;
     gCurrLevelNum = levelNum;
     gCurrCourseNum = gLevelToCourseNumTable[levelNum - 1];
+
+    if (gDoResetCheck) {
+        if (gSaveBuffer.files[gCurrSaveFileNum - 1].wasInCourse) {
+            save_file_mark_run_invalid();
+            gResetMessageTimer = 120;
+        }
+        gDoResetCheck = FALSE;
+    }
 
     course_check_lock(oldCourseNum, gCurrCourseNum);
 

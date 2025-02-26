@@ -241,7 +241,7 @@ s32 curPreset = 0;
 // };
 
 struct OptionsSettings gPresets[6] = {
-    {{{0, /* pad */ 0, 1, 1, 1, 1, 0, 2, 1, 1, 1, 7, 0}}, {{2, 1, 1, 1, 2, 0, 1}}},
+    {{{0, /* pad */ 0, 1, 1, 1, 1, 0, 2, 1, 1, 1, 7, 0}}, {{2, 1, 1, 1, 2, 0, 0}}},
     {{{0, /* pad */ 0, 1, 1, 1, 1, 0, 2, 1, 1, 1, 10, 0}}, {{2, 1, 1, 1, 2, 0, 1}}},
     {{{0, /* pad */ 0, 1, 1, 1, 1, 0, 2, 1, 1, 1, 12, 0}}, {{2, 1, 1, 1, 2, 0, 1}}},
     {{{0, /* pad */ 1, 1, 1, 1, 1, 0, 2, 1, 1, 1, 7, 0}}, {{2, 1, 1, 1, 2, 0, 1}}},
@@ -1262,6 +1262,9 @@ void ironmario_display_end_of_run(void) {
             char buf[64];
             sprintf(buf, "%s complete", presetStrings[gIronmarioPreset]);
             generic_text_shadow_center(160,175, buf);
+            // if (!gOptionsSettings.cosmetic.s.iframes) {
+            //     generic_text_shadow_center(160,120, "iframes");
+            // }
             break;
         case RUN_IS_SET_SEED:
             generic_text_shadow_center(160,190, "RUN INVALID!");
@@ -1495,6 +1498,14 @@ void print_savestate_message(void) {
     display_bg_box();
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     generic_text_shadow_center(160, 40, "Savestating detected.");
+    generic_text_shadow_center(160, 24, "This run is now invalid.");
+    gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
+}
+
+void print_reset_message(void) {
+    display_bg_box();
+    gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
+    generic_text_shadow_center(160, 40, "Reset detected.");
     generic_text_shadow_center(160, 24, "This run is now invalid.");
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
 }
