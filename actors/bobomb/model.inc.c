@@ -5,9 +5,19 @@ ALIGNED8 static const Texture bobomb_seg8_texture_0801DA60[] = {
 #include "actors/bobomb/bob-omb_left_side.rgba16.inc.c"
 };
 
+// 0x0801DA60
+ALIGNED8 static const Texture bobomb_seg8_texture_0801DA60_fast[] = {
+#include "actors/bobomb/bob-omb_fast_left_side.rgba16.inc.c"
+};
+
 // 0x0801EA60
 ALIGNED8 static const Texture bobomb_seg8_texture_0801EA60[] = {
 #include "actors/bobomb/bob-omb_right_side.rgba16.inc.c"
+};
+
+// 0x0801EA60
+ALIGNED8 static const Texture bobomb_seg8_texture_0801EA60_fast[] = {
+#include "actors/bobomb/bob-omb_fast_right_side.rgba16.inc.c"
 };
 
 // 0x0801FA60
@@ -142,6 +152,21 @@ const Gfx bobomb_seg8_dl_08022C38[] = {
     gsSPEndDisplayList(),
 };
 
+// 0x08022C38 - 0x08022CA0
+const Gfx bobomb_seg8_dl_08022C38_fast[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bobomb_seg8_texture_0801DA60_fast),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPVertex(bobomb_seg8_vertex_08022BB8, 4, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bobomb_seg8_texture_0801EA60_fast),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPVertex(bobomb_seg8_vertex_08022BF8, 4, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSPEndDisplayList(),
+};
+
 // 0x08022CA0 - 0x08022D08
 const Gfx bobomb_seg8_dl_08022CA0[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bobomb_seg8_texture_0801FA60),
@@ -168,6 +193,24 @@ const Gfx bobomb_seg8_dl_08022D08[] = {
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 6, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (64 - 1) << G_TEXTURE_IMAGE_FRAC),
     gsSPDisplayList(bobomb_seg8_dl_08022C38),
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
+    gsDPPipeSync(),
+    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
+    gsSPSetGeometryMode(G_LIGHTING),
+    gsSPEndDisplayList(),
+};
+
+// 0x08022D08 - 0x08022D78
+const Gfx bobomb_seg8_dl_08022D08_fast[] = {
+    gsDPPipeSync(),
+    gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
+    gsSPClearGeometryMode(G_LIGHTING),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+    gsDPTileSync(),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 6, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
+    gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (64 - 1) << G_TEXTURE_IMAGE_FRAC),
+    gsSPDisplayList(bobomb_seg8_dl_08022C38_fast),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

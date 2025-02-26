@@ -86,18 +86,22 @@ static u32 mips_floor_is_slippery(void) {
     return o->oFloor->normal.y <= normY;
 }
 
-static u32 mips_is_safe_floor(void) {
-    if (o->oFloor == NULL || mips_floor_is_slippery()) {
+static u32 mips_is_safe_floor(struct Surface* floor, f32 x, f32 y, f32 z) {
+    if (floor == NULL || mips_floor_is_slippery()) {
         return FALSE;
     }
-    if (o->oFloorType > SURFACE_SAFE_FLOORS_GENERAL) {
+    if (floor->type > SURFACE_SAFE_FLOORS_GENERAL) {
         return FALSE;
     }
     struct AreaParams *areaParams = &(*sLevelParams[gCurrLevelNum - 4])[gCurrAreaIndex - 1];
-    if (!(areaParams->areaParamFlags & AREA_PARAM_FLAG_CHANGING_WATER_LEVEL) && find_water_level(o->oPosX, o->oPosZ) > o->oPosY) {
+    if (!(areaParams->areaParamFlags & AREA_PARAM_FLAG_CHANGING_WATER_LEVEL) && find_water_level(x, z) > y) {
         return FALSE;
     }
     return TRUE;
+}
+
+static u32 mips_is_current_floor_safe(void) {
+    return mips_is_safe_floor(o->oFloor, o->oPosX, o->oPosY, o->oPosZ);
 }
 
 void bhv_mips_act_wait_for_nearby_mario(void) {
@@ -106,16 +110,16 @@ void bhv_mips_act_wait_for_nearby_mario(void) {
         o->oAction = MIPS_ACT_RUN;
         o->oForwardVel = 10.0f;
         o->oMoveAngleYaw = o->oAngleToMario + 0x8000;
-    } else if (o->oDistanceToMario > 1000.0f && !mips_is_safe_floor()) {
-        f32 homeDistX = o->oMipsSafeFloorX - o->oPosX;
-        f32 homeDistZ = o->oMipsSafeFloorZ - o->oPosZ;
-        s16 angleTowardsHome = atan2s(homeDistZ, homeDistX);
+    } else if (o->oDistanceToMario > 1000.0f && !mips_is_current_floor_safe()) {
+        f32 safetyDistX = o->oMipsSafeFloorX - o->oPosX;
+        f32 safetyDistZ = o->oMipsSafeFloorZ - o->oPosZ;
+        s16 angleTowardsSafety = atan2s(safetyDistZ, safetyDistX);
 
         if (!is_point_within_radius_of_mario(o->oMipsSafeFloorX, o->oMipsSafeFloorY, o->oMipsSafeFloorZ, 500)) {
             cur_obj_init_animation(1);
             o->oAction = MIPS_ACT_RETURN_TO_SAFE_GROUND;
             o->oForwardVel = 10.0f;
-            o->oMoveAngleYaw = angleTowardsHome;
+            o->oMoveAngleYaw = angleTowardsSafety;
         }
     }
 }
@@ -127,50 +131,74 @@ static void mips_hard_turn(void) {
     }
 }
 
+static void mips_avoid_wall(s16 wallAngle) {
+    s16 angleDiff = abs_angle_diff(o->oMoveAngleYaw, wallAngle);
+    if (angleDiff > 0x4000) {
+        if (angleDiff > 0x6000) {
+            o->oMoveAngleYaw = approach_angle(wallAngle, o->oMoveAngleYaw, 0x8000 - angleDiff);
+            mips_hard_turn();
+        } else {
+            o->oMoveAngleYaw = approach_angle(wallAngle, o->oMoveAngleYaw, 0x3C00);
+        }
+        o->oMipsWallTimer = 15;
+    }
+}
+
+static void mips_avoid_edge() {
+    u16 angle;
+    s16 foundAngle = 0;
+    for (angle = 0x400; angle <= 0x8000; angle += 0x400) {
+        f32 dx, dz;
+        f32 leftTurnFloorHeight, rightTurnFloorHeight;
+        struct Surface* leftTurnFloor;
+        struct Surface* rightTurnFloor;
+        u32 leftTurnSafe, rightTurnSafe;
+
+        // Check left turn
+        dx = o->oForwardVel * sins(o->oMoveAngleYaw + angle);
+        dz = o->oForwardVel * coss(o->oMoveAngleYaw + angle);
+        leftTurnFloorHeight = find_floor(o->oPosX + dx, o->oPosY, o->oPosZ + dz, &leftTurnFloor);
+        leftTurnSafe = mips_is_safe_floor(leftTurnFloor, o->oPosX + dx, o->oPosY, o->oPosZ + dz);
+
+        // Check right turn
+        dx = o->oForwardVel * sins(o->oMoveAngleYaw - angle);
+        dz = o->oForwardVel * coss(o->oMoveAngleYaw - angle);
+        rightTurnFloorHeight = find_floor(o->oPosX + dx, o->oPosY, o->oPosZ + dz, &rightTurnFloor);
+        rightTurnSafe = mips_is_safe_floor(rightTurnFloor, o->oPosX + dx, o->oPosY, o->oPosZ + dz);
+
+        f32 heightCheck = o->oFloorHeight - 50.0f;
+
+        if (leftTurnFloorHeight >= heightCheck && rightTurnFloorHeight >= heightCheck && leftTurnSafe && rightTurnSafe) {
+            foundAngle = leftTurnFloorHeight > rightTurnFloorHeight ? angle : -angle;
+            break;
+        } else if (leftTurnFloorHeight >= heightCheck && leftTurnSafe) {
+            foundAngle = angle;
+            break;
+        } else if (rightTurnFloorHeight >= heightCheck && rightTurnSafe) {
+            foundAngle = -angle;
+            break;
+        }
+    }
+    o->oMipsWallTimer = 15;
+    if (!foundAngle) {
+        f32 safetyDistX = o->oMipsSafeFloorX - o->oPosX;
+        f32 safetyDistZ = o->oMipsSafeFloorZ - o->oPosZ;
+        s16 angleTowardsSafety = atan2s(safetyDistZ, safetyDistX);
+        foundAngle = angleTowardsSafety - o->oMoveAngleYaw;
+    }
+    
+    o->oMoveAngleYaw += foundAngle;
+    if (foundAngle > 0x2000) {
+        mips_hard_turn();
+    }
+}
+
 static u32 mips_avoid_walls_and_edges(void) {
     if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
-        s16 angleDiff = abs_angle_diff(o->oMoveAngleYaw, o->oWallAngle);
-        if (angleDiff > 0x4000) {
-            if (angleDiff > 0x6000) {
-                o->oMoveAngleYaw = approach_angle(o->oWallAngle, o->oMoveAngleYaw, 0x8000 - angleDiff);
-                mips_hard_turn();
-            } else {
-                o->oMoveAngleYaw = approach_angle(o->oWallAngle, o->oMoveAngleYaw, 0x4000);
-            }
-        }
+        mips_avoid_wall(o->oWallAngle);
         return TRUE;
     } else if (o->oMoveFlags & OBJ_MOVE_HIT_EDGE) {
-        s16 angle;
-        for (angle = 0x400; angle <= 0x8000; angle += 0x400) {
-            f32 dx, dz;
-            f32 leftTurnFloorHeight, rightTurnFloorHeight;
-
-            // Check left turn
-            dx = o->oForwardVel * sins(o->oMoveAngleYaw + angle);
-            dz = o->oForwardVel * coss(o->oMoveAngleYaw + angle);
-            leftTurnFloorHeight = find_floor_height(o->oPosX + dx, o->oPosY, o->oPosZ + dz);
-
-            // Check right turn
-            dx = o->oForwardVel * sins(o->oMoveAngleYaw - angle);
-            dz = o->oForwardVel * coss(o->oMoveAngleYaw - angle);
-            rightTurnFloorHeight = find_floor_height(o->oPosX + dx, o->oPosY, o->oPosZ + dz);
-
-            f32 heightCheck = o->oFloorHeight - 50.0f;
-
-            if (leftTurnFloorHeight >= heightCheck && rightTurnFloorHeight >= heightCheck) {
-                o->oMoveAngleYaw += leftTurnFloorHeight > rightTurnFloorHeight ? angle : -angle;
-                break;
-            } else if (leftTurnFloorHeight >= heightCheck) {
-                o->oMoveAngleYaw += angle;
-                break;
-            } else if (rightTurnFloorHeight >= heightCheck) {
-                o->oMoveAngleYaw -= angle;
-                break;
-            }
-        }
-        if (angle > 0x2000) {
-            mips_hard_turn();
-        }
+        mips_avoid_edge();
         return TRUE;
     }
     return FALSE;
@@ -190,13 +218,24 @@ static void mips_run_sound(void) {
 void bhv_mips_act_run(void) {
     cur_obj_forward_vel_approach_upward(o->oMipsForwardVelocity, 2.0f);
 
-    if (mips_is_safe_floor()) {
+    if (mips_is_current_floor_safe()) {
         vec3f_copy(&o->oMipsSafeFloorVec, &o->oPosVec);
-    }
 
-    if (!mips_avoid_walls_and_edges()) {
-        s16 goalYaw = o->oAngleToMario + 0x8000;
-        cur_obj_rotate_yaw_toward(goalYaw, 0x800);
+        if (!mips_avoid_walls_and_edges() && !o->oMipsWallTimer) {
+            s16 goalYaw = o->oAngleToMario + 0x8000;
+            cur_obj_rotate_yaw_toward(goalYaw, 0x800);
+        }
+    } else {
+        if (o->oFloor == NULL || (o->oFloor->normal.x == 0 && o->oFloor->normal.z == 0)) {
+            mips_avoid_edge();
+        } else {
+            s16 wallAngle = SURFACE_YAW(o->oFloor);
+            s16 angleDiff = abs_angle_diff(o->oAngleToMario, wallAngle);
+            if (angleDiff > 0x4000) {
+                wallAngle += 0x8000;
+            }
+            mips_avoid_wall(wallAngle);
+        }
     }
 
     if (o->oDistanceToMario > 1000.0f) {
@@ -209,11 +248,10 @@ void bhv_mips_act_run(void) {
 void bhv_mips_act_return_to_safe_ground(void) {
     if (o->oDistanceToMario < 500.0f) {
         o->oAction = MIPS_ACT_RUN;
-        o->oForwardVel = o->oMipsForwardVelocity;
         o->oMoveAngleYaw = o->oAngleToMario + 0x8000;
     }
 
-    if (mips_is_safe_floor()) {
+    if (mips_is_current_floor_safe()) {
         o->oAction = MIPS_ACT_WAIT_FOR_ANIMATION_DONE;
         return;
     }
@@ -334,8 +372,9 @@ static void mips_update_floor(void) {
 void bhv_mips_free(void) {
     f32 prevVec[3];
     vec3f_copy(&prevVec, &o->oPosVec);
+    u32 wasInAir = o->oMoveFlags & OBJ_MOVE_IN_AIR;
     cur_obj_update_floor_and_walls();
-    if (o->oMoveFlags & OBJ_MOVE_IN_AIR) {
+    if (!wasInAir && (o->oMoveFlags & OBJ_MOVE_IN_AIR)) {
         vec3f_copy(&o->oPosVec, &prevVec);
         mips_update_floor();
         o->oMoveFlags &= ~OBJ_MOVE_IN_AIR;
@@ -343,7 +382,13 @@ void bhv_mips_free(void) {
     }
     cur_obj_call_action_function(sMipsActions);
     cur_obj_move_standard(-78);
-    o->oPosY = find_floor_height(o->oPosX, o->oPosY, o->oPosZ);
+    f32 floorHeight = find_floor_height(o->oPosX, o->oPosY, o->oPosZ);
+    if (o->oPosY <= floorHeight + 50.0f) {
+        o->oPosY = floorHeight;
+    }
+    if (o->oMipsWallTimer > 0) {
+        o->oMipsWallTimer--;
+    }
 }
 
 /**

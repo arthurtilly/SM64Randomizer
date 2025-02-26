@@ -32,6 +32,7 @@ extern const Gfx bobomb_seg8_dl_08022B88_fast[];
 extern const Gfx bobomb_seg8_dl_08022C38[];
 extern const Gfx bobomb_seg8_dl_08022CA0[];
 extern const Gfx bobomb_seg8_dl_08022D08[];
+extern const Gfx bobomb_seg8_dl_08022D08_fast[];
 extern const Gfx bobomb_seg8_dl_08022D78[];
 extern const Gfx bobomb_seg8_dl_08023270[];
 extern const Gfx bobomb_seg8_dl_08023378[];
