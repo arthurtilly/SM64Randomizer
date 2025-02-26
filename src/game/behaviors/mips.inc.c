@@ -97,9 +97,6 @@ static u32 mips_is_safe_floor(struct Surface* floor, f32 x, f32 y, f32 z) {
     if (!(areaParams->areaParamFlags & AREA_PARAM_FLAG_CHANGING_WATER_LEVEL) && find_water_level(x, z) > y) {
         return FALSE;
     }
-    if (gCurrLevelNum == LEVEL_HMC && y < find_poison_gas_level(x, z) - 100) {
-        return FALSE;
-    }
     return TRUE;
 }
 
