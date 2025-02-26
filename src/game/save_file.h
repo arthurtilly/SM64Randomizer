@@ -137,12 +137,12 @@ enum SaveProgressFlags {
     SAVE_FLAG_CAP_ON_MR_BLIZZARD     = (1 << 19), /* 0x00080000 */
     SAVE_FLAG_UNLOCKED_50_STAR_DOOR  = (1 << 20), /* 0x00100000 */
     SAVE_FLAG_IS_SET_SEED            = (1 << 21), /* 0x00200000 */
+    SAVE_FLAG_HAVE_KOOPA_SHELL       = (1 << 22), /* 0x00400000 */
     SAVE_FLAG_COLLECTED_TOAD_STAR_1  = (1 << 24), /* 0x01000000 */
     SAVE_FLAG_COLLECTED_TOAD_STAR_2  = (1 << 25), /* 0x02000000 */
     SAVE_FLAG_COLLECTED_TOAD_STAR_3  = (1 << 26), /* 0x04000000 */
     SAVE_FLAG_COLLECTED_MIPS_STAR_1  = (1 << 27), /* 0x08000000 */
     SAVE_FLAG_COLLECTED_MIPS_STAR_2  = (1 << 28), /* 0x10000000 */
-    SAVE_FLAG_HAVE_KOOPA_SHELL       = (1 << 29), /* 0x20000000 */
 };
 
 enum StarFlags {
