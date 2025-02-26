@@ -257,7 +257,7 @@ void print_seed_and_options_data(void) {
     u32 i;
     u32 verXPos;
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
-    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
+    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
     
     if (gIsSetSeed) {
         print_generic_string_ascii(8, ypos + 28, "Set Seed");
@@ -1262,9 +1262,11 @@ void ironmario_display_end_of_run(void) {
             char buf[64];
             sprintf(buf, "%s complete", presetStrings[gIronmarioPreset]);
             generic_text_shadow_center(160,175, buf);
-            // if (!gOptionsSettings.cosmetic.s.iframes) {
-            //     generic_text_shadow_center(160,120, "iframes");
-            // }
+            if (!gOptionsSettings.cosmetic.s.iframes) {
+                generic_text_shadow_center(160,120, "Congrats on beating the original IronMario Challenge!");
+                generic_text_shadow_center(160,105, "I hope you had fun along the way!");
+                generic_text_shadow_center(160,90, "- DGR");
+            }
             break;
         case RUN_IS_SET_SEED:
             generic_text_shadow_center(160,190, "RUN INVALID!");
@@ -1475,8 +1477,9 @@ char *songlist[] = {
 
 extern u8 sCurrentBackgroundMusicSeqId;
 void print_music(void) {
+    if (sCurrentBackgroundMusicSeqId == SEQUENCE_NONE) return;
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
-    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
+    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
     print_generic_string_ascii(10, 220, "Now Playing:");
     print_generic_string_ascii(10, 204, songlist[sCurrentBackgroundMusicSeqId - BASE_ID]);
 
