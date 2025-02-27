@@ -1478,6 +1478,7 @@ char *songlist[] = {
 extern u8 sCurrentBackgroundMusicSeqId;
 void print_music(void) {
     if (sCurrentBackgroundMusicSeqId == SEQUENCE_NONE) return;
+    if (sCurrentBackgroundMusicSeqId < BASE_ID) return;
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
     print_generic_string_ascii(10, 220, "Now Playing:");

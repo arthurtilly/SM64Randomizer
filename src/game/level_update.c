@@ -176,6 +176,13 @@ u32 get_intended_level_is_locked(s16 intendedLevel) {
     return get_level_is_locked(targetLevel);
 }
 
+void save_if_stars_nonzero(void) {
+    if (gMarioState->numStars > 0) {
+        gSaveFileModified = TRUE;
+        save_file_do_save(gCurrSaveFileNum - 1);
+    }
+}
+
 void set_course_is_locked(s8 course) {
     if (course == COURSE_NONE) {
         return;
@@ -186,7 +193,7 @@ void set_course_is_locked(s8 course) {
     u32 flag = 1 << course;
     if (!(curFile.lockedCourses & flag)) {
         curFile.lockedCourses |= flag;
-        save_file_do_save(gCurrSaveFileNum - 1);
+        save_if_stars_nonzero();
     }
 }
 
@@ -496,8 +503,7 @@ void course_check_lock(s8 prevCourse, s8 currCourse) {
     } else if (currCourse == COURSE_NONE) {
         curFile.wasInCourse = FALSE;
     }
-    gSaveFileModified = TRUE;
-    save_file_do_save(gCurrSaveFileNum - 1);
+    save_if_stars_nonzero();
 }
 
 // used for warps between levels

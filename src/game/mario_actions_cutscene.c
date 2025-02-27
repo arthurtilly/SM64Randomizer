@@ -1050,10 +1050,15 @@ s32 act_emerge_from_pipe(struct MarioState *m) {
     return FALSE;
 }
 
+u32 gMarioSpawnInvincTimer = 0;
+
 s32 act_spawn_spin_airborne(struct MarioState *m) {
     // entered water, exit action
     if (m->pos[1] < m->waterLevel - 100) {
         load_level_init_text(0);
+        if (gOptionsSettings.cosmetic.s.iframes) {
+            gMarioSpawnInvincTimer = 45;
+        }
         return set_water_plunge_action(m);
     }
 
@@ -1081,8 +1086,6 @@ s32 act_spawn_spin_airborne(struct MarioState *m) {
 
     return FALSE;
 }
-
-u32 gMarioSpawnInvincTimer = 0;
 
 s32 act_spawn_spin_landing(struct MarioState *m) {
     stop_and_set_height_to_floor(m);
