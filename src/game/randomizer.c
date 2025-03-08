@@ -1148,12 +1148,12 @@ void set_mario_light_random(Lights1 *light, tinymt32_t *randomState) {
     set_mario_light(light, r, g, b);
 }
 
-extern Lights1 mario_blue_lights_group;
-extern Lights1 mario_red_lights_group;
-extern Lights1 mario_white_lights_group;
-extern Lights1 mario_brown1_lights_group;
-extern Lights1 mario_beige_lights_group;
-extern Lights1 mario_brown2_lights_group;
+// extern Lights1 mario_blue_lights_group;
+// extern Lights1 mario_red_lights_group;
+// extern Lights1 mario_white_lights_group;
+// extern Lights1 mario_brown1_lights_group;
+// extern Lights1 mario_beige_lights_group;
+// extern Lights1 mario_brown2_lights_group;
 // 4 vertex colors each
 extern Vtx coin_seg3_vertex_yellow[];
 extern Vtx coin_seg3_vertex_red[];
@@ -1193,18 +1193,18 @@ void set_mario_colors(void) {
 
     if (gOptionsSettings.cosmetic.s.marioColors) {
         if (gRandomizerMarioSeed == 2401) {
-            set_mario_light(segmented_to_virtual(&mario_red_lights_group), 0, 255, 0);
+            // set_mario_light(segmented_to_virtual(&mario_red_lights_group), 0, 255, 0);
         } else {
             tinymt32_init(&randomState, gRandomizerMarioSeed);
 
-            set_mario_light_random(segmented_to_virtual(&mario_blue_lights_group), &randomState);
-            set_mario_light_random(segmented_to_virtual(&mario_red_lights_group), &randomState);
-            set_mario_light_random(segmented_to_virtual(&mario_white_lights_group), &randomState);
-            set_mario_light_random(segmented_to_virtual(&mario_brown1_lights_group), &randomState);
-            if (gOptionsSettings.cosmetic.s.marioColors == 2) {
-                set_mario_light_random(segmented_to_virtual(&mario_beige_lights_group), &randomState);
-                set_mario_light_random(segmented_to_virtual(&mario_brown2_lights_group), &randomState);
-            }
+            // set_mario_light_random(segmented_to_virtual(&mario_blue_lights_group), &randomState);
+            // set_mario_light_random(segmented_to_virtual(&mario_red_lights_group), &randomState);
+            // set_mario_light_random(segmented_to_virtual(&mario_white_lights_group), &randomState);
+            // set_mario_light_random(segmented_to_virtual(&mario_brown1_lights_group), &randomState);
+            // if (gOptionsSettings.cosmetic.s.marioColors == 2) {
+            //     set_mario_light_random(segmented_to_virtual(&mario_beige_lights_group), &randomState);
+            //     set_mario_light_random(segmented_to_virtual(&mario_brown2_lights_group), &randomState);
+            // }
         }
     }
 }

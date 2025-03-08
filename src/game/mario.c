@@ -1579,6 +1579,11 @@ void sink_mario_in_quicksand(struct MarioState *m) {
  */
 u64 sCapFlickerFrames = 0b100010001000100010001001001001001001001001001010101010101010101;
 
+
+#ifdef CAP_EFFECT_TEST
+s32 capflags = 0;
+#endif
+
 /**
  * Updates the cap flags mainly based on the cap timer.
  */
@@ -1617,6 +1622,16 @@ u32 update_and_return_cap_flags(struct MarioState *m) {
             }
         }
     }
+
+#ifdef CAP_EFFECT_TEST
+    if (gPlayer1Controller->buttonPressed & L_JPAD) {
+        capflags--;
+    } else if (gPlayer1Controller->buttonPressed & R_JPAD) {
+        capflags++;
+    }
+    capflags = (capflags + 8) % 8;
+    return flags | (capflags << 1);
+#endif
 
     return flags;
 }

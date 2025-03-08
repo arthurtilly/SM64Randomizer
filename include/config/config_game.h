@@ -88,3 +88,5 @@
 // #define BOWSER_3_TEST
 
 // #define JUKEBOX_TEST
+
+// #define CAP_EFFECT_TEST

@@ -298,7 +298,7 @@ static Gfx *make_gfx_mario_alpha(struct GraphNodeGenerated *node, s16 alpha) {
         SET_GRAPH_NODE_LAYER(node->fnNode.node.flags, LAYER_TRANSPARENT);
         gfxHead = alloc_display_list(3 * sizeof(*gfxHead));
         gfx = gfxHead;
-        if (gMarioState->flags & MARIO_VANISH_CAP) {
+        if (gMarioState->marioBodyState->modelState & MODEL_STATE_ALPHA) {
             gDPSetAlphaCompare(gfx++, G_AC_DITHER);
         } else {
             gDPSetAlphaCompare(gfx++, G_AC_NONE);
@@ -329,22 +329,6 @@ Gfx *geo_mirror_mario_set_alpha(s32 callContext, struct GraphNode *node, UNUSED 
         gfx = make_gfx_mario_alpha(asGenerated, alpha);
     }
     return gfx;
-}
-
-/**
- * Determines if Mario is standing or running for the level of detail of his model.
- * If Mario is standing still, he is always high poly. If he is running,
- * his level of detail depends on the distance to the camera.
- */
-Gfx *geo_switch_mario_stand_run(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
-    struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
-    struct MarioBodyState *bodyState = &gBodyStates[switchCase->numCases];
-
-    if (callContext == GEO_CONTEXT_RENDER) {
-        // assign result. 0 if moving, 1 if stationary.
-        switchCase->selectedCase = ((bodyState->action & ACT_FLAG_STATIONARY) == 0);
-    }
-    return NULL;
 }
 
 /**
@@ -476,14 +460,37 @@ Gfx *geo_mario_hand_foot_scaler(s32 callContext, struct GraphNode *node, UNUSED 
 /**
  * Switch between normal cap, wing cap, vanish cap and metal cap.
  */
-Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
+Gfx *geo_switch_mario_alpha(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
     struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
     struct MarioBodyState *bodyState = &gBodyStates[switchCase->numCases];
 
     if (callContext == GEO_CONTEXT_RENDER) {
-        switchCase->selectedCase = bodyState->modelState >> 8;
+        switchCase->selectedCase = (bodyState->modelState & MODEL_STATE_ALPHA) != 0;
     }
     return NULL;
+}
+
+Gfx *geo_switch_mario_env_map(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
+    struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
+    struct MarioBodyState *bodyState = &gBodyStates[switchCase->numCases];
+
+    if (callContext == GEO_CONTEXT_RENDER) {
+        switchCase->selectedCase = (bodyState->modelState & MODEL_STATE_METAL) != 0;
+    }
+    return NULL;
+}
+
+Gfx *geo_mario_revert_dither(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
+    struct GraphNodeGenerated *asGenerated = (struct GraphNodeGenerated *) node;
+    Gfx *gfx = NULL;
+
+    if (callContext == GEO_CONTEXT_RENDER) {
+        gfx = alloc_display_list(2 * sizeof(*gfx));
+        gDPSetAlphaCompare(&gfx[0], G_AC_NONE);
+        gSPEndDisplayList(&gfx[1]);
+        SET_GRAPH_NODE_LAYER(asGenerated->fnNode.node.flags, LAYER_TRANSPARENT);
+    }
+    return gfx;
 }
 
 /**
