@@ -1,48 +1,48 @@
 #include "src/game/envfx_snow.h"
 
-const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt1[] = {
+const GeoLayout mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt1[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_002_switch_option_head__no_cap__mesh_layer_1_mat_override_face_1___eyes_half_closed_1),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt2[] = {
+const GeoLayout mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt2[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_002_switch_option_head__no_cap__mesh_layer_1_mat_override_face_2___eyes_closed_2),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt3[] = {
+const GeoLayout mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt3[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_002_switch_option_head__no_cap__mesh_layer_1_mat_override_face_3___eyes_look_left_3),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt4[] = {
+const GeoLayout mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt4[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_002_switch_option_head__no_cap__mesh_layer_1_mat_override_face_4___eyes_look_right_4),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt5[] = {
+const GeoLayout mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt5[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_002_switch_option_head__no_cap__mesh_layer_1_mat_override_face_5___eyes_look_up_5),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt6[] = {
+const GeoLayout mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt6[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_002_switch_option_head__no_cap__mesh_layer_1_mat_override_face_6___eyes_look_down_6),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt7[] = {
+const GeoLayout mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt7[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_002_switch_option_head__no_cap__mesh_layer_1_mat_override_face_7___eyes_dead_7),
@@ -58,13 +58,13 @@ const GeoLayout mario_head_capless[] = {
 			GEO_OPEN_NODE(),
 				GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_002_switch_option_head__no_cap__mesh_layer_1),
 			GEO_CLOSE_NODE(),
-			GEO_BRANCH(1, mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt1),
-			GEO_BRANCH(1, mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt2),
-			GEO_BRANCH(1, mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt3),
-			GEO_BRANCH(1, mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt4),
-			GEO_BRANCH(1, mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt5),
-			GEO_BRANCH(1, mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt6),
-			GEO_BRANCH(1, mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt7),
+			GEO_BRANCH(1, mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt1),
+			GEO_BRANCH(1, mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt2),
+			GEO_BRANCH(1, mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt3),
+			GEO_BRANCH(1, mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt4),
+			GEO_BRANCH(1, mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt5),
+			GEO_BRANCH(1, mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt6),
+			GEO_BRANCH(1, mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt7),
 		GEO_CLOSE_NODE(),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
@@ -110,56 +110,56 @@ const GeoLayout mario_right_hand_wing_cap[] = {
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt1[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt1[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_002_switch_option_head__no_cap__mesh_layer_1_mat_override_face_1___eyes_half_closed_1),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt2[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt2[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_002_switch_option_head__no_cap__mesh_layer_1_mat_override_face_2___eyes_closed_2),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt3[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt3[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_002_switch_option_head__no_cap__mesh_layer_1_mat_override_face_3___eyes_look_left_3),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt4[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt4[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_002_switch_option_head__no_cap__mesh_layer_1_mat_override_face_4___eyes_look_right_4),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt5[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt5[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_002_switch_option_head__no_cap__mesh_layer_1_mat_override_face_5___eyes_look_up_5),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt6[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt6[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_002_switch_option_head__no_cap__mesh_layer_1_mat_override_face_6___eyes_look_down_6),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt7[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt7[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_002_switch_option_head__no_cap__mesh_layer_1_mat_override_face_7___eyes_dead_7),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_jump_mario_head_capless[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_jump_mario_head_capless[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_SWITCH_CASE(0, geo_switch_mario_eyes),
@@ -168,25 +168,25 @@ const GeoLayout mario_002_alpha_switch_case_opt1_jump_mario_head_capless[] = {
 			GEO_OPEN_NODE(),
 				GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_002_switch_option_head__no_cap__mesh_layer_1),
 			GEO_CLOSE_NODE(),
-			GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt1),
-			GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt2),
-			GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt3),
-			GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt4),
-			GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt5),
-			GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt6),
-			GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt7),
+			GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt1),
+			GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt2),
+			GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt3),
+			GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt4),
+			GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt5),
+			GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt6),
+			GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt1_switch_face_opt7),
 		GEO_CLOSE_NODE(),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_jump_mario_left_hand_open[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_jump_mario_left_hand_open[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_ANIMATED_PART(LAYER_TRANSPARENT, 60, 0, 0, mario_002_switch_option_hand_open_left_mesh_layer_1),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_jump_mario_right_hand_open[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_jump_mario_right_hand_open[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_ANIMATED_PART(LAYER_TRANSPARENT, 60, 0, 0, mario_002_switch_option_hand_open_right_mesh_layer_1),
@@ -196,21 +196,21 @@ const GeoLayout mario_002_alpha_switch_case_opt1_jump_mario_right_hand_open[] = 
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_jump_mario_right_hand_peace[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_jump_mario_right_hand_peace[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_ANIMATED_PART(LAYER_TRANSPARENT, 60, 0, 0, mario_004_switch_option_hand_peace_right_mesh_layer_1),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_jump_mario_right_hand_cap[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_jump_mario_right_hand_cap[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_ANIMATED_PART(LAYER_TRANSPARENT, 60, 0, 0, mario_005_switch_option_hand_cap_right_mesh_layer_1),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_jump_mario_right_hand_wing_cap[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_jump_mario_right_hand_wing_cap[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_ANIMATED_PART(LAYER_TRANSPARENT, 60, 0, 0, mario_006_switch_option_hand_wing_cap_right_mesh_layer_1),
@@ -220,7 +220,7 @@ const GeoLayout mario_002_alpha_switch_case_opt1_jump_mario_right_hand_wing_cap[
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_002_alpha_switch_case_opt1_jump_mario_head_capless[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_003_alpha_switch_case_opt1_jump_mario_head_capless[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_SWITCH_CASE(0, geo_switch_mario_eyes),
@@ -233,14 +233,14 @@ const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_002_alpha_switch_case_opt1_jump_mario_left_hand_open[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_003_alpha_switch_case_opt1_jump_mario_left_hand_open[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_ANIMATED_PART(LAYER_TRANSPARENT, 60, 0, 0, mario_002_switch_option_hand_open_left_mesh_layer_1_mat_override_metal_0),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_002_alpha_switch_case_opt1_jump_mario_right_hand_open[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_003_alpha_switch_case_opt1_jump_mario_right_hand_open[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_ANIMATED_PART(LAYER_TRANSPARENT, 60, 0, 0, mario_002_switch_option_hand_open_right_mesh_layer_1_mat_override_metal_0),
@@ -250,21 +250,21 @@ const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_002_alpha_switch_case_opt1_jump_mario_right_hand_peace[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_003_alpha_switch_case_opt1_jump_mario_right_hand_peace[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_ANIMATED_PART(LAYER_TRANSPARENT, 60, 0, 0, mario_004_switch_option_hand_peace_right_mesh_layer_1_mat_override_metal_0),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_002_alpha_switch_case_opt1_jump_mario_right_hand_cap[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_003_alpha_switch_case_opt1_jump_mario_right_hand_cap[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_ANIMATED_PART(LAYER_TRANSPARENT, 60, 0, 0, mario_005_switch_option_hand_cap_right_mesh_layer_1_mat_override_metal_0),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_002_alpha_switch_case_opt1_jump_mario_right_hand_wing_cap[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_003_alpha_switch_case_opt1_jump_mario_right_hand_wing_cap[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_ANIMATED_PART(LAYER_TRANSPARENT, 60, 0, 0, mario_006_switch_option_hand_wing_cap_right_mesh_layer_1_mat_override_metal_0),
@@ -274,7 +274,7 @@ const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt1[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt1[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, NULL),
@@ -304,7 +304,7 @@ const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt1[] = 
 											GEO_CLOSE_NODE(),
 										GEO_CLOSE_NODE(),
 									GEO_CLOSE_NODE(),
-									GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_002_alpha_switch_case_opt1_jump_mario_head_capless),
+									GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_003_alpha_switch_case_opt1_jump_mario_head_capless),
 								GEO_CLOSE_NODE(),
 								GEO_TRANSLATE_ROTATE(LAYER_FORCE, 142, -51, 126, -15, 33, -133),
 								GEO_OPEN_NODE(),
@@ -343,7 +343,7 @@ const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt1[] = 
 												GEO_CLOSE_NODE(),
 											GEO_CLOSE_NODE(),
 										GEO_CLOSE_NODE(),
-										GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_002_alpha_switch_case_opt1_jump_mario_left_hand_open),
+										GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_003_alpha_switch_case_opt1_jump_mario_left_hand_open),
 									GEO_CLOSE_NODE(),
 								GEO_CLOSE_NODE(),
 							GEO_CLOSE_NODE(),
@@ -368,10 +368,10 @@ const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt1[] = 
 												GEO_HELD_OBJECT(0, 0, 0, 0, geo_switch_mario_hand_grab_pos),
 											GEO_CLOSE_NODE(),
 										GEO_CLOSE_NODE(),
-										GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_002_alpha_switch_case_opt1_jump_mario_right_hand_open),
-										GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_002_alpha_switch_case_opt1_jump_mario_right_hand_peace),
-										GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_002_alpha_switch_case_opt1_jump_mario_right_hand_cap),
-										GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_002_alpha_switch_case_opt1_jump_mario_right_hand_wing_cap),
+										GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_003_alpha_switch_case_opt1_jump_mario_right_hand_open),
+										GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_003_alpha_switch_case_opt1_jump_mario_right_hand_peace),
+										GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_003_alpha_switch_case_opt1_jump_mario_right_hand_cap),
+										GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt1_jump_mario_003_alpha_switch_case_opt1_jump_mario_right_hand_wing_cap),
 									GEO_CLOSE_NODE(),
 								GEO_CLOSE_NODE(),
 							GEO_CLOSE_NODE(),
@@ -410,56 +410,56 @@ const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt1[] = 
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt1[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt1[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_head_mesh_layer_1_mat_override_face_1___eyes_half_closed_1),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt2[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt2[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_head_mesh_layer_1_mat_override_face_2___eyes_closed_2),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt3[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt3[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_head_mesh_layer_1_mat_override_face_3___eyes_look_left_3),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt4[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt4[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_head_mesh_layer_1_mat_override_face_4___eyes_look_right_4),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt5[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt5[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_head_mesh_layer_1_mat_override_face_5___eyes_look_up_5),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt6[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt6[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_head_mesh_layer_1_mat_override_face_6___eyes_look_down_6),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt7[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt7[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_head_mesh_layer_1_mat_override_face_7___eyes_dead_7),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt1[] = {
+const GeoLayout mario_003_alpha_switch_case_opt1[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_SWITCH_CASE(0, geo_switch_mario_env_map),
@@ -491,16 +491,16 @@ const GeoLayout mario_002_alpha_switch_case_opt1[] = {
 													GEO_OPEN_NODE(),
 														GEO_DISPLAY_LIST(LAYER_TRANSPARENT, mario_head_mesh_layer_1),
 													GEO_CLOSE_NODE(),
-													GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt1),
-													GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt2),
-													GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt3),
-													GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt4),
-													GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt5),
-													GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt6),
-													GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt7),
+													GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt1),
+													GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt2),
+													GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt3),
+													GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt4),
+													GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt5),
+													GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt6),
+													GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt7),
 												GEO_CLOSE_NODE(),
 											GEO_CLOSE_NODE(),
-											GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_jump_mario_head_capless),
+											GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_jump_mario_head_capless),
 										GEO_CLOSE_NODE(),
 										GEO_TRANSLATE_ROTATE(LAYER_FORCE, 142, -51, 126, -15, 33, -133),
 										GEO_OPEN_NODE(),
@@ -539,7 +539,7 @@ const GeoLayout mario_002_alpha_switch_case_opt1[] = {
 														GEO_CLOSE_NODE(),
 													GEO_CLOSE_NODE(),
 												GEO_CLOSE_NODE(),
-												GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_jump_mario_left_hand_open),
+												GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_jump_mario_left_hand_open),
 											GEO_CLOSE_NODE(),
 										GEO_CLOSE_NODE(),
 									GEO_CLOSE_NODE(),
@@ -564,10 +564,10 @@ const GeoLayout mario_002_alpha_switch_case_opt1[] = {
 														GEO_HELD_OBJECT(0, 0, 0, 0, geo_switch_mario_hand_grab_pos),
 													GEO_CLOSE_NODE(),
 												GEO_CLOSE_NODE(),
-												GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_jump_mario_right_hand_open),
-												GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_jump_mario_right_hand_peace),
-												GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_jump_mario_right_hand_cap),
-												GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_jump_mario_right_hand_wing_cap),
+												GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_jump_mario_right_hand_open),
+												GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_jump_mario_right_hand_peace),
+												GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_jump_mario_right_hand_cap),
+												GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_jump_mario_right_hand_wing_cap),
 											GEO_CLOSE_NODE(),
 										GEO_CLOSE_NODE(),
 									GEO_CLOSE_NODE(),
@@ -604,12 +604,12 @@ const GeoLayout mario_002_alpha_switch_case_opt1[] = {
 					GEO_CLOSE_NODE(),
 				GEO_CLOSE_NODE(),
 			GEO_CLOSE_NODE(),
-			GEO_BRANCH(1, mario_002_alpha_switch_case_opt1_002_metal_switch_case_opt1),
+			GEO_BRANCH(1, mario_003_alpha_switch_case_opt1_002_metal_switch_case_opt1),
 		GEO_CLOSE_NODE(),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_head_capless[] = {
+const GeoLayout mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_head_capless[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_SWITCH_CASE(0, geo_switch_mario_eyes),
@@ -622,14 +622,14 @@ const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_left_hand_open[] = {
+const GeoLayout mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_left_hand_open[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_ANIMATED_PART(LAYER_OPAQUE, 60, 0, 0, mario_002_switch_option_hand_open_left_mesh_layer_1_mat_override_metal_0),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_right_hand_open[] = {
+const GeoLayout mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_right_hand_open[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_ANIMATED_PART(LAYER_OPAQUE, 60, 0, 0, mario_002_switch_option_hand_open_right_mesh_layer_1_mat_override_metal_0),
@@ -639,21 +639,21 @@ const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_right_hand_peace[] = {
+const GeoLayout mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_right_hand_peace[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_ANIMATED_PART(LAYER_OPAQUE, 60, 0, 0, mario_004_switch_option_hand_peace_right_mesh_layer_1_mat_override_metal_0),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_right_hand_cap[] = {
+const GeoLayout mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_right_hand_cap[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_ANIMATED_PART(LAYER_OPAQUE, 60, 0, 0, mario_005_switch_option_hand_cap_right_mesh_layer_1_mat_override_metal_0),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_right_hand_wing_cap[] = {
+const GeoLayout mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_right_hand_wing_cap[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_ANIMATED_PART(LAYER_OPAQUE, 60, 0, 0, mario_006_switch_option_hand_wing_cap_right_mesh_layer_1_mat_override_metal_0),
@@ -663,7 +663,7 @@ const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt1[] = {
+const GeoLayout mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt1[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, NULL),
@@ -693,7 +693,7 @@ const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt1[] = 
 											GEO_CLOSE_NODE(),
 										GEO_CLOSE_NODE(),
 									GEO_CLOSE_NODE(),
-									GEO_BRANCH(1, mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_head_capless),
+									GEO_BRANCH(1, mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_head_capless),
 								GEO_CLOSE_NODE(),
 								GEO_TRANSLATE_ROTATE(LAYER_FORCE, 142, -51, 126, -15, 33, -133),
 								GEO_OPEN_NODE(),
@@ -732,7 +732,7 @@ const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt1[] = 
 												GEO_CLOSE_NODE(),
 											GEO_CLOSE_NODE(),
 										GEO_CLOSE_NODE(),
-										GEO_BRANCH(1, mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_left_hand_open),
+										GEO_BRANCH(1, mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_left_hand_open),
 									GEO_CLOSE_NODE(),
 								GEO_CLOSE_NODE(),
 							GEO_CLOSE_NODE(),
@@ -757,10 +757,10 @@ const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt1[] = 
 												GEO_HELD_OBJECT(0, 0, 0, 0, geo_switch_mario_hand_grab_pos),
 											GEO_CLOSE_NODE(),
 										GEO_CLOSE_NODE(),
-										GEO_BRANCH(1, mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_right_hand_open),
-										GEO_BRANCH(1, mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_right_hand_peace),
-										GEO_BRANCH(1, mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_right_hand_cap),
-										GEO_BRANCH(1, mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_right_hand_wing_cap),
+										GEO_BRANCH(1, mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_right_hand_open),
+										GEO_BRANCH(1, mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_right_hand_peace),
+										GEO_BRANCH(1, mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_right_hand_cap),
+										GEO_BRANCH(1, mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt1_jump_mario_right_hand_wing_cap),
 									GEO_CLOSE_NODE(),
 								GEO_CLOSE_NODE(),
 							GEO_CLOSE_NODE(),
@@ -799,49 +799,49 @@ const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt1[] = 
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt1[] = {
+const GeoLayout mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt1[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_head_mesh_layer_1_mat_override_face_1___eyes_half_closed_1),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt2[] = {
+const GeoLayout mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt2[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_head_mesh_layer_1_mat_override_face_2___eyes_closed_2),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt3[] = {
+const GeoLayout mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt3[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_head_mesh_layer_1_mat_override_face_3___eyes_look_left_3),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt4[] = {
+const GeoLayout mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt4[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_head_mesh_layer_1_mat_override_face_4___eyes_look_right_4),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt5[] = {
+const GeoLayout mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt5[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_head_mesh_layer_1_mat_override_face_5___eyes_look_up_5),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt6[] = {
+const GeoLayout mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt6[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_head_mesh_layer_1_mat_override_face_6___eyes_look_down_6),
 	GEO_CLOSE_NODE(),
 	GEO_RETURN(),
 };
-const GeoLayout mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt7[] = {
+const GeoLayout mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt7[] = {
 	GEO_NODE_START(),
 	GEO_OPEN_NODE(),
 		GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_head_mesh_layer_1_mat_override_face_7___eyes_dead_7),
@@ -856,6 +856,7 @@ const GeoLayout mario_geo[] = {
 			GEO_SCALE(LAYER_FORCE, 16384),
 			GEO_OPEN_NODE(),
 				GEO_ASM(0, geo_mirror_mario_backface_culling),
+				GEO_ASM(2, geo_mirror_mario_backface_culling),
 				GEO_ASM(0, geo_mirror_mario_set_alpha),
 				GEO_SWITCH_CASE(0, geo_switch_mario_alpha),
 				GEO_OPEN_NODE(),
@@ -890,13 +891,13 @@ const GeoLayout mario_geo[] = {
 																	GEO_OPEN_NODE(),
 																		GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_head_mesh_layer_1),
 																	GEO_CLOSE_NODE(),
-																	GEO_BRANCH(1, mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt1),
-																	GEO_BRANCH(1, mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt2),
-																	GEO_BRANCH(1, mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt3),
-																	GEO_BRANCH(1, mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt4),
-																	GEO_BRANCH(1, mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt5),
-																	GEO_BRANCH(1, mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt6),
-																	GEO_BRANCH(1, mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt7),
+																	GEO_BRANCH(1, mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt1),
+																	GEO_BRANCH(1, mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt2),
+																	GEO_BRANCH(1, mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt3),
+																	GEO_BRANCH(1, mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt4),
+																	GEO_BRANCH(1, mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt5),
+																	GEO_BRANCH(1, mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt6),
+																	GEO_BRANCH(1, mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt0_capless_switch_opt0_face_switch_opt7),
 																GEO_CLOSE_NODE(),
 															GEO_CLOSE_NODE(),
 															GEO_BRANCH(1, mario_head_capless),
@@ -1003,13 +1004,13 @@ const GeoLayout mario_geo[] = {
 									GEO_CLOSE_NODE(),
 								GEO_CLOSE_NODE(),
 							GEO_CLOSE_NODE(),
-							GEO_BRANCH(1, mario_002_alpha_switch_case_opt0_002_metal_switch_case_opt1),
+							GEO_BRANCH(1, mario_003_alpha_switch_case_opt0_002_metal_switch_case_opt1),
 						GEO_CLOSE_NODE(),
 					GEO_CLOSE_NODE(),
-					GEO_BRANCH(1, mario_002_alpha_switch_case_opt1),
+					GEO_BRANCH(1, mario_003_alpha_switch_case_opt1),
 				GEO_CLOSE_NODE(),
 				GEO_ASM(1, geo_mirror_mario_backface_culling),
-				GEO_ASM(0, geo_mario_revert_dither),
+				GEO_ASM(3, geo_mirror_mario_backface_culling),
 			GEO_CLOSE_NODE(),
 		GEO_CLOSE_NODE(),
 	GEO_CLOSE_NODE(),

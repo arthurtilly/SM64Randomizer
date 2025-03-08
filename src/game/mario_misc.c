@@ -298,11 +298,6 @@ static Gfx *make_gfx_mario_alpha(struct GraphNodeGenerated *node, s16 alpha) {
         SET_GRAPH_NODE_LAYER(node->fnNode.node.flags, LAYER_TRANSPARENT);
         gfxHead = alloc_display_list(3 * sizeof(*gfxHead));
         gfx = gfxHead;
-        if (gMarioState->marioBodyState->modelState & MODEL_STATE_ALPHA) {
-            gDPSetAlphaCompare(gfx++, G_AC_DITHER);
-        } else {
-            gDPSetAlphaCompare(gfx++, G_AC_NONE);
-        }
     }
     gDPSetEnvColor(gfx++, 255, 255, 255, alpha);
     gSPEndDisplayList(gfx);
@@ -480,19 +475,6 @@ Gfx *geo_switch_mario_env_map(s32 callContext, struct GraphNode *node, UNUSED Ma
     return NULL;
 }
 
-Gfx *geo_mario_revert_dither(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
-    struct GraphNodeGenerated *asGenerated = (struct GraphNodeGenerated *) node;
-    Gfx *gfx = NULL;
-
-    if (callContext == GEO_CONTEXT_RENDER) {
-        gfx = alloc_display_list(2 * sizeof(*gfx));
-        gDPSetAlphaCompare(&gfx[0], G_AC_NONE);
-        gSPEndDisplayList(&gfx[1]);
-        SET_GRAPH_NODE_LAYER(asGenerated->fnNode.node.flags, LAYER_TRANSPARENT);
-    }
-    return gfx;
-}
-
 /**
  * Determine whether Mario's head is drawn with or without a cap on.
  * Also sets the visibility of the wing cap wings on or off.
@@ -618,23 +600,55 @@ Gfx *geo_render_mirror_mario(s32 callContext, struct GraphNode *node, UNUSED Mat
  * Since Mirror Mario has an x scale of -1, the mesh becomes inside out.
  * This node corrects that by changing the culling mode accordingly.
  */
+struct RenderModeContainer {
+    u32 modes[LAYER_COUNT];
+};
+extern struct RenderModeContainer renderModeTable_1Cycle[2];
+extern struct RenderModeContainer renderModeTable_2Cycle[2];
+
 Gfx *geo_mirror_mario_backface_culling(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
     struct GraphNodeGenerated *asGenerated = (struct GraphNodeGenerated *) node;
     Gfx *gfx = NULL;
 
-    if (callContext == GEO_CONTEXT_RENDER && gCurGraphNodeObject == &gMirrorMario) {
-        gfx = alloc_display_list(3 * sizeof(*gfx));
+    if (callContext == GEO_CONTEXT_RENDER) {
+        gfx = alloc_display_list(6 * sizeof(*gfx));
+        Gfx *gfxHead = gfx;
 
-        if (asGenerated->parameter == 0) {
-            gSPClearGeometryMode(&gfx[0], G_CULL_BACK);
-            gSPSetGeometryMode(&gfx[1], G_CULL_FRONT);
-            gSPEndDisplayList(&gfx[2]);
+        s32 isEnd = (asGenerated->parameter & 1);
+        s32 isCutout = (asGenerated->parameter & 2);
+
+        u8 layer = (gMarioState->marioBodyState->modelState & MODEL_STATE_ALPHA) ? LAYER_TRANSPARENT : (isCutout ? LAYER_ALPHA : LAYER_OPAQUE);
+        if (layer == LAYER_TRANSPARENT && isCutout) return NULL;
+
+        u32 renderModeCycle1 = renderModeTable_1Cycle[1].modes[layer];
+        u32 renderModeCycle2 = renderModeTable_2Cycle[1].modes[layer];
+
+        if (!isEnd) {
+            gDPSetCycleType(gfxHead++, G_CYC_2CYCLE);
+            gDPSetRenderMode(gfxHead++, G_RM_NOOP, renderModeCycle2);
+            if (layer == LAYER_TRANSPARENT) {
+                gDPSetAlphaCompare(gfxHead++, G_AC_DITHER);
+            } else {
+                gDPSetAlphaCompare(gfxHead++, G_AC_NONE);
+            }
         } else {
-            gSPClearGeometryMode(&gfx[0], G_CULL_FRONT);
-            gSPSetGeometryMode(&gfx[1], G_CULL_BACK);
-            gSPEndDisplayList(&gfx[2]);
+            gDPSetAlphaCompare(gfxHead++, G_AC_NONE);
+            gDPSetCycleType(gfxHead++, G_CYC_1CYCLE);
+            gDPSetRenderMode(gfxHead++, renderModeCycle1, renderModeCycle2);
         }
-        SET_GRAPH_NODE_LAYER(asGenerated->fnNode.node.flags, LAYER_OPAQUE);
+
+        if (gCurGraphNodeObject == &gMirrorMario) {
+            if (!isEnd) {
+                gSPClearGeometryMode(gfxHead++, G_CULL_BACK);
+                gSPSetGeometryMode(gfxHead++, G_CULL_FRONT);
+            } else {
+                gSPClearGeometryMode(gfxHead++, G_CULL_FRONT);
+                gSPSetGeometryMode(gfxHead++, G_CULL_BACK);
+            }
+        }
+        gSPEndDisplayList(gfxHead++);
+        SET_GRAPH_NODE_LAYER(asGenerated->fnNode.node.flags, layer);
     }
+
     return gfx;
 }

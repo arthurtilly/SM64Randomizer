@@ -30,7 +30,6 @@ Gfx *geo_switch_mario_hand(s32 callContext, struct GraphNode *node, UNUSED Mat4 
 Gfx *geo_mario_hand_foot_scaler(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx);
 Gfx *geo_switch_mario_alpha(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx);
 Gfx *geo_switch_mario_env_map(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx);
-Gfx *geo_mario_revert_dither(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx);
 Gfx *geo_switch_mario_cap_on_off(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx);
 Gfx *geo_mario_rotate_wing_cap_wings(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx);
 Gfx *geo_switch_mario_hand_grab_pos(s32 callContext, struct GraphNode *node, Mat4 *mtx);
