@@ -1260,10 +1260,6 @@ void apply_mario_colors(void) {
     set_mario_light(&mario_hair_lights, MARIO_HAIR_COLOR);
 
     set_mario_prim(mat_mario_sideburns, MARIO_HAIR_COLOR);
-    u8 r = gMarioColors[MARIO_MUSTACHE_COLOR] >> 24;
-    u8 g = gMarioColors[MARIO_MUSTACHE_COLOR] >> 16;
-    u8 b = gMarioColors[MARIO_MUSTACHE_COLOR] >> 8;
-    gMarioColors[MARIO_MUSTACHE_COLOR] = (r/2 << 24) | (g/2 << 16) | (b/2 << 8) | 0xFF;
     set_mario_prim(mat_mario_mustache, MARIO_MUSTACHE_COLOR);
     set_mario_prim(mat_mario_button, MARIO_BUTTON_COLOR);
     set_mario_prim(mat_mario_cap_logo, MARIO_EMBLEM_COLOR);
