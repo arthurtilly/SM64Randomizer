@@ -1055,6 +1055,16 @@ void init_randomizer(s32 fileNum) {
     init_required_stars();
 }
 
+f32 RMSE(u8 r1, u8 r2, u8 g1, u8 g2, u8 b1, u8 b2) {
+    f32 r, g, b;
+    r = r1 - r2;
+    g = g1 - g2;
+    b = b1 - b2;
+    return sqrtf(r * r + g * g + b * b);
+}
+
+#define MINDIFF 140.f //might be infinite loop idk how this works
+
 // stolen from stackoverflow
 f32 hue_to_rgb(f32 p, f32 q, f32 t) {
     if (t < 0.f)
@@ -1124,7 +1134,47 @@ void init_star_color(struct Object *star, s32 courseID, s32 starID) {
     star->oStarColor = (RGB[0] << 16) | (RGB[1] << 8) | RGB[2];
 }
 
-void set_mario_light(Lights1 *light, u8 r, u8 g, u8 b) {
+enum MarioColors {
+    MARIO_HAT_COLOR,
+    MARIO_SHIRT_COLOR,
+    MARIO_OVERALLS_COLOR,
+    MARIO_SHOES_COLOR,
+    MARIO_GLOVES_COLOR,
+    MARIO_BUTTON_COLOR,
+    MARIO_HAIR_COLOR,
+    MARIO_SKIN_COLOR,
+    MARIO_MUSTACHE_COLOR,
+    MARIO_EMBLEM_COLOR,
+
+    MARIO_COLOR_COUNT,
+};
+
+u32 gMarioColors[MARIO_COLOR_COUNT];
+
+void set_mario_colors_default(void) {
+    if (gOptionsSettings.gameplay.s.hardcoreIronmario) {
+        gMarioColors[MARIO_HAT_COLOR] = 0x00FF00FF;
+        gMarioColors[MARIO_EMBLEM_COLOR] = 0x00FF00FF;
+    } else { 
+        gMarioColors[MARIO_HAT_COLOR] = 0xFF0000FF;
+        gMarioColors[MARIO_EMBLEM_COLOR] = 0xFF0000FF;
+    }
+    gMarioColors[MARIO_SHIRT_COLOR] = 0xFF0000FF;
+    gMarioColors[MARIO_OVERALLS_COLOR] = 0x0000FFFF;
+    gMarioColors[MARIO_SHOES_COLOR] = 0x721C0EFF;
+    gMarioColors[MARIO_GLOVES_COLOR] = 0xFFFFFFFF;
+    gMarioColors[MARIO_HAIR_COLOR] = 0x730600FF;
+    gMarioColors[MARIO_SKIN_COLOR] = 0xFEC179FF;
+    gMarioColors[MARIO_MUSTACHE_COLOR] = 0x000000FF;
+    gMarioColors[MARIO_BUTTON_COLOR] = 0xF8F800FF;
+}
+
+void set_mario_light(Lights1 *light, u32 num) {
+    u32 color = gMarioColors[num];
+    light = segmented_to_virtual(light);
+    u8 r = color >> 24;
+    u8 g = color >> 16;
+    u8 b = color >> 8;
     light->a.l.col[0] = r / 2;
     light->a.l.col[1] = g / 2;
     light->a.l.col[2] = b / 2;
@@ -1139,21 +1189,86 @@ void set_mario_light(Lights1 *light, u8 r, u8 g, u8 b) {
     light->l[0].l.colc[2] = light->l[0].l.col[2];
 }
 
-void set_mario_light_random(Lights1 *light, tinymt32_t *randomState) {
-    u8 RGB[3];
-    get_random_color(RGB, randomState);
-    u8 r = RGB[0];
-    u8 g = RGB[1];
-    u8 b = RGB[2];
-    set_mario_light(light, r, g, b);
+void set_mario_prim(Gfx *gfx, u32 num) {
+    gfx = segmented_to_virtual(gfx);
+    while (gfx->words.w0 >> 24 != G_SETPRIMCOLOR) {
+        gfx++;
+    }
+    gfx->words.w1 = gMarioColors[num];
 }
 
-// extern Lights1 mario_blue_lights_group;
-// extern Lights1 mario_red_lights_group;
-// extern Lights1 mario_white_lights_group;
-// extern Lights1 mario_brown1_lights_group;
-// extern Lights1 mario_beige_lights_group;
-// extern Lights1 mario_brown2_lights_group;
+void set_mario_color_random(u32 num, tinymt32_t *randomState) {
+    u8 RGB[3];
+    get_random_color(RGB, randomState);
+    gMarioColors[num] = (RGB[0] << 24) | (RGB[1] << 16) | (RGB[2] << 8) | 0xFF;
+}
+
+void set_mario_color_different(u32 num, u32 avoidNum, tinymt32_t *randomState) {
+    u8 RGB[3];
+    u8 avoidR = gMarioColors[avoidNum] >> 24;
+    u8 avoidG = gMarioColors[avoidNum] >> 16;
+    u8 avoidB = gMarioColors[avoidNum] >> 8;
+    get_random_color(RGB, randomState);
+    while (RMSE(RGB[0], avoidR, RGB[1], avoidG, RGB[2], avoidB) < MINDIFF) {
+        get_random_color(RGB, randomState);
+    }
+    gMarioColors[num] = (RGB[0] << 24) | (RGB[1] << 16) | (RGB[2] << 8) | 0xFF;
+}
+
+extern Lights1 mario_hat_lights;
+extern Lights1 mario_cap_logo_lights;
+extern Lights1 mario_shirt_lights;
+
+extern Lights1 mario_blue_lights;
+extern Lights1 mario_button_lights;
+
+extern Lights1 mario_gloves_lights;
+extern Lights1 mario_shoes_lights;
+
+extern Lights1 mario_skin_lights;
+extern Lights1 mario_mustache_lights;
+extern Lights1 mario_sideburns_lights;
+extern Lights1 mario_face_0___eyes_open_lights;
+extern Lights1 mario_face_1___eyes_half_closed_lights;
+extern Lights1 mario_face_2___eyes_closed_lights;
+extern Lights1 mario_face_3___eyes_dead_lights;
+extern Lights1 mario_hair_lights;
+
+extern Gfx mat_mario_sideburns[];
+extern Gfx mat_mario_mustache[];
+extern Gfx mat_mario_button[];
+extern Gfx mat_mario_cap_logo[];
+
+void apply_mario_colors(void) {
+    set_mario_light(&mario_hat_lights, MARIO_HAT_COLOR);
+    set_mario_light(&mario_cap_logo_lights, MARIO_HAT_COLOR);
+    set_mario_light(&mario_shirt_lights, MARIO_SHIRT_COLOR);
+
+    set_mario_light(&mario_blue_lights, MARIO_OVERALLS_COLOR);
+    set_mario_light(&mario_button_lights, MARIO_OVERALLS_COLOR);
+
+    set_mario_light(&mario_gloves_lights, MARIO_GLOVES_COLOR);
+    set_mario_light(&mario_shoes_lights, MARIO_SHOES_COLOR);
+
+    set_mario_light(&mario_skin_lights, MARIO_SKIN_COLOR);
+    set_mario_light(&mario_mustache_lights, MARIO_SKIN_COLOR);
+    set_mario_light(&mario_sideburns_lights, MARIO_SKIN_COLOR);
+    set_mario_light(&mario_face_0___eyes_open_lights, MARIO_SKIN_COLOR);
+    set_mario_light(&mario_face_1___eyes_half_closed_lights, MARIO_SKIN_COLOR);
+    set_mario_light(&mario_face_2___eyes_closed_lights, MARIO_SKIN_COLOR);
+    set_mario_light(&mario_face_3___eyes_dead_lights, MARIO_SKIN_COLOR);
+    set_mario_light(&mario_hair_lights, MARIO_HAIR_COLOR);
+
+    set_mario_prim(mat_mario_sideburns, MARIO_HAIR_COLOR);
+    u8 r = gMarioColors[MARIO_MUSTACHE_COLOR] >> 24;
+    u8 g = gMarioColors[MARIO_MUSTACHE_COLOR] >> 16;
+    u8 b = gMarioColors[MARIO_MUSTACHE_COLOR] >> 8;
+    gMarioColors[MARIO_MUSTACHE_COLOR] = (r/2 << 24) | (g/2 << 16) | (b/2 << 8) | 0xFF;
+    set_mario_prim(mat_mario_mustache, MARIO_MUSTACHE_COLOR);
+    set_mario_prim(mat_mario_button, MARIO_BUTTON_COLOR);
+    set_mario_prim(mat_mario_cap_logo, MARIO_EMBLEM_COLOR);
+}
+
 // 4 vertex colors each
 extern Vtx coin_seg3_vertex_yellow[];
 extern Vtx coin_seg3_vertex_red[];
@@ -1178,35 +1293,32 @@ void set_coin_color(u8 r, u8 g, u8 b, Vtx *d) {
     }
 }
 
-f32 RMSE(u8 r1, u8 r2, u8 g1, u8 g2, u8 b1, u8 b2) {
-    f32 r, g, b;
-    r = r1 - r2;
-    g = g1 - g2;
-    b = b1 - b2;
-    return sqrtf(r * r + g * g + b * b);
-}
-
-#define MINDIFF 140.f //might be infinite loop idk how this works
-
 void set_mario_colors(void) {
+    set_mario_colors_default();
     tinymt32_t randomState;
 
     if (gOptionsSettings.cosmetic.s.marioColors) {
         if (gRandomizerMarioSeed == 2401) {
-            // set_mario_light(segmented_to_virtual(&mario_red_lights_group), 0, 255, 0);
+            gMarioColors[MARIO_SHIRT_COLOR] = 0x00FF00FF;
+            gMarioColors[MARIO_HAT_COLOR] = 0x00FF00FF;
+            gMarioColors[MARIO_EMBLEM_COLOR] = 0x00FF00FF;
         } else {
             tinymt32_init(&randomState, gRandomizerMarioSeed);
 
-            // set_mario_light_random(segmented_to_virtual(&mario_blue_lights_group), &randomState);
-            // set_mario_light_random(segmented_to_virtual(&mario_red_lights_group), &randomState);
-            // set_mario_light_random(segmented_to_virtual(&mario_white_lights_group), &randomState);
-            // set_mario_light_random(segmented_to_virtual(&mario_brown1_lights_group), &randomState);
-            // if (gOptionsSettings.cosmetic.s.marioColors == 2) {
-            //     set_mario_light_random(segmented_to_virtual(&mario_beige_lights_group), &randomState);
-            //     set_mario_light_random(segmented_to_virtual(&mario_brown2_lights_group), &randomState);
-            // }
+            set_mario_color_random(MARIO_SHIRT_COLOR, &randomState);
+            set_mario_color_random(MARIO_OVERALLS_COLOR, &randomState);
+            set_mario_color_random(MARIO_GLOVES_COLOR, &randomState);
+            set_mario_color_random(MARIO_SHOES_COLOR, &randomState);
+            set_mario_color_random(MARIO_BUTTON_COLOR, &randomState);
+            if (gOptionsSettings.cosmetic.s.marioColors == 2) {
+                set_mario_color_random(MARIO_SKIN_COLOR, &randomState);
+                set_mario_color_different(MARIO_HAIR_COLOR, MARIO_SKIN_COLOR, &randomState);
+                gMarioColors[MARIO_MUSTACHE_COLOR] = gMarioColors[MARIO_HAIR_COLOR];
+            }
         }
     }
+
+    apply_mario_colors();
 }
 
 void set_coin_colors(void) {
