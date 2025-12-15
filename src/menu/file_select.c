@@ -2478,7 +2478,7 @@ void handle_info_display(struct InfoDisplay displays[], s32 count) {
             if (prevInfoDisplay != i) {
                 infoAlpha = 0;
                 prevInfoDisplay = i;
-            } else if ((abs(gPlayer3Controller->rawStickX) > 10) || (abs(gPlayer3Controller->rawStickY) > 10)) {
+            } else if ((absi(gPlayer3Controller->rawStickX) > 10) || (absi(gPlayer3Controller->rawStickY) > 10)) {
                 infoAlpha -= 40;
                 if (infoAlpha < 0) infoAlpha = 0;
             } else if (infoAlpha < 255) {
