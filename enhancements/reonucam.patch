@@ -11,11 +11,11 @@ index 5752ab85..a1585533 100644
 +#define REONUCAM
 +
  // Note: Reonucam is available, but because we had no time to test it properly, it's included as a patch rather than being in the code by default.
- // Run this command to apply the patch if you want to use it: 
+ // Run this command to apply the patch if you want to use it:
  // tools/apply_patch.sh enhancements/reonucam.patch
 @@ -70,3 +74,22 @@
- #ifndef FLYING_CAMERA_MODE
- #define FLYING_CAMERA_MODE CAMERA_MODE_BEHIND_MARIO
+ #ifdef ENABLE_VANILLA_LEVEL_SPECIFIC_CHECKS
+     #define ENABLE_VANILLA_CAM_PROCESSING
  #endif
 +
 +// Reonucam overrides
@@ -69,8 +69,8 @@ index 819f235c..bdc07159 100644
 +#endif
 +
  // BSS
- /**
-  * Stores Lakitu's position from the last frame, used for transitioning in next_lakitu_state()
+ u8 gRedCoinStarCutscene = FALSE;
+
 @@ -452,6 +456,25 @@ CameraTransition sModeTransitions[] = {
  extern u8 sDanceCutsceneIndexTable[][4];
  extern u8 sZoomOutAreaMasks[];
@@ -220,15 +220,7 @@ index 819f235c..bdc07159 100644
              s8DirModeYawOffset = snap_to_45_degrees(c->yaw);
          }
  #endif
-@@ -2875,6 +2974,7 @@ void update_camera(struct Camera *c) {
-     OSTime first   = osGetTime();
-     OSTime colTime = collisionTime[perfIteration];
- #endif
-+
-     gCamera = c;
-     update_camera_hud_status(c);
-     if (c->cutscene == CUTSCENE_NONE
-@@ -2885,14 +2985,23 @@ void update_camera(struct Camera *c) {
+@@ -2883,14 +2985,23 @@ void update_camera(struct Camera *c) {
          // Only process R_TRIG if 'fixed' is not selected in the menu
          if (cam_select_alt_mode(CAM_SELECTION_NONE) == CAM_SELECTION_MARIO) {
              if (gPlayer1Controller->buttonPressed & R_TRIG) {
@@ -236,7 +228,7 @@ index 819f235c..bdc07159 100644
 +                if (set_cam_angle(0) == CAM_ANGLE_MARIO) {
 +                    s8DirModeBaseYaw = snap_to_45_degrees(s8DirModeBaseYaw);
 +                    set_cam_angle(CAM_ANGLE_LAKITU);
-+                }              
++                }
 +#else
                  if (set_cam_angle(0) == CAM_ANGLE_LAKITU) {
                      set_cam_angle(CAM_ANGLE_MARIO);
@@ -333,10 +325,10 @@ diff --git a/src/game/game_init.c b/src/game/game_init.c
 index ad9fdb7d..26e1f000 100644
 --- a/src/game/game_init.c
 +++ b/src/game/game_init.c
-@@ -29,6 +29,9 @@
- #include "puppycam2.h"
- #include "debug_box.h"
+@@ -30,6 +29,9 @@
  #include "vc_check.h"
+ #include "profiling.h"
+ #include "vc/vc_ultra.h"
 +#ifdef REONUCAM
 +#include "camera.h"
 +#endif
@@ -421,7 +413,7 @@ index 28c80f34..37dc71c1 100644
  void change_dialog_camera_angle(void) {
      if (cam_select_alt_mode(0) == CAM_SELECTION_MARIO) {
          gDialogCameraAngleIndex = CAM_SELECTION_MARIO;
-@@ -1917,6 +1967,9 @@ s32 render_pause_courses_and_castle(void) {
+@@ -1933,6 +1967,9 @@ s32 render_pause_courses_and_castle(void) {
      }
  #if defined(WIDE) && !defined(PUPPYCAM)
          render_widescreen_setting();
@@ -429,8 +421,8 @@ index 28c80f34..37dc71c1 100644
 +#ifdef REONUCAM
 +        render_reonucam_speed_setting();
  #endif
-     if (gDialogTextAlpha < 250) {
-         gDialogTextAlpha += 25;
+
+     print_seed_and_options_data();
 diff --git a/src/game/mario.c b/src/game/mario.c
 index 757c7f0b..a998bac5 100644
 --- a/src/game/mario.c
@@ -497,7 +489,7 @@ diff --git a/src/game/save_file.c b/src/game/save_file.c
 index 07f0faad..db76574b 100644
 --- a/src/game/save_file.c
 +++ b/src/game/save_file.c
-@@ -715,6 +715,19 @@ u32 save_file_get_sound_mode(void) {
+@@ -712,6 +712,19 @@ u32 save_file_get_sound_mode(void) {
      return gSaveBuffer.menuData.soundMode;
  }
  
@@ -516,7 +508,7 @@ index 07f0faad..db76574b 100644
 +
  void save_file_move_cap_to_default_location(void) {
      if (save_file_get_flags() & SAVE_FLAG_CAP_ON_GROUND) {
-         switch (gSaveBuffer.files[gCurrSaveFileNum - 1][0].capLevel) {
+         switch (gSaveBuffer.files[gCurrSaveFileNum - 1].capLevel) {
 diff --git a/src/game/save_file.h b/src/game/save_file.h
 index a03dbafb..8ba8725f 100644
 --- a/src/game/save_file.h
